@@ -28,6 +28,12 @@ LLM Generation (Mistral-7B / Llama3-8B, no fine-tuning)
      │
      ▼
 Root Cause Summary + Remediation Steps
+     │
+     ▼
+FastAPI Backend Layer
+     │
+     ▼
+Next.js Frontend (Vercel)
 ```
 
 ## Tech Stack
@@ -38,8 +44,11 @@ Root Cause Summary + Remediation Steps
 | Clustering        | HDBSCAN                           |
 | Vector Store      | ChromaDB                          |
 | Generation        | Mistral-7B / Llama3-8B (prompted, not fine-tuned) |
-| UI                | Streamlit                         |
+| Backend API       | FastAPI (hosted on Render/Railway/HF Spaces — needs real compute, not serverless) |
+| Frontend          | Next.js, deployed on Vercel |
 | Evaluation        | ROUGE, BERTScore, human "Actionability" rating |
+
+**Note on hosting split**: the ML pipeline (embeddings, clustering, vector search, LLM inference) runs on a compute-backed host, exposed via FastAPI. Vercel serves the frontend only — its serverless functions aren't suited to long-running inference workloads. Frontend calls the backend over REST.
 
 ## Dataset
 
@@ -57,7 +66,7 @@ Root Cause Summary + Remediation Steps
 
 ## Pipeline Trace (Key Feature)
 
-The Streamlit demo includes a "Show Pipeline Trace" toggle that exposes:
+The frontend includes a "Show Pipeline Trace" toggle that exposes:
 1. The raw log anomaly detected.
 2. The retrieved historical incident, with similarity score.
 3. The exact prompt sent to the LLM.
@@ -78,7 +87,7 @@ This makes the RAG mechanism auditable rather than a black box — the core diff
 | 3–4   | Embedding + HDBSCAN clustering (core NLP module) |
 | 5–6   | RAG layer: ChromaDB vector storage + retrieval |
 | 7–8   | LLM integration via prompting (no LoRA) |
-| 9–10  | Pipeline integration + Streamlit UI |
+| 9–10  | Pipeline integration + Next.js frontend + FastAPI backend wiring |
 | 11–12 | Evaluation, report, buffer |
 
 ## Explicit Scope Boundaries
@@ -88,12 +97,22 @@ This makes the RAG mechanism auditable rather than a black box — the core diff
 
 ## Setup
 
+**Backend**
 ```bash
 git clone https://github.com/nish-debug15/TraceMind.git
-cd rca-pipeline
+cd rca-pipeline/backend
 pip install -r requirements.txt
-streamlit run app.py
+uvicorn main:app --reload
 ```
+
+**Frontend**
+```bash
+cd rca-pipeline/frontend
+npm install
+npm run dev
+```
+
+Deploy frontend to Vercel; deploy backend to a compute-backed host (Render/Railway/HF Spaces).
 
 ## License
 
