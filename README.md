@@ -89,7 +89,7 @@ This makes the RAG mechanism auditable rather than a black box — the core diff
 ## Setup
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/nish-debug15/TraceMind.git
 cd rca-pipeline
 pip install -r requirements.txt
 streamlit run app.py
