@@ -5,7 +5,7 @@ REQUIRED_FIELDS = {"incident_id", "raw_log_excerpt", "root_cause", "remediation_
 
 def validate():
     try:
-        with open("data/postmortems.json", "r") as f:
+        with open("data/postmortems.json", "r", encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
         print("data/postmortems.json not found.")
