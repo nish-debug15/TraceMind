@@ -1,0 +1,2 @@
+# Aggregated requirements for backend
+-r backend/requirements.txt
