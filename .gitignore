@@ -12,6 +12,8 @@ venv.bak/
 node_modules/
 .next/
 chroma_data/
+clustering/cluster_index.pkl
+scripts/scrapers/output/
 .pytest_cache/
 .coverage
 coverage.xml
