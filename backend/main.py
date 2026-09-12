@@ -12,7 +12,6 @@ from rag import generate_rca
 
 app = FastAPI(title="TraceMind Backend")
 
-# Setup CORS with wildcard support for vercel
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,

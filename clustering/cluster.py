@@ -98,8 +98,8 @@ def assign_cluster(text: str) -> dict:
     best_idx = int(np.argmax(similarities))
     best_score = float(similarities[best_idx])
 
-    # Threshold: if similarity is below 0.3, treat as noise/novel
-    NOISE_THRESHOLD = 0.3
+    # Threshold: if similarity is below 0.40, treat as noise/novel
+    NOISE_THRESHOLD = 0.40
     if best_score < NOISE_THRESHOLD:
         return {
             "cluster_id": -1,

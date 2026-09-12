@@ -97,6 +97,8 @@ This makes the RAG mechanism auditable rather than a black box — the core diff
 
 Sample size is stated explicitly alongside all reported metrics — this is a proof-of-concept evaluation, not a claim of statistical significance at scale.
 
+**Note on Test Coverage:** Only the clustering module currently has test coverage (`test_clustering.py`). The backend and data scrapers currently have zero tests. This project is not fully tested.
+
 ## 12-Week Roadmap
 
 | Weeks | Milestone |

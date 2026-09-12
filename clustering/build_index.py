@@ -19,7 +19,7 @@ INDEX_PATH = Path(__file__).parent / "cluster_index.pkl"
 DATA_PATH = Path(__file__).parent.parent / "data" / "postmortems.json"
 
 
-def build(data_path: str = None, min_cluster_size: int = 5, min_samples: int = 3):
+def build(data_path: str = None, min_cluster_size: int = 3, min_samples: int = 2):
     """Build the cluster index and save to disk.
 
     Args:
