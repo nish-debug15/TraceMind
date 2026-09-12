@@ -44,7 +44,8 @@ export default function Home() {
     setResult(null);
 
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      // Adjusted to use 127.0.0.1 to avoid IPv6 vs IPv4 localhost resolution issues on some machines
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
       const response = await fetch(`${baseUrl}/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -58,140 +59,143 @@ export default function Home() {
       const data: AnalyzeResponse = await response.json();
       setResult(data);
     } catch (err: any) {
-      setError(err.message || "Something went wrong.");
+      setError(err.message || "Failed to fetch. Is the backend running on http://127.0.0.1:8000?");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 p-8 font-sans">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <header className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">TraceMind RCA</h1>
-          {result?.is_mock && (
-            <div className="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-sm font-semibold border border-amber-300">
-              Mock Response — LLM not configured
-            </div>
-          )}
-        </header>
+    <div className="max-w-4xl mx-auto space-y-12 py-16 px-6">
+      <header className="flex flex-col md:flex-row md:items-baseline justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-serif text-[#332f2c] tracking-tight">TraceMind RCA</h1>
+          <p className="text-[#6B655D] mt-2 font-sans text-sm tracking-wide uppercase">AI-Assisted Root Cause Analysis</p>
+        </div>
+        {result?.is_mock && (
+          <div className="px-4 py-1.5 rounded bg-[#FDF4F2] text-[#B84B31] text-sm font-medium border border-[#F5D8D3] self-start md:self-auto">
+            Mock Response — LLM not configured
+          </div>
+        )}
+      </header>
 
-        <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="logInput" className="block text-sm font-medium text-gray-700 mb-2">
-                Raw Log Excerpt
-              </label>
-              <textarea
-                id="logInput"
-                className="w-full h-32 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Paste your raw infrastructure logs here..."
-                value={logText}
-                onChange={(e) => setLogText(e.target.value)}
-              />
-            </div>
+      <section className="bg-white rounded-xl border border-[#EAE5D9] p-8 md:p-10">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="logInput" className="block text-sm font-medium text-[#4A4541] mb-3">
+              Input Raw Log Excerpt
+            </label>
+            <textarea
+              id="logInput"
+              className="w-full h-40 p-4 border border-[#EAE5D9] rounded-lg bg-[#FAF9F5] text-[#332f2c] placeholder-[#9F9992] focus:ring-1 focus:ring-[#D97757] focus:border-[#D97757] outline-none transition-colors font-mono text-sm leading-relaxed resize-y"
+              placeholder="Paste infrastructure logs or error traces here..."
+              value={logText}
+              onChange={(e) => setLogText(e.target.value)}
+            />
+          </div>
+          <div className="flex justify-end">
             <button
               type="submit"
               disabled={loading || !logText.trim()}
-              className="bg-blue-600 text-white px-6 py-2 rounded-md font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="bg-[#D97757] text-white px-8 py-2.5 rounded-md font-medium text-sm hover:bg-[#C26245] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
             >
               {loading ? "Analyzing..." : "Analyze Incident"}
             </button>
-          </form>
-          {error && (
-            <div className="mt-4 p-4 text-red-700 bg-red-50 border border-red-200 rounded-md">
-              {error}
-            </div>
-          )}
-        </section>
-
-        {loading && (
-          <div className="text-center p-12">
-            <div className="inline-block animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
-            <p className="mt-4 text-gray-600">Retrieving historical context and generating RCA...</p>
+          </div>
+        </form>
+        {error && (
+          <div className="mt-6 p-5 text-[#B84B31] bg-[#FDF4F2] border border-[#F5D8D3] rounded-lg text-sm">
+            {error}
           </div>
         )}
+      </section>
 
-        {result && !loading && (
-          <section className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
-              <h2 className="text-2xl font-semibold text-gray-900 border-b pb-2">Analysis Results</h2>
-              
-              <div>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">Root Cause</h3>
-                <div className="bg-gray-50 p-4 rounded-md border border-gray-100 whitespace-pre-wrap">
-                  {result.root_cause}
-                </div>
-              </div>
+      {loading && (
+        <div className="text-center py-16 flex flex-col items-center justify-center space-y-4">
+          <div className="inline-block animate-spin w-8 h-8 border-[3px] border-[#D97757] border-t-transparent rounded-full"></div>
+          <p className="text-[#6B655D] text-sm font-medium tracking-wide">Retrieving historical context...</p>
+        </div>
+      )}
 
-              <div>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">Remediation Steps</h3>
-                <div className="bg-gray-50 p-4 rounded-md border border-gray-100 whitespace-pre-wrap">
-                  {result.remediation_steps}
-                </div>
+      {result && !loading && (
+        <section className="space-y-8 animate-in fade-in duration-500">
+          <div className="bg-white rounded-xl border border-[#EAE5D9] p-8 md:p-10 space-y-10">
+            <h2 className="text-3xl font-serif text-[#332f2c] border-b border-[#EAE5D9] pb-4">Analysis Results</h2>
+            
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold tracking-wide text-[#6B655D] uppercase">Root Cause</h3>
+              <div className="text-[#332f2c] text-lg leading-relaxed whitespace-pre-wrap font-serif">
+                {result.root_cause}
               </div>
             </div>
 
-            <div className="bg-slate-900 rounded-xl shadow-sm border border-slate-700 text-slate-300 p-6 overflow-hidden">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-white">Pipeline Trace (Auditable RAG)</h2>
-                <button
-                  type="button"
-                  onClick={() => setShowTrace(!showTrace)}
-                  className="text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-1.5 rounded border border-slate-600 transition-colors"
-                >
-                  {showTrace ? "Hide Pipeline Trace" : "Show Pipeline Trace"}
-                </button>
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold tracking-wide text-[#6B655D] uppercase">Remediation Steps</h3>
+              <div className="text-[#332f2c] text-lg leading-relaxed whitespace-pre-wrap font-serif">
+                {result.remediation_steps}
               </div>
+            </div>
+          </div>
 
-              {showTrace && (
-                <div className="space-y-6 mt-6 border-t border-slate-700 pt-6 text-sm">
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="bg-slate-800 p-3 rounded border border-slate-700">
-                      <span className="block text-slate-400 text-xs mb-1">Similarity Score</span>
-                      <span className="font-mono text-emerald-400 text-lg">
-                        {result.trace.similarity_score.toFixed(4)}
-                      </span>
-                    </div>
-                    <div className="bg-slate-800 p-3 rounded border border-slate-700">
-                      <span className="block text-slate-400 text-xs mb-1">Incident ID</span>
-                      <span className="font-mono text-slate-200 text-lg">
-                        {result.trace.retrieved_incident.incident_id}
-                      </span>
-                    </div>
+          <div className="bg-white rounded-xl border border-[#EAE5D9] p-8 md:p-10">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-serif text-[#332f2c]">Pipeline Trace</h2>
+              <button
+                type="button"
+                onClick={() => setShowTrace(!showTrace)}
+                className="text-sm font-medium text-[#D97757] hover:text-[#C26245] bg-[#FDF9F7] hover:bg-[#FCEEEA] px-4 py-2 rounded-md border border-[#F5D8D3] transition-colors"
+              >
+                {showTrace ? "Hide Audit Trace" : "Show Audit Trace"}
+              </button>
+            </div>
+
+            {showTrace && (
+              <div className="mt-8 space-y-8 text-[#4A4541]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-[#FAF9F5] p-5 rounded-lg border border-[#EAE5D9]">
+                    <span className="block text-[#6B655D] text-xs font-semibold uppercase tracking-wider mb-2">Similarity Score</span>
+                    <span className="font-mono text-[#4A4541] text-xl">
+                      {result.trace.similarity_score.toFixed(4)}
+                    </span>
                   </div>
-
-                  <div>
-                    <h4 className="text-slate-400 mb-2 uppercase tracking-wider text-xs font-semibold">Retrieved Historical Incident</h4>
-                    <div className="bg-slate-800 p-4 rounded border border-slate-700 space-y-3">
-                      <p><strong className="text-slate-200">Root Cause:</strong> {result.trace.retrieved_incident.root_cause}</p>
-                      <p><strong className="text-slate-200">Remediation:</strong> {result.trace.retrieved_incident.remediation_steps}</p>
-                      <p>
-                        <strong className="text-slate-200">Source:</strong>{" "}
-                        <a 
-                          href={result.trace.retrieved_incident.source_url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-blue-400 hover:text-blue-300 underline break-all"
-                        >
-                          {result.trace.retrieved_incident.source_url}
-                        </a>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="text-slate-400 mb-2 uppercase tracking-wider text-xs font-semibold">Prompt Sent to LLM</h4>
-                    <pre className="bg-slate-800 p-4 rounded border border-slate-700 whitespace-pre-wrap font-mono text-xs overflow-x-auto text-slate-300">
-                      {result.trace.prompt_used}
-                    </pre>
+                  <div className="bg-[#FAF9F5] p-5 rounded-lg border border-[#EAE5D9]">
+                    <span className="block text-[#6B655D] text-xs font-semibold uppercase tracking-wider mb-2">Matched Incident ID</span>
+                    <span className="font-mono text-[#4A4541] text-xl">
+                      {result.trace.retrieved_incident.incident_id}
+                    </span>
                   </div>
                 </div>
-              )}
-            </div>
-          </section>
-        )}
-      </div>
+
+                <div>
+                  <h4 className="text-[#6B655D] text-xs font-semibold uppercase tracking-wider mb-3">Retrieved Historical Context</h4>
+                  <div className="bg-[#FAF9F5] p-6 rounded-lg border border-[#EAE5D9] space-y-4 text-sm leading-relaxed">
+                    <p><strong className="text-[#332f2c] font-medium">Root Cause:</strong> {result.trace.retrieved_incident.root_cause}</p>
+                    <p><strong className="text-[#332f2c] font-medium">Remediation:</strong> {result.trace.retrieved_incident.remediation_steps}</p>
+                    <div className="pt-2">
+                      <strong className="text-[#332f2c] font-medium mr-2">Source:</strong>
+                      <a 
+                        href={result.trace.retrieved_incident.source_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-[#D97757] hover:text-[#C26245] underline decoration-[#F5D8D3] underline-offset-4 break-all"
+                      >
+                        {result.trace.retrieved_incident.source_url}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-[#6B655D] text-xs font-semibold uppercase tracking-wider mb-3">Raw Prompt Payload</h4>
+                  <pre className="bg-[#332f2c] text-[#EAE5D9] p-6 rounded-lg overflow-x-auto text-xs leading-relaxed font-mono whitespace-pre-wrap">
+                    {result.trace.prompt_used}
+                  </pre>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
