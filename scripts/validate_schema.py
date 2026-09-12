@@ -1,7 +1,6 @@
 import json
 import sys
-
-REQUIRED_FIELDS = {"incident_id", "raw_log_excerpt", "root_cause", "remediation_steps", "source_url"}
+REQUIRED_FIELDS = {"incident_id", "raw_log_excerpt", "root_cause", "remediation_steps", "source_url", "quality"}
 
 def validate():
     try:

@@ -108,7 +108,7 @@ Remediation Steps: (your steps)
     hf_token = os.environ.get("HF_TOKEN")
     if not hf_token:
         # Fallback to mock for testing without API key
-        generated_text = "Root Cause: (Mocked because HF_TOKEN is not set) Analyzed based on historical data.\nRemediation Steps: Restart service and monitor."
+        generated_text = "Root Cause: [MOCK] Analyzed based on historical data.\nRemediation Steps: [MOCK] Restart service and monitor."
     else:
         try:
             hf_client = InferenceClient(token=hf_token)
@@ -135,7 +135,8 @@ Remediation Steps: (your steps)
         "remediation_steps": remediation_steps,
         "retrieved_incident": match_meta,
         "similarity_score": round(similarity, 4),
-        "prompt_used": prompt
+        "prompt_used": prompt,
+        "is_mock": not bool(hf_token)
     }
 
 if __name__ == "__main__":

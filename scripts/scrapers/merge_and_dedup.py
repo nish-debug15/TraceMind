@@ -9,8 +9,7 @@ from collections import Counter
 
 OUTPUT_DIR = Path(__file__).parent / "output"
 FINAL_OUT = Path(__file__).parent.parent.parent / "data" / "postmortems.json"
-
-REQUIRED_FIELDS = {"incident_id", "raw_log_excerpt", "root_cause", "remediation_steps", "source_url"}
+REQUIRED_FIELDS = {"incident_id", "raw_log_excerpt", "root_cause", "remediation_steps", "source_url", "quality"}
 
 
 def main():
