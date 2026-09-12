@@ -45,7 +45,8 @@ def ingest():
             "raw_log_excerpt": log,
             "root_cause": rc,
             "remediation_steps": r.get("remediation_steps", ""),
-            "source_url": r.get("source_url", "")
+            "source_url": r.get("source_url", ""),
+            "quality": r.get("quality", "high")
         })
         ids.append(r.get("incident_id", f"inc-{i}"))
         embeddings.append(embed(text))
@@ -60,24 +61,36 @@ def ingest():
     print("Ingestion complete.")
 
 def retrieve(log_text: str, k: int = 1):
-    """Retrieve the most similar historical incident from ChromaDB."""
+    """Retrieve the most similar historical incident from ChromaDB, preferring quality:high."""
     collection = client.get_collection(name=COLLECTION_NAME)
     query_embedding = embed(log_text)
     
-    results = collection.query(
+    # Try high quality first
+    results_high = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=k,
+        where={"quality": "high"}
+    )
+    
+    if results_high['metadatas'] and results_high['metadatas'][0]:
+        distance = results_high['distances'][0][0]
+        similarity = 1.0 - (distance / 2.0)
+        # Similarity floor for high quality
+        if similarity >= 0.40:
+            return results_high['metadatas'][0][0], similarity
+            
+    # Fallback to any quality if no high quality match found or similarity < 0.40
+    results_all = collection.query(
         query_embeddings=[query_embedding],
         n_results=k
     )
     
-    if not results['metadatas'] or not results['metadatas'][0]:
+    if not results_all['metadatas'] or not results_all['metadatas'][0]:
         return None, 0.0
         
-    match_meta = results['metadatas'][0][0]
-    distance = results['distances'][0][0]
-    # L2 distance on normalized vectors: distance = 2 * (1 - cosine_sim) -> cosine_sim = 1 - (distance / 2)
+    distance = results_all['distances'][0][0]
     similarity = 1.0 - (distance / 2.0)
-    
-    return match_meta, similarity
+    return results_all['metadatas'][0][0], similarity
 
 def generate_rca(log_text: str) -> dict:
     """Full RAG pipeline. Retrieves context and generates RCA using HF Inference API."""
