@@ -26,3 +26,4 @@ class AnalyzeResponse(BaseModel):
     remediation_steps: str
     source_url: str
     trace: PipelineTrace
+    is_mock: bool = False

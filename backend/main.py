@@ -36,10 +36,10 @@ def health_check():
 @app.post("/analyze", response_model=AnalyzeResponse)
 def analyze_log(request: AnalyzeRequest):
     try:
-        # MOCK MODE: call stub clustering function
+        # Run clustering
         cluster_info = assign_cluster(request.log_text)
         
-        # MOCK MODE: call stub RAG function
+        # Run RAG retrieval and generation
         rag_info = generate_rca(request.log_text)
         
         # Assemble PipelineTrace
@@ -57,7 +57,8 @@ def analyze_log(request: AnalyzeRequest):
             root_cause=rag_info["root_cause"],
             remediation_steps=rag_info["remediation_steps"],
             source_url=rag_info["retrieved_incident"]["source_url"],
-            trace=trace
+            trace=trace,
+            is_mock=rag_info.get("is_mock", False)
         )
     except Exception as e:
         # For simplicity, assuming timeout might raise TimeoutError in the future
