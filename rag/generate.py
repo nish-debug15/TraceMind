@@ -6,25 +6,32 @@ from clustering.cluster import embed
 from huggingface_hub import InferenceClient
 
 RAG_DIR = Path(__file__).parent
-DATA_PATH = RAG_DIR.parent / "data" / "postmortems.json"
+DATA_PATH = RAG_DIR.parent / "data" / "train.json"
 CHROMA_DB_PATH = RAG_DIR / "chroma_db"
 COLLECTION_NAME = "postmortems"
 
 # Initialize Chroma client
 client = chromadb.PersistentClient(path=str(CHROMA_DB_PATH))
 
-def ingest():
-    """Ingest postmortems into ChromaDB."""
+def ingest(force: bool = False):
+    """Ingest postmortems from train.json into ChromaDB, preventing test leakage."""
     print("Ingesting data into ChromaDB...")
     try:
         collection = client.get_collection(name=COLLECTION_NAME)
-        print("Collection already exists, skipping ingestion.")
-        return
+        if force:
+            print("Force re-ingestion requested. Deleting existing collection...")
+            client.delete_collection(name=COLLECTION_NAME)
+            collection = client.create_collection(name=COLLECTION_NAME)
+        elif collection.count() == 662:
+            print("Collection already contains exactly 662 train records, skipping ingestion.")
+            return collection
+        else:
+            print(f"Collection count is {collection.count()} (expected 662 train records). Rebuilding...")
+            client.delete_collection(name=COLLECTION_NAME)
+            collection = client.create_collection(name=COLLECTION_NAME)
     except Exception:
-        pass
+        collection = client.create_collection(name=COLLECTION_NAME)
 
-    collection = client.create_collection(name=COLLECTION_NAME)
-    
     with open(DATA_PATH, "r", encoding="utf-8") as f:
         records = json.load(f)
     

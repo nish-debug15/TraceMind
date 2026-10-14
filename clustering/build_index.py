@@ -16,14 +16,14 @@ from pathlib import Path
 from collections import Counter
 
 INDEX_PATH = Path(__file__).parent / "cluster_index.pkl"
-DATA_PATH = Path(__file__).parent.parent / "data" / "postmortems.json"
+DATA_PATH = Path(__file__).parent.parent / "data" / "train.json"
 
 
 def build(data_path: str = None, min_cluster_size: int = 3, min_samples: int = 2):
     """Build the cluster index and save to disk.
 
     Args:
-        data_path: Path to postmortems.json. Defaults to data/postmortems.json.
+        data_path: Path to dataset json (defaults to data/train.json).
         min_cluster_size: HDBSCAN min_cluster_size parameter.
         min_samples: HDBSCAN min_samples parameter.
     """

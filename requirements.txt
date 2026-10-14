@@ -6,3 +6,12 @@ sentence-transformers>=2.2.0
 hdbscan>=0.8.33
 scikit-learn>=1.3.0
 numpy>=1.24.0
+
+# Vector Store & RAG — BLOCK-RAG-01
+chromadb>=0.4.0
+huggingface-hub>=0.20.0
+
+# Hugging Face Space UI — Gradio
+gradio>=4.0.0
+
+
