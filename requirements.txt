@@ -1,7 +1,10 @@
-# Aggregated requirements for TraceMind
--r backend/requirements.txt
+# Backend API
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.0
+python-dotenv>=1.0.0
 
-# Clustering — BLOCK-CLUSTER-01
+# Clustering & NLP — BLOCK-CLUSTER-01
 sentence-transformers>=2.2.0
 hdbscan>=0.8.33
 scikit-learn>=1.3.0
@@ -13,5 +16,3 @@ huggingface-hub>=0.20.0
 
 # Hugging Face Space UI — Gradio
 gradio>=4.0.0
-
-
