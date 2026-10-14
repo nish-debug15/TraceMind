@@ -3,7 +3,7 @@ import pickle
 from pathlib import Path
 
 def check_correlation():
-    DATA_PATH = Path("n:/gitt/TraceMind/data/postmortems.json")
+    DATA_PATH = Path("n:/gitt/TraceMind/data/train.json")
     INDEX_PATH = Path("n:/gitt/TraceMind/clustering/cluster_index.pkl")
     
     with open(DATA_PATH, "r", encoding="utf-8") as f:
