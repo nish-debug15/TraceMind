@@ -5,6 +5,18 @@ from backend.main import app as fastapi_app
 from backend.models import AnalyzeRequest
 from backend.main import analyze_log
 
+# Auto-build indices on cold start if running on fresh cloud host
+from clustering.cluster import INDEX_PATH
+from clustering.build_index import build
+from rag.generate import ingest
+
+if not INDEX_PATH.exists():
+    print("[Startup] Cluster index not found. Building from train.json...")
+    build()
+
+print("[Startup] Verifying ChromaDB collection...")
+ingest()
+
 # Build interactive Gradio demo for direct browser access on Hugging Face Spaces
 with gr.Blocks(title="TraceMind RCA Backend") as demo:
     gr.Markdown("# 🧠 TraceMind — SRE Root Cause Analysis Service")
