@@ -1,0 +1,839 @@
+[
+  {
+    "incident_id": "icco-3ec87435-3fcc-4edb-bf72-e80bb09d901f",
+    "raw_log_excerpt": "E-commerce site went down after a sudden traffic spike caused by a marketing campaign. The outage was caused by a configuration error in cluster resource management which prevented more service instances from starting even though hardware resources were available.",
+    "root_cause": "E-commerce site went down after a sudden traffic spike caused by a marketing campaign. The outage was caused by a configuration error in cluster resource management which prevented more service instances from starting even though hardware resources were available.",
+    "remediation_steps": "E-commerce site went down after a sudden traffic spike caused by a marketing campaign. The outage was caused by a configuration error in cluster resource management which prevented more service instances from starting even though hardware resources were available.",
+    "source_url": "https://allegro.tech/2018/08/postmortem-why-allegro-went-down.html",
+    "quality": "high",
+    "company": "allegro"
+  },
+  {
+    "incident_id": "icco-6d1c63bd-3529-4120-8a00-18ee6647f3f0",
+    "raw_log_excerpt": "The [Allegro](http://allegro.pl) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.",
+    "root_cause": "The [Allegro](http://allegro.pl) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.",
+    "remediation_steps": "The [Allegro](http://allegro.pl) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.",
+    "source_url": "http://allegro.tech/allegro-cast-post-mortem.html",
+    "quality": "high",
+    "company": "allegro"
+  },
+  {
+    "incident_id": "icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43",
+    "raw_log_excerpt": "The [Allegro](https://web.archive.org/web/20211204232004/https://allegro.pl/) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.",
+    "root_cause": "The [Allegro](https://web.archive.org/web/20211204232004/https://allegro.pl/) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.",
+    "remediation_steps": "The [Allegro](https://web.archive.org/web/20211204232004/https://allegro.pl/) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.",
+    "source_url": "https://allegro.tech/2015/01/allegro-cast-post-mortem.html",
+    "quality": "high",
+    "company": "allegro"
+  },
+  {
+    "incident_id": "icco-7d5ab17c-e367-4135-9c88-53f0f2df0073",
+    "raw_log_excerpt": "A large organizational failure to build a website for United States healthcare.",
+    "root_cause": "A large organizational failure to build a website for United States healthcare.",
+    "remediation_steps": "A large organizational failure to build a website for United States healthcare.",
+    "source_url": "https://www.bloomberg.com/opinion/articles/2015-09-16/how-healthcare-gov-went-so-so-wrong",
+    "quality": "high",
+    "company": "bloomberg"
+  },
+  {
+    "incident_id": "icco-ca82c550-402b-4abd-942a-163c1b084e52",
+    "raw_log_excerpt": "An upgraded reservation system, utilized by TUI, developed a critical fault prior to an incident flight. This system was responsible for generating the aircraft's load sheet, a vital document for ensuring flight safety and proper weight distribution.",
+    "root_cause": "An upgraded reservation system, utilized by TUI, developed a critical fault prior to an incident flight. This system was responsible for generating the aircraft's load sheet, a vital document for ensuring flight safety and proper weight distribution.",
+    "remediation_steps": "The provided information does not detail the specific timeline of the incident flight or the subsequent remediation actions taken to correct the fault in the reservation system.",
+    "source_url": "https://assets.publishing.service.gov.uk/media/604f423be90e077fdf88493f/Boeing_737-8K5_G-TAWG_04-21.pdf",
+    "quality": "high",
+    "company": "boeing"
+  },
+  {
+    "incident_id": "icco-018edf27-f738-448d-8c46-947cd3b6d5b0",
+    "raw_log_excerpt": "On July 31st, 2018, a security researcher identified that a GitHub personal access token, which had recently elevated scopes, was leaked from Homebrew's Jenkins instance. This token provided `git push` access to the `Homebrew/brew` and `Homebrew/homebrew-core` repositories.",
+    "root_cause": "Within a few hours of the report, the compromised credentials were revoked, replaced, and sanitized within Jenkins to prevent future exposure. GitHub Support confirmed that the token had not been used to perform any unauthorized pushes to the affected repositories during its period of elevated scopes. Consequently, no packages were compromised, and no action is required by users due to this incident.",
+    "remediation_steps": "Homebrew implemented several remediation steps. The `Homebrew/brew` and `Homebrew/homebrew-core` repositories were updated to prevent non-administrators from pushing directly to master. Additionally, most other repositories in the Homebrew organization were configured to require CI checks from a pull request to pass before changes could be pushed to master.",
+    "source_url": "https://brew.sh/2018/08/05/security-incident-disclosure/",
+    "quality": "high",
+    "company": "brew"
+  },
+  {
+    "incident_id": "icco-c990285e-31b4-48e1-b535-bf18869268ad",
+    "raw_log_excerpt": "On August 22nd, 2016, Buildkite experienced a severe unplanned outage starting at 17:21 UTC. During this period, customers were unable to log in, view build logs, or access documentation, although builds continued to run and GitHub/Bitbucket Pull Request statuses updated. The Buildkite team, based in Melbourne, was alerted hours later due to misconfigured PagerDuty settings and phones on silent, delaying their response.",
+    "root_cause": "On August 22nd, 2016, Buildkite experienced a severe unplanned outage starting at 17:21 UTC. During this period, customers were unable to log in, view build logs, or access documentation, although builds continued to run and GitHub/Bitbucket Pull Request statuses updated. The Buildkite team, based in Melbourne, was alerted hours later due to misconfigured PagerDuty settings and phones on silent, delaying their response.",
+    "remediation_steps": "On August 22nd, 2016, Buildkite experienced a severe unplanned outage starting at 17:21 UTC. During this period, customers were unable to log in, view build logs, or access documentation, although builds continued to run and GitHub/Bitbucket Pull Request statuses updated. The Buildkite team, based in Melbourne, was alerted hours later due to misconfigured PagerDuty settings and phones on silent, delaying their response.",
+    "source_url": "https://building.buildkite.com/outage-post-mortem-for-august-23rd-82b619a3679b",
+    "quality": "high",
+    "company": "buildkite"
+  },
+  {
+    "incident_id": "icco-785c5618-a34e-4dfc-bd04-559fc0635b3b",
+    "raw_log_excerpt": "Approximately two hours after its launch as the official community site, Supermarket began experiencing increased latency and intermittent unresponsiveness. This issue impacted the main Supermarket site, community.opscode.com, cookbooks.opscode.com, and api.berkshelf.com, making cookbook operations problematic.",
+    "root_cause": "Immediate stabilization steps involved adding new instances and upgrading the instance type to m3.xlarge, increasing the capacity to five instances. Long-term corrective actions include changing Berkshelf API behavior, adjusting Unicorn worker counts, improving download performance with non-blocking metrics, enhancing alerting for ELB node failures, and improving status communication.",
+    "remediation_steps": "Immediate stabilization steps involved adding new instances and upgrading the instance type to m3.xlarge, increasing the capacity to five instances. Long-term corrective actions include changing Berkshelf API behavior, adjusting Unicorn worker counts, improving download performance with non-blocking metrics, enhancing alerting for ELB node failures, and improving status communication.",
+    "source_url": "https://www.chef.io/blog/2014/07/10/supermarket-intermittent-unresponsiveness-postmortem/",
+    "quality": "high",
+    "company": "chef"
+  },
+  {
+    "incident_id": "icco-0dfe934b-9234-4383-9d1c-de9b860a43d1",
+    "raw_log_excerpt": "The WebKit Subversion repository experienced an incident in late February 2017 when a user committed two files with different content but identical SHA1 hashes. This SHA1 collision led to unexpected behavior and data corruption within the repository.",
+    "root_cause": "The root cause was Subversion's \"Representation Sharing\" feature, introduced in version 1.6. This feature uses SHA1 hashes to deduplicate file content. When the two colliding files were committed, the system, encountering the same hash, stored only a pointer for the second file, effectively replacing its content with a reference to the first.",
+    "remediation_steps": "Remediation options considered included disabling the representation sharing feature, implementing pre-commit hooks to block known colliding files, or deleting the problematic file from the HEAD revision. The WebKit repository specifically implemented a Subversion permission rule (authz) to block access to the affected files, providing a robust long-term solution and enabling potential migration.",
+    "source_url": "https://digital.ai/catalyst-blog/subversion-sha1-collision-problem-statement-prevention-and-remediation-options",
+    "quality": "high",
+    "company": "digital"
+  },
+  {
+    "incident_id": "icco-36450ae5-3427-4ebb-ae57-16409643a473",
+    "raw_log_excerpt": "On March 20, 2017, Discord experienced significant connectivity issues affecting a large portion of its users. The incident began at 11:38 PDT when an internal \"presence\" service server disconnected. This triggered a \"thundering herd\" of reconnection attempts from \"sessions\" service nodes, leading to memory exhaustion and crashes in these nodes. Service was mostly recovered by 13:56 PDT, but a recurrence of the presence service disconnection at 14:52 PDT caused further issues, with full resoluti",
+    "root_cause": "The root cause of the initial disconnection was identified as CPU soft lockups on a single presence server. These lockups stalled the machine's network stack for extended periods. A bug in the presence cluster's handling of lost nodes exacerbated the problem, causing the cluster to split-brain instead of properly isolating the faulty node.",
+    "remediation_steps": "Discord engineers implemented several remediations. They rolled out upgrades to the presence server to fix the split-brain bug and other planned improvements. A hard limit was added to the number of in-flight connections from the sessions cluster to the presence server, along with a fast-fail mechanism to prevent future cascading failures. Discord is also actively collaborating with Google Cloud Platform's hypervisor team to investigate and resolve the underlying CPU soft lockup issue.",
+    "source_url": "https://status.discordapp.com/incidents/dj3l6lw926kl",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "icco-a46ebba4-2d7c-49e6-aa71-0ce989fbff97",
+    "raw_log_excerpt": "On October 13, 2017, at 14:01 PDT, a Google Cloud Platform-initiated migration of a primary Redis instance caused it to drop offline. This triggered a known bug in Discord's API instances, which failed to properly handle the Redis failover, leading to a partial outage. Engineers performed rolling restarts of API instances and escalated the issue to GCP support.",
+    "root_cause": "However, at 15:41 PDT, new anomalies emerged, with users reporting unavailable guilds and connection problems. A misbehaving node in the \"guilds\" cluster was identified, followed by issues in the \"sessions\" cluster. These cascading failures prompted Discord engineers to initiate a full service restart at 16:07 PDT, which involved rebooting various components and correcting an improperly configured API setting for client reconnection.",
+    "remediation_steps": "Following the initial Redis issue, a misconfigured edge caching rule for an expensive API route was discovered, causing performance degradation and overloading a Cassandra cluster. This misconfiguration was corrected, the Cassandra cluster recovered, and further API instance restarts were performed. By 14:57 PDT, these issues were believed resolved, and the API returned to a nominal state.",
+    "source_url": "https://status.discordapp.com/incidents/qk9cdgnqnhcn",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-pcg3nsfq6l2y",
+    "raw_log_excerpt": "Issues sending messages for bots and users\nWe're aware of an issue preventing users and bots from sending messages, we're working on fully restoring service",
+    "root_cause": "This issue has expanded and is now affecting all Discord interactions. We're continuing to work towards mitigating the issue.",
+    "remediation_steps": "This issue has been fully resolved",
+    "source_url": "https://discordstatus.com/incidents/pcg3nsfq6l2y",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-vrdywypml5lf",
+    "raw_log_excerpt": "API errors affecting message sends, session starts, and billing operations\nWe're aware of an issue that is affecting a subset of users trying to interact with our services. We are working on  a fix to address the issues.",
+    "root_cause": "We're aware of an issue that is affecting a subset of users trying to interact with our services. We are working on  a fix to address the issues.",
+    "remediation_steps": "We have applied a fix and are seeing recovery across our systems",
+    "source_url": "https://discordstatus.com/incidents/vrdywypml5lf",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-4hpm4454hxtx",
+    "raw_log_excerpt": "Increased API Errors\nWe're investgating errors in our API systems.",
+    "root_cause": "Users are able to connect to the platform, and we are working on recovering some features",
+    "remediation_steps": "All critical functionalities have recovered for all users.",
+    "source_url": "https://discordstatus.com/incidents/4hpm4454hxtx",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-k42p6rqypf7v",
+    "raw_log_excerpt": "Message Sends affected on certain channels\nWe are currently investigating the issue",
+    "root_cause": "We've resolved the issue and messaging should be functional",
+    "remediation_steps": "We've resolved the issue and messaging should be functional",
+    "source_url": "https://discordstatus.com/incidents/k42p6rqypf7v",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-947scltt0c6j",
+    "raw_log_excerpt": "Issues with invites\nWe are currently investigating issues interacting with invites.",
+    "root_cause": "The issue has been identified and changes are being rolled back.",
+    "remediation_steps": "The issue has been resolved.",
+    "source_url": "https://discordstatus.com/incidents/947scltt0c6j",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-dsv750sj44fn",
+    "raw_log_excerpt": "Applications experiencing 503 errors\nWe are aware that bot traffic may be hitting 503 errors and are investigating the issue.",
+    "root_cause": "We believe the 503s have been resolved.",
+    "remediation_steps": "We believe the 503s have been resolved.",
+    "source_url": "https://discordstatus.com/incidents/dsv750sj44fn",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-jvqsklfdcvt8",
+    "raw_log_excerpt": "UK/AU: Issues Completing Age Verification via k-ID\nSome users in the UK and Australia may be unable to complete new age verification via k-ID. Users who have already completed age verification should not be impacted. We\u2019re actively working with k-ID on a resolution and will share updates here as we learn more.",
+    "root_cause": "k-ID age verification is operating normally again in the UK and Australia. Previously age verified users were not impacted.",
+    "remediation_steps": "k-ID age verification is operating normally again in the UK and Australia. Previously age verified users were not impacted.",
+    "source_url": "https://discordstatus.com/incidents/jvqsklfdcvt8",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-r7919gwty4gc",
+    "raw_log_excerpt": "Connectivity issues\nAn upstream provider is investigating a major issue, and we are currently investigating the impact to Discord.",
+    "root_cause": "We've identified the expected upstream errors in our monitoring and are awaiting an in-progress fix from upstream provider.",
+    "remediation_steps": "The upstream provider has resolved the issue on their side, and all Discord components are operating normally.",
+    "source_url": "https://discordstatus.com/incidents/r7919gwty4gc",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-5sqkt5xhj2pc",
+    "raw_log_excerpt": "API Availability Issues\nWe're actively investigating API availability issues affecting a number of operations",
+    "root_cause": "A fix has been implemented and we are monitoring the results.",
+    "remediation_steps": "A fix has been implemented and we are monitoring the results.",
+    "source_url": "https://discordstatus.com/incidents/5sqkt5xhj2pc",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-91qwn7zg2sts",
+    "raw_log_excerpt": "API availability issues\nWe're actively investigating API availability issues affecting a number of operations",
+    "root_cause": "We've identified and fixed the underlying system issue that was causing errors.",
+    "remediation_steps": "We've identified and fixed the underlying system issue that was causing errors.",
+    "source_url": "https://discordstatus.com/incidents/91qwn7zg2sts",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "discordstatus-9bm86bnmfhfr",
+    "raw_log_excerpt": "Guilds Unavailability\nWe're investigating an issue where some guilds are unavailable to some members.",
+    "root_cause": "Voice calls have fully recovered.",
+    "remediation_steps": "Voice calls have fully recovered.",
+    "source_url": "https://discordstatus.com/incidents/9bm86bnmfhfr",
+    "quality": "high",
+    "company": "discord"
+  },
+  {
+    "incident_id": "icco-3d2adf6c-a887-4db4-badf-92987c613a46",
+    "raw_log_excerpt": "On February 3rd and 4th, 2018, Fortnite experienced a series of six distinct service incidents, ranging from partial to total disruptions. These outages occurred as the game reached a new peak of 3.4 million concurrent players, exposing various scaling challenges and bottlenecks within Epic Games' infrastructure.",
+    "root_cause": "The MCP (Matchmaking, Chat, and Presence) database, primarily MongoDB shards, suffered from severe latency due to write queuing, particularly affecting matchmaking. This led to database operations spiking to over 40,000ms and MCP threads blocking. Additionally, a bug introduced prior to launch limited the number of available service threads for MCP, which, when corrected, paradoxically increased latency in production due to connection pool starvation. Manual primary failovers were required multi",
+    "remediation_steps": "Players experienced unusually long wait times, matchmaking instability, and were often blocked from signing in or out. Social features like seeing friends online or forming parties were largely non-functional, creating a \"dark room\" situation. In response, Epic Games is actively working on resolving database performance issues with external experts, optimizing backend calls, improving matchmaking data storage, enhancing operational excellence, and improving monitoring for cloud provider limits.",
+    "source_url": "https://www.epicgames.com/fortnite/en-US/news/postmortem-of-service-outage-at-3-4m-ccu",
+    "quality": "high",
+    "company": "epicgames"
+  },
+  {
+    "incident_id": "icco-1c6f32bc-10ed-463a-a52d-763121f74e30",
+    "raw_log_excerpt": "Etsy experienced significant challenges with its Solr search index replication as the index size and number of replica servers grew. The standard HTTP replication method scaled linearly with the number of replicas, leading to increasingly long replication times, with a 4 GB index taking over an hour to replicate to 11 servers. This bottleneck was exacerbated by network interface limitations and the need for nightly index optimizations.",
+    "root_cause": "In an attempt to improve replication speed, Etsy engineers experimented with multicast rsync to send index data to all replicas simultaneously. However, this deployment in production led to an \"epic failure\" where the multicast traffic saturated the CPU on core network switches, causing the entire Etsy site to become unreachable for several minutes.",
+    "remediation_steps": "While BitTorrent replication dramatically reduced transfer times (e.g., a 9 GB index to 23 replicas now takes less than an hour), it introduced a lag due to SHA1 hash calculations for large indexes. Etsy addressed this by creating a thread-safe SHA1 implementation and a DigestPool interface for parallel hashing, reducing the lag from 2 minutes to about 32 seconds. Future improvements include creating torrents per index segment to further reduce lag and supporting replication of arbitrary related",
+    "source_url": "https://codeascraft.com/2012/01/23/solr-bittorrent-index-replication/",
+    "quality": "high",
+    "company": "etsy"
+  },
+  {
+    "incident_id": "icco-9f912643-516f-4592-8d71-f70c68984c73",
+    "raw_log_excerpt": "First, a deploy that was supposed to be a small bugfix deploy also caused live databases to get upgraded on running production machines. To make sure that this didn't cause any corruption, Etsy stopped serving traffic to run integrity checks. Second, an overflow in ids (signed 32-bit ints) caused some database operations to fail. Etsy didn't trust that this wouldn't result in data corruption and took down the site while the upgrade got pushed.",
+    "root_cause": "First, a deploy that was supposed to be a small bugfix deploy also caused live databases to get upgraded on running production machines. To make sure that this didn't cause any corruption, Etsy stopped serving traffic to run integrity checks. Second, an overflow in ids (signed 32-bit ints) caused some database operations to fail. Etsy didn't trust that this wouldn't result in data corruption and took down the site while the upgrade got pushed.",
+    "remediation_steps": "First, a deploy that was supposed to be a small bugfix deploy also caused live databases to get upgraded on running production machines. To make sure that this didn't cause any corruption, Etsy stopped serving traffic to run integrity checks. Second, an overflow in ids (signed 32-bit ints) caused some database operations to fail. Etsy didn't trust that this wouldn't result in data corruption and took down the site while the upgrade got pushed.",
+    "source_url": "https://blog.etsy.com/news/2012/demystifying-site-outages/",
+    "quality": "high",
+    "company": "etsy"
+  },
+  {
+    "incident_id": "icco-01494547-7ee9-4169-a0c0-d921fa309d83",
+    "raw_log_excerpt": "On December 5, 2007, shortly after the release of the EVE Online: Trinity expansion at 22:04 GMT, CCP Games began receiving reports that the Classic to Premium graphics content upgrade was deleting the `C:\\boot.ini` file on players' Windows systems. This critical system file deletion sometimes prevented computers from starting up until it was manually fixed.",
+    "root_cause": "The issue stemmed from a decision to use a third-party installer technology for the graphics content upgrade due to its superior compression, which significantly reduced download size. The installer script, added on November 30, contained a `Delete \"boot.ini\"` command intended to remove a legacy EVE Online file also named `boot.ini` from the game's installation directory.",
+    "remediation_steps": "On December 5, 2007, shortly after the release of the EVE Online: Trinity expansion at 22:04 GMT, CCP Games began receiving reports that the Classic to Premium graphics content upgrade was deleting the `C:\\boot.ini` file on players' Windows systems. This critical system file deletion sometimes prevented computers from starting up until it was manually fixed.",
+    "source_url": "http://community.eveonline.com/news/dev-blogs/about-the-boot.ini-issue/",
+    "quality": "high",
+    "company": "eveonline"
+  },
+  {
+    "incident_id": "icco-be40b5ba-c37f-46d0-8891-febc43941fd0",
+    "raw_log_excerpt": "On July 15th, 2015, the EVE Online Tranquillity (TQ) cluster experienced an extended downtime following a patch deployment for Aegis Sovereignty. The deployment tool initially failed, and subsequent startup attempts at 11:42 UTC revealed that multiple server nodes were getting stuck in the \"-1\" state, preventing the cluster from becoming ready. This led to repeated restarts and investigations by the operations and development teams.",
+    "root_cause": "The root cause was identified as a problematic logging channel within the sovereignty campaign system. When a large volume of log messages were generated during the startup sequence, this channel severely degraded node performance, causing nodes to become unresponsive and drop out of the cluster. This issue was specific to the Tranquillity server and was not reproducible on test environments.",
+    "remediation_steps": "To resolve the incident, a hotfix (Hotfix #5) was deployed at 22:07 UTC, which entirely removed all logging within the campaign system. This change allowed the TQ cluster to start successfully by 22:22 UTC. After VIP checks to ensure data integrity, EVE Online was reopened to all players at 22:41 UTC, resulting in a total downtime of 699 minutes.",
+    "source_url": "https://community.eveonline.com/news/dev-blogs/behind-the-scenes-of-a-long-eve-online-downtime/",
+    "quality": "high",
+    "company": "eveonline"
+  },
+  {
+    "incident_id": "icco-db126e26-be84-4286-a778-975bbe87df0d",
+    "raw_log_excerpt": "CCP karkur initiated an investigation into an issue where the drone window in EVE Online would occasionally stop updating. Her initial debugging revealed that tasklets were failing to wake up from sleep, entering an unscheduled and unblocked state. A reproduction script was developed to reliably trigger this \"sleeping disorder\" in tasklets.",
+    "root_cause": "CCP karkur initiated an investigation into an issue where the drone window in EVE Online would occasionally stop updating. Her initial debugging revealed that tasklets were failing to wake up from sleep, entering an unscheduled and unblocked state. A reproduction script was developed to reliably trigger this \"sleeping disorder\" in tasklets.",
+    "remediation_steps": "The resolution involved a targeted code change: moving the Py_DECREF calls for channel objects into the SleepWallclock function. This ensures that channel objects are not prematurely recycled, thereby preventing the memory address collision and the subsequent erroneous removal of active tasklets from the sleeper queue.",
+    "source_url": "https://community.eveonline.com/news/dev-blogs/sleeping-beauty/",
+    "quality": "high",
+    "company": "eveonline"
+  },
+  {
+    "incident_id": "icco-31874408-c4e9-4687-94a2-ec1dfdcdf8e2",
+    "raw_log_excerpt": "A mysterious glitch began affecting Sun Microsystems' high-end Enterprise server line starting in late 1999, causing servers to crash unexpectedly. This issue impacted major corporate clients such as America Online, Ebay, and Verisign, leading to significant downtime and operational costs. Sun initially struggled to identify the problem and, for months, required customers seeking repairs to sign non-disclosure agreements, which led to accusations of a cover-up.",
+    "root_cause": "In May 2000, Sun engineers finally identified the root cause: faulty S-RAM cache memory chips supplied by an unnamed vendor. These chips were susceptible to disruption by stray radiation, such as alpha particles or cosmic rays, causing bit-level errors (a 1 turning into a 0 or vice versa). When the server detected these memory errors, it would shut down and reboot. A critical contributing factor was Sun's omission of Error-Correcting Code (ECC) protection in these server models, a feature common",
+    "remediation_steps": "Sun's remediation efforts included developing new \"mirrored\" cache modules to replace the defective ones, which began shipping in November 2000 and were installed free of charge for affected customers. The company also committed to including ECC protection in its next generation of high-end servers, the UltraSparc III, slated for release in mid-2001. Sun expected to resolve the issue for all affected customers within a few months of the article's publication.",
+    "source_url": "https://www.forbes.com/forbes/2000/1113/6613068a.html#6d1bdc036162",
+    "quality": "high",
+    "company": "forbes"
+  },
+  {
+    "incident_id": "icco-cd8e3b5f-7b97-4af5-8986-28e2bf663805",
+    "raw_log_excerpt": "On June 28, 2018, an unknown entity gained administrative control of the Gentoo GitHub Organization. The attacker immediately removed all access for Gentoo developers and proceeded to make malicious changes to several repositories. The incident lasted until July 3, 2018, when GitHub unlocked the organization after remediation efforts.",
+    "root_cause": "The root cause was identified as the compromise of an organization administrator's password. Evidence suggested a password reuse scheme, where a password disclosed on one site made it easy to guess the password for the GitHub account.",
+    "remediation_steps": "Gentoo developers and infrastructure staff escalated the issue to GitHub support, leading to the organization being frozen. Gentoo regained control, reverted the malicious commits through force-pushes, and restored the defaced content. Post-incident actions included implementing 2FA requirements, reviewing password policies, and improving backup procedures for GitHub settings.",
+    "source_url": "https://wiki.gentoo.org/wiki/Github/2018-06-28",
+    "quality": "high",
+    "company": "gentoo"
+  },
+  {
+    "incident_id": "icco-3e8b0d65-84e5-4a4f-bd28-81a2693432d4",
+    "raw_log_excerpt": "On the afternoon of 10 October 2017, GoCardless experienced an outage of its API and Dashboard, lasting 1 hour and 50 minutes. During this period, all requests to these services failed and returned an error. The incident began at 15:09 BST when monitoring detected the outage, and services were confirmed back up at 16:59 BST after manual intervention.",
+    "root_cause": "The incident was triggered by a hardware failure on the primary database node, specifically a disk array failure. This alone should have resulted in a brief outage as the database cluster automation, Pacemaker, was designed to promote a replica to primary. However, the automation failed to do so, extending what would typically be a 1-2 minute outage to almost two hours.",
+    "remediation_steps": "Remediation involved engineers manually promoting a synchronous replica to primary and reconfiguring backend applications to connect to its IP address. Post-incident, a new database cluster was provisioned, and traffic was migrated to it. The Pacemaker configuration was adjusted to correctly handle failovers, and the team committed to improving fault injection testing and addressing knowledge atrophy related to manual recovery procedures.",
+    "source_url": "https://gocardless.com/blog/incident-review-api-and-dashboard-outage-on-10th-october/",
+    "quality": "high",
+    "company": "gocardless"
+  },
+  {
+    "incident_id": "icco-50a576ca-3171-417a-b001-50093be2d910",
+    "raw_log_excerpt": "In late January, GoCardless experienced approximately 15 seconds of unexpected API downtime during a planned database migration. Shortly after the schema migration began, API requests started timing out, indicating a service disruption.",
+    "root_cause": "The AccessExclusive lock, unable to be acquired immediately, entered a queue. Because AccessExclusive locks conflict with all other lock types, subsequent read/write queries from the API also queued up behind it, leading to widespread timeouts and the 15-second API outage.",
+    "remediation_steps": "To prevent similar issues, GoCardless identified several best practices. These include eliminating long-running queries, running analytical queries on replicas, setting lock_timeout in migration scripts, splitting schema changes into smaller transactions, and keeping PostgreSQL updated to benefit from locking code improvements.",
+    "source_url": "https://gocardless.com/blog/zero-downtime-postgres-migrations-the-hard-parts/",
+    "quality": "high",
+    "company": "gocardless"
+  },
+  {
+    "incident_id": "icco-0afb9162-9810-4b29-b5f3-d2f41508aede",
+    "raw_log_excerpt": "An upstream `apt` update broke pinned packages which lead to customers experiencing write permission failures to `/dev`.",
+    "root_cause": "An upstream `apt` update broke pinned packages which lead to customers experiencing write permission failures to `/dev`.",
+    "remediation_steps": "An upstream `apt` update broke pinned packages which lead to customers experiencing write permission failures to `/dev`.",
+    "source_url": "https://status.heroku.com/incidents/1042",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-3ca9020c-e384-4964-98b6-68268d9e42ec",
+    "raw_log_excerpt": "On September 3, an incident occurred with Heroku's Git server component, which handles `git push heroku main` operations. The issue arose during a deployment that required a new configuration variable for an internal API endpoint.",
+    "root_cause": "On September 3, an incident occurred with Heroku's Git server component, which handles `git push heroku main` operations. The issue arose during a deployment that required a new configuration variable for an internal API endpoint.",
+    "remediation_steps": "The immediate resolution involved transmitting the correct configuration variables to the affected instances and restarting their processes. To prevent recurrence, Heroku plans to merge the steps of updating configuration variables and deploying code into a single, atomic action, or implement a safeguard warning if configuration variables are out of sync during a deployment.",
+    "source_url": "https://blog.heroku.com/how-i-broke-git-push-heroku-main",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-41f95c9f-d248-4a6c-802d-3648022a03dd",
+    "raw_log_excerpt": "A security incident affecting Heroku systems began on April 7, 2022, when a threat actor gained unauthorized access to a Heroku database. The actor subsequently obtained customer GitHub integration OAuth tokens and downloaded Heroku's private GitHub repositories between April 8 and April 9, 2022. GitHub notified Salesforce of a potential security issue on April 13, 2022, prompting an immediate investigation by Heroku.",
+    "root_cause": "Customer impact included the potential compromise of private GitHub repositories and the exfiltration of sensitive account data. Heroku notified affected customers, revoked existing GitHub integration tokens, and mandated a password rotation for customer accounts due to the exfiltration of hashed and salted passwords, especially for those without multi-factor authentication enabled. These actions, while critical for security, caused some inconvenience to customers.",
+    "remediation_steps": "Through these diligent efforts, Heroku effectively disrupted the threat actor's infrastructure, with no evidence of unauthorized access since April 14, 2022. The investigation concluded on May 30, 2022, leading to significant improvements in Heroku's security posture and ongoing efforts to strengthen defenses against evolving threats.",
+    "source_url": "https://blog.heroku.com/april-2022-incident-review",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-7e14860a-fced-4a66-9fdf-40f702ceeccd",
+    "raw_log_excerpt": "Having a system that requires scheduled manual updates resulted in an error which caused US customers to be unable to scale, stop or restart dynos, or route HTTP traffic, and also prevented all customers from being able to deploy.",
+    "root_cause": "Having a system that requires scheduled manual updates resulted in an error which caused US customers to be unable to scale, stop or restart dynos, or route HTTP traffic, and also prevented all customers from being able to deploy.",
+    "remediation_steps": "Having a system that requires scheduled manual updates resulted in an error which caused US customers to be unable to scale, stop or restart dynos, or route HTTP traffic, and also prevented all customers from being able to deploy.",
+    "source_url": "https://status.heroku.com/incidents/642?postmortem",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-86beec9d-3cf5-4cbd-8379-9a04b614f3e4",
+    "raw_log_excerpt": "An upgrade silently disabled a check that was meant to prevent filesystem corruption in running containers. A subsequent deploy caused filesystem corruption in running containers.",
+    "root_cause": "An upgrade silently disabled a check that was meant to prevent filesystem corruption in running containers. A subsequent deploy caused filesystem corruption in running containers.",
+    "remediation_steps": "An upgrade silently disabled a check that was meant to prevent filesystem corruption in running containers. A subsequent deploy caused filesystem corruption in running containers.",
+    "source_url": "https://engineering.heroku.com/blogs/2017-02-15-filesystem-corruption-on-heroku-dynos/",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-8aab8820-3db3-4827-b1b9-9702bddbafb1",
+    "raw_log_excerpt": "An automated remote configuration change did not propagate fully. Web dynos could not be started.",
+    "root_cause": "An automated remote configuration change did not propagate fully. Web dynos could not be started.",
+    "remediation_steps": "An automated remote configuration change did not propagate fully. Web dynos could not be started.",
+    "source_url": "https://status.heroku.com/incidents/1091",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-a532970a-0625-4ac3-8d3d-852108d2eb6b",
+    "raw_log_excerpt": "At 15:05 UTC on June 8, 2023, a database error occurred where a foreign key used a smaller data type than the primary key that it referenced. This error caused an overflow when the primary key exceeded the allowable value, resulting in an inability to create new authorizations within Heroku. This error also prevented customers from creating new deployments. The oncall operations then triggered the Heroku API full outage.",
+    "root_cause": "At 15:05 UTC on June 8, 2023, a database error occurred where a foreign key used a smaller data type than the primary key that it referenced. This error caused an overflow when the primary key exceeded the allowable value, resulting in an inability to create new authorizations within Heroku. This error also prevented customers from creating new deployments. The oncall operations then triggered the Heroku API full outage.",
+    "remediation_steps": "At 15:05 UTC on June 8, 2023, a database error occurred where a foreign key used a smaller data type than the primary key that it referenced. This error caused an overflow when the primary key exceeded the allowable value, resulting in an inability to create new authorizations within Heroku. This error also prevented customers from creating new deployments. The oncall operations then triggered the Heroku API full outage.",
+    "source_url": "https://status.heroku.com/incidents/2558",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-f6bbc0ef-8355-46ba-aba6-86fd4f312bd7",
+    "raw_log_excerpt": "A change to the core application that manages the underlying infrastructure for the Common Runtime included a dependency upgrade that caused a timing lock issue that greatly reduced the throughput of our task workers. This dependency change, coupled with a failure to appropriately scale up due to increased workload scheduling, caused the application's work queue to build up. Contributing to the issue, the team was not alerted immediately that new router instances were not being initialized corre",
+    "root_cause": "A change to the core application that manages the underlying infrastructure for the Common Runtime included a dependency upgrade that caused a timing lock issue that greatly reduced the throughput of our task workers. This dependency change, coupled with a failure to appropriately scale up due to increased workload scheduling, caused the application's work queue to build up. Contributing to the issue, the team was not alerted immediately that new router instances were not being initialized corre",
+    "remediation_steps": "A change to the core application that manages the underlying infrastructure for the Common Runtime included a dependency upgrade that caused a timing lock issue that greatly reduced the throughput of our task workers. This dependency change, coupled with a failure to appropriately scale up due to increased workload scheduling, caused the application's work queue to build up. Contributing to the issue, the team was not alerted immediately that new router instances were not being initialized corre",
+    "source_url": "https://status.heroku.com/incidents/2451",
+    "quality": "high",
+    "company": "heroku"
+  },
+  {
+    "incident_id": "icco-019eb098-9da5-4d2c-a64c-c6498933f165",
+    "raw_log_excerpt": "In early August 2022, Honeycomb experienced incidents impacting query performance and alerting via triggers and SLOs. Visible issues began around 11:35 a.m. ET, with the worst impact lasting approximately 4 hours, though the investigation spanned 9 hours.",
+    "root_cause": "The incidents stemmed from a convergence of factors. Inaccurate timestamps in a customer's telemetry data caused short trigger queries to consistently access cold storage via AWS Lambda, tying trigger performance to Lambda capacity. Concurrently, a single customer's SLO, due to an SLI never returning valid results, continuously triggered aggressive backfills of up to 60 days of cold data, consuming significant Lambda resources.",
+    "remediation_steps": "Initial mitigation attempts were hampered by red herrings. Resolution came when an engineer, not involved in the initial investigation, identified the problematic SLO. The team fixed the customer's SLO, corrected the general SLO behavior for failures, and implemented a more aggressive default policy for handling future-stamps in data.",
+    "source_url": "https://www.honeycomb.io/blog/incident-review-designed-failing/",
+    "quality": "high",
+    "company": "honeycomb"
+  },
+  {
+    "incident_id": "icco-7ba9335c-25db-4dfc-b0f6-3e6a2aff2244",
+    "raw_log_excerpt": "On September 8th, 2022, Honeycomb's ingest system experienced repeated outages for over eight hours. The incident began with a \"shark fin\" pattern, where Shepherd hosts, responsible for accepting customer data, ran out of memory (OOM) and restarted. This also led to cascading crashes in the Refinery cluster, which processes internal Shepherd traces.",
+    "root_cause": "On September 8th, 2022, Honeycomb's ingest system experienced repeated outages for over eight hours. The incident began with a \"shark fin\" pattern, where Shepherd hosts, responsible for accepting customer data, ran out of memory (OOM) and restarted. This also led to cascading crashes in the Refinery cluster, which processes internal Shepherd traces.",
+    "remediation_steps": "The outage resulted in a serious portion of ingest data being unavailable for over eight and a half hours, impacting most customers sending data at the time. Engineers developed and deployed a fix to reduce cache contention and pre-fill the cache before Shepherd hosts accepted traffic. This immediately stabilized the ingest system, and Refinery was subsequently stabilized by adding more hosts.",
+    "source_url": "https://www.honeycomb.io/blog/incident-review-shepherd-cache-delays/",
+    "quality": "high",
+    "company": "honeycomb"
+  },
+  {
+    "incident_id": "icco-b3ecf309-d821-44e9-9755-b49540b6a90c",
+    "raw_log_excerpt": "On July 25th, 2023, Honeycomb experienced a total outage impacting all user-facing components from 1:40 p.m. UTC to 2:48 p.m. UTC. The incident began with a routine switch between Retriever (storage and query engine) clusters on July 24th to avoid a bug. Hours later, an internal SLO for Shepherd (ingest service) started burning, indicating performance degradation.",
+    "root_cause": "Engineers discovered that the new query engine cluster failed to write updates for schema refresh, undermining the ingest cache and causing performance issues. An attempt to fix this by toggling a feature flag to flip writes back to the old cluster failed due to a subtle implementation bug: hosts told to stop never tried again, requiring a full reboot. This flaw, hidden by deployment mechanisms, eventually led to a complete cessation of writes.",
+    "remediation_steps": "Recovery involved setting up circuit-breakers to protect the database, failing over to a replica, manually updating schema timestamps to force a cache reload, and restarting Retriever hosts. Corrective actions include strengthening the cache, reducing database contention during schema updates, and stabilizing performance. In the short term, the specific failure mode has been drastically reduced due to completed migrations and code removal, and a faster database failover response is now expected.",
+    "source_url": "https://www.honeycomb.io/blog/incident-review-what-comes-up-must-first-go-down/",
+    "quality": "high",
+    "company": "honeycomb"
+  },
+  {
+    "incident_id": "icco-c67e3d46-6829-4524-a849-751464295b74",
+    "raw_log_excerpt": "During September and early October, Honeycomb experienced a period of significant operational burden, encompassing over 20 internal issues and leading to five publicly declared incidents. This surge in activity was primarily attributed to accelerated growth, with data ingestion increasing by 40% over a few weeks, causing multiple components to reach their scaling limits simultaneously.",
+    "root_cause": "The root causes were multifaceted, stemming from the rapid growth. Key issues included previously unknown network limits in AWS for Kafka, limitations in automation stability, and unexpected interactions between production and dogfood environments. Specific technical problems involved the Kafka auto-balancer, a Linux EXT4 bug, an undersized RDS instance, and a critical bottleneck in the Sarama library's Kafka consumer group implementation, which limited throughput to a single connection per lead",
+    "remediation_steps": "Remediation efforts included manual intervention for Kafka rebalancing, scaling up RDS, vertically scaling Kafka for increased network capacity, and adjusting Sarama library settings. Retriever instances were also scaled horizontally, though an initial attempt was hampered by an incorrect runbook entry. Honeycomb learned that scaling individual components requires a deep understanding of distinct scaling patterns, and that a balanced operational tempo is crucial to avoid both constant firefighti",
+    "source_url": "https://www.honeycomb.io/blog/incident-resolution-september-retrospective/",
+    "quality": "high",
+    "company": "honeycomb"
+  },
+  {
+    "incident_id": "icco-029b4a8e-0332-4b91-abc3-5f84bdf70094",
+    "raw_log_excerpt": "On Friday, November 18th, 2022, incident.io experienced 13 minutes of intermittent downtime over a 32-minute period, from 15:40 to 16:12 GMT. This incident led to repeated crashes of their Go monolith application, impacting customer access to the service.",
+    "root_cause": "The core issue was an unhandled panic within the Go application, triggered by a \"poison pill\" message in the GCP Pub/Sub asynchronous message queue. This message caused a specific handler to panic, which, due to an edge case in Go's panic recovery mechanism, led to the entire application crashing.",
+    "remediation_steps": "Two key mitigations were implemented. First, a `recover()` function was explicitly added to the message handler within the `sub.Receive` method to correctly catch panics in child goroutines. Second, the monolithic application was physically split into separate Heroku dynos for web, worker, and cron processes, enhancing reliability by isolating failures and preventing one component from crashing the entire service.",
+    "source_url": "https://incident.io/blog/intermittent-downtime",
+    "quality": "high",
+    "company": "incident"
+  },
+  {
+    "incident_id": "icco-32d4756d-4a53-475d-bfc5-3a028c6192b8",
+    "raw_log_excerpt": "On October 20, 2025, incident.io experienced a service disruption during a major AWS us-east-1 outage (07:11 to 10:53 UTC). Although incident.io's core platform is hosted on Google Cloud, several key services were impacted due to dependencies on AWS-hosted third parties. These included Scribe (AI note taker), SAML authentication, Status Pages, and on-call notifications, leading to intermittent unavailability and delays for users.",
+    "root_cause": "On October 20, 2025, incident.io experienced a service disruption during a major AWS us-east-1 outage (07:11 to 10:53 UTC). Although incident.io's core platform is hosted on Google Cloud, several key services were impacted due to dependencies on AWS-hosted third parties. These included Scribe (AI note taker), SAML authentication, Status Pages, and on-call notifications, leading to intermittent unavailability and delays for users.",
+    "remediation_steps": "Another contributing factor was a traffic management feature flag that failed to apply globally. A recent usability tweak meant limits were only applied to the top 10 organizations by traffic volume, rendering it ineffective for broader control. Remediation efforts included removing the Docker Hub dependency, implementing region switching for Scribe, optimizing escalation acquisition logic and autovacuum settings, and planning for telecom redundancy. The incident highlighted the complex nature o",
+    "source_url": "https://incident.io/blog/service-disruption-october-20th-2025",
+    "quality": "high",
+    "company": "incident"
+  },
+  {
+    "incident_id": "icco-34b4a47b-a3d6-4bda-acc9-57b621f53468",
+    "raw_log_excerpt": "Incident.io experienced intermittent application timeouts over a two-week period earlier this year, impacting customer experience and leading to \"context canceled errors\" in their error reporting. Despite initial investigations, no clear cause like sudden code changes or traffic spikes was immediately apparent.",
+    "root_cause": "To better diagnose the problem, incident.io improved their observability by implementing a custom `ngrok/sqlmw` middleware. This allowed them to track the total time operations spent holding a database connection pool. The ultimate root cause was identified as an unnecessary transaction wrapping every Slack modal submission.",
+    "remediation_steps": "Removing these unnecessary transactions, and explicitly adding them only where transactional guarantees were required, resolved the issue. The problem was not a single slow operation but an aggregation of many small, fast transactions exhausting the connection pool. The company has been timeout-free for four months since the fix.",
+    "source_url": "https://incident.io/blog/database-performance",
+    "quality": "high",
+    "company": "incident"
+  },
+  {
+    "incident_id": "icco-9dbf5bb5-79ba-4d1f-8d14-d6f0ca264fd6",
+    "raw_log_excerpt": "Customers of incident.io began reporting that their per-organization incident identifiers, such as #INC-N, were unexpectedly jumping. For example, one customer observed an ID jump from #INC-7 directly to #INC-39, indicating a consistent skip of 32 numbers. This suggested a systematic issue with how incident IDs were being generated.",
+    "root_cause": "Initially, the team considered transaction rollbacks as a potential cause, as PostgreSQL sequences increment even if a transaction is rolled back. However, this was deemed unlikely because it would require 32 failed incident creations for a single organization, and no such issues or customer reports of failed incident creation were observed.",
+    "remediation_steps": "Initially, the team considered transaction rollbacks as a potential cause, as PostgreSQL sequences increment even if a transaction is rolled back. However, this was deemed unlikely because it would require 32 failed incident creations for a single organization, and no such issues or customer reports of failed incident creation were observed.",
+    "source_url": "https://incident.io/blog/one-two-skip-a-few",
+    "quality": "high",
+    "company": "incident"
+  },
+  {
+    "incident_id": "icco-eb95646f-90c2-4efe-b89e-060debafa0fc",
+    "raw_log_excerpt": "Following a migration to Google Cloud, incident.io experienced a spike in Postgres connection timeouts, with hundreds of new connections being opened per second. Initial investigations led to tuning the Postgres connection pool by doubling the maximum connection lifespan to 30 minutes and making the pools static, which significantly reduced new connection creation.",
+    "root_cause": "The persistent cache errors were eventually traced to GKE Dataplane V2. Bursts of parallel outbound calls, particularly when generating timeline events with many attachments, saturated the CPU of the `anetd` agent on Kubernetes nodes. This CPU exhaustion led to dropped packets and network communication failures between the node and services like memcached running on it.",
+    "remediation_steps": "The incident underscored the importance of considering node-wide activity when diagnosing network timeouts and the necessity of carefully limiting outbound network concurrency. While turning off Dataplane V2 was considered, the team opted to address the root cause by improving connection pooling and concurrency management, rather than disabling a core GKE feature.",
+    "source_url": "https://incident.io/blog/clouds-caches-and-connection-conundrums",
+    "quality": "high",
+    "company": "incident"
+  },
+  {
+    "incident_id": "icco-f9f4ba4c-686c-46a4-982c-8dc21bd8a448",
+    "raw_log_excerpt": "On Wednesday, April 9, 2025, between 14:16 and 14:27 UTC, incident.io experienced intermittent availability issues, culminating in a 2-minute database outage from 14:25 to 14:27 UTC. This affected their dashboard, mobile app, Slack app, and API, though on-call alerts remained operational.",
+    "root_cause": "On Wednesday, April 9, 2025, between 14:16 and 14:27 UTC, incident.io experienced intermittent availability issues, culminating in a 2-minute database outage from 14:25 to 14:27 UTC. This affected their dashboard, mobile app, Slack app, and API, though on-call alerts remained operational.",
+    "remediation_steps": "Incident.io plans further investigation, an internal debrief, and enhancements to their processes and monitoring capabilities to better detect and prevent similar situations.",
+    "source_url": "https://status.incident.io/incidents/01JRDFKAGE07YYDY0KZR137BX3/write-up",
+    "quality": "high",
+    "company": "incident"
+  },
+  {
+    "incident_id": "icco-160d35a4-38ac-49da-a261-97d12c86203c",
+    "raw_log_excerpt": "Operations on Manta were blocked because a lock couldn't be obtained on their PostgreSQL metadata servers. This was due to a combination of PostgreSQL's transaction wraparound maintenance taking a lock on something, and a Joyent query that unnecessarily tried to take a global lock.",
+    "root_cause": "Operations on Manta were blocked because a lock couldn't be obtained on their PostgreSQL metadata servers. This was due to a combination of PostgreSQL's transaction wraparound maintenance taking a lock on something, and a Joyent query that unnecessarily tried to take a global lock.",
+    "remediation_steps": "Operations on Manta were blocked because a lock couldn't be obtained on their PostgreSQL metadata servers. This was due to a combination of PostgreSQL's transaction wraparound maintenance taking a lock on something, and a Joyent query that unnecessarily tried to take a global lock.",
+    "source_url": "https://www.joyent.com/blog/manta-postmortem-7-27-2015",
+    "quality": "high",
+    "company": "joyent"
+  },
+  {
+    "incident_id": "icco-9332c0d7-bec4-427c-8689-267bdc5840fa",
+    "raw_log_excerpt": "An operator used a tool with lax input validation to reboot a small number of servers undergoing maintenance but forgot to type `-n` and instead rebooted all servers in the datacenter. This caused an outage that lasted 2.5 hours, rebooted all customer instances, put tremendous load on DHCP/TFTP PXE boot systems, and left API systems requiring manual intervention. See also [Bryan Cantrill's talk](https://www.youtube.com/watch?v=30jNsCVLpAE).",
+    "root_cause": "An operator used a tool with lax input validation to reboot a small number of servers undergoing maintenance but forgot to type `-n` and instead rebooted all servers in the datacenter. This caused an outage that lasted 2.5 hours, rebooted all customer instances, put tremendous load on DHCP/TFTP PXE boot systems, and left API systems requiring manual intervention. See also [Bryan Cantrill's talk](https://www.youtube.com/watch?v=30jNsCVLpAE).",
+    "remediation_steps": "An operator used a tool with lax input validation to reboot a small number of servers undergoing maintenance but forgot to type `-n` and instead rebooted all servers in the datacenter. This caused an outage that lasted 2.5 hours, rebooted all customer instances, put tremendous load on DHCP/TFTP PXE boot systems, and left API systems requiring manual intervention. See also [Bryan Cantrill's talk](https://www.youtube.com/watch?v=30jNsCVLpAE).",
+    "source_url": "https://www.joyent.com/blog/postmortem-for-outage-of-us-east-1-may-27-2014",
+    "quality": "high",
+    "company": "joyent"
+  },
+  {
+    "incident_id": "icco-5a1083d6-e8cd-410a-b8de-90967b967ac7",
+    "raw_log_excerpt": "On 17 October 2016, one of the four controllers in the principal HP 3PAR storage system at King's College London's Strand Data Centre failed. There was no user impact at that point \u2014 the system was designed to keep serving from the remaining controllers. HP hardware engineers attended on site and replaced the failed controller. Instead of returning to a normal state, the storage system went offline and many of its disks simultaneously started failing, leading to a complete loss of data on that a",
+    "root_cause": "The failure was traced to a flaw in the storage-controller firmware. HP had issued an updated firmware release several weeks earlier which would have allowed the controller swap to proceed without an outage, but the IT team had not had the opportunity to apply the routine update before the incident.",
+    "remediation_steps": "The failure was traced to a flaw in the storage-controller firmware. HP had issued an updated firmware release several weeks earlier which would have allowed the controller swap to proceed without an outage, but the IT team had not had the opportunity to apply the routine update before the incident.",
+    "source_url": "https://regmedia.co.uk/2017/02/23/kcl_external_review.pdf",
+    "quality": "high",
+    "company": "kcl"
+  },
+  {
+    "incident_id": "icco-d44e5d9b-5c18-4cbe-b624-46bb9a311b84",
+    "raw_log_excerpt": "On Thursday, March 7th, Kickstarter experienced a critical incident where all MySQL replicas stopped updating, leading to stale and inconsistent data across the site. The issue was signaled by `Duplicate entry` errors during replication, indicating a divergence between the master and its replicas.",
+    "root_cause": "On Thursday, March 7th, Kickstarter experienced a critical incident where all MySQL replicas stopped updating, leading to stale and inconsistent data across the site. The issue was signaled by `Duplicate entry` errors during replication, indicating a divergence between the master and its replicas.",
+    "remediation_steps": "While the immediate crisis was resolved within hours by stabilizing the site, the underlying bug had caused data inconsistencies for an extended period. The primary outcome of the incident was the discovery and understanding of this critical MySQL replication bug, highlighting the importance of deeply understanding database internals beyond ORM abstractions.",
+    "source_url": "https://kickstarter.engineering/the-day-the-replication-died-e543ba45f262",
+    "quality": "high",
+    "company": "kickstarter"
+  },
+  {
+    "incident_id": "icco-edaa981d-2a23-4aab-8c09-1c20c899fb2f",
+    "raw_log_excerpt": "Primary DB became inconsistent with all replicas, which wasn't detected until a query failed. This was caused by a MySQL bug which sometimes caused `order by` to be ignored.",
+    "root_cause": "Primary DB became inconsistent with all replicas, which wasn't detected until a query failed. This was caused by a MySQL bug which sometimes caused `order by` to be ignored.",
+    "remediation_steps": "Primary DB became inconsistent with all replicas, which wasn't detected until a query failed. This was caused by a MySQL bug which sometimes caused `order by` to be ignored.",
+    "source_url": "https://www.kickstarter.com/backing-and-hacking/the-day-the-replication-died",
+    "quality": "high",
+    "company": "kickstarter"
+  },
+  {
+    "incident_id": "icco-5bce5ed8-a675-4b38-8825-5ec0e41e0d1b",
+    "raw_log_excerpt": "On July 1, 2012, a discussion on the Linux Kernel Mailing List (LKML) detailed a critical issue related to leap seconds. When a leap second occurred, CLOCK_REALTIME was correctly rewound by one second. However, the hrtimer subsystem's internal base.offset value, which tracks wall time for CLOCK_REALTIME timers, was not updated. This caused the hrtimer's perception of time to be one second ahead of the system's actual CLOCK_REALTIME.",
+    "root_cause": "The root cause was identified as the omission of a call to clock_was_set() when a leap second was applied. Without this function call, the hrtimer base.offset remained out of sync with the CLOCK_REALTIME adjustment, leading to an inconsistency in timekeeping within the kernel. This state would persist until clock_was_set() was manually invoked, for example, via settimeofday().",
+    "remediation_steps": "On July 1, 2012, a discussion on the Linux Kernel Mailing List (LKML) detailed a critical issue related to leap seconds. When a leap second occurred, CLOCK_REALTIME was correctly rewound by one second. However, the hrtimer subsystem's internal base.offset value, which tracks wall time for CLOCK_REALTIME timers, was not updated. This caused the hrtimer's perception of time to be one second ahead of the system's actual CLOCK_REALTIME.",
+    "source_url": "https://lkml.org/lkml/2012/7/1/203",
+    "quality": "high",
+    "company": "lkml"
+  },
+  {
+    "incident_id": "icco-f4d13c23-5dca-4deb-8ddb-c4bdfc4fea4c",
+    "raw_log_excerpt": "On New Year's 2008-2009, Linux systems experienced crashes related to the introduction of a leap second. This issue was observed on various kernel versions, including `kernel-2.6.26.6-49.fc8.x86_64` on Fedora 8 and `RHEL 4 kernel 2.6.9-67.0.7.EL`. The crashes were particularly prevalent on busy systems.",
+    "root_cause": "The root cause was identified as a deadlock condition within the kernel's timekeeping and logging mechanisms. Specifically, the `ntp_leap_second` function, responsible for handling the leap second event, was invoked from the timer interrupt handler. At this point, the `xtime_lock` was already held by the interrupt handler.",
+    "remediation_steps": "An immediate, albeit temporary, fix suggested was to prevent `printk` calls while `xtime_lock` is held within the NTP code. A more robust and desirable solution would aim to provide leap second notifications without introducing such deadlocks, ensuring system stability during these time adjustments.",
+    "source_url": "https://lkml.org/lkml/2009/1/2/373",
+    "quality": "high",
+    "company": "lkml"
+  },
+  {
+    "incident_id": "icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0",
+    "raw_log_excerpt": "Mandrill experienced a significant outage from February 4, 05:35 UTC, to February 5, 22:09 UTC, which severely impacted its ability to send emails. During this period, only 80% of queued emails were being sent. The incident was triggered when a PostgreSQL database, specifically shard4, entered a safety shutdown mode.",
+    "root_cause": "The root cause was a transaction ID (XID) wraparound in PostgreSQL. Postgres uses 32-bit XIDs, which increment and must be periodically cleared by an auto_vacuum process to prevent them from wrapping around and appearing to be in the future, which causes the database to shut down. Shard4 was a \"hotter\" shard due to the hashing algorithm used for load balancing, leading to a higher load of writes. This likely caused the auto_vacuum process on shard4 to fall behind or fail, resulting in the XID hi",
+    "remediation_steps": "Initial attempts to resolve the issue, including running a full VACUUM and a dump-and-restore operation, were estimated to take days or weeks. A more radical solution was adopted: truncating the large \"Search\" and \"Url\" tables directly on the locked database. This freed the associated XIDs, allowing the vacuum to complete within an hour. Operational data for job queues was also moved to other shards, and storage volumes on app servers were replaced. Post-incident, new XID wraparound alerting was",
+    "source_url": "https://mailchimp.com/what-we-learned-from-the-recent-mandrill-outage/",
+    "quality": "high",
+    "company": "mailchimp"
+  },
+  {
+    "incident_id": "icco-655ee350-a86f-424b-89c5-f80cc0fe527e",
+    "raw_log_excerpt": "On August 18, 2016, Platform.sh experienced a 4-hour downtime in its EU region. A scheduled maintenance window began at 19:00 UTC to upgrade the orchestration software, initially affecting only git servers and the UI. However, at 19:30 UTC, websites also went down, and all services were restored by 23:30 UTC.",
+    "root_cause": "The incident occurred due to a series of cascading issues. During the orchestration software upgrade, gateways were prematurely restarted before the orchestration software had fully started. This caused the gateways to lose their application list and be unable to fetch a new one, leading to website downtime.",
+    "remediation_steps": "On August 18, 2016, Platform.sh experienced a 4-hour downtime in its EU region. A scheduled maintenance window began at 19:00 UTC to upgrade the orchestration software, initially affecting only git servers and the UI. However, at 19:30 UTC, websites also went down, and all services were restored by 23:30 UTC.",
+    "source_url": "https://medium.com/@florian_7764/technical-post-mortem-of-the-august-incident-82ab4c3d6547",
+    "quality": "high",
+    "company": "medium"
+  },
+  {
+    "incident_id": "icco-7562d257-0f9d-4f6a-b7e0-69c3649f79f4",
+    "raw_log_excerpt": "A double free revealed by a database update caused all \"impression bus\" servers to crash simultaneously. This wasn't caught in staging and made it into production because a time delay is required to trigger the bug, and the staging period didn't have a built-in delay.",
+    "root_cause": "A double free revealed by a database update caused all \"impression bus\" servers to crash simultaneously. This wasn't caught in staging and made it into production because a time delay is required to trigger the bug, and the staging period didn't have a built-in delay.",
+    "remediation_steps": "A double free revealed by a database update caused all \"impression bus\" servers to crash simultaneously. This wasn't caught in staging and made it into production because a time delay is required to trigger the bug, and the staging period didn't have a built-in delay.",
+    "source_url": "https://medium.com/xandr-tech/2013-09-17-outage-postmortem-586b19ae4307",
+    "quality": "high",
+    "company": "medium"
+  },
+  {
+    "incident_id": "icco-922e216e-efe1-4687-a3e7-2398fbdd8dbe",
+    "raw_log_excerpt": "Instapaper experienced an extended outage from Wednesday, February 9 at 12:30 PM PT until Thursday, February 10 at 7:30 PM PT. During this period, the service was unavailable. A short-term solution was implemented, restoring Instapaper with limited access to archives. Full service recovery was completed on Tuesday, February 14, 2017.",
+    "root_cause": "The critical system that failed was Instapaper's MySQL database, hosted on Amazon's Relational Database Service (RDS). The root cause was a 2TB file size limit for RDS instances created before April 2014, which used an ext3 filesystem. Instapaper's \"bookmarks\" table, storing user-saved articles, exceeded this 2TB limit on February 9, causing new entries to fail. Although a read replica was created in March 2015, it inherited the same filesystem and limitation from the original June 2013 instance",
+    "remediation_steps": "Instapaper experienced an extended outage from Wednesday, February 9 at 12:30 PM PT until Thursday, February 10 at 7:30 PM PT. During this period, the service was unavailable. A short-term solution was implemented, restoring Instapaper with limited access to archives. Full service recovery was completed on Tuesday, February 14, 2017.",
+    "source_url": "https://medium.com/making-instapaper/instapaper-outage-cause-recovery-3c32a7e9cc5f",
+    "quality": "high",
+    "company": "medium"
+  },
+  {
+    "incident_id": "icco-cf16d8bc-b4cd-469d-94e4-e39fcec5aec9",
+    "raw_log_excerpt": "In early 2015, Medium users in Poland reported an inability to type the character '\u015a' within the Medium editor. This issue was specific to Medium, as the character could be typed elsewhere, and was reported \"a few weeks\" before the article's publication on February 2, 2015.",
+    "root_cause": "The root cause was a complex interaction of several historical and technical factors. In Poland, due to the lack of customized keyboards in early computing, a \"programmer's layout\" emerged where diacritics like '\u015a' were typed using Alt key combinations (e.g., Alt+S). On Microsoft Windows, the Right Alt key was internally mapped as a combination of Ctrl + Alt.",
+    "remediation_steps": "The remediation involved a simple code change in Medium's editor. The fix was implemented \"last week\" (late January 2015) and involved modifying the logic to only block Ctrl + S if the Alt key was *not* pressed. This allowed the Ctrl + Alt + S combination, originating from Right Alt + S, to pass through and correctly produce the '\u015a' character.",
+    "source_url": "https://medium.com/medium-eng/the-curious-case-of-disappearing-polish-s-fa398313d4df",
+    "quality": "high",
+    "company": "medium"
+  },
+  {
+    "incident_id": "icco-d6db1e76-af37-435c-83e9-e7c7cabfaf0f",
+    "raw_log_excerpt": "On March 16, 2017, Square's serving infrastructure experienced a widespread service disruption, primarily affecting the \"Multipass\" customer authentication service. This incident impacted most of Square's products and services, including payment processing, Point of Sale, Dashboard, Appointments, and Payroll.",
+    "root_cause": "The root cause was identified as the Multipass service becoming unrecoverably overloaded. This was triggered by a deployment of the \"Roster\" service (which handles customer identity) in a single datacenter. A critical contributing factor was a harmful feedback loop within Multipass's Redis database interactions, where a specific code path had a high upper bound (500) for retries on optimistic transactions with no backoff, causing Redis to peak on capacity.",
+    "remediation_steps": "Initial remediation attempts, including rolling back Roster changes and restarting Multipass, were unsuccessful. Engineers then diagnosed the Redis retry issue in Multipass, developed a fix to reduce retries, and deployed it, which restored Multipass and payment flows. The subsequent 2FA SMS issue was resolved by contacting the SMS vendor and rebalancing outbound SMS phone numbers to increase capacity.",
+    "source_url": "https://medium.com/square-corner-blog/incident-summary-2017-03-16-2f65be39297",
+    "quality": "high",
+    "company": "medium"
+  },
+  {
+    "incident_id": "icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5",
+    "raw_log_excerpt": "The August 14, 2003 blackout affected ~50 million people across Ohio, Michigan, Pennsylvania, New York, Vermont, Massachusetts, Connecticut, New Jersey, and Ontario. About 61,800 MW of load was lost; restoration took 4 days in parts of the U.S. and over a week of rolling blackouts in Ontario. Estimated U.S. cost: $4\u201310 billion; Canada's GDP fell 0.7% in August.",
+    "root_cause": "1. **Inadequate system understanding at FirstEnergy.** FE had not adequately studied its system or maintained voltage criteria; its operators did not understand how degraded conditions would propagate.\n2. **Inadequate situational awareness at FE.** Beginning at 14:14 EDT, FE's XA/21 EMS alarm processor died silently. Operators continued to act on a stale picture of the grid for nearly two hours and missed the loss of the Eastlake 5 generator and successive 345-kV line trips.\n3. **Vegetation mana",
+    "remediation_steps": "The principal recommendation was that the U.S. Congress make NERC reliability standards mandatory and enforceable, with audit, compliance, and penalty authority. Subsidiary recommendations covered EMS alarm and state-estimator monitoring, mandatory vegetation-management standards on transmission ROWs, control-area audits, reliability-coordinator authority and tooling, operator training and certification, under-voltage load-shedding programs, and back-up control-center planning.",
+    "source_url": "https://www3.epa.gov/region1/npdes/merrimackstation/pdfs/ar/AR-1165.pdf",
+    "quality": "high",
+    "company": "merrimack"
+  },
+  {
+    "incident_id": "icco-a54b2ace-5fdf-452e-bdb2-cd8a48a94e56",
+    "raw_log_excerpt": "On October 4, 2021, Facebook experienced a global outage affecting all its platforms. This incident was triggered by a system managing the company's global backbone network capacity, which connects all its computing facilities and data centers worldwide.",
+    "root_cause": "The root cause was a routine maintenance job where a command, intended to assess backbone capacity, unintentionally took down all connections in the backbone network. A bug in an audit tool failed to prevent this command. This led to a complete disconnection of Facebook's data centers from the internet. A secondary issue arose when DNS servers, unable to communicate with data centers, withdrew their BGP advertisements, making them unreachable to the rest of the internet.",
+    "remediation_steps": "Remediation involved sending engineers physically to data centers due to the lack of remote access. The high security of these facilities made physical access and modification difficult, prolonging the recovery. Once backbone connectivity was restored, services were brought back online carefully, leveraging experience from \"storm drills\" to manage the potential surge in traffic and prevent further crashes.",
+    "source_url": "https://engineering.fb.com/2021/10/05/networking-traffic/outage-details/",
+    "quality": "high",
+    "company": "meta"
+  },
+  {
+    "incident_id": "icco-3f376b77-6063-48a6-8ee2-92ca365194e4",
+    "raw_log_excerpt": "A configuration change rolled out as part of an Azure Storage performance update triggered a previously-undetected infinite-loop bug in the Blob front-ends, which then could not absorb traffic and took down every Azure service that depended on Storage. The change was applied to most regions in a short period of time, due to operational error, rather than following the standard protocol of applying production changes in incremental batches \u2014 which is why the blast radius was so broad.",
+    "root_cause": "A configuration change rolled out as part of an Azure Storage performance update triggered a previously-undetected infinite-loop bug in the Blob front-ends, which then could not absorb traffic and took down every Azure service that depended on Storage. The change was applied to most regions in a short period of time, due to operational error, rather than following the standard protocol of applying production changes in incremental batches \u2014 which is why the blast radius was so broad.",
+    "remediation_steps": "Committed remediations: enforce incremental-batch deployment in the deployment tooling itself (so the operational error of pushing globally is no longer possible); shorten recovery time for cases where a configuration revert needs a process restart; fix the infinite-loop bug in the CPU-reduction code path before it ships again; and harden the Service Health Dashboard infrastructure so it can report through future Storage outages.",
+    "source_url": "http://azure.microsoft.com/blog/2014/11/19/update-on-azure-storage-service-interruption/",
+    "quality": "high",
+    "company": "microsoft"
+  },
+  {
+    "incident_id": "icco-5a99836e-bbde-4dfc-9621-054eac5c5c50",
+    "raw_log_excerpt": "On February 29, 2012, Windows Azure experienced a significant service disruption primarily affecting its Compute service and dependent components like Access Control Service (ACS), Windows Azure Service Bus, SQL Azure Portal, and Data Sync Services. The incident began at 00:00 UST on February 29th, when new virtual machines (VMs) attempted to generate transfer certificates.",
+    "root_cause": "The root cause was a \"leap day bug\" in the Guest Agent (GA) responsible for creating these certificates. The GA calculated the certificate's valid-to date by simply adding one year to the current date. On February 29, 2012, this resulted in an invalid expiration date of February 29, 2013, causing certificate creation to fail. This failure prevented GAs from connecting to Host Agents (HAs), leading to VMs being marked faulty and eventually entire clusters entering a degraded \"Human Investigate\" (",
+    "remediation_steps": "After identifying the bug at 6:38 PM PST, developers created and tested a fix. The updated GA code was ready by 11:20 PM PST and began rolling out to all clusters by 2:11 AM PST on February 29th, with service management restored to most clusters by 5:23 AM PST. However, a secondary outage occurred in seven clusters at 2:47 AM PST due to an incompatible networking plugin included in an emergency update package. This caused VMs in these clusters to lose network connectivity.",
+    "source_url": "https://azure.microsoft.com/en-us/blog/summary-of-windows-azure-service-disruption-on-feb-29th-2012/",
+    "quality": "high",
+    "company": "microsoft"
+  },
+  {
+    "incident_id": "icco-e21166ff-b35a-4309-99cd-4a8bf5e22305",
+    "raw_log_excerpt": "The Mars Pathfinder spacecraft experienced unexpected system resets a few days after its landing in July 1997. These resets occurred when the high-priority `bc_sched` task detected that the `bc_dist` task, responsible for data distribution, failed to complete its execution within its hard deadline. Each reset reinitialized hardware and software, terminating current ground-commanded activities and delaying daily operations, though no collected data was lost.",
+    "root_cause": "The root cause was identified as a priority inversion problem within the VxWorks operating system. A low-priority `ASI/MET` task acquired a mutual exclusion semaphore but was then preempted by several medium-priority tasks before releasing it. When the high-priority `bc_dist` task subsequently attempted to acquire the same semaphore, it became blocked, effectively waiting for the much lower-priority `ASI/MET` task to complete, leading to the deadline violation and system reset.",
+    "remediation_steps": "Extensive testing was conducted on the ground to verify the fix and assess any potential performance impacts or behavioral changes. The remote software update process involved sending only the differences between the onboard and desired software versions, which were then applied by custom software on the spacecraft. This remediation successfully resolved the system resets, allowing the mission to continue its scientific objectives.",
+    "source_url": "http://research.microsoft.com/en-us/um/people/mbj/Mars_Pathfinder/Authoritative_Account.html",
+    "quality": "high",
+    "company": "microsoft"
+  },
+  {
+    "incident_id": "icco-f4458caf-d848-419a-966e-07c9020cfc48",
+    "raw_log_excerpt": "On November 19, 2014, Azure storage services experienced a service interruption across the United States, Europe, and parts of Asia. This incident, which began at 00:51 UTC and was largely resolved by 11:45 UTC, impacted numerous cloud services built on Azure Storage, including Virtual Machines, Websites, SQL Geo-Restore, and the Management Portal.",
+    "root_cause": "The root cause was identified as a configuration change introduced as part of a performance update for Azure Storage. This change, intended to improve performance and reduce CPU footprint for Azure Table Front-Ends, exposed a previously undetected bug in the Blob Front-Ends. The bug caused the Blob Front-Ends to enter an infinite loop, preventing them from processing traffic.",
+    "remediation_steps": "On November 19, 2014, Azure storage services experienced a service interruption across the United States, Europe, and parts of Asia. This incident, which began at 00:51 UTC and was largely resolved by 11:45 UTC, impacted numerous cloud services built on Azure Storage, including Virtual Machines, Websites, SQL Geo-Restore, and the Management Portal.",
+    "source_url": "https://azure.microsoft.com/en-us/blog/update-on-azure-storage-service-interruption/",
+    "quality": "high",
+    "company": "microsoft"
+  },
+  {
+    "incident_id": "icco-5b73c1c1-8ec4-4901-91f3-0d993f582dd4",
+    "raw_log_excerpt": "Around May 4th, 2019, most Firefox add-ons stopped functioning due to an expired certificate. The incident was triggered when a certificate used for signing add-ons expired, preventing Firefox from validating their authenticity.",
+    "root_cause": "Around May 4th, 2019, most Firefox add-ons stopped functioning due to an expired certificate. The incident was triggered when a certificate used for signing add-ons expired, preventing Firefox from validating their authenticity.",
+    "remediation_steps": "To remediate the issue, a fix was delivered via the Studies system (internally known as Normandy), which injected a valid certificate. This method was chosen for its speed, despite requiring some users to enable Telemetry, leading to temporary over-collection of data. Over the subsequent weeks, numerous fixes and dot releases were deployed to address various deployment targets and defects in initial patches.",
+    "source_url": "https://hacks.mozilla.org/2019/07/add-ons-outage-post-mortem-result/",
+    "quality": "high",
+    "company": "mozilla"
+  },
+  {
+    "incident_id": "icco-65ef2aac-4cc6-4592-af9b-999694efc917",
+    "raw_log_excerpt": "On January 13th, 2022, Firefox became unusable for nearly two hours for users globally. This incident began around 07:28 UTC when Google Cloud Platform (GCP) deployed an unannounced change, making HTTP/3 the default for load balancers set to \"Automatic\". Shortly after, Firefox users experienced hangs and crashes, rendering the browser unresponsive and unable to load web content.",
+    "root_cause": "On January 13th, 2022, Firefox became unusable for nearly two hours for users globally. This incident began around 07:28 UTC when Google Cloud Platform (GCP) deployed an unannounced change, making HTTP/3 the default for load balancers set to \"Automatic\". Shortly after, Firefox users experienced hangs and crashes, rendering the browser unresponsive and unable to load web content.",
+    "remediation_steps": "On January 13th, 2022, Firefox became unusable for nearly two hours for users globally. This incident began around 07:28 UTC when Google Cloud Platform (GCP) deployed an unannounced change, making HTTP/3 the default for load balancers set to \"Automatic\". Shortly after, Firefox users experienced hangs and crashes, rendering the browser unresponsive and unable to load web content.",
+    "source_url": "https://hacks.mozilla.org/2022/02/retrospective-and-technical-details-on-the-recent-firefox-outage/",
+    "quality": "high",
+    "company": "mozilla"
+  },
+  {
+    "incident_id": "icco-7f0cc221-46c7-485e-bf6c-1719dc4c4e49",
+    "raw_log_excerpt": "On January 28, 2014, npm experienced an outage due to a configuration change made to the Varnish VCL on Fastly. This change inadvertently misrouted all incoming requests, including those intended for CouchDB, to Manta.",
+    "root_cause": "On January 28, 2014, npm experienced an outage due to a configuration change made to the Varnish VCL on Fastly. This change inadvertently misrouted all incoming requests, including those intended for CouchDB, to Manta.",
+    "remediation_steps": "To prevent recurrence, future Fastly VCL configuration changes will ensure `req.backend` is explicitly set within the `vcl_recv` function, even after a `restart`. Additionally, npm plans to implement a separate Varnish instance for staging VCL changes to catch errors before deployment.",
+    "source_url": "https://blog.npmjs.org/post/74949623024/2014-01-28-outage-postmortem.html",
+    "quality": "high",
+    "company": "npmjs"
+  },
+  {
+    "incident_id": "icco-414194f9-fb2c-48b4-a239-eead81523b5d",
+    "raw_log_excerpt": "On January 16, 2022, a threat actor gained remote access via RDP to a laptop belonging to a customer support engineer working for Sitel, a third-party sub-processor for Okta. This access continued until January 21, 2022. Okta Security was alerted on January 20, 2022, about suspicious activity on a Sitel employee's Okta account, leading to an immediate investigation and escalation.",
+    "root_cause": "The root cause was the compromise of a Sitel-owned and managed laptop, allowing the attacker to control the machine through an RDP session. While the attacker never gained direct access to the Okta service via account takeover, they were able to obtain screenshots and operate the compromised machine. The support engineer's access was limited to basic duties using internal tools like \"SuperUser,\" designed with least privilege principles.",
+    "remediation_steps": "Okta analyzed over 125,000 log entries to scope the blast radius and will provide affected customers with reports detailing actions performed on their Okta tenants by Sitel during the incident period. This transparency aims to allow customers to conduct their own analysis and assess the situation. Okta also acknowledged opportunities for process and communication improvements.",
+    "source_url": "https://www.okta.com/blog/2022/03/oktas-investigation-of-the-january-2022-compromise/",
+    "quality": "high",
+    "company": "okta"
+  },
+  {
+    "incident_id": "icco-912b30f3-43b7-4d6d-a03d-322983048e5c",
+    "raw_log_excerpt": "On July 7, 2020, at 16:06 UTC, PythonAnywhere experienced an unplanned outage due to a storage volume failure on one of their file servers, 'livefile1'. This immediately impacted their own website and user programs, including websites, scheduled tasks, and always-on tasks dependent on that volume. The issue later spread to other hosted sites during recovery efforts.",
+    "root_cause": "On July 7, 2020, at 16:06 UTC, PythonAnywhere experienced an unplanned outage due to a storage volume failure on one of their file servers, 'livefile1'. This immediately impacted their own website and user programs, including websites, scheduled tasks, and always-on tasks dependent on that volume. The issue later spread to other hosted sites during recovery efforts.",
+    "remediation_steps": "The PythonAnywhere team, with AWS support, rebuilt the file server's volumes from backup snapshots. All sites were reported as up and running by 21:24 UTC, with full volume warm-up completed by 23:50 UTC. Moving forward, PythonAnywhere plans to improve the speed of identifying underlying causes, streamline file server volume rebuilding, limit the scope of future outages to only directly affected users, and optimize the process of warming up new volumes.",
+    "source_url": "https://blog.pythonanywhere.com/189/",
+    "quality": "high",
+    "company": "pythonanywhere"
+  },
+  {
+    "incident_id": "icco-0d5441d3-c69a-4a0a-ab5f-c5ef6e7cc774",
+    "raw_log_excerpt": "On a Friday evening in December 2019, Razorpay experienced an outage when their main application, \"API\", began throwing 5xx errors due to an inability to connect to its RDS (MySQL) database. An AWS Multi-AZ failover occurred, and the application automatically recovered after approximately 110 seconds. However, this failover led to replication failure on all five replica instances, which then had to be recreated, a process that took six hours.",
+    "root_cause": "On a Friday evening in December 2019, Razorpay experienced an outage when their main application, \"API\", began throwing 5xx errors due to an inability to connect to its RDS (MySQL) database. An AWS Multi-AZ failover occurred, and the application automatically recovered after approximately 110 seconds. However, this failover led to replication failure on all five replica instances, which then had to be recreated, a process that took six hours.",
+    "remediation_steps": "Additionally, the `sync_binlog` parameter was correctly set to `1`, causing binary logs to be flushed immediately. Replicas read this data and applied it, but since the data was not durable on the primary, when the new primary inserted the same data, it caused duplicate-key errors on the replicas, leading to their crash. The remediation involved changing `innodb_flush_log_at_trx_commit` to `1` on the master instance and correcting the lost data.",
+    "source_url": "https://razorpay.com/blog/day-of-rds-multi-az-failover/",
+    "quality": "high",
+    "company": "razorpay"
+  },
+  {
+    "incident_id": "icco-27672984-d1e8-4a31-b08c-75c8c54e6314",
+    "raw_log_excerpt": "On September 20, 2023, a service disruption began at 14:48 Coordinated Universal Time (UTC), affecting a subset of Salesforce customers. This incident led to some customers being unable to log in and access their services across multiple offerings.",
+    "root_cause": "On September 20, 2023, a service disruption began at 14:48 Coordinated Universal Time (UTC), affecting a subset of Salesforce customers. This incident led to some customers being unable to log in and access their services across multiple offerings.",
+    "remediation_steps": "The policy change inadvertently blocked access to resources. This blockage extended beyond the intended scope of the security update, causing the widespread access issues.",
+    "source_url": "https://help.salesforce.com/s/articleView?id=000396429&type=1",
+    "quality": "high",
+    "company": "salesforce"
+  },
+  {
+    "incident_id": "icco-848f9263-fe81-4bbc-b0d2-cc1671bb88a5",
+    "raw_log_excerpt": "Initial disruption due to power failure in one datacenter led to cascading failures with a database cluster and file discrepancies resulting in cross data center failover issues.",
+    "root_cause": "Initial disruption due to power failure in one datacenter led to cascading failures with a database cluster and file discrepancies resulting in cross data center failover issues.",
+    "remediation_steps": "Initial disruption due to power failure in one datacenter led to cascading failures with a database cluster and file discrepancies resulting in cross data center failover issues.",
+    "source_url": "https://help.salesforce.com/apex/HTViewSolution?urlname=Root-Cause-Message-for-Disruption-of-Service-on-NA14-May-2016&language=en_US",
+    "quality": "high",
+    "company": "salesforce"
+  },
+  {
+    "incident_id": "shopify-882r6x3ttyg9",
+    "raw_log_excerpt": "Some POS transactions are not completing on iOS devices Actions\nSome POS transactions are not completing on iOS devices, we are currently investigating and will keep you updated.",
+    "root_cause": "Between 16:31 UTC and 19:48 UTC, we experienced an issue due to which some POS transactions could not be completed as expected. A fix was implemented at 17:44 UTC which resolved the issue. The monitoring period for this issue has ended and no further impact has been observed. Merchants still experiencing issues can try disconnecting, forgetting, and reconnecting their card readers to resolve errors.",
+    "remediation_steps": "Between 16:31 UTC and 19:48 UTC, we experienced an issue due to which some POS transactions could not be completed as expected. A fix was implemented at 17:44 UTC which resolved the issue. The monitoring period for this issue has ended and no further impact has been observed. Merchants still experiencing issues can try disconnecting, forgetting, and reconnecting their card readers to resolve errors.",
+    "source_url": "https://status.shopify.com/incidents/882r6x3ttyg9",
+    "quality": "high",
+    "company": "shopify"
+  },
+  {
+    "incident_id": "shopify-26hrlv896m7j",
+    "raw_log_excerpt": "We are investigating an issue preventing web traffic to our servers\nWe are looking into this and will keep you posted with updates here as soon as we have identified the issue.",
+    "root_cause": "All traffic is back to normal levels, we are no longer seeing errors and believe this fix has worked as intended.",
+    "remediation_steps": "All traffic is back to normal levels, we are no longer seeing errors and believe this fix has worked as intended.",
+    "source_url": "https://status.shopify.com/incidents/26hrlv896m7j",
+    "quality": "high",
+    "company": "shopify"
+  },
+  {
+    "incident_id": "shopify-7g3scbq177td",
+    "raw_log_excerpt": "Admin left nav is missing elements\nSeveral merchants have reported navigation elements missing from the left navigation. This affects a merchant's ability to use sub-nav items. The problem has been identified and a fix will be rolled out.",
+    "root_cause": "Several merchants have reported navigation elements missing from the left navigation. This affects a merchant's ability to use sub-nav items. The problem has been identified and a fix will be rolled out.",
+    "remediation_steps": "This incident has now been resolved, and all items in the left nav are now back to normal.",
+    "source_url": "https://status.shopify.com/incidents/7g3scbq177td",
+    "quality": "high",
+    "company": "shopify"
+  },
+  {
+    "incident_id": "shopify-tq1zmqvw6cjz",
+    "raw_log_excerpt": "Login issues affecting some merchants\nWe are currently looking into an issue which may affect some merchants' ability to log into parts of Shopify, including Admin",
+    "root_cause": "A fix has been deployed and we are now monitoring all systems.",
+    "remediation_steps": "The incident affecting logins for merchants and partners is now resolved.",
+    "source_url": "https://status.shopify.com/incidents/tq1zmqvw6cjz",
+    "quality": "high",
+    "company": "shopify"
+  },
+  {
+    "incident_id": "shopify-x7y62nyy43mt",
+    "raw_log_excerpt": "Network connectivity issues with some customers from Italy\nCustomers in Italy using Wind 3 and Fastweb internet service providers are continuing to experience connectivity issues. Some customers using the TIM internet service provider are also affected.\n\nWhile the issue is outside of Shopify, we are continuing to work with our network service provider to assist with diagnosing the issue. We recommend that impacted customers contact their Internet Service Provider for further assistance.",
+    "root_cause": "While the root cause of this issue is still outside of Shopify, we have implemented a solution which has successfully restored connectivity for the majority of stores from the affected ISPs. If you are still experiencing this issue, please contact Shopify support for assistance.",
+    "remediation_steps": "While the root cause of this issue is still outside of Shopify, we have implemented a solution which has successfully restored connectivity for the majority of stores from the affected ISPs. If you are still experiencing this issue, please contact Shopify support for assistance.",
+    "source_url": "https://status.shopify.com/incidents/x7y62nyy43mt",
+    "quality": "high",
+    "company": "shopify"
+  },
+  {
+    "incident_id": "icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2",
+    "raw_log_excerpt": "A combination of factor results in a large number of Slack's users being disconnected to the server. The subsequent massive disconnection-reconnection process exceeded the database capacity and caused cascading connection failures, leading to 5% of Slack's users not being able to connect to the server for up to 2 hours.",
+    "root_cause": "A combination of factor results in a large number of Slack's users being disconnected to the server. The subsequent massive disconnection-reconnection process exceeded the database capacity and caused cascading connection failures, leading to 5% of Slack's users not being able to connect to the server for up to 2 hours.",
+    "remediation_steps": "A combination of factor results in a large number of Slack's users being disconnected to the server. The subsequent massive disconnection-reconnection process exceeded the database capacity and caused cascading connection failures, leading to 5% of Slack's users not being able to connect to the server for up to 2 hours.",
+    "source_url": "https://slackhq.com/this-was-not-normal-really-230c2fd23bdc",
+    "quality": "high",
+    "company": "slack"
+  },
+  {
+    "incident_id": "icco-61617271-54e4-4f99-9ade-86428b8fe4c3",
+    "raw_log_excerpt": "Slack experienced two significant service disruptions in October 2014, impacting user connectivity. The first occurred on October 14th, and the second on October 16th. These incidents led to varying degrees of unavailability for a subset of users.",
+    "root_cause": "The immediate attempt by disconnected users to reconnect simultaneously overwhelmed Slack's database capacity, leading to cascading connection failures. Ultimately, 5% of users remained disconnected for up to two hours while database clusters recovered.",
+    "remediation_steps": "In response, Slack immediately began adding additional database capacity and optimizing reconnection methods to reduce the load during mass reconnections. They also worked on gracefully restarting real-time message servers and addressing the introduced bug.",
+    "source_url": "https://slackhq.com/this-was-not-normal-really",
+    "quality": "high",
+    "company": "slack"
+  },
+  {
+    "incident_id": "icco-6bc6cd0c-5bbd-4278-a7bf-c42cd8174b50",
+    "raw_log_excerpt": "On January 4th, 2021, Slack experienced a significant outage beginning in the Americas' morning. Error rates began to climb, and by 7:00 AM PST, Slack became unavailable due to widespread network degradation and saturation of its web tier. This was exacerbated by a mini-peak in traffic at the top of the hour, leading to increased packet loss and high latency.",
+    "root_cause": "On January 4th, 2021, Slack experienced a significant outage beginning in the Americas' morning. Error rates began to climb, and by 7:00 AM PST, Slack became unavailable due to widespread network degradation and saturation of its web tier. This was exacerbated by a mini-peak in traffic at the top of the hour, leading to increased packet loss and high latency.",
+    "remediation_steps": "AWS engineers were alerted and manually increased the TGW capacity, which resolved the underlying network issue by 10:40 AM PST. Slack engineers disabled downscaling, cleared broken instances, and relied on load balancer 'panic mode' and retries to restore service. By 9:15 AM PST, Slack was degraded but functional, and error rates returned to normal after the AWS fix.",
+    "source_url": "https://slack.engineering/slacks-outage-on-january-4th-2021/",
+    "quality": "high",
+    "company": "slack"
+  },
+  {
+    "incident_id": "icco-a50e7b06-2f2c-4d13-a340-9a1e7eed59d7",
+    "raw_log_excerpt": "On February 22, 2022, just after 6 a.m. Pacific Time, Slack experienced a major incident where many users were unable to connect to the service. The primary symptom was the failure of client boot operations, which prevented users from fetching essential data like channel listings and preferences, rendering Slack unusable.",
+    "root_cause": "On February 22, 2022, just after 6 a.m. Pacific Time, Slack experienced a major incident where many users were unable to connect to the service. The primary symptom was the failure of client boot operations, which prevented users from fetching essential data like channel listings and preferences, rendering Slack unusable.",
+    "remediation_steps": "These remediations enabled engineers to slowly increase the client boot rate limit back to normal levels, gradually restoring full service. The incident highlighted complex interactions between the application, Vitess datastores, caching system, and service discovery, leading to process changes for Consul rollouts and modifications to the problematic query.",
+    "source_url": "https://slack.engineering/slacks-incident-on-2-22-22/",
+    "quality": "high",
+    "company": "slack"
+  },
+  {
+    "incident_id": "icco-d17fe136-eb00-44f8-8147-e3dc22358cba",
+    "raw_log_excerpt": "Spotify experienced a major outage for European users in April 2013, impacting music playback and login functionality. This incident was preceded by a similar issue two months prior involving Popcount, a backend service storing playlist subscriber lists. Popcount was designed to fail fast, but a legacy desktop client component lacked this behavior.",
+    "root_cause": "The legacy client continuously retried fetching Popcount data without exponential backoff, overwhelming the service. This led to a state where recovery was difficult due to the volume of pending requests. Developers deployed a fix for Popcount to fast-fail and return empty lists, which temporarily resolved the issue. However, the root cause in the client was not prioritized for a permanent fix.",
+    "remediation_steps": "The legacy client continuously retried fetching Popcount data without exponential backoff, overwhelming the service. This led to a state where recovery was difficult due to the volume of pending requests. Developers deployed a fix for Popcount to fast-fail and return empty lists, which temporarily resolved the issue. However, the root cause in the client was not prioritized for a permanent fix.",
+    "source_url": "https://labs.spotify.com/2013/06/04/incident-management-at-spotify/",
+    "quality": "high",
+    "company": "spotify"
+  },
+  {
+    "incident_id": "icco-e7d7aa93-81f7-4338-9c0b-6e6c0dcefdcb",
+    "raw_log_excerpt": "The Tarsnap service experienced an outage on 2016-07-24, lasting approximately 85 minutes from 10:15:19 UTC to 11:40:04 UTC. During this period, customers were unable to create new archives or retrieve existing ones, although all customer data remained safely stored. Affected users were credited with two days of storage costs.",
+    "root_cause": "The incident was precipitated by an increase in correlated timeout failures from Amazon S3, observed since around June 30th. This led to a significant increase in the rate at which S3 requests exhausted all permitted retries, suggesting an undiagnosed change in S3's behavior, particularly concerning retries of failed requests.",
+    "remediation_steps": "Lessons learned included the importance of better internal monitoring (e.g., disk space usage), the necessity of investigating anomalous behavior even if it appears harmless, and improvements to incident response protocols. The incident also reaffirmed Tarsnap's design philosophy of prioritizing data safety over service availability during critical failures.",
+    "source_url": "http://mail.tarsnap.com/tarsnap-announce/msg00035.html",
+    "quality": "high",
+    "company": "tarsnap"
+  },
+  {
+    "incident_id": "icco-46457692-ed7e-49df-8a45-d1b3eea8ac46",
+    "raw_log_excerpt": "Six Therac-25 radiation-therapy accidents occurred between June 1985 and January 1987 in the United States and Canada. The Therac-25 was a dual-mode (electron and X-ray) medical linear accelerator built by Atomic Energy of Canada Limited (AECL); it was the successor to the Therac-6 and Therac-20, both of which had been developed jointly with the French firm CGR.",
+    "root_cause": "Broader contributing factors: AECL's incident response was repeatedly inadequate (technicians could not reproduce the bug; the company told other sites the accidents were \"not possible\"); the FDA was not notified about the first accident because medical-device incident reporting was not yet mandatory (the Safe Medical Devices Act came in 1990); a 1990 GAO study estimated the FDA learned of fewer than 1% of in-hospital deaths, serious injuries, or equipment malfunctions; system-safety analyses by",
+    "remediation_steps": "Broader contributing factors: AECL's incident response was repeatedly inadequate (technicians could not reproduce the bug; the company told other sites the accidents were \"not possible\"); the FDA was not notified about the first accident because medical-device incident reporting was not yet mandatory (the Safe Medical Devices Act came in 1990); a 1990 GAO study estimated the FDA learned of fewer than 1% of in-hospital deaths, serious injuries, or equipment malfunctions; system-safety analyses by",
+    "source_url": "http://sunnyday.mit.edu/papers/therac.pdf",
+    "quality": "high",
+    "company": "therac-25"
+  },
+  {
+    "incident_id": "icco-44ce12a8-20dd-43fe-914a-c9a0747baf52",
+    "raw_log_excerpt": "The Xubuntu.org download site was compromised for a brief period in October 2025, serving a malicious zip file instead of legitimate torrents. The compromise was first reported on October 15, leading to an immediate lockdown of the site and an investigation by Canonical's infrastructure and security teams. By October 19, the malicious files were removed, and the site was deemed clean.",
+    "root_cause": "The incident was caused by a malicious actor who gained unauthorized access to the WordPress installation maintaining the Xubuntu website. This was achieved by brute-forcing a vulnerable component of the WordPress instance. Once access was obtained, the attacker injected code to alter the download links on the site.",
+    "remediation_steps": "As a long-term remediation, the Xubuntu team decided to migrate their website to Hugo, a static site generator, to eliminate the type of attack vector exploited. The community played a crucial role in reporting the compromise and assisting users. The team also highlighted that Xubuntu itself cannot accept donations, but developers can be supported via the Xfce project.",
+    "source_url": "https://lists.ubuntu.com/archives/xubuntu-users/2025-November/012210.html",
+    "quality": "high",
+    "company": "ubuntu"
+  },
+  {
+    "incident_id": "icco-2590ea48-9ceb-4cb4-a034-49bffacd7b33",
+    "raw_log_excerpt": "On Tuesday, July 29, 2014, planned datacenter maintenance between 1100 UTC and 1200 UTC led to the formation of three network partitions within Yeller's server cluster. The issue persisted for approximately 21.5 hours until it was resolved on Wednesday, July 30, 2014, at 0930 UTC following a rolling restart of the cluster.",
+    "root_cause": "The network partitions primarily affected Yeller's internal networking, leading to severe exception processing delays and a complete inability to modify user account and billing data. The exact root cause of the partitions after the maintenance, and why a cluster restart resolved them, remains unclear. Cached routes are suspected, but the restart wiped the machine state, preventing definitive identification of the underlying issue.",
+    "remediation_steps": "On Tuesday, July 29, 2014, planned datacenter maintenance between 1100 UTC and 1200 UTC led to the formation of three network partitions within Yeller's server cluster. The issue persisted for approximately 21.5 hours until it was resolved on Wednesday, July 30, 2014, at 0930 UTC following a rolling restart of the cluster.",
+    "source_url": "http://yellerapp.com/posts/2014-08-04-postmortem1.html",
+    "quality": "high",
+    "company": "yellerapp"
+  },
+  {
+    "incident_id": "icco-090ac94f-65d7-49cc-9e5d-1c8c000b2042",
+    "raw_log_excerpt": "On August 29, 2019, between 10:00 AM and 10:40 AM, Zerodha experienced technical issues with its Order Management System (OMS). While order placements resumed after this period, clients who had open orders from before 10:00 AM that were executed during the affected window faced problems with additional margin blocks until their positions could be reconciled with the exchanges.",
+    "root_cause": "The root cause was identified as an unprecedented event: a single order for 10 lakh units of a sub-Rs 1 stock, placed around 9:40 AM on BSE, was executed in over 1 lakh individual trades. This highly unusual fragmentation of a single order, far exceeding the typical few hundred trades, caused an overload in the OMS, a scenario neither Zerodha nor its vendor, Refinitiv (formerly Thomson Reuters), had encountered before.",
+    "remediation_steps": "Refinitiv is actively working on a fix for the OMS to better handle such extreme cases of order execution. In the interim, Zerodha has implemented a temporary measure, limiting the maximum allowed quantity per equity trade order to 20,000 units.",
+    "source_url": "https://zerodha.com/marketintel/bulletin/229363/post-mortem-of-technical-issue-august-29-2019",
+    "quality": "high",
+    "company": "zerodha"
+  },
+  {
+    "incident_id": "icco-097f2292-4ca7-41f4-abdf-585177b99669",
+    "raw_log_excerpt": "On April 12th, 2018, around 12:12 PM, Zerodha experienced a connectivity issue when a primary leased line connecting their setup to the National Stock Exchange (NSE) via one of their CTCLs failed. The system automatically switched to the backup leased line, but this line subsequently became unstable, \"flapping\" multiple times over the next 60 minutes.",
+    "root_cause": "Less than 0.3% of total orders and approximately 1.5% of clients who traded that day were affected. The root cause was identified as the poor reliability of the leased line connectivity provided by an exchange-approved vendor in India. Zerodha stated that they have no control over the fundamental reliability of these lines, despite significant investments in their own infrastructure.",
+    "remediation_steps": "For future occurrences, Zerodha announced a release by the end of the month to allow clients to exit bracket and cover order positions directly from the open position, even if counter-leg orders are not visible. They continue to seek ways to improve the system within their control, acknowledging the limitations imposed by external leased line reliability.",
+    "source_url": "https://zerodha.com/marketintel/bulletin/105569/postmortem-trading-and-hanging-orders-on-12th-april-2018",
+    "quality": "high",
+    "company": "zerodha"
+  }
+]

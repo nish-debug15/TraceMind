@@ -1,0 +1,681 @@
+{
+  "seed": 42,
+  "corpus_total": 828,
+  "corpus_quality_high": 544,
+  "corpus_quality_low": 284,
+  "train_records": 662,
+  "test_records": 93,
+  "excluded_test_company_low_quality": 73,
+  "test_companies_count": 40,
+  "test_companies": [
+    "allegro",
+    "bloomberg",
+    "boeing",
+    "brew",
+    "buildkite",
+    "chef",
+    "digital",
+    "discord",
+    "epicgames",
+    "etsy",
+    "eveonline",
+    "forbes",
+    "gentoo",
+    "gocardless",
+    "heroku",
+    "honeycomb",
+    "incident",
+    "joyent",
+    "kcl",
+    "kickstarter",
+    "lkml",
+    "mailchimp",
+    "medium",
+    "merrimack",
+    "meta",
+    "microsoft",
+    "mozilla",
+    "npmjs",
+    "okta",
+    "pythonanywhere",
+    "razorpay",
+    "salesforce",
+    "shopify",
+    "slack",
+    "spotify",
+    "tarsnap",
+    "therac-25",
+    "ubuntu",
+    "yellerapp",
+    "zerodha"
+  ],
+  "max_single_company_count": 13,
+  "max_single_company_share_pct": 13.98,
+  "max_cross_split_similarity": 0.8438,
+  "company_distribution": {
+    "github": {
+      "total": 68,
+      "high": 68,
+      "low": 0,
+      "split": "train"
+    },
+    "twilio": {
+      "total": 44,
+      "high": 44,
+      "low": 0,
+      "split": "train"
+    },
+    "sentry": {
+      "total": 48,
+      "high": 43,
+      "low": 5,
+      "split": "train"
+    },
+    "circleci": {
+      "total": 49,
+      "high": 41,
+      "low": 8,
+      "split": "train"
+    },
+    "digitalocean": {
+      "total": 44,
+      "high": 40,
+      "low": 4,
+      "split": "train"
+    },
+    "google": {
+      "total": 26,
+      "high": 26,
+      "low": 0,
+      "split": "train"
+    },
+    "atlassian": {
+      "total": 27,
+      "high": 24,
+      "low": 3,
+      "split": "train"
+    },
+    "openai": {
+      "total": 24,
+      "high": 23,
+      "low": 1,
+      "split": "train"
+    },
+    "aws": {
+      "total": 20,
+      "high": 20,
+      "low": 0,
+      "split": "train"
+    },
+    "discord": {
+      "total": 45,
+      "high": 13,
+      "low": 32,
+      "split": "test"
+    },
+    "cloudflare": {
+      "total": 12,
+      "high": 12,
+      "low": 0,
+      "split": "train"
+    },
+    "datadog": {
+      "total": 52,
+      "high": 12,
+      "low": 40,
+      "split": "train"
+    },
+    "reddit": {
+      "total": 51,
+      "high": 11,
+      "low": 40,
+      "split": "train"
+    },
+    "heroku": {
+      "total": 8,
+      "high": 8,
+      "low": 0,
+      "split": "test"
+    },
+    "incident": {
+      "total": 6,
+      "high": 6,
+      "low": 0,
+      "split": "test"
+    },
+    "dropbox": {
+      "total": 45,
+      "high": 6,
+      "low": 39,
+      "split": "train"
+    },
+    "squarespace": {
+      "total": 47,
+      "high": 6,
+      "low": 41,
+      "split": "train"
+    },
+    "netlify": {
+      "total": 36,
+      "high": 6,
+      "low": 30,
+      "split": "train"
+    },
+    "stackoverflow": {
+      "total": 5,
+      "high": 5,
+      "low": 0,
+      "split": "train"
+    },
+    "medium": {
+      "total": 5,
+      "high": 5,
+      "low": 0,
+      "split": "test"
+    },
+    "travisci": {
+      "total": 5,
+      "high": 5,
+      "low": 0,
+      "split": "train"
+    },
+    "shopify": {
+      "total": 46,
+      "high": 5,
+      "low": 41,
+      "split": "test"
+    },
+    "honeycomb": {
+      "total": 4,
+      "high": 4,
+      "low": 0,
+      "split": "test"
+    },
+    "microsoft": {
+      "total": 4,
+      "high": 4,
+      "low": 0,
+      "split": "test"
+    },
+    "slack": {
+      "total": 4,
+      "high": 4,
+      "low": 0,
+      "split": "test"
+    },
+    "eveonline": {
+      "total": 3,
+      "high": 3,
+      "low": 0,
+      "split": "test"
+    },
+    "pagerduty": {
+      "total": 3,
+      "high": 3,
+      "low": 0,
+      "split": "train"
+    },
+    "signalvnoise": {
+      "total": 3,
+      "high": 3,
+      "low": 0,
+      "split": "train"
+    },
+    "wikipedia": {
+      "total": 3,
+      "high": 3,
+      "low": 0,
+      "split": "train"
+    },
+    "allegro": {
+      "total": 3,
+      "high": 3,
+      "low": 0,
+      "split": "test"
+    },
+    "rust-lang": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "train"
+    },
+    "zerodha": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "elastic": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "train"
+    },
+    "joyent": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "etsy": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "salesforce": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "twitter": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "train"
+    },
+    "gocardless": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "launchdarkly": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "train"
+    },
+    "indyweek": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "train"
+    },
+    "mozilla": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "lkml": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "thousandeyes": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "train"
+    },
+    "kickstarter": {
+      "total": 2,
+      "high": 2,
+      "low": 0,
+      "split": "test"
+    },
+    "brew": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "cercind": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "razorpay": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "ietf": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "digital": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "fastly": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "turso": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "yellerapp": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "pri": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "doneyles": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "netflix": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "forbes": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "epicgames": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "eslint": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "okta": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "ubuntu": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "therac-25": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "skyliner": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "att": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "gliffy": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "kcl": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "merrimack": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "mailchimp": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "strava": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "stripe": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "chef": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "metrist": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "bloomberg": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "npmjs": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "gps": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "paritytech": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "collab": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "pythonanywhere": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "tumblr": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "bungie": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "trivago": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "meta": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "duo": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "ycombinator": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "keepthescore": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "mailgun": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "42gems": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "scribd": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "faqs": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "buildkite": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "boeing": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "gentoo": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "spotify": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "browserstack": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "telstra": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "bitly": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "tarsnap": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "test"
+    },
+    "vzaar": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "bintray": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "dougseven": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "enomstatus": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "gitlab": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "linkedin": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "bbc": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    },
+    "crowdstrike": {
+      "total": 1,
+      "high": 1,
+      "low": 0,
+      "split": "train"
+    }
+  }
+}

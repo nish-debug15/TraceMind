@@ -13,50 +13,70 @@ COLLECTION_NAME = "postmortems"
 # Initialize Chroma client
 client = chromadb.PersistentClient(path=str(CHROMA_DB_PATH))
 
-def ingest(force: bool = False):
-    """Ingest postmortems from train.json into ChromaDB, preventing test leakage."""
-    print("Ingesting data into ChromaDB...")
-    try:
-        collection = client.get_collection(name=COLLECTION_NAME)
-        if force:
-            print("Force re-ingestion requested. Deleting existing collection...")
-            client.delete_collection(name=COLLECTION_NAME)
-            collection = client.create_collection(name=COLLECTION_NAME)
-        elif collection.count() == 662:
-            print("Collection already contains exactly 662 train records, skipping ingestion.")
-            return collection
-        else:
-            print(f"Collection count is {collection.count()} (expected 662 train records). Rebuilding...")
-            client.delete_collection(name=COLLECTION_NAME)
-            collection = client.create_collection(name=COLLECTION_NAME)
-    except Exception:
-        collection = client.create_collection(name=COLLECTION_NAME)
+def ingest(
+    force: bool = False,
+    source: str | Path | None = None,
+    persist_directory: str | Path | None = None,
+    collection_name: str | None = None,
+):
+    """Ingest postmortems from source JSON into ChromaDB."""
+    source_path = Path(source) if source else DATA_PATH
+    persist_dir = Path(persist_directory) if persist_directory else CHROMA_DB_PATH
+    col_name = collection_name if collection_name else COLLECTION_NAME
 
-    with open(DATA_PATH, "r", encoding="utf-8") as f:
+    print(f"Ingesting data from {source_path} into ChromaDB at {persist_dir} (collection: {col_name})...")
+    
+    target_client = client if (persist_dir.resolve() == CHROMA_DB_PATH.resolve()) else chromadb.PersistentClient(path=str(persist_dir))
+
+    with open(source_path, "r", encoding="utf-8") as f:
         records = json.load(f)
     
+    expected_count = len(records)
+
+    try:
+        collection = target_client.get_collection(name=col_name)
+        if force:
+            print(f"Force re-ingestion requested. Deleting existing collection '{col_name}'...")
+            target_client.delete_collection(name=col_name)
+            collection = target_client.create_collection(name=col_name)
+        elif collection.count() == expected_count:
+            print(f"Collection '{col_name}' already contains exactly {expected_count} records, skipping ingestion.")
+            return collection
+        else:
+            print(f"Collection '{col_name}' count is {collection.count()} (expected {expected_count} records). Rebuilding...")
+            target_client.delete_collection(name=col_name)
+            collection = target_client.create_collection(name=col_name)
+    except Exception:
+        collection = target_client.create_collection(name=col_name)
+
     docs = []
     metadatas = []
     ids = []
-    embeddings = []
     
-    print(f"Embedding {len(records)} records for Chroma...")
+    print(f"Preparing {len(records)} records for Chroma...")
     for i, r in enumerate(records):
         log = r.get("raw_log_excerpt", "")[:1000]
         rc = r.get("root_cause", "")[:1000]
         text = f"{log} [SEP] {rc}"
         
         docs.append(text)
-        metadatas.append({
+        meta = {
             "incident_id": r.get("incident_id", f"inc-{i}"),
             "raw_log_excerpt": log,
             "root_cause": rc,
             "remediation_steps": r.get("remediation_steps", ""),
             "source_url": r.get("source_url", ""),
-            "quality": r.get("quality", "high")
-        })
+            "quality": r.get("quality", "high"),
+        }
+        if "company" in r:
+            meta["company"] = r["company"]
+        metadatas.append(meta)
         ids.append(r.get("incident_id", f"inc-{i}"))
-        embeddings.append(embed(text))
+
+    print(f"Embedding {len(docs)} records for Chroma...")
+    from clustering.cluster import _get_model
+    model = _get_model()
+    embeddings = model.encode(docs, batch_size=64, show_progress_bar=False, normalize_embeddings=True).tolist()
     
     batch_size = 100
     for i in range(0, len(docs), batch_size):
@@ -66,10 +86,24 @@ def ingest(force: bool = False):
             metadatas=metadatas[i:i+batch_size]
         )
     print("Ingestion complete.")
+    return collection
 
-def retrieve(log_text: str, k: int = 1):
+def retrieve(
+    log_text: str,
+    k: int = 1,
+    persist_directory: str | Path | None = None,
+    collection_name: str | None = None,
+    return_all: bool = False,
+):
     """Retrieve the most similar historical incident from ChromaDB, preferring quality:high."""
-    collection = client.get_collection(name=COLLECTION_NAME)
+    if persist_directory or collection_name:
+        p_dir = Path(persist_directory) if persist_directory else CHROMA_DB_PATH
+        c_name = collection_name if collection_name else COLLECTION_NAME
+        target_client = client if (p_dir.resolve() == CHROMA_DB_PATH.resolve()) else chromadb.PersistentClient(path=str(p_dir))
+        collection = target_client.get_collection(name=c_name)
+    else:
+        collection = client.get_collection(name=COLLECTION_NAME)
+
     query_embedding = embed(log_text)
     
     # Try high quality first
@@ -78,6 +112,27 @@ def retrieve(log_text: str, k: int = 1):
         n_results=k,
         where={"quality": "high"}
     )
+
+    if return_all:
+        matches = []
+        if results_high.get('metadatas') and results_high['metadatas'][0]:
+            for meta, dist in zip(results_high['metadatas'][0], results_high['distances'][0]):
+                sim = 1.0 - (dist / 2.0)
+                matches.append((meta, sim))
+        if len(matches) < k:
+            results_all = collection.query(
+                query_embeddings=[query_embedding],
+                n_results=k
+            )
+            if results_all.get('metadatas') and results_all['metadatas'][0]:
+                seen_ids = {m[0]['incident_id'] for m in matches}
+                for meta, dist in zip(results_all['metadatas'][0], results_all['distances'][0]):
+                    if meta['incident_id'] not in seen_ids:
+                        sim = 1.0 - (dist / 2.0)
+                        matches.append((meta, sim))
+                    if len(matches) >= k:
+                        break
+        return matches
     
     if results_high['metadatas'] and results_high['metadatas'][0]:
         distance = results_high['distances'][0][0]
@@ -160,4 +215,28 @@ Remediation Steps: (your steps)
     }
 
 if __name__ == "__main__":
-    ingest()
+    import argparse
+    parser = argparse.ArgumentParser(description="TraceMind RAG Ingestion CLI")
+    parser.add_argument("--ingest-train", action="store_true", help="Ingest train split into rag/chroma_db_train")
+    parser.add_argument("--force", action="store_true", help="Force re-ingestion")
+    parser.add_argument("--source", type=str, default=None, help="Source JSON file")
+    parser.add_argument("--persist", type=str, default=None, help="Persist directory")
+    parser.add_argument("--collection", type=str, default=None, help="Collection name")
+    cli_args = parser.parse_args()
+
+    if cli_args.ingest_train:
+        train_path = RAG_DIR.parent / "data" / "splits" / "train.json"
+        persist_dir = RAG_DIR / "chroma_db_train"
+        ingest(
+            force=cli_args.force,
+            source=train_path,
+            persist_directory=persist_dir,
+            collection_name="postmortems_train"
+        )
+    else:
+        ingest(
+            force=cli_args.force,
+            source=cli_args.source,
+            persist_directory=cli_args.persist,
+            collection_name=cli_args.collection
+        )
