@@ -18,6 +18,7 @@ class PipelineTrace(BaseModel):
     retrieved_incident: RetrievedIncident
     similarity_score: float
     prompt_used: str
+    model: Optional[str] = None
 
 class AnalyzeResponse(BaseModel):
     incident_id: str = Field(default_factory=lambda: f"INC-{uuid.uuid4().hex[:8].upper()}")

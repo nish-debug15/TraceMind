@@ -8,7 +8,7 @@ from backend.main import analyze_log
 # Auto-build indices on cold start if running on fresh cloud host
 from clustering.cluster import INDEX_PATH
 from clustering.build_index import build
-from rag.generate import ingest
+from rag.generate import ingest, LLM_MODEL
 
 # 1. ZeroGPU runtime compatibility hook
 try:
@@ -86,11 +86,12 @@ def render_pills_html(is_mock: bool) -> str:
     mode_class = "pill-mock" if is_mock else "pill-live"
     dot_class = "dot-mock" if is_mock else "dot-live"
     mode_text = "MOCK" if is_mock else "Live"
+    model_display = LLM_MODEL.split("/")[-1] if "/" in LLM_MODEL else LLM_MODEL
     return f"""
     <div class="pills-container">
         <span class="status-pill">Corpus (828 incidents)</span>
         <span class="status-pill">Clusters (48)</span>
-        <span class="status-pill">Model (Mistral-7B-Instruct-v0.3)</span>
+        <span class="status-pill">Model ({model_display})</span>
         <span class="status-pill {mode_class}">
             <span class="pill-dot {dot_class}"></span> Mode ({mode_text})
         </span>

@@ -47,7 +47,7 @@ RAG_CACHE_FILE = CACHE_DIR / "rag_generations.json"
 ZEROSHOT_CACHE_FILE = CACHE_DIR / "zeroshot_generations.json"
 RESULTS_FILE = EVAL_DIR / "evaluation_report.json"
 
-MODEL_ID = "mistralai/Mistral-7B-Instruct-v0.3"
+MODEL_ID = os.environ.get("LLM_MODEL", "Qwen/Qwen2.5-72B-Instruct")
 
 
 def check_no_leakage(test_records: List[Dict[str, Any]]):
@@ -201,7 +201,7 @@ def run_evaluation(limit: int = None, force_refresh: bool = False, use_bertscore
     if not hf_token:
         print("\n" + "!" * 70)
         print("CRITICAL ERROR: HF_TOKEN is NOT set!")
-        print("Evaluation requires real inference on Mistral-7B. MOCK output is strictly forbidden.")
+        print(f"Evaluation requires real inference on {MODEL_ID}. MOCK output is strictly forbidden.")
         print("Set your HuggingFace token before evaluating: export HF_TOKEN='your_token'")
         print("!" * 70 + "\n")
         sys.exit(1)

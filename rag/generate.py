@@ -154,6 +154,8 @@ def retrieve(
     similarity = 1.0 - (distance / 2.0)
     return results_all['metadatas'][0][0], similarity
 
+LLM_MODEL = os.environ.get("LLM_MODEL", "Qwen/Qwen2.5-7B-Instruct")
+
 def generate_rca(log_text: str) -> dict:
     """Full RAG pipeline. Retrieves context and generates RCA using HF Inference API."""
     try:
@@ -166,52 +168,154 @@ def generate_rca(log_text: str) -> dict:
     if not match_meta:
         return {"error": "No historical context found."}
         
-    prompt = f"""You are an SRE assistant analyzing infrastructure incidents. Use the following historical incident to understand the context and format, then analyze the New Log Input and provide a precise Root Cause Analysis and actionable Remediation Steps.
+    system_prompt = (
+        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+        "Reasoning: low\n"
+        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
+        "You must structure your response into exactly two sections labeled as follows:\n\n"
+        "ROOT CAUSE:\n"
+        "<concise, precise analysis of the technical root cause>\n\n"
+        "REMEDIATION STEPS:\n"
+        "<numbered actionable mitigation and remediation steps>\n\n"
+        "Do not output internal chain-of-thought, reasoning scratchpads, or conversational preambles."
+    )
 
-Historical Incident:
+    user_prompt = f"""Historical Incident Reference:
 - Root Cause: {match_meta['root_cause']}
 - Remediation: {match_meta['remediation_steps']}
 
-New Log Input:
-{log_text}
+New Incident Log Excerpt:
+{log_text}"""
 
-Provide your response in the following format:
-Root Cause: (your analysis)
-Remediation Steps: (your steps)
-"""
+    prompt_used = f"{system_prompt}\n\n{user_prompt}"
     
     hf_token = os.environ.get("HF_TOKEN")
-    if not hf_token:
-        # Fallback to mock for testing without API key
-        generated_text = "Root Cause: [MOCK] Analyzed based on historical data.\nRemediation Steps: [MOCK] Restart service and monitor."
-    else:
-        try:
-            hf_client = InferenceClient(token=hf_token)
-            response = hf_client.text_generation(
-                prompt, 
-                model="mistralai/Mistral-7B-Instruct-v0.3",
-                max_new_tokens=256,
-                temperature=0.2
-            )
-            generated_text = response
-        except Exception as e:
-            generated_text = f"Root Cause: (Error calling LLM) {str(e)}\nRemediation Steps: N/A"
+    is_mock = not bool(hf_token)
+    model_name = LLM_MODEL
 
-    # Simple parsing logic
-    root_cause = generated_text
-    remediation_steps = ""
-    if "Remediation Steps:" in generated_text:
-        parts = generated_text.split("Remediation Steps:")
-        root_cause = parts[0].replace("Root Cause:", "").strip()
-        remediation_steps = parts[1].strip()
+    if is_mock:
+        # Fallback to mock for testing without API key
+        root_cause = "[MOCK] Analyzed based on historical data."
+        remediation_steps = "[MOCK] Restart service and monitor."
+    else:
+        import time
+        import re
+        import logging
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+
+        last_error = None
+        raw_content = ""
+        hf_client = InferenceClient(token=hf_token, timeout=60.0)
+
+        chat_kwargs = {
+            "model": model_name,
+            "messages": messages,
+            "max_tokens": 800,
+            "temperature": 0.2,
+        }
+
+        # 1 retry with backoff on 429/5xx
+        for attempt in range(2):
+            try:
+                try:
+                    response = hf_client.chat_completion(**chat_kwargs, extra_body={"reasoning_effort": "low"})
+                except TypeError:
+                    response = hf_client.chat_completion(**chat_kwargs)
+                
+                choice = response.choices[0]
+                message = choice.message
+                content = message.content or ""
+                
+                # Check reasoning/reasoning_content field defensively if content is empty
+                if not content.strip():
+                    reasoning = getattr(message, "reasoning_content", None) or getattr(message, "reasoning", None)
+                    if reasoning:
+                        logging.warning("Main message content was empty; using reasoning content fallback.")
+                        content = reasoning
+                    else:
+                        raise ValueError("Received empty content and empty reasoning from LLM response.")
+
+                raw_content = content
+                break
+            except Exception as e:
+                last_error = e
+                err_str = str(e)
+                is_retryable = any(code in err_str for code in ["429", "500", "502", "503", "504", "Rate limit", "timed out", "timeout"])
+                if attempt == 0 and is_retryable:
+                    time.sleep(2.0)
+                    continue
+                else:
+                    break
+
+        if not raw_content and last_error is not None:
+            # Live call failed — return explicit error, is_mock must NEVER be true
+            return {
+                "root_cause": f"(Error calling LLM) {str(last_error)}",
+                "remediation_steps": "N/A",
+                "retrieved_incident": match_meta,
+                "similarity_score": round(similarity, 4),
+                "prompt_used": prompt_used,
+                "is_mock": False,
+                "model": model_name,
+            }
+
+        try:
+            # Clean any leaked reasoning text (e.g. <think>...</think>)
+            cleaned_text = re.sub(r"<think>.*?</think>", "", raw_content, flags=re.DOTALL).strip()
+            if not cleaned_text:
+                cleaned_text = raw_content.strip()
+
+            # Parse ROOT CAUSE and REMEDIATION STEPS defensively
+            norm_text = cleaned_text
+            for marker in ["### ROOT CAUSE", "## ROOT CAUSE", "ROOT CAUSE:", "Root Cause:"]:
+                if marker in norm_text:
+                    norm_text = norm_text.replace(marker, "ROOT CAUSE:")
+                    break
+
+            for marker in ["### REMEDIATION STEPS", "## REMEDIATION STEPS", "REMEDIATION STEPS:", "Remediation Steps:", "REMEDIATION:"]:
+                if marker in norm_text:
+                    norm_text = norm_text.replace(marker, "REMEDIATION STEPS:")
+                    break
+
+            if "ROOT CAUSE:" not in norm_text:
+                raise ValueError(f"LLM output missing required 'ROOT CAUSE' section: {cleaned_text[:200]}")
+            if "REMEDIATION STEPS:" not in norm_text:
+                raise ValueError(f"LLM output missing required 'REMEDIATION STEPS' section: {cleaned_text[:200]}")
+
+            parts = norm_text.split("REMEDIATION STEPS:")
+            rc_part = parts[0]
+            if "ROOT CAUSE:" in rc_part:
+                rc_part = rc_part.split("ROOT CAUSE:")[-1]
+            root_cause = rc_part.strip()
+            remediation_steps = parts[1].strip()
+
+            if not root_cause:
+                raise ValueError("Parsed 'ROOT CAUSE' section is blank.")
+            if not remediation_steps:
+                raise ValueError("Parsed 'REMEDIATION STEPS' section is blank.")
+        except Exception as e:
+            return {
+                "root_cause": f"(Error parsing LLM response) {str(e)}",
+                "remediation_steps": "N/A",
+                "retrieved_incident": match_meta,
+                "similarity_score": round(similarity, 4),
+                "prompt_used": prompt_used,
+                "is_mock": False,
+                "model": model_name,
+            }
 
     return {
         "root_cause": root_cause,
         "remediation_steps": remediation_steps,
         "retrieved_incident": match_meta,
         "similarity_score": round(similarity, 4),
-        "prompt_used": prompt,
-        "is_mock": not bool(hf_token)
+        "prompt_used": prompt_used,
+        "is_mock": is_mock,
+        "model": model_name,
     }
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 """
 Prompt Robustness Ablation Suite
 --------------------------------
-Tests output sensitivity of Mistral-7B across 3 distinct prompt formulations:
+Tests output sensitivity of the generation model across 3 distinct prompt formulations:
 1. Standard SRE Prompt (default in TraceMind)
 2. Minimal / Direct Context Prompt (no role persona)
 3. Step-by-Step Diagnostic Prompt (Chain-of-Thought style)
@@ -31,7 +31,7 @@ from rag.generate import retrieve
 
 TEST_FILE = Path(__file__).parent.parent / "data" / "test.json"
 CACHE_FILE = Path(__file__).parent / "cache" / "prompt_ablation_cache.json"
-MODEL_ID = "mistralai/Mistral-7B-Instruct-v0.3"
+MODEL_ID = os.environ.get("LLM_MODEL", "Qwen/Qwen2.5-72B-Instruct")
 
 PROMPT_VARIANTS = {
     "variant_1_standard": (

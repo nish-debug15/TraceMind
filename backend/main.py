@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
 
-from backend.config import ALLOWED_ORIGINS
+from backend.config import ALLOWED_ORIGINS, LLM_MODEL
 from backend.models import AnalyzeRequest, AnalyzeResponse, PipelineTrace, RetrievedIncident
 
 # Import stubs with mock data
@@ -48,7 +48,8 @@ def analyze_log(request: AnalyzeRequest):
             is_noise=cluster_info["is_noise"],
             retrieved_incident=RetrievedIncident(**rag_info["retrieved_incident"]),
             similarity_score=rag_info["similarity_score"],
-            prompt_used=rag_info["prompt_used"]
+            prompt_used=rag_info["prompt_used"],
+            model=rag_info.get("model", LLM_MODEL),
         )
         
         # Assemble Final Response
