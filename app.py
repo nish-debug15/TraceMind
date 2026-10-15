@@ -1,5 +1,4 @@
 import os
-import uvicorn
 import gradio as gr
 from backend.main import app as fastapi_app
 from backend.models import AnalyzeRequest
@@ -10,6 +9,18 @@ from clustering.cluster import INDEX_PATH
 from clustering.build_index import build
 from rag.generate import ingest
 
+# 1. ZeroGPU runtime compatibility hook
+try:
+    import spaces
+    @spaces.GPU
+    def zero_gpu_anchor():
+        """Satisfies Hugging Face ZeroGPU runtime requirement."""
+        return True
+except (ImportError, Exception):
+    def zero_gpu_anchor():
+        return True
+
+# 2. Cold-start index verification
 if not INDEX_PATH.exists():
     print("[Startup] Cluster index not found. Building from train.json...")
     build()
@@ -17,7 +28,7 @@ if not INDEX_PATH.exists():
 print("[Startup] Verifying ChromaDB collection...")
 ingest()
 
-# Build interactive Gradio demo for direct browser access on Hugging Face Spaces
+# 3. Build interactive Gradio demo
 with gr.Blocks(title="TraceMind RCA Backend") as demo:
     gr.Markdown("# 🧠 TraceMind — SRE Root Cause Analysis Service")
     gr.Markdown(
@@ -54,11 +65,9 @@ with gr.Blocks(title="TraceMind RCA Backend") as demo:
 
     analyze_btn.click(on_analyze, inputs=[log_input], outputs=[rc_output, rem_output, trace_output])
 
-# Mount Gradio onto the existing FastAPI backend
-# /analyze and /health remain FastAPI endpoints for the Next.js frontend!
-app = gr.mount_gradio_app(fastapi_app, demo, path="/")
+# 4. Attach backend FastAPI routes (/health, /analyze) to Gradio's internal FastAPI app
+demo.app.include_router(fastapi_app.router)
 
+# 5. Launch using native Gradio launcher (compatible with HF Spaces & ZeroGPU)
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", os.environ.get("GRADIO_SERVER_PORT", 7860)))
-    uvicorn.run(app, host="0.0.0.0", port=port)
-
+    demo.launch(server_name="0.0.0.0", server_port=7860)
