@@ -13,6 +13,7 @@ node_modules/
 .next/
 chroma_data/
 rag/chroma_db/
+rag/chroma_db_train/
 clustering/cluster_index.pkl
 scripts/scrapers/output/
 .pytest_cache/
