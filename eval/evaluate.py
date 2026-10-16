@@ -5,8 +5,8 @@ Evaluates Root Cause Analysis (RCA) on held-out test postmortems (zero leakage).
 Compares RAG-augmented generation vs. Zero-Shot (No-RAG) baseline.
 
 Requirements:
-- HF_TOKEN must be set in environment or .env. Mock responses cause immediate hard failure.
-- Generations are cached to disk (eval/cache/) to prevent API exhaustion and redundant calls.
+- GROQ_API_KEY must be set in environment or .env. Mock responses cause immediate hard failure.
+- Generations are cached to disk (rag/gen_cache.py and eval/cache/) to prevent API exhaustion.
 - Results are broken down by Full Set, Quality:High subset, and Quality:Low subset.
 
 Usage:
@@ -25,17 +25,18 @@ import time
 import argparse
 from typing import Dict, List, Any
 import numpy as np
+import requests
 from dotenv import load_dotenv
 
 # Load local environment variables if available
 load_dotenv()
 
 from rouge_score import rouge_scorer
-from huggingface_hub import InferenceClient
 import chromadb
 
 from clustering.cluster import embed
-from rag.generate import retrieve, COLLECTION_NAME, CHROMA_DB_PATH
+from rag.generate import retrieve, COLLECTION_NAME, CHROMA_DB_PATH, RateLimiter, LLM_MAX_RPM, GROQ_API_URL
+from rag.gen_cache import get_cached_generation, set_cached_generation
 
 EVAL_DIR = Path(__file__).parent
 DATA_DIR = EVAL_DIR.parent / "data"
@@ -47,7 +48,8 @@ RAG_CACHE_FILE = CACHE_DIR / "rag_generations.json"
 ZEROSHOT_CACHE_FILE = CACHE_DIR / "zeroshot_generations.json"
 RESULTS_FILE = EVAL_DIR / "evaluation_report.json"
 
-MODEL_ID = os.environ.get("LLM_MODEL", "Qwen/Qwen2.5-72B-Instruct")
+MODEL_ID = os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile")
+_rate_limiter = RateLimiter(max_rpm=LLM_MAX_RPM)
 
 
 def check_no_leakage(test_records: List[Dict[str, Any]]):
@@ -65,43 +67,73 @@ def check_no_leakage(test_records: List[Dict[str, Any]]):
     print(f"[Verification] Index contains {collection.count()} train records. Test leakage: 0 records.")
 
 
-def call_llm_with_retry(prompt: str, client: InferenceClient, max_retries: int = 5) -> str:
-    """Execute LLM completion with exponential backoff on rate limits."""
+def call_llm_with_retry(prompt: str, api_key: str, max_retries: int = 4) -> str:
+    """Execute LLM chat completion via Groq with rate limiting and exponential backoff."""
     delay = 2.0
     for attempt in range(max_retries):
+        _rate_limiter.acquire()
         try:
-            response = client.text_generation(
-                prompt,
-                model=MODEL_ID,
-                max_new_tokens=256,
-                temperature=0.2
+            resp = requests.post(
+                GROQ_API_URL,
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": MODEL_ID,
+                    "messages": [
+                        {"role": "system", "content": "You are an expert SRE assistant analyzing infrastructure incidents. Structure your output into ROOT CAUSE: and REMEDIATION STEPS: sections."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.2,
+                    "max_tokens": 500,
+                },
+                timeout=60.0
             )
-            if not response or "[MOCK]" in response:
-                raise RuntimeError("Received mock or empty response from Inference API.")
-            return response
-        except Exception as e:
-            err_str = str(e).lower()
-            if "rate" in err_str or "429" in err_str or "quota" in err_str:
-                print(f"  [Rate Limit / 429] Waiting {delay:.1f}s before retry (attempt {attempt+1}/{max_retries})...")
+            if resp.status_code == 200:
+                data = resp.json()
+                content = data["choices"][0]["message"]["content"]
+                if not content or "[MOCK]" in content:
+                    raise RuntimeError("Received mock or empty response from Groq API.")
+                return content
+            elif resp.status_code == 429:
+                retry_after = resp.headers.get("Retry-After")
+                sleep_sec = float(retry_after) if retry_after else delay
+                print(f"  [Rate Limit / 429] Waiting {sleep_sec:.1f}s before retry (attempt {attempt+1}/{max_retries})...")
+                time.sleep(sleep_sec)
+                delay *= 2.0
+            elif resp.status_code >= 500:
+                print(f"  [Server Error {resp.status_code}] Retrying in {delay:.1f}s...")
                 time.sleep(delay)
                 delay *= 2.0
             else:
-                if attempt == max_retries - 1:
-                    raise
-                print(f"  [API Error: {e}] Retrying in {delay:.1f}s...")
-                time.sleep(delay)
-    raise RuntimeError("Exceeded maximum retries calling Hugging Face Inference API.")
+                raise RuntimeError(f"Groq API error ({resp.status_code}): {resp.text}")
+        except requests.exceptions.RequestException as e:
+            if attempt == max_retries - 1:
+                raise
+            print(f"  [Network Error: {e}] Retrying in {delay:.1f}s...")
+            time.sleep(delay)
+    raise RuntimeError("Exceeded maximum retries calling Groq API.")
 
 
 def parse_rca(generated_text: str) -> Dict[str, str]:
-    root_cause = generated_text
+    norm = generated_text
+    for marker in ["### ROOT CAUSE", "## ROOT CAUSE", "ROOT CAUSE:", "Root Cause:"]:
+        if marker in norm:
+            norm = norm.replace(marker, "ROOT CAUSE:")
+            break
+    for marker in ["### REMEDIATION STEPS", "## REMEDIATION STEPS", "REMEDIATION STEPS:", "Remediation Steps:"]:
+        if marker in norm:
+            norm = norm.replace(marker, "REMEDIATION STEPS:")
+            break
+    root_cause = norm
     remediation_steps = ""
-    if "Remediation Steps:" in generated_text:
-        parts = generated_text.split("Remediation Steps:")
-        root_cause = parts[0].replace("Root Cause:", "").strip()
+    if "REMEDIATION STEPS:" in norm:
+        parts = norm.split("REMEDIATION STEPS:")
+        root_cause = parts[0].replace("ROOT CAUSE:", "").strip()
         remediation_steps = parts[1].strip()
-    elif "Root Cause:" in generated_text:
-        root_cause = generated_text.replace("Root Cause:", "").strip()
+    elif "ROOT CAUSE:" in norm:
+        root_cause = norm.replace("ROOT CAUSE:", "").strip()
     return {
         "root_cause": root_cause,
         "remediation_steps": remediation_steps
@@ -120,27 +152,48 @@ def save_cache(cache: Dict[str, Any], cache_file: Path):
         json.dump(cache, f, indent=2)
 
 
-def generate_rag(record: Dict[str, Any], client: InferenceClient) -> Dict[str, Any]:
+def generate_rag(record: Dict[str, Any], api_key: str, use_cache: bool = True) -> Dict[str, Any]:
     log_text = record["raw_log_excerpt"]
     match_meta, similarity = retrieve(log_text, k=1)
     if not match_meta:
         match_meta = {"root_cause": "N/A", "remediation_steps": "N/A"}
 
-    prompt = f"""You are an SRE assistant analyzing infrastructure incidents. Use the following historical incident to understand the context and format, then analyze the New Log Input and provide a precise Root Cause Analysis and actionable Remediation Steps.
+    if use_cache:
+        cached = get_cached_generation(model=MODEL_ID, prompt_variant="rag", query_text_or_id=log_text)
+        if cached:
+            return {
+                "root_cause": cached["root_cause"],
+                "remediation_steps": cached["remediation_steps"],
+                "retrieved_incident_id": match_meta.get("incident_id"),
+                "similarity_score": similarity,
+                "prompt": "(cached)",
+                "is_mock": False
+            }
 
-Historical Incident:
+    prompt = f"""Historical Incident Reference:
 - Root Cause: {match_meta['root_cause']}
 - Remediation: {match_meta['remediation_steps']}
 
-New Log Input:
+New Incident Log Excerpt:
 {log_text}
 
 Provide your response in the following format:
-Root Cause: (your analysis)
-Remediation Steps: (your steps)
-"""
-    raw_gen = call_llm_with_retry(prompt, client)
+ROOT CAUSE:
+(your analysis)
+
+REMEDIATION STEPS:
+(your steps)"""
+    raw_gen = call_llm_with_retry(prompt, api_key)
     parsed = parse_rca(raw_gen)
+    if use_cache and not parsed["root_cause"].startswith("[MOCK]"):
+        set_cached_generation(
+            model=MODEL_ID,
+            prompt_variant="rag",
+            query_text_or_id=log_text,
+            root_cause=parsed["root_cause"],
+            remediation_steps=parsed["remediation_steps"],
+            raw_output=raw_gen
+        )
     return {
         "root_cause": parsed["root_cause"],
         "remediation_steps": parsed["remediation_steps"],
@@ -151,19 +204,38 @@ Remediation Steps: (your steps)
     }
 
 
-def generate_zeroshot(record: Dict[str, Any], client: InferenceClient) -> Dict[str, Any]:
+def generate_zeroshot(record: Dict[str, Any], api_key: str, use_cache: bool = True) -> Dict[str, Any]:
     log_text = record["raw_log_excerpt"]
-    prompt = f"""You are an SRE assistant analyzing infrastructure incidents. Analyze the New Log Input directly and provide a precise Root Cause Analysis and actionable Remediation Steps.
+    if use_cache:
+        cached = get_cached_generation(model=MODEL_ID, prompt_variant="zeroshot", query_text_or_id=log_text)
+        if cached:
+            return {
+                "root_cause": cached["root_cause"],
+                "remediation_steps": cached["remediation_steps"],
+                "prompt": "(cached)",
+                "is_mock": False
+            }
 
-New Log Input:
+    prompt = f"""New Incident Log Excerpt:
 {log_text}
 
 Provide your response in the following format:
-Root Cause: (your analysis)
-Remediation Steps: (your steps)
-"""
-    raw_gen = call_llm_with_retry(prompt, client)
+ROOT CAUSE:
+(your analysis)
+
+REMEDIATION STEPS:
+(your steps)"""
+    raw_gen = call_llm_with_retry(prompt, api_key)
     parsed = parse_rca(raw_gen)
+    if use_cache and not parsed["root_cause"].startswith("[MOCK]"):
+        set_cached_generation(
+            model=MODEL_ID,
+            prompt_variant="zeroshot",
+            query_text_or_id=log_text,
+            root_cause=parsed["root_cause"],
+            remediation_steps=parsed["remediation_steps"],
+            raw_output=raw_gen
+        )
     return {
         "root_cause": parsed["root_cause"],
         "remediation_steps": parsed["remediation_steps"],
@@ -197,17 +269,16 @@ def compute_metrics(predictions: List[str], references: List[str]) -> Dict[str, 
 
 
 def run_evaluation(limit: int = None, force_refresh: bool = False, use_bertscore: bool = False):
-    hf_token = os.environ.get("HF_TOKEN")
-    if not hf_token:
+    groq_api_key = os.environ.get("GROQ_API_KEY")
+    if not groq_api_key:
         print("\n" + "!" * 70)
-        print("CRITICAL ERROR: HF_TOKEN is NOT set!")
+        print("CRITICAL ERROR: GROQ_API_KEY is NOT set!")
         print(f"Evaluation requires real inference on {MODEL_ID}. MOCK output is strictly forbidden.")
-        print("Set your HuggingFace token before evaluating: export HF_TOKEN='your_token'")
+        print("Set your Groq API key before evaluating: export GROQ_API_KEY='your_key'")
         print("!" * 70 + "\n")
         sys.exit(1)
 
-    print(f"Connecting to Hugging Face Inference API ({MODEL_ID})...")
-    client = InferenceClient(token=hf_token)
+    print(f"Connecting to Groq API ({MODEL_ID})...")
 
     with open(TEST_FILE, "r", encoding="utf-8") as f:
         test_records = json.load(f)
@@ -229,7 +300,7 @@ def run_evaluation(limit: int = None, force_refresh: bool = False, use_bertscore
         # 1. RAG Generation
         if inc_id not in rag_cache:
             print("  Fetching RAG generation...")
-            res = generate_rag(r, client)
+            res = generate_rag(r, groq_api_key, use_cache=not force_refresh)
             assert res["is_mock"] is False, "Mock generation detected in RAG!"
             rag_cache[inc_id] = res
             save_cache(rag_cache, RAG_CACHE_FILE)
@@ -239,7 +310,7 @@ def run_evaluation(limit: int = None, force_refresh: bool = False, use_bertscore
         # 2. Zero-Shot Generation
         if inc_id not in zeroshot_cache:
             print("  Fetching Zero-Shot generation...")
-            res = generate_zeroshot(r, client)
+            res = generate_zeroshot(r, groq_api_key, use_cache=not force_refresh)
             assert res["is_mock"] is False, "Mock generation detected in Zero-Shot!"
             zeroshot_cache[inc_id] = res
             save_cache(zeroshot_cache, ZEROSHOT_CACHE_FILE)

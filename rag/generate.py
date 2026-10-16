@@ -1,9 +1,13 @@
 import os
+import re
 import json
+import time
+import logging
+import threading
+import requests
 import chromadb
 from pathlib import Path
 from clustering.cluster import embed
-from huggingface_hub import InferenceClient
 
 RAG_DIR = Path(__file__).parent
 DATA_PATH = RAG_DIR.parent / "data" / "train.json"
@@ -154,10 +158,52 @@ def retrieve(
     similarity = 1.0 - (distance / 2.0)
     return results_all['metadatas'][0][0], similarity
 
-LLM_MODEL = os.environ.get("LLM_MODEL", "Qwen/Qwen2.5-7B-Instruct")
+LLM_MODEL = os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile")
+LLM_MAX_RPM = int(os.environ.get("LLM_MAX_RPM", "20"))
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-def generate_rca(log_text: str) -> dict:
-    """Full RAG pipeline. Retrieves context and generates RCA using HF Inference API."""
+
+class LLMGenerationError(Exception):
+    """Raised when live LLM generation or parsing fails."""
+    def __init__(self, message: str, provider_status: int = 502):
+        super().__init__(message)
+        self.message = message
+        self.provider_status = provider_status
+
+
+class RateLimiter:
+    """Thread-safe client-side rate limiter respecting LLM_MAX_RPM."""
+    def __init__(self, max_rpm: int = 20):
+        self.max_rpm = max_rpm
+        self.window = 60.0
+        self.timestamps = []
+        self.lock = threading.Lock()
+
+    def acquire(self):
+        if self.max_rpm <= 0:
+            return
+        with self.lock:
+            now = time.time()
+            self.timestamps = [t for t in self.timestamps if now - t < self.window]
+            if len(self.timestamps) >= self.max_rpm:
+                sleep_sec = self.window - (now - self.timestamps[0]) + 0.1
+                if sleep_sec > 0:
+                    time.sleep(sleep_sec)
+                now = time.time()
+                self.timestamps = [t for t in self.timestamps if now - t < self.window]
+            self.timestamps.append(now)
+
+
+_rate_limiter = RateLimiter(max_rpm=LLM_MAX_RPM)
+
+
+def generate_rca(
+    log_text: str,
+    use_cache: bool = False,
+    prompt_variant: str = "default",
+    model_override: str | None = None
+) -> dict:
+    """Full RAG pipeline. Retrieves context and generates RCA using Groq API."""
     try:
         match_meta, similarity = retrieve(log_text, k=1)
     except Exception:
@@ -168,9 +214,10 @@ def generate_rca(log_text: str) -> dict:
     if not match_meta:
         return {"error": "No historical context found."}
         
+    model_name = model_override or os.environ.get("LLM_MODEL", LLM_MODEL)
+
     system_prompt = (
         "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
-        "Reasoning: low\n"
         "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
         "You must structure your response into exactly two sections labeled as follows:\n\n"
         "ROOT CAUSE:\n"
@@ -188,125 +235,189 @@ New Incident Log Excerpt:
 {log_text}"""
 
     prompt_used = f"{system_prompt}\n\n{user_prompt}"
-    
-    hf_token = os.environ.get("HF_TOKEN")
-    is_mock = not bool(hf_token)
-    model_name = LLM_MODEL
+
+    if use_cache:
+        try:
+            from rag.gen_cache import get_cached_generation, set_cached_generation
+            cached = get_cached_generation(model=model_name, prompt_variant=prompt_variant, query_text_or_id=log_text)
+            if cached:
+                return {
+                    "root_cause": cached["root_cause"],
+                    "remediation_steps": cached["remediation_steps"],
+                    "retrieved_incident": match_meta,
+                    "similarity_score": round(similarity, 4),
+                    "prompt_used": prompt_used,
+                    "is_mock": False,
+                    "model": model_name,
+                    "cached": True,
+                }
+        except Exception as e:
+            logging.warning(f"Failed to check gen_cache: {e}")
+
+    groq_api_key = os.environ.get("GROQ_API_KEY", "").strip()
+    is_mock = not bool(groq_api_key)
 
     if is_mock:
         # Fallback to mock for testing without API key
         root_cause = "[MOCK] Analyzed based on historical data."
         remediation_steps = "[MOCK] Restart service and monitor."
-    else:
-        import time
-        import re
-        import logging
-
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-        ]
-
-        last_error = None
-        raw_content = ""
-        hf_client = InferenceClient(token=hf_token, timeout=60.0)
-
-        chat_kwargs = {
+        return {
+            "root_cause": root_cause,
+            "remediation_steps": remediation_steps,
+            "retrieved_incident": match_meta,
+            "similarity_score": round(similarity, 4),
+            "prompt_used": prompt_used,
+            "is_mock": True,
             "model": model_name,
-            "messages": messages,
-            "max_tokens": 800,
-            "temperature": 0.2,
         }
 
-        # 1 retry with backoff on 429/5xx
-        for attempt in range(2):
-            try:
-                try:
-                    response = hf_client.chat_completion(**chat_kwargs, extra_body={"reasoning_effort": "low"})
-                except TypeError:
-                    response = hf_client.chat_completion(**chat_kwargs)
-                
-                choice = response.choices[0]
-                message = choice.message
-                content = message.content or ""
-                
-                # Check reasoning/reasoning_content field defensively if content is empty
-                if not content.strip():
-                    reasoning = getattr(message, "reasoning_content", None) or getattr(message, "reasoning", None)
-                    if reasoning:
-                        logging.warning("Main message content was empty; using reasoning content fallback.")
-                        content = reasoning
-                    else:
-                        raise ValueError("Received empty content and empty reasoning from LLM response.")
+    # Live call to Groq
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt}
+    ]
 
-                raw_content = content
+    last_error_status = 502
+    last_error_msg = ""
+    raw_content = ""
+
+    # Up to 4 attempts (1 initial + up to 3 retries on 429, 1 retry on 5xx/timeout)
+    for attempt in range(4):
+        _rate_limiter.acquire()
+        try:
+            resp = requests.post(
+                GROQ_API_URL,
+                headers={
+                    "Authorization": f"Bearer {groq_api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": model_name,
+                    "messages": messages,
+                    "temperature": 0.2,
+                    "max_tokens": 800,
+                },
+                timeout=60.0
+            )
+
+            if resp.status_code == 200:
+                data = resp.json()
+                raw_content = data["choices"][0]["message"]["content"] or ""
                 break
-            except Exception as e:
-                last_error = e
-                err_str = str(e)
-                is_retryable = any(code in err_str for code in ["429", "500", "502", "503", "504", "Rate limit", "timed out", "timeout"])
-                if attempt == 0 and is_retryable:
+            elif resp.status_code == 429:
+                last_error_status = 429
+                last_error_msg = resp.text
+                if attempt < 3:
+                    retry_after = resp.headers.get("Retry-After")
+                    reset_req = resp.headers.get("x-ratelimit-reset-requests")
+                    sleep_sec = 2.0 * (attempt + 1)
+                    if retry_after:
+                        try:
+                            sleep_sec = float(retry_after)
+                        except ValueError:
+                            pass
+                    elif reset_req:
+                        try:
+                            if "s" in reset_req:
+                                sleep_sec = float(reset_req.replace("s", "").strip())
+                            elif "m" in reset_req:
+                                parts = reset_req.split("m")
+                                sleep_sec = float(parts[0]) * 60 + float(parts[1].replace("s", ""))
+                        except Exception:
+                            pass
+                    time.sleep(max(1.0, min(sleep_sec, 60.0)))
+                    continue
+                else:
+                    raise LLMGenerationError(
+                        f"Groq 429 Rate Limit Exceeded after 3 retries: {last_error_msg}",
+                        provider_status=429
+                    )
+            elif resp.status_code >= 500:
+                last_error_status = resp.status_code
+                last_error_msg = resp.text
+                if attempt == 0:
                     time.sleep(2.0)
                     continue
                 else:
-                    break
+                    raise LLMGenerationError(
+                        f"Groq server error ({resp.status_code}) after retry: {last_error_msg}",
+                        provider_status=resp.status_code
+                    )
+            else:
+                raise LLMGenerationError(
+                    f"Groq API error ({resp.status_code}): {resp.text}",
+                    provider_status=resp.status_code
+                )
+        except requests.exceptions.Timeout as e:
+            last_error_status = 504
+            last_error_msg = str(e)
+            if attempt == 0:
+                time.sleep(2.0)
+                continue
+            else:
+                raise LLMGenerationError(f"Groq request timeout after 60s: {e}", provider_status=504)
+        except requests.exceptions.RequestException as e:
+            last_error_status = 502
+            last_error_msg = str(e)
+            if attempt == 0:
+                time.sleep(2.0)
+                continue
+            else:
+                raise LLMGenerationError(f"Groq network error: {e}", provider_status=502)
 
-        if not raw_content and last_error is not None:
-            # Live call failed — return explicit error, is_mock must NEVER be true
-            return {
-                "root_cause": f"(Error calling LLM) {str(last_error)}",
-                "remediation_steps": "N/A",
-                "retrieved_incident": match_meta,
-                "similarity_score": round(similarity, 4),
-                "prompt_used": prompt_used,
-                "is_mock": False,
-                "model": model_name,
-            }
+    if not raw_content:
+        raise LLMGenerationError(
+            f"Empty response from Groq API: {last_error_msg}",
+            provider_status=last_error_status
+        )
 
+    # Clean any leaked reasoning text (e.g. <think>...</think>)
+    cleaned_text = re.sub(r"<think>.*?</think>", "", raw_content, flags=re.DOTALL).strip()
+    if not cleaned_text:
+        cleaned_text = raw_content.strip()
+
+    # Parse ROOT CAUSE and REMEDIATION STEPS defensively
+    norm_text = cleaned_text
+    for marker in ["### ROOT CAUSE", "## ROOT CAUSE", "ROOT CAUSE:", "Root Cause:"]:
+        if marker in norm_text:
+            norm_text = norm_text.replace(marker, "ROOT CAUSE:")
+            break
+
+    for marker in ["### REMEDIATION STEPS", "## REMEDIATION STEPS", "REMEDIATION STEPS:", "Remediation Steps:", "REMEDIATION:"]:
+        if marker in norm_text:
+            norm_text = norm_text.replace(marker, "REMEDIATION STEPS:")
+            break
+
+    if "ROOT CAUSE:" not in norm_text:
+        raise LLMGenerationError(f"Groq output missing required 'ROOT CAUSE' section: {cleaned_text[:200]}", provider_status=502)
+    if "REMEDIATION STEPS:" not in norm_text:
+        raise LLMGenerationError(f"Groq output missing required 'REMEDIATION STEPS' section: {cleaned_text[:200]}", provider_status=502)
+
+    parts = norm_text.split("REMEDIATION STEPS:")
+    rc_part = parts[0]
+    if "ROOT CAUSE:" in rc_part:
+        rc_part = rc_part.split("ROOT CAUSE:")[-1]
+    root_cause = rc_part.strip()
+    remediation_steps = parts[1].strip()
+
+    if not root_cause:
+        raise LLMGenerationError("Parsed 'ROOT CAUSE' section is blank.", provider_status=502)
+    if not remediation_steps:
+        raise LLMGenerationError("Parsed 'REMEDIATION STEPS' section is blank.", provider_status=502)
+
+    if use_cache:
         try:
-            # Clean any leaked reasoning text (e.g. <think>...</think>)
-            cleaned_text = re.sub(r"<think>.*?</think>", "", raw_content, flags=re.DOTALL).strip()
-            if not cleaned_text:
-                cleaned_text = raw_content.strip()
-
-            # Parse ROOT CAUSE and REMEDIATION STEPS defensively
-            norm_text = cleaned_text
-            for marker in ["### ROOT CAUSE", "## ROOT CAUSE", "ROOT CAUSE:", "Root Cause:"]:
-                if marker in norm_text:
-                    norm_text = norm_text.replace(marker, "ROOT CAUSE:")
-                    break
-
-            for marker in ["### REMEDIATION STEPS", "## REMEDIATION STEPS", "REMEDIATION STEPS:", "Remediation Steps:", "REMEDIATION:"]:
-                if marker in norm_text:
-                    norm_text = norm_text.replace(marker, "REMEDIATION STEPS:")
-                    break
-
-            if "ROOT CAUSE:" not in norm_text:
-                raise ValueError(f"LLM output missing required 'ROOT CAUSE' section: {cleaned_text[:200]}")
-            if "REMEDIATION STEPS:" not in norm_text:
-                raise ValueError(f"LLM output missing required 'REMEDIATION STEPS' section: {cleaned_text[:200]}")
-
-            parts = norm_text.split("REMEDIATION STEPS:")
-            rc_part = parts[0]
-            if "ROOT CAUSE:" in rc_part:
-                rc_part = rc_part.split("ROOT CAUSE:")[-1]
-            root_cause = rc_part.strip()
-            remediation_steps = parts[1].strip()
-
-            if not root_cause:
-                raise ValueError("Parsed 'ROOT CAUSE' section is blank.")
-            if not remediation_steps:
-                raise ValueError("Parsed 'REMEDIATION STEPS' section is blank.")
+            from rag.gen_cache import set_cached_generation
+            set_cached_generation(
+                model=model_name,
+                prompt_variant=prompt_variant,
+                query_text_or_id=log_text,
+                root_cause=root_cause,
+                remediation_steps=remediation_steps,
+                raw_output=raw_content
+            )
         except Exception as e:
-            return {
-                "root_cause": f"(Error parsing LLM response) {str(e)}",
-                "remediation_steps": "N/A",
-                "retrieved_incident": match_meta,
-                "similarity_score": round(similarity, 4),
-                "prompt_used": prompt_used,
-                "is_mock": False,
-                "model": model_name,
-            }
+            logging.warning(f"Failed to write gen_cache: {e}")
 
     return {
         "root_cause": root_cause,
@@ -314,7 +425,7 @@ New Incident Log Excerpt:
         "retrieved_incident": match_meta,
         "similarity_score": round(similarity, 4),
         "prompt_used": prompt_used,
-        "is_mock": is_mock,
+        "is_mock": False,
         "model": model_name,
     }
 

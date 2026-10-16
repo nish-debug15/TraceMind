@@ -11,7 +11,9 @@ RUN useradd -m -u 1000 user
 USER user
 ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    LLM_MODEL=llama-3.3-70b-versatile \
+    LLM_MAX_RPM=20
 
 WORKDIR /app
 

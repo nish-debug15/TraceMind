@@ -38,7 +38,7 @@ Vector Retrieval (ChromaDB) ──► Historical Postmortem Corpus
 RAG-Augmented Prompt Construction
      │
      ▼
-LLM Generation (Qwen-2.5, prompted — no fine-tuning)
+LLM Generation (Groq / Llama 3.3 70B Versatile, prompted — no fine-tuning)
      │
      ▼
 Root Cause Summary + Remediation Steps
@@ -59,7 +59,7 @@ Next.js Frontend (Vercel)
 | Embeddings | sentence-transformers |
 | Clustering | HDBSCAN |
 | Vector Store | ChromaDB |
-| Generation | Qwen-2.5 (prompted, not fine-tuned) |
+| Generation | Groq / Llama-3.3-70b-versatile (prompted, not fine-tuned) |
 | Backend API | FastAPI (hosted on Render/Railway/HF Spaces — needs real compute, not serverless) |
 | Frontend | Next.js, deployed on Vercel |
 | Evaluation | ROUGE, BERTScore, ablation, human "Actionability" rating |
@@ -99,7 +99,8 @@ To guarantee valid quantitative evaluation and eliminate data leakage, the corpu
 - **Embeddings:** `all-MiniLM-L6-v2` (384-dimensional normalized embeddings).
 - **Anomaly Clustering (HDBSCAN):** Fitted on the train corpus with `min_cluster_size=3` and `min_samples=2`, producing 40 distinct failure clusters (55.4% noise rate, consistent with the corpus baseline quality distribution).
 - **2-Pass Vector Retrieval:** Queries ChromaDB for `quality:high` incidents first with a `0.40` cosine similarity floor. If no match exceeds this floor, it falls back to all records.
-- **LLM Generation:** `Qwen/Qwen2.5-7B-Instruct` via Hugging Face Inference API. Transparent mock fallback (`is_mock: true`) is provided for offline development when `HF_TOKEN` is unset.
+- **LLM Generation:** `llama-3.3-70b-versatile` via Groq Cloud API (OpenAI-compatible chat completions). Transparent mock fallback (`is_mock: true`) is provided for offline development when `GROQ_API_KEY` is unset.
+- **Hugging Face Space Secret:** In your Space settings under *Variables and secrets*, add `GROQ_API_KEY` as a secret.
 
 ## Pipeline Trace (Key Feature)
 
@@ -115,8 +116,8 @@ The editorial Next.js frontend includes a "Show Pipeline Trace" toggle exposing:
 - **Ablation Study (Primary Quantitative Metric):** Direct comparison of **RAG (TraceMind)** against a **Zero-Shot (No-RAG)** baseline across the held-out test split.
 - **Quality-Stratified Reporting:** Metrics are disaggregated for the Full Set ($N=166$), High-Quality incidents ($N=109$), and Low-Quality incidents ($N=57$).
 - **Metrics:** ROUGE-1, ROUGE-2, ROUGE-L, and Semantic Embedding Similarity (with optional `--use-bertscore`).
-- **Disk Caching:** All model completions are cached to `eval/cache/` to survive API quotas and network interruptions.
-- **Mock Prohibition:** The evaluation script fails hard if `HF_TOKEN` is missing or if any mock completion is returned.
+- **Disk Caching:** All model completions are cached to `rag/gen_cache.py` (and `eval/cache/`) to survive API quotas and network interruptions.
+- **Mock Prohibition:** The evaluation script fails hard if `GROQ_API_KEY` is missing or if any mock completion is returned.
 
 **Note on Test Coverage:** Automated test coverage exists for the clustering module (`tests/test_clustering.py`) and backend API (`tests/test_backend.py`) (19/19 passing). Data scrapers currently do not have automated unit tests.
 
@@ -127,7 +128,7 @@ The editorial Next.js frontend includes a "Show Pipeline Trace" toggle exposing:
 | 1–2 | Aggregator-first data sourcing + schema standardization (828 records) | Complete |
 | 3–4 | Embedding + HDBSCAN clustering (40 clusters, noise correlation validated) | Complete |
 | 5–6 | RAG layer: ChromaDB vector storage + 2-pass quality retrieval | Complete |
-| 7–8 | LLM integration (Qwen-2.5 via HF Inference API + mock transparency) | Complete |
+| 7–8 | LLM integration (Groq Llama 3.3 70B via API + mock transparency) | Complete |
 | 9–10 | Pipeline integration + FastAPI backend + Next.js editorial UI | Complete |
 | 11–12 | Evaluation suite, ablation benchmark, cloud deployment | In Progress |
 
@@ -138,6 +139,8 @@ The editorial Next.js frontend includes a "Show Pipeline Trace" toggle exposing:
 git clone https://github.com/nish-debug15/TraceMind.git
 cd TraceMind
 pip install -r requirements.txt
+# Copy sample env and add GROQ_API_KEY
+cp .env.example .env
 # Run from repository root so sibling packages resolve cleanly:
 uvicorn backend.main:app --reload
 ```
@@ -151,7 +154,7 @@ npm run dev
 
 ### Running Evaluation
 ```bash
-export HF_TOKEN="your_huggingface_token"
+export GROQ_API_KEY="your_groq_api_key"
 python eval/evaluate.py --limit 20   # Run smoke test on 20 held-out samples
 python eval/evaluate.py              # Full ablation on all 166 test incidents
 ```

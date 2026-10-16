@@ -98,7 +98,7 @@ def render_pills_html(is_mock: bool) -> str:
     </div>
     """
 
-initial_is_mock = not bool(os.environ.get("HF_TOKEN"))
+initial_is_mock = not bool(os.environ.get("GROQ_API_KEY"))
 
 # 4. Build Editorial UI
 head_html = """
@@ -274,12 +274,35 @@ with gr.Blocks(title="TraceMind RCA API") as demo:
                 trace.prompt_used
             )
         except Exception as e:
+            if hasattr(e, "detail") and isinstance(e.detail, dict):
+                error_msg = e.detail.get("message", str(e.detail))
+            elif hasattr(e, "message"):
+                error_msg = e.message
+            else:
+                error_msg = str(e)
+            err_html = (
+                f'<div class="error-banner-box" style="background-color: #FDF2F2; border: 1px solid #F5D8D3; '
+                f'color: #B04A3A; padding: 12px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; '
+                f'margin-bottom: 16px; line-height: 1.5;">'
+                f'❌ <strong>Analysis Failed (HTTP 502):</strong> {error_msg}</div>'
+            )
             return (
-                f"**Error executing analysis:** {str(e)}",
-                "N/A",
-                gr.update(visible=False),
-                render_pills_html(initial_is_mock),
-                "",
+                '<div class="result-empty" style="color: #B04A3A;">Analysis failed. Please check the error above.</div>',
+                '<div class="result-empty">N/A</div>',
+                gr.update(value=err_html, visible=True),
+                render_pills_html(False),
+                """
+                <div class="trace-metric-grid">
+                    <div class="trace-metric-box">
+                        <div class="trace-metric-label">Detected Anomaly & Cluster</div>
+                        <div class="trace-metric-value" style="color: #B04A3A;">Error</div>
+                    </div>
+                    <div class="trace-metric-box">
+                        <div class="trace-metric-label">Matched Incident & Similarity</div>
+                        <div class="trace-metric-value" style="color: #B04A3A;">Failed</div>
+                    </div>
+                </div>
+                """,
                 ""
             )
 

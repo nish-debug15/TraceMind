@@ -9,6 +9,7 @@ from backend.models import AnalyzeRequest, AnalyzeResponse, PipelineTrace, Retri
 # Import stubs with mock data
 from clustering import assign_cluster
 from rag import generate_rca
+from rag.generate import LLMGenerationError
 
 app = FastAPI(title="TraceMind Backend")
 
@@ -20,6 +21,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    if isinstance(exc.detail, dict):
+        content = dict(exc.detail)
+        if "detail" not in content and "message" in content:
+            content["detail"] = content["message"]
+        return JSONResponse(status_code=exc.status_code, content=content)
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail, "message": str(exc.detail)})
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -61,8 +71,16 @@ def analyze_log(request: AnalyzeRequest):
             trace=trace,
             is_mock=rag_info.get("is_mock", False)
         )
+    except LLMGenerationError as e:
+        logging.error(f"LLM Generation Error: {e.message}")
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "message": e.message,
+                "provider_status": e.provider_status or 502
+            }
+        )
     except Exception as e:
-        # For simplicity, assuming timeout might raise TimeoutError in the future
         if isinstance(e, TimeoutError):
-            raise HTTPException(status_code=504, detail="LLM Request Timeout")
+            raise HTTPException(status_code=504, detail={"message": "LLM Request Timeout", "provider_status": 504})
         raise

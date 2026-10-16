@@ -1,22 +1,120 @@
+# ==========================================
+# Environments & Secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ==========================================
+# Python & Virtual Environments
+# ==========================================
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
 *.pyd
+*.pyo
 .Python
-env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
 venv/
 .venv/
+env/
 env.bak/
 venv.bak/
-.env
-node_modules/
-.next/
+ENV/
+
+# ==========================================
+# Testing & Coverage
+# ==========================================
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.nox/
+.tox/
+
+# ==========================================
+# Vector DB & AI / LLM Generation Caches
+# ==========================================
 chroma_data/
 rag/chroma_db/
 rag/chroma_db_train/
+rag/cache/
+eval/cache/
 clustering/cluster_index.pkl
+*.sqlite3
+*.sqlite
+*.db
+*.db-journal
+*.db-wal
+
+# Model weights & HuggingFace caches
+.cache/
+hf_cache/
+
+# ==========================================
+# Scrapers & Ephemeral Data Output
+# ==========================================
 scripts/scrapers/output/
-.pytest_cache/
-.coverage
-coverage.xml
-htmlcov/
+
+# ==========================================
+# Node / Frontend (Next.js)
+# ==========================================
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+frontend/out/
+.vercel/
+frontend/.vercel/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# Logs & Temporary Files
+# ==========================================
+*.log
+*.tmp
+*.temp
+
+# ==========================================
+# OS & Editor Artifacts
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
