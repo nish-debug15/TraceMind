@@ -1,26 +1,73 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+  :root {
+    --bg: #0A0A0B;
+    --surface: #111113;
+    --elevated: #17171A;
+    --border: #26262B;
+    --text: #EDEDEF;
+    --muted: #8B8B94;
+    --accent: #6E7AE8;
+    --ok: #3FB67C;
+    --warn: #E5A23B;
+    --danger: #E5534B;
+
+    --background: #0A0A0B;
+    --foreground: #EDEDEF;
+    --card: #111113;
+    --card-foreground: #EDEDEF;
+    --popover: #17171A;
+    --popover-foreground: #EDEDEF;
+    --primary: #6E7AE8;
+    --primary-foreground: #FFFFFF;
+    --secondary: #17171A;
+    --secondary-foreground: #EDEDEF;
+    --muted-foreground: #8B8B94;
+    --accent-foreground: #FFFFFF;
+    --destructive: #E5534B;
+    --destructive-foreground: #FFFFFF;
+    --input: #26262B;
+    --ring: #6E7AE8;
+    --radius: 6px;
+  }
+
+  * {
+    border-color: #26262B;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-lora);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Custom scrollbar for ops console */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+::-webkit-scrollbar-track {
+  background: #0A0A0B;
+}
+::-webkit-scrollbar-thumb {
+  background: #26262B;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
 }
