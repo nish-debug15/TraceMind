@@ -28,6 +28,9 @@ _original_create_app = gr.routes.App.create_app
 def _custom_create_app(*args, **kwargs):
     app = _original_create_app(*args, **kwargs)
     app.include_router(fastapi_app.router)
+    app.include_router(fastapi_app.router, prefix="/gradio_api")
+    for exc, handler in fastapi_app.exception_handlers.items():
+        app.add_exception_handler(exc, handler)
     return app
 
 gr.routes.App.create_app = _custom_create_app
