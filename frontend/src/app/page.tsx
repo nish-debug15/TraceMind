@@ -169,7 +169,14 @@ export default function Home() {
   const gutterRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  const baseUrl = (() => {
+    let url = rawBaseUrl.trim().replace(/\/+$/, "");
+    if (url.includes(".hf.space") && !url.includes("/gradio_api")) {
+      url = `${url}/gradio_api`;
+    }
+    return url;
+  })();
 
   // --- Health Check Polling ---
   useEffect(() => {
