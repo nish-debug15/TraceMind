@@ -1,5 +1,4 @@
 import os
-import uvicorn
 from pathlib import Path
 import gradio as gr
 from backend.main import app as fastapi_app
@@ -22,7 +21,18 @@ except (ImportError, Exception):
     def zero_gpu_anchor():
         return True
 
-# 2. Cold-start index verification
+# 2. Hook into Gradio's App.create_app so all launches include FastAPI REST routes
+_original_create_app = gr.routes.App.create_app
+
+@staticmethod
+def _custom_create_app(*args, **kwargs):
+    app = _original_create_app(*args, **kwargs)
+    app.include_router(fastapi_app.router)
+    return app
+
+gr.routes.App.create_app = _custom_create_app
+
+# 3. Cold-start index verification
 if not INDEX_PATH.exists():
     print("[Startup] Cluster index not found. Building from train.json...")
     build()
@@ -30,7 +40,7 @@ if not INDEX_PATH.exists():
 print("[Startup] Verifying ChromaDB collection...")
 ingest()
 
-# 3. Load CSS & Build Editorial Base Theme
+# 4. Load CSS & Build Editorial Base Theme
 CSS_PATH = Path(__file__).parent / "styles.css"
 custom_css = CSS_PATH.read_text(encoding="utf-8") if CSS_PATH.exists() else ""
 
@@ -101,7 +111,7 @@ def render_pills_html(is_mock: bool) -> str:
 
 initial_is_mock = not bool(os.environ.get("GROQ_API_KEY"))
 
-# 4. Build Editorial UI
+# 5. Build Editorial UI
 head_html = """
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -126,87 +136,41 @@ with gr.Blocks(title="TraceMind RCA API") as demo:
             log_input = gr.Textbox(
                 lines=8,
                 show_label=False,
-                placeholder="Paste infrastructure error logs or stack traces here...",
-                value=SAMPLE_LOGS[0],
-                elem_classes=["log-textarea"],
-            )
-            analyze_btn = gr.Button(
-                "Analyze incident",
-                variant="primary",
-                elem_classes=["analyze-button"]
+                placeholder="Paste unstructured infrastructure logs (Kubernetes OOMKilled, Database pool exhaust, Network timeouts, Redis sentinel)...",
+                elem_classes=["code-editor-input"]
             )
 
-        # Example Chips
-        with gr.Column():
-            gr.HTML('<span class="section-label">TRY AN EXAMPLE</span>')
-            with gr.Row(elem_classes=["chips-container"]):
-                chip_db = gr.Button("DB pool exhausted", elem_classes=["example-chip"])
-                chip_oom = gr.Button("Kubelet OOMKilled", elem_classes=["example-chip"])
-                chip_redis = gr.Button("Redis sentinel failover", elem_classes=["example-chip"])
-                chip_ssl = gr.Button("SSL verify failed", elem_classes=["example-chip"])
+            with gr.Row():
+                analyze_btn = gr.Button("Analyze Incident", variant="primary", elem_classes=["analyze-btn"])
+                clear_btn = gr.ClearButton(components=[log_input], value="Clear", variant="secondary")
 
-        # Chip click interactions
-        chip_db.click(fn=lambda: SAMPLE_LOGS[0], inputs=[], outputs=[log_input])
-        chip_oom.click(fn=lambda: SAMPLE_LOGS[1], inputs=[], outputs=[log_input])
-        chip_redis.click(fn=lambda: SAMPLE_LOGS[2], inputs=[], outputs=[log_input])
-        chip_ssl.click(fn=lambda: SAMPLE_LOGS[3], inputs=[], outputs=[log_input])
-
-        # Mock Banner (shown when is_mock is true)
-        mock_banner = gr.HTML(visible=False)
-
-        # Results Grid (2 Equal Cards, stacks on mobile)
-        with gr.Row(elem_classes=["results-grid"]):
-            with gr.Column(elem_classes=["result-card"]):
-                gr.HTML('<h3 class="result-heading">Root cause</h3>')
-                rc_output = gr.Markdown(
-                    value='<div class="result-empty">Run an analysis to see results.</div>',
-                    elem_classes=["result-body"]
-                )
-
-            with gr.Column(elem_classes=["result-card"]):
-                gr.HTML('<h3 class="result-heading">Remediation steps</h3>')
-                rem_output = gr.Markdown(
-                    value='<div class="result-empty">Run an analysis to see results.</div>',
-                    elem_classes=["result-body"]
-                )
-
-        # Pipeline Trace Accordion (Directly under results)
-        with gr.Accordion("Pipeline trace (audit the reasoning)", open=False, elem_classes=["trace-card"]):
-            trace_summary_view = gr.HTML(
-                value="""
-                <div class="trace-metric-grid">
-                    <div class="trace-metric-box">
-                        <div class="trace-metric-label">Detected Anomaly & Cluster</div>
-                        <div class="trace-metric-value">—</div>
-                    </div>
-                    <div class="trace-metric-box">
-                        <div class="trace-metric-label">Matched Incident & Similarity</div>
-                        <div class="trace-metric-value">—</div>
-                    </div>
-                </div>
-                <div class="trace-source-wrapper">Run an incident analysis to inspect retrieved postmortem context.</div>
-                """
-            )
-            prompt_viewer = gr.Code(
-                label="Prompt Payload Delivered to LLM",
-                language="markdown",
-                elem_classes=["prompt-code"],
-                interactive=False
+            gr.Examples(
+                examples=SAMPLE_LOGS,
+                inputs=log_input,
+                label="Select Incident Benchmark"
             )
 
-        # Footer
-        gr.HTML("""
-        <div class="editorial-footer">
-            TraceMind RCA · Auditable Infrastructure Postmortem Correlation · 
-            <a href="https://github.com/nish-debug15/TraceMind" target="_blank" rel="noopener noreferrer">github.com/nish-debug15/TraceMind</a>
-        </div>
-        """)
+        # Output Card
+        with gr.Column(elem_classes=["editorial-card"]):
+            gr.HTML('<span class="section-label">ROOT CAUSE ANALYSIS</span>')
+            mock_banner = gr.HTML(visible=initial_is_mock)
+            rc_output = gr.Markdown(elem_classes=["rc-markdown"])
 
-    def on_analyze(log_text):
-        if not log_text.strip():
+            gr.HTML('<span class="section-label" style="margin-top: 24px;">RECOMMENDED REMEDIATION</span>')
+            rem_output = gr.Markdown(elem_classes=["rem-markdown"])
+
+            # Trace Inspector
+            with gr.Accordion("Show Pipeline Trace", open=True, elem_classes=["trace-accordion"]):
+                trace_summary_view = gr.HTML()
+                gr.HTML('<div style="height: 8px;"></div>')
+                with gr.Accordion("View Exact Prompt Sent to LLM", open=False):
+                    prompt_viewer = gr.Code(language="markdown", interactive=False, show_label=False)
+
+    def on_analyze(log_text: str):
+        if not log_text or not log_text.strip():
             return (
-                '<div class="result-empty">Please enter a log excerpt to analyze.</div>',
-                '<div class="result-empty">Please enter a log excerpt to analyze.</div>',
+                "*Please input a valid log excerpt to run analysis.*",
+                "*No remediation steps available.*",
                 gr.update(visible=False),
                 render_pills_html(initial_is_mock),
                 """
@@ -313,14 +277,10 @@ with gr.Blocks(title="TraceMind RCA API") as demo:
         outputs=[rc_output, rem_output, mock_banner, status_pills_view, trace_summary_view, prompt_viewer]
     )
 
-# Attach backend FastAPI routes (/health, /analyze) to Gradio's internal FastAPI app
-demo.app.include_router(fastapi_app.router)
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', os.environ.get('GRADIO_SERVER_PORT', 7860)))
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", os.environ.get("GRADIO_SERVER_PORT", 7860)))
     demo.launch(
-        _app=demo.app,
-        server_name='0.0.0.0',
+        server_name="0.0.0.0",
         server_port=port,
         theme=editorial_theme,
         css=custom_css,
