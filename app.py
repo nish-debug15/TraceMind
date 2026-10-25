@@ -313,18 +313,16 @@ with gr.Blocks(title="TraceMind RCA API") as demo:
         outputs=[rc_output, rem_output, mock_banner, status_pills_view, trace_summary_view, prompt_viewer]
     )
 
-# Mount Gradio onto the existing FastAPI backend
-# /analyze and /health remain FastAPI endpoints for external clients / Vercel frontend!
-app = gr.mount_gradio_app(
-    fastapi_app,
-    demo,
-    path="/",
-    theme=editorial_theme,
-    css=custom_css,
-    head=head_html,
-)
+# Attach backend FastAPI routes (/health, /analyze) to Gradio's internal FastAPI app
+demo.app.include_router(fastapi_app.router)
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", os.environ.get("GRADIO_SERVER_PORT", 7860)))
-    uvicorn.run(app, host="0.0.0.0", port=port)
-
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', os.environ.get('GRADIO_SERVER_PORT', 7860)))
+    demo.launch(
+        _app=demo.app,
+        server_name='0.0.0.0',
+        server_port=port,
+        theme=editorial_theme,
+        css=custom_css,
+        head=head_html,
+    )
