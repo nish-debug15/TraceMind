@@ -38,7 +38,7 @@ Vector Retrieval (ChromaDB) ──► Historical Postmortem Corpus
 RAG-Augmented Prompt Construction
      │
      ▼
-LLM Generation (Groq / Llama 3.3 70B Versatile, prompted — no fine-tuning)
+LLM Generation (Groq / openai/gpt-oss-120b, prompted — no fine-tuning)
      │
      ▼
 Root Cause Summary + Remediation Steps
@@ -59,7 +59,7 @@ Next.js Frontend (Vercel)
 | Embeddings | sentence-transformers |
 | Clustering | HDBSCAN |
 | Vector Store | ChromaDB |
-| Generation | Groq / Llama-3.3-70b-versatile (prompted, not fine-tuned) |
+| Generation | Groq / openai/gpt-oss-120b (prompted, not fine-tuned) |
 | Backend API | FastAPI (hosted on Render/Railway/HF Spaces — needs real compute, not serverless) |
 | Frontend | Next.js, deployed on Vercel |
 | Evaluation | ROUGE, BERTScore, ablation, human "Actionability" rating |
@@ -99,7 +99,7 @@ To guarantee valid quantitative evaluation and eliminate data leakage, the corpu
 - **Embeddings:** `all-MiniLM-L6-v2` (384-dimensional normalized embeddings).
 - **Anomaly Clustering (HDBSCAN):** Fitted on the train corpus with `min_cluster_size=3` and `min_samples=2`, producing 40 distinct failure clusters (55.4% noise rate, consistent with the corpus baseline quality distribution).
 - **2-Pass Vector Retrieval:** Queries ChromaDB for `quality:high` incidents first with a `0.40` cosine similarity floor. If no match exceeds this floor, it falls back to all records.
-- **LLM Generation:** `llama-3.3-70b-versatile` via Groq Cloud API (OpenAI-compatible chat completions). Transparent mock fallback (`is_mock: true`) is provided for offline development when `GROQ_API_KEY` is unset.
+- **LLM Generation:** `openai/gpt-oss-120b` via Groq Cloud API (OpenAI-compatible chat completions). Transparent mock fallback (`is_mock: true`) is provided for offline development when `GROQ_API_KEY` is unset.
 - **Hugging Face Space Secret:** In your Space settings under *Variables and secrets*, add `GROQ_API_KEY` as a secret.
 
 ## Pipeline Trace (Key Feature)
@@ -128,7 +128,7 @@ The editorial Next.js frontend includes a "Show Pipeline Trace" toggle exposing:
 | 1–2 | Aggregator-first data sourcing + schema standardization (828 records) | Complete |
 | 3–4 | Embedding + HDBSCAN clustering (40 clusters, noise correlation validated) | Complete |
 | 5–6 | RAG layer: ChromaDB vector storage + 2-pass quality retrieval | Complete |
-| 7–8 | LLM integration (Groq Llama 3.3 70B via API + mock transparency) | Complete |
+| 7–8 | LLM integration (Groq openai/gpt-oss-120b via API + mock transparency) | Complete |
 | 9–10 | Pipeline integration + FastAPI backend + Next.js editorial UI | Complete |
 | 11–12 | Evaluation suite, ablation benchmark, cloud deployment | In Progress |
 

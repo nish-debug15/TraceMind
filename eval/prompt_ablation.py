@@ -32,7 +32,7 @@ from rag.gen_cache import get_cached_generation, set_cached_generation
 
 TEST_FILE = Path(__file__).parent.parent / "data" / "test.json"
 CACHE_FILE = Path(__file__).parent / "cache" / "prompt_ablation_cache.json"
-MODEL_ID = os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile")
+MODEL_ID = os.environ.get("LLM_MODEL", "openai/gpt-oss-120b")
 _rate_limiter = RateLimiter(max_rpm=LLM_MAX_RPM)
 
 PROMPT_VARIANTS = {

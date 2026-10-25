@@ -48,7 +48,7 @@ RAG_CACHE_FILE = CACHE_DIR / "rag_generations.json"
 ZEROSHOT_CACHE_FILE = CACHE_DIR / "zeroshot_generations.json"
 RESULTS_FILE = EVAL_DIR / "evaluation_report.json"
 
-MODEL_ID = os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile")
+MODEL_ID = os.environ.get("LLM_MODEL", "openai/gpt-oss-120b")
 _rate_limiter = RateLimiter(max_rpm=LLM_MAX_RPM)
 
 

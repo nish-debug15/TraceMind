@@ -158,7 +158,7 @@ def retrieve(
     similarity = 1.0 - (distance / 2.0)
     return results_all['metadatas'][0][0], similarity
 
-LLM_MODEL = os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile")
+LLM_MODEL = os.environ.get("LLM_MODEL", "openai/gpt-oss-120b")
 LLM_MAX_RPM = int(os.environ.get("LLM_MAX_RPM", "20"))
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 

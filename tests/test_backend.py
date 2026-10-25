@@ -49,7 +49,7 @@ def test_analyze_loud_502_on_live_failure():
             assert "Invalid API Key" in data["message"]
 
 def test_gen_cache_roundtrip(tmp_path):
-    test_model = "llama-3.3-70b-versatile"
+    test_model = "openai/gpt-oss-120b"
     test_variant = "test_unit"
     test_query = "Error: Out of memory killed process 1234"
     

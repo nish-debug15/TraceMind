@@ -161,7 +161,7 @@ export default function Home() {
   // Health check state
   const [apiStatus, setApiStatus] = useState<"ok" | "waking" | "error">("ok");
   const [lastChecked, setLastChecked] = useState<string>("Initializing");
-  const [knownModel, setKnownModel] = useState<string>("llama-3.3-70b-versatile");
+  const [knownModel, setKnownModel] = useState<string>("openai/gpt-oss-120b");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const gutterRef = useRef<HTMLDivElement>(null);

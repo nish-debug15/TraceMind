@@ -12,7 +12,7 @@ USER user
 ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH \
     PYTHONUNBUFFERED=1 \
-    LLM_MODEL=llama-3.3-70b-versatile \
+    LLM_MODEL=openai/gpt-oss-120b \
     LLM_MAX_RPM=20
 
 WORKDIR /app
