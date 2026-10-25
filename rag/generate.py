@@ -98,6 +98,7 @@ def retrieve(
     persist_directory: str | Path | None = None,
     collection_name: str | None = None,
     return_all: bool = False,
+    return_pass: bool = False,
 ):
     """Retrieve the most similar historical incident from ChromaDB, preferring quality:high."""
     if persist_directory or collection_name:
@@ -143,6 +144,8 @@ def retrieve(
         similarity = 1.0 - (distance / 2.0)
         # Similarity floor for high quality
         if similarity >= 0.40:
+            if return_pass:
+                return results_high['metadatas'][0][0], similarity, 1
             return results_high['metadatas'][0][0], similarity
             
     # Fallback to any quality if no high quality match found or similarity < 0.40
@@ -152,10 +155,14 @@ def retrieve(
     )
     
     if not results_all['metadatas'] or not results_all['metadatas'][0]:
+        if return_pass:
+            return None, 0.0, 2
         return None, 0.0
         
     distance = results_all['distances'][0][0]
     similarity = 1.0 - (distance / 2.0)
+    if return_pass:
+        return results_all['metadatas'][0][0], similarity, 2
     return results_all['metadatas'][0][0], similarity
 
 LLM_MODEL = os.environ.get("LLM_MODEL", "openai/gpt-oss-120b")
@@ -205,11 +212,11 @@ def generate_rca(
 ) -> dict:
     """Full RAG pipeline. Retrieves context and generates RCA using Groq API."""
     try:
-        match_meta, similarity = retrieve(log_text, k=1)
+        match_meta, similarity, pass_tier = retrieve(log_text, k=1, return_pass=True)
     except Exception:
         # In case it hasn't been ingested yet
         ingest()
-        match_meta, similarity = retrieve(log_text, k=1)
+        match_meta, similarity, pass_tier = retrieve(log_text, k=1, return_pass=True)
         
     if not match_meta:
         return {"error": "No historical context found."}
@@ -246,6 +253,7 @@ New Incident Log Excerpt:
                     "remediation_steps": cached["remediation_steps"],
                     "retrieved_incident": match_meta,
                     "similarity_score": round(similarity, 4),
+                    "retrieval_pass": pass_tier,
                     "prompt_used": prompt_used,
                     "is_mock": False,
                     "model": model_name,
@@ -266,6 +274,7 @@ New Incident Log Excerpt:
             "remediation_steps": remediation_steps,
             "retrieved_incident": match_meta,
             "similarity_score": round(similarity, 4),
+            "retrieval_pass": pass_tier,
             "prompt_used": prompt_used,
             "is_mock": True,
             "model": model_name,
@@ -424,6 +433,7 @@ New Incident Log Excerpt:
         "remediation_steps": remediation_steps,
         "retrieved_incident": match_meta,
         "similarity_score": round(similarity, 4),
+        "retrieval_pass": pass_tier,
         "prompt_used": prompt_used,
         "is_mock": False,
         "model": model_name,

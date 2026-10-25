@@ -17,6 +17,7 @@ class PipelineTrace(BaseModel):
     is_noise: bool
     retrieved_incident: RetrievedIncident
     similarity_score: float
+    retrieval_pass: Optional[int] = 1
     prompt_used: str
     model: Optional[str] = None
 
@@ -26,5 +27,6 @@ class AnalyzeResponse(BaseModel):
     root_cause: str
     remediation_steps: str
     source_url: str
+    retrieval_pass: Optional[int] = 1
     trace: PipelineTrace
     is_mock: bool = False

@@ -53,11 +53,13 @@ def analyze_log(request: AnalyzeRequest):
         rag_info = generate_rca(request.log_text)
         
         # Assemble PipelineTrace
+        retrieval_pass = rag_info.get("retrieval_pass", 1 if rag_info.get("similarity_score", 0) >= 0.40 else 2)
         trace = PipelineTrace(
             cluster_id=cluster_info["cluster_id"],
             is_noise=cluster_info["is_noise"],
             retrieved_incident=RetrievedIncident(**rag_info["retrieved_incident"]),
             similarity_score=rag_info["similarity_score"],
+            retrieval_pass=retrieval_pass,
             prompt_used=rag_info["prompt_used"],
             model=rag_info.get("model", LLM_MODEL),
         )
@@ -68,6 +70,7 @@ def analyze_log(request: AnalyzeRequest):
             root_cause=rag_info["root_cause"],
             remediation_steps=rag_info["remediation_steps"],
             source_url=rag_info["retrieved_incident"]["source_url"],
+            retrieval_pass=retrieval_pass,
             trace=trace,
             is_mock=rag_info.get("is_mock", False)
         )

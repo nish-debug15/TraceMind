@@ -50,6 +50,7 @@ type PipelineTrace = {
   is_noise: boolean;
   retrieved_incident: RetrievedIncident;
   similarity_score: number;
+  retrieval_pass?: number;
   prompt_used: string;
   model?: string;
 };
@@ -60,6 +61,7 @@ type AnalyzeResponse = {
   root_cause: string;
   remediation_steps: string;
   source_url: string;
+  retrieval_pass?: number;
   trace: PipelineTrace;
   is_mock?: boolean;
 };
@@ -323,6 +325,7 @@ export default function Home() {
   const lineCount = Math.max(lines.length, 1);
   const remediationList = result ? parseRemediationSteps(result.remediation_steps) : [];
   const similarity = result?.trace?.similarity_score ?? 0;
+  const passTier = result?.trace?.retrieval_pass ?? result?.retrieval_pass ?? (similarity >= 0.40 ? 1 : 2);
   const isWeakMatch = Boolean(result && similarity < 0.40);
   const company = result ? extractCompany(result.trace?.retrieved_incident?.source_url || result.source_url) : "";
 
@@ -646,7 +649,7 @@ export default function Home() {
 
                   {/* Pass Tier */}
                   <Badge className="bg-[#17171A] text-[#8B8B94] border border-[#26262B] font-mono text-[11px] rounded-[4px]">
-                    {similarity >= 0.4 ? "Pass 1 (high-quality)" : "Pass 2 (fallback)"}
+                    {passTier === 1 ? "Pass 1 (high-quality)" : "Pass 2 (fallback)"}
                   </Badge>
 
                   {/* Company */}
@@ -791,7 +794,7 @@ export default function Home() {
                             <div>
                               <span className="text-[#8B8B94]">Quality tier: </span>
                               <span className="text-[#EDEDEF]">
-                                {result.trace.similarity_score >= 0.4 ? "Pass 1 (high quality)" : "Pass 2 (fallback tier)"}
+                                {passTier === 1 ? "Pass 1 (high quality)" : "Pass 2 (fallback tier)"}
                               </span>
                             </div>
                             {result.trace.retrieved_incident.source_url && (

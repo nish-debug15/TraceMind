@@ -19,6 +19,10 @@ def test_analyze_valid():
     assert "root_cause" in data
     assert "remediation_steps" in data
     assert "trace" in data
+    assert "retrieval_pass" in data
+    assert "retrieval_pass" in data["trace"]
+    assert data["retrieval_pass"] in (1, 2)
+    assert data["trace"]["retrieval_pass"] in (1, 2)
 
 def test_analyze_empty():
     response = client.post("/analyze", json={"log_text": ""})
@@ -31,6 +35,10 @@ def test_analyze_mock_when_groq_key_unset():
         data = response.json()
         assert data["is_mock"] is True
         assert "[MOCK]" in data["root_cause"]
+        assert "retrieval_pass" in data
+        assert "retrieval_pass" in data["trace"]
+        assert data["retrieval_pass"] in (1, 2)
+        assert data["trace"]["retrieval_pass"] in (1, 2)
 
 def test_analyze_loud_502_on_live_failure():
     """Live call failure after retries must return HTTP 502 with message and provider_status."""
