@@ -250,13 +250,37 @@ PROMPT_REGISTRY = {
             "{log_text}"
         ),
     },
+    "relevance_gate_v2": {
+        "system": (
+            "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+            "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
+            "The historical incident below may be unrelated to the current log. First judge whether it is clearly relevant.\n\n"
+            "You must structure your response into exactly two sections labeled as follows:\n\n"
+            "ROOT CAUSE:\n"
+            "The very first line of ROOT CAUSE must be exactly one of:\n"
+            "Precedent: relevant\n"
+            "Precedent: not relevant\n\n"
+            "Followed by a concise, precise analysis of the technical root cause. If precedent is not relevant, derive the cause from the current log alone. "
+            "Never claim the current incident 'mirrors' or 'matches' a historical one unless specific evidence in the log supports it.\n\n"
+            "REMEDIATION STEPS:\n"
+            "At most 5 numbered steps, ordered by priority with immediate mitigation first, each exactly one sentence.\n\n"
+            "Do not output internal chain-of-thought, reasoning scratchpads, or conversational preambles."
+        ),
+        "user_template": (
+            "Historical Incident Reference (Similarity: {similarity:.2f}, below 0.60 treat as weak):\n"
+            "- Root Cause: {ref_root_cause}\n"
+            "- Remediation: {ref_remediation_steps}\n\n"
+            "New Incident Log Excerpt:\n"
+            "{log_text}"
+        ),
+    },
 }
 
 
 def generate_rca(
     log_text: str,
     use_cache: bool = False,
-    prompt_variant: str = "relevance_gate",
+    prompt_variant: str = "relevance_gate_v2",
     model_override: str | None = None
 ) -> dict:
     """Full RAG pipeline. Retrieves context and generates RCA using Groq API."""
@@ -272,7 +296,7 @@ def generate_rca(
         
     model_name = model_override or os.environ.get("LLM_MODEL", LLM_MODEL)
 
-    variant_key = prompt_variant if prompt_variant in PROMPT_REGISTRY else "relevance_gate"
+    variant_key = prompt_variant if prompt_variant in PROMPT_REGISTRY else "relevance_gate_v2"
     variant_def = PROMPT_REGISTRY[variant_key]
     system_prompt = variant_def["system"]
     user_prompt = variant_def["user_template"].format(

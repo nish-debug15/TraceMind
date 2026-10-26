@@ -59,6 +59,21 @@ PROMPT_VARIANTS = {
         "{log_text}\n\n"
         "Provide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
     ),
+    "relevance_gate_v2": (
+        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
+        "The historical incident below may be unrelated to the current log. First judge whether it is clearly relevant.\n\n"
+        "Historical Incident Reference:\n"
+        "- Root Cause: {root_cause}\n"
+        "- Remediation: {remediation_steps}\n\n"
+        "New Incident Log Excerpt:\n"
+        "{log_text}\n\n"
+        "Provide your response in the following format:\nROOT CAUSE:\n"
+        "The very first line MUST be exactly 'Precedent: relevant' or 'Precedent: not relevant'.\n"
+        "(your concise analysis)\n\n"
+        "REMEDIATION STEPS:\n"
+        "(at most 5 numbered steps, ordered by priority, immediate mitigation first, each one sentence)"
+    ),
     "variant_1_standard": (
         "You are an SRE assistant analyzing infrastructure incidents. Use the following historical incident to understand "
         "the context and format, then analyze the New Log Input and provide a precise Root Cause Analysis and actionable Remediation Steps.\n\n"
