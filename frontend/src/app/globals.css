@@ -2,47 +2,83 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
-    --bg: #0A0A0B;
-    --surface: #111113;
-    --elevated: #17171A;
-    --border: #26262B;
-    --text: #EDEDEF;
-    --muted: #8B8B94;
-    --accent: #6E7AE8;
+    --bg: #F6F6F7;
+    --tile: #FFFFFF;
+    --tile-2: #FAFAFB;
+    --border: #E6E6EA;
+    --border-strong: #D4D4DA;
+    --text: #0E0E10;
+    --muted: #6B6B76;
+    --accent: #2F5BFF;
+    --accent-soft: #EEF2FF;
+    --ok: #1A9E5C;
+    --warn: #C77700;
+    --danger: #D23B3B;
+
+    --background: #F6F6F7;
+    --foreground: #0E0E10;
+    --card: #FFFFFF;
+    --card-foreground: #0E0E10;
+    --popover: #FFFFFF;
+    --popover-foreground: #0E0E10;
+    --primary: #2F5BFF;
+    --primary-foreground: #FFFFFF;
+    --secondary: #FAFAFB;
+    --secondary-foreground: #0E0E10;
+    --muted-foreground: #6B6B76;
+    --accent-foreground: #FFFFFF;
+    --destructive: #D23B3B;
+    --destructive-foreground: #FFFFFF;
+    --input: #E6E6EA;
+    --ring: #2F5BFF;
+    --radius: 16px;
+  }
+
+  .dark {
+    --bg: #101114;
+    --tile: #17181C;
+    --tile-2: #1C1D22;
+    --border: #2A2B31;
+    --border-strong: #3A3B43;
+    --text: #ECECEF;
+    --muted: #9A9AA5;
+    --accent: #6C8CFF;
+    --accent-soft: #1E2440;
     --ok: #3FB67C;
     --warn: #E5A23B;
-    --danger: #E5534B;
+    --danger: #E5645C;
 
-    --background: #0A0A0B;
-    --foreground: #EDEDEF;
-    --card: #111113;
-    --card-foreground: #EDEDEF;
-    --popover: #17171A;
-    --popover-foreground: #EDEDEF;
-    --primary: #6E7AE8;
+    --background: #101114;
+    --foreground: #ECECEF;
+    --card: #17181C;
+    --card-foreground: #ECECEF;
+    --popover: #17181C;
+    --popover-foreground: #ECECEF;
+    --primary: #6C8CFF;
     --primary-foreground: #FFFFFF;
-    --secondary: #17171A;
-    --secondary-foreground: #EDEDEF;
-    --muted-foreground: #8B8B94;
+    --secondary: #1C1D22;
+    --secondary-foreground: #ECECEF;
+    --muted-foreground: #9A9AA5;
     --accent-foreground: #FFFFFF;
-    --destructive: #E5534B;
+    --destructive: #E5645C;
     --destructive-foreground: #FFFFFF;
-    --input: #26262B;
-    --ring: #6E7AE8;
-    --radius: 6px;
+    --input: #2A2B31;
+    --ring: #6C8CFF;
   }
 
   * {
-    border-color: #26262B;
+    border-color: var(--border);
     box-sizing: border-box;
   }
 
   body {
     background-color: var(--bg);
     color: var(--text);
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -56,18 +92,27 @@
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-/* Custom scrollbar for ops console */
+/* Crisp scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0B;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #26262B;
-  border-radius: 3px;
+  background: var(--border-strong);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3F3F46;
+  background: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
