@@ -1,4 +1,9 @@
 import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 import re
 import json
 import time
@@ -203,11 +208,55 @@ class RateLimiter:
 
 _rate_limiter = RateLimiter(max_rpm=LLM_MAX_RPM)
 
+PROMPT_REGISTRY = {
+    "baseline": {
+        "system": (
+            "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+            "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
+            "You must structure your response into exactly two sections labeled as follows:\n\n"
+            "ROOT CAUSE:\n"
+            "<concise, precise analysis of the technical root cause>\n\n"
+            "REMEDIATION STEPS:\n"
+            "<numbered actionable mitigation and remediation steps>\n\n"
+            "Do not output internal chain-of-thought, reasoning scratchpads, or conversational preambles."
+        ),
+        "user_template": (
+            "Historical Incident Reference:\n"
+            "- Root Cause: {ref_root_cause}\n"
+            "- Remediation: {ref_remediation_steps}\n\n"
+            "New Incident Log Excerpt:\n"
+            "{log_text}"
+        ),
+    },
+    "relevance_gate": {
+        "system": (
+            "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+            "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
+            "The historical incident below may be unrelated to the current log. First judge whether it is clearly relevant. "
+            "If it is not, write 'Precedent: not relevant' on the first line of ROOT CAUSE and derive the cause from the current log alone. "
+            "Never claim the current incident 'mirrors' or 'matches' a historical one unless specific evidence in the log supports it.\n\n"
+            "You must structure your response into exactly two sections labeled as follows:\n\n"
+            "ROOT CAUSE:\n"
+            "<concise, precise analysis of the technical root cause>\n\n"
+            "REMEDIATION STEPS:\n"
+            "<numbered actionable mitigation and remediation steps>\n\n"
+            "Do not output internal chain-of-thought, reasoning scratchpads, or conversational preambles."
+        ),
+        "user_template": (
+            "Historical Incident Reference (Similarity: {similarity:.2f}, below 0.60 treat as weak):\n"
+            "- Root Cause: {ref_root_cause}\n"
+            "- Remediation: {ref_remediation_steps}\n\n"
+            "New Incident Log Excerpt:\n"
+            "{log_text}"
+        ),
+    },
+}
+
 
 def generate_rca(
     log_text: str,
     use_cache: bool = False,
-    prompt_variant: str = "default",
+    prompt_variant: str = "relevance_gate",
     model_override: str | None = None
 ) -> dict:
     """Full RAG pipeline. Retrieves context and generates RCA using Groq API."""
@@ -223,30 +272,28 @@ def generate_rca(
         
     model_name = model_override or os.environ.get("LLM_MODEL", LLM_MODEL)
 
-    system_prompt = (
-        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
-        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
-        "You must structure your response into exactly two sections labeled as follows:\n\n"
-        "ROOT CAUSE:\n"
-        "<concise, precise analysis of the technical root cause>\n\n"
-        "REMEDIATION STEPS:\n"
-        "<numbered actionable mitigation and remediation steps>\n\n"
-        "Do not output internal chain-of-thought, reasoning scratchpads, or conversational preambles."
+    variant_key = prompt_variant if prompt_variant in PROMPT_REGISTRY else "relevance_gate"
+    variant_def = PROMPT_REGISTRY[variant_key]
+    system_prompt = variant_def["system"]
+    user_prompt = variant_def["user_template"].format(
+        ref_root_cause=match_meta.get("root_cause", ""),
+        ref_remediation_steps=match_meta.get("remediation_steps", ""),
+        log_text=log_text,
+        similarity=similarity
     )
 
-    user_prompt = f"""Historical Incident Reference:
-- Root Cause: {match_meta['root_cause']}
-- Remediation: {match_meta['remediation_steps']}
-
-New Incident Log Excerpt:
-{log_text}"""
-
     prompt_used = f"{system_prompt}\n\n{user_prompt}"
+    retrieved_inc_id = match_meta.get("incident_id", "")
 
     if use_cache:
         try:
             from rag.gen_cache import get_cached_generation, set_cached_generation
-            cached = get_cached_generation(model=model_name, prompt_variant=prompt_variant, query_text_or_id=log_text)
+            cached = get_cached_generation(
+                model=model_name,
+                prompt_variant=variant_key,
+                query_text_or_id=log_text,
+                incident_id=retrieved_inc_id
+            )
             if cached:
                 return {
                     "root_cause": cached["root_cause"],
@@ -419,11 +466,12 @@ New Incident Log Excerpt:
             from rag.gen_cache import set_cached_generation
             set_cached_generation(
                 model=model_name,
-                prompt_variant=prompt_variant,
+                prompt_variant=variant_key,
                 query_text_or_id=log_text,
                 root_cause=root_cause,
                 remediation_steps=remediation_steps,
-                raw_output=raw_content
+                raw_output=raw_content,
+                incident_id=retrieved_inc_id
             )
         except Exception as e:
             logging.warning(f"Failed to write gen_cache: {e}")

@@ -36,6 +36,29 @@ MODEL_ID = os.environ.get("LLM_MODEL", "openai/gpt-oss-120b")
 _rate_limiter = RateLimiter(max_rpm=LLM_MAX_RPM)
 
 PROMPT_VARIANTS = {
+    "baseline": (
+        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n\n"
+        "Historical Incident Reference:\n"
+        "- Root Cause: {root_cause}\n"
+        "- Remediation: {remediation_steps}\n\n"
+        "New Incident Log Excerpt:\n"
+        "{log_text}\n\n"
+        "Provide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
+    ),
+    "relevance_gate": (
+        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
+        "The historical incident below may be unrelated to the current log. First judge whether it is clearly relevant. "
+        "If it is not, write 'Precedent: not relevant' on the first line of ROOT CAUSE and derive the cause from the current log alone. "
+        "Never claim the current incident 'mirrors' or 'matches' a historical one unless specific evidence in the log supports it.\n\n"
+        "Historical Incident Reference:\n"
+        "- Root Cause: {root_cause}\n"
+        "- Remediation: {remediation_steps}\n\n"
+        "New Incident Log Excerpt:\n"
+        "{log_text}\n\n"
+        "Provide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
+    ),
     "variant_1_standard": (
         "You are an SRE assistant analyzing infrastructure incidents. Use the following historical incident to understand "
         "the context and format, then analyze the New Log Input and provide a precise Root Cause Analysis and actionable Remediation Steps.\n\n"

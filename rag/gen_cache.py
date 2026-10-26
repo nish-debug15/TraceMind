@@ -35,23 +35,30 @@ def _get_connection() -> sqlite3.Connection:
     return conn
 
 
-def make_cache_key(model: str, prompt_variant: str, query_text_or_id: str) -> str:
-    """Generate a deterministic cache key from model, prompt_variant, and query."""
+def make_cache_key(
+    model: str,
+    prompt_variant: str,
+    query_text_or_id: str,
+    incident_id: Optional[str] = None
+) -> str:
+    """Generate a deterministic cache key from model, prompt_variant, incident_id, and query."""
     normalized_id = query_text_or_id.strip()
     if len(normalized_id) > 64:
         query_hash = hashlib.sha256(normalized_id.encode("utf-8")).hexdigest()[:16]
     else:
         query_hash = normalized_id
-    return f"{model}:{prompt_variant}:{query_hash}"
+    inc_part = f":{incident_id.strip()}" if incident_id else ""
+    return f"{model}:{prompt_variant}{inc_part}:{query_hash}"
 
 
 def get_cached_generation(
     model: str,
     prompt_variant: str,
-    query_text_or_id: str
+    query_text_or_id: str,
+    incident_id: Optional[str] = None
 ) -> Optional[Dict[str, Any]]:
     """Retrieve cached generation if present."""
-    cache_key = make_cache_key(model, prompt_variant, query_text_or_id)
+    cache_key = make_cache_key(model, prompt_variant, query_text_or_id, incident_id=incident_id)
     try:
         conn = _get_connection()
         cursor = conn.cursor()
@@ -79,10 +86,11 @@ def set_cached_generation(
     query_text_or_id: str,
     root_cause: str,
     remediation_steps: str,
-    raw_output: str = ""
+    raw_output: str = "",
+    incident_id: Optional[str] = None
 ) -> None:
     """Save a generation into cache."""
-    cache_key = make_cache_key(model, prompt_variant, query_text_or_id)
+    cache_key = make_cache_key(model, prompt_variant, query_text_or_id, incident_id=incident_id)
     try:
         conn = _get_connection()
         conn.execute("""
