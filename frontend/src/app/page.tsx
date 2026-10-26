@@ -7,7 +7,6 @@ import ReactMarkdown from "react-markdown";
 import {
   AlertCircle,
   Check,
-  ChevronDown,
   Copy,
   ExternalLink,
   GitBranch,
@@ -33,12 +32,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -162,6 +155,31 @@ function cleanRootCause(raw: string): string {
   return filtered.join("\n").trim();
 }
 
+function parsePrecedent(raw: string): {
+  status: "not_relevant" | "relevant" | null;
+  cleanedText: string;
+} {
+  if (!raw) return { status: null, cleanedText: "" };
+  const cleaned = cleanRootCause(raw);
+  const lines = cleaned.split(/\r?\n/);
+  if (lines.length === 0) return { status: null, cleanedText: cleaned };
+
+  const firstLine = lines[0].trim();
+  if (/^\s*precedent:\s*not relevant/i.test(firstLine)) {
+    return {
+      status: "not_relevant",
+      cleanedText: lines.slice(1).join("\n").trim(),
+    };
+  }
+  if (/^\s*precedent:\s*relevant/i.test(firstLine)) {
+    return {
+      status: "relevant",
+      cleanedText: lines.slice(1).join("\n").trim(),
+    };
+  }
+  return { status: null, cleanedText: cleaned };
+}
+
 function parseRemediationSteps(raw: string): string[] {
   if (!raw) return [];
   const lines = raw.split(/\r?\n/);
@@ -213,83 +231,91 @@ function getSimilarityMatchInfo(similarity: number) {
 
 function SimilarityGauge({ value }: { value: number }) {
   const clampVal = Math.max(0, Math.min(1, value));
-  const r = 38;
-  const cx = 50;
-  const cy = 46;
+  const cx = 90;
+  const cy = 90;
+  const r = 64;
   const arcLength = Math.PI * r;
   const offset = arcLength * (1 - clampVal);
 
-  // 0.40 Threshold tick
-  const tickAngle = Math.PI * (1 - 0.4);
-  const tickInnerR = r - 6;
-  const tickOuterR = r + 6;
-  const x1 = cx + tickInnerR * Math.cos(tickAngle);
-  const y1 = cy - tickInnerR * Math.sin(tickAngle);
-  const x2 = cx + tickOuterR * Math.cos(tickAngle);
-  const y2 = cy - tickOuterR * Math.sin(tickAngle);
+  // Threshold tick at 0.40:
+  // angle = Math.PI * (1 - 0.40)
+  const angle = Math.PI * (1 - 0.4);
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
 
-  // 0.40 Label position
-  const labelR = r + 15;
-  const lx = cx + labelR * Math.cos(tickAngle);
-  const ly = cy - labelR * Math.sin(tickAngle);
+  // 14px tick crossing the arc in --warn (7px inside, 7px outside)
+  const x1 = cx + (r - 7) * cosA;
+  const y1 = cy - (r - 7) * sinA;
+  const x2 = cx + (r + 7) * cosA;
+  const y2 = cy - (r + 7) * sinA;
+
+  // "0.40" label placed OUTSIDE the arc at radius r+16
+  const lx = cx + (r + 17) * cosA;
+  const ly = cy - (r + 17) * sinA;
 
   return (
-    <div className="relative flex flex-col items-center justify-center flex-shrink-0 pt-1">
+    <div className="flex flex-col items-center flex-shrink-0">
       <svg
-        width="110"
-        height="62"
-        viewBox="-5 -12 110 66"
+        width="180"
+        height="110"
+        viewBox="0 0 180 110"
         className="overflow-visible"
         aria-hidden="true"
       >
-        {/* Track */}
+        {/* Track in --border-strong */}
         <path
           d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
           fill="none"
-          stroke="var(--border)"
-          strokeWidth="6"
+          stroke="var(--border-strong)"
+          strokeWidth="10"
           strokeLinecap="round"
         />
-        {/* Progress */}
+        {/* Value arc in --accent */}
         <path
           d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
           fill="none"
           stroke="var(--accent)"
-          strokeWidth="6"
+          strokeWidth="10"
           strokeLinecap="round"
           strokeDasharray={arcLength}
           strokeDashoffset={offset}
           className="transition-all duration-500 ease-out"
         />
-        {/* 0.40 Threshold tick */}
+        {/* 14px Threshold tick at 0.40 crossing the arc in --warn */}
         <line
           x1={x1}
           y1={y1}
           x2={x2}
           y2={y2}
           stroke="var(--warn)"
-          strokeWidth="2"
+          strokeWidth="2.5"
           strokeLinecap="round"
         />
-        {/* 0.40 Label */}
+        {/* "0.40" label placed OUTSIDE the arc at radius r+16 */}
         <text
           x={lx}
           y={ly}
           textAnchor="middle"
           fill="var(--warn)"
-          className="text-[10px] font-mono font-medium select-none"
+          className="text-[10px] font-mono font-semibold select-none"
         >
           0.40
         </text>
-      </svg>
-      <div className="absolute top-4 flex flex-col items-center">
-        <span className="font-mono text-[16px] font-semibold tabular-nums text-[var(--text)]">
+        {/* Number (0.51, 2 decimals, Geist Mono 22px semibold) centered INSIDE the arc at y~84 */}
+        <text
+          x={cx}
+          y="84"
+          textAnchor="middle"
+          fill="var(--text)"
+          className="font-mono text-[22px] font-semibold tabular-nums select-none"
+        >
           {clampVal.toFixed(2)}
-        </span>
-        <span className="text-[10px] text-[var(--muted)] font-mono uppercase tracking-wider">
-          similarity
-        </span>
-      </div>
+        </text>
+      </svg>
+      {/* "SIMILARITY" as HTML caption (10px, uppercase, muted) BELOW the svg */}
+      <span className="text-[10px] text-[var(--muted)] font-mono uppercase tracking-wider -mt-1 select-none">
+        SIMILARITY
+      </span>
     </div>
   );
 }
@@ -471,6 +497,7 @@ export default function Home() {
   const charCount = logText.length;
   const remediationList = result ? parseRemediationSteps(result.remediation_steps) : [];
   const completedStepsCount = Object.values(checkedSteps).filter(Boolean).length;
+  const precedentInfo = result ? parsePrecedent(result.root_cause) : { status: null, cleanedText: "" };
 
   const tileVariants = {
     hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 6 },
@@ -601,7 +628,21 @@ export default function Home() {
           </div>
         )}
 
-        {/* Bento Grid: 12 cols desktop, 6 tablet, 1 mobile */}
+        {/* Mock Banner (full-width, warn-bordered, when is_mock is true) */}
+        {result?.is_mock && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="w-full flex items-center gap-3 p-4 rounded-[12px] border border-[var(--warn)] bg-[var(--warn)]/10 text-[var(--warn)] text-[13px] font-medium"
+          >
+            <AlertCircle className="h-5 w-5 text-[var(--warn)] flex-shrink-0" />
+            <span>
+              Mock response: no LLM key is configured on this backend. This is placeholder text, not an analysis.
+            </span>
+          </div>
+        )}
+
+        {/* Bento Grid: 12 cols desktop, 6 tablet, 1 mobile; align-items: start */}
         <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-4 items-start">
           {/* ========================================================= */}
           {/* ROW 1 - TILE A: Incident Log (col-span 7) */}
@@ -613,7 +654,7 @@ export default function Home() {
             variants={tileVariants}
             className="order-1 md:order-1 col-span-1 md:col-span-3 xl:col-span-7 flex flex-col rounded-[16px] border border-[var(--border)] bg-[var(--tile)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none min-h-[460px] overflow-hidden justify-between"
           >
-            {/* Tile Header */}
+            {/* Tile Header: label row + Clear button */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
               <div className="flex items-center gap-2">
                 <Terminal className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
@@ -621,44 +662,18 @@ export default function Home() {
                   Incident Log
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                {/* Example Dropdown */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="inline-flex items-center justify-center h-7 text-[12px] font-medium text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2 border border-transparent transition-colors">
-                    Load example
-                    <ChevronDown className="h-3.5 w-3.5 ml-1 opacity-70" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 bg-[var(--tile)] border-[var(--border)]">
-                    {PRESET_EXAMPLES.map((ex) => (
-                      <DropdownMenuItem
-                        key={ex.title}
-                        onClick={() => {
-                          setLogText(ex.log);
-                          setResult(null);
-                          setError(null);
-                        }}
-                        className="text-[12px] cursor-pointer hover:bg-[var(--tile-2)]"
-                      >
-                        {ex.title}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                {/* Clear */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setLogText("");
-                    setResult(null);
-                    setError(null);
-                  }}
-                  className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
-                >
-                  Clear
-                </Button>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setLogText("");
+                  setResult(null);
+                  setError(null);
+                }}
+                className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
+              >
+                Clear
+              </Button>
             </div>
 
             {/* Editor Body with Gutter (white-space: pre, horizontal scroll, no wrapping) */}
@@ -699,10 +714,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Preset chips inside Tile A under editor */}
-            <div className="px-4 py-2 border-t border-[var(--border)] bg-[var(--tile)] flex items-center gap-1.5 overflow-x-auto">
+            {/* EXAMPLES chips row directly under editor */}
+            <div className="px-4 py-2 border-t border-[var(--border)] bg-[var(--tile)] flex items-center gap-2 overflow-x-auto">
               <span className="text-[11px] text-[var(--muted)] font-mono uppercase tracking-wider mr-1 flex-shrink-0">
-                Chips:
+                EXAMPLES
               </span>
               {PRESET_EXAMPLES.map((ex) => (
                 <button
@@ -713,7 +728,7 @@ export default function Home() {
                     setResult(null);
                     setError(null);
                   }}
-                  className="text-[12px] px-2.5 py-1 rounded-[6px] border border-[var(--border)] bg-[var(--tile-2)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-colors whitespace-nowrap flex-shrink-0"
+                  className="text-[12px] px-2.5 py-1 rounded-[6px] border border-[var(--border)] bg-[var(--tile-2)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-colors whitespace-nowrap flex-shrink-0 cursor-pointer"
                 >
                   {ex.title}
                 </button>
@@ -756,7 +771,7 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className="order-2 md:order-2 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border border-[var(--border)] bg-[var(--tile)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none min-h-[460px] p-4 justify-between"
+            className="order-2 md:order-2 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border border-[var(--border)] bg-[var(--tile)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none min-h-[460px] p-4 justify-start"
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
@@ -779,8 +794,8 @@ export default function Home() {
               )}
             </div>
 
-            {/* Stepper Stages (compact spacing without dead space) */}
-            <div className="flex flex-col gap-3.5 py-4">
+            {/* Stepper Stages (top-aligned, compact spacing, no vertical centering) */}
+            <div className="flex flex-col gap-3 py-3">
               {PIPELINE_STAGES.map((stage, idx) => {
                 const isFinished = result ? true : loading ? loadingStage > idx : false;
                 const isActive = loading && loadingStage === idx;
@@ -854,13 +869,11 @@ export default function Home() {
             </div>
 
             {/* Cold start alert message if elapsed >3s */}
-            {isColdStart && loading ? (
-              <div className="mt-auto p-3 rounded-[8px] bg-[var(--warn)]/10 border border-[var(--warn)]/30 text-[12px] text-[var(--warn)] flex items-center gap-2">
+            {isColdStart && loading && (
+              <div className="mt-2 p-3 rounded-[8px] bg-[var(--warn)]/10 border border-[var(--warn)]/30 text-[12px] text-[var(--warn)] flex items-center gap-2">
                 <Loader2 className="h-3.5 w-3.5 animate-spin flex-shrink-0" />
                 <span>Backend is waking up, first request can take up to a minute</span>
               </div>
-            ) : (
-              <div className="h-4" />
             )}
           </motion.div>
 
@@ -968,7 +981,7 @@ export default function Home() {
                   <Skeleton className="h-5 w-32 bg-[var(--border)]" />
                   <Skeleton className="h-4 w-24 bg-[var(--border)]" />
                 </div>
-                <Skeleton className="h-14 w-24 rounded-full bg-[var(--border)]" />
+                <Skeleton className="h-16 w-36 rounded-full bg-[var(--border)]" />
               </div>
             ) : result ? (
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pt-3">
@@ -1032,7 +1045,7 @@ export default function Home() {
                   )}
                 </div>
 
-                {/* Right: Semicircular Arc Gauge */}
+                {/* Right: Redrawn Semicircular Arc Gauge */}
                 <SimilarityGauge value={result.trace.similarity_score} />
               </div>
             ) : (
@@ -1125,7 +1138,7 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-4 md:order-6 col-span-1 md:col-span-3 xl:col-span-7 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] max-h-[560px] ${
+            className={`order-4 md:order-6 col-span-1 md:col-span-3 xl:col-span-7 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
@@ -1142,7 +1155,7 @@ export default function Home() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => copyToClipboard(cleanRootCause(result.root_cause), "Root cause")}
+                  onClick={() => copyToClipboard(precedentInfo.cleanedText, "Root cause")}
                   className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
                 >
                   <Copy className="h-3.5 w-3.5 mr-1" />
@@ -1151,7 +1164,7 @@ export default function Home() {
               )}
             </div>
 
-            <div className="p-5 flex-1 flex flex-col justify-start items-start overflow-hidden">
+            <div className="p-5 flex-1 flex flex-col justify-start items-start">
               {loading ? (
                 <div className="space-y-3 w-full">
                   <Skeleton className="h-4 w-full bg-[var(--border)]" />
@@ -1160,7 +1173,26 @@ export default function Home() {
                   <Skeleton className="h-4 w-3/4 bg-[var(--border)]" />
                 </div>
               ) : result ? (
-                <ScrollArea className="w-full max-h-[460px] pr-3">
+                <div className="w-full">
+                  {/* Precedent status badge */}
+                  {precedentInfo.status === "not_relevant" && (
+                    <Badge
+                      variant="outline"
+                      className="mb-3 text-[11px] font-mono border-[var(--border)] text-[var(--muted)] bg-[var(--tile-2)]"
+                    >
+                      No relevant precedent
+                    </Badge>
+                  )}
+                  {precedentInfo.status === "relevant" && (
+                    <Badge
+                      variant="outline"
+                      className="mb-3 text-[11px] font-mono border-[var(--ok)]/40 text-[var(--ok)] bg-[var(--ok)]/10"
+                    >
+                      Precedent applied
+                    </Badge>
+                  )}
+
+                  {/* Cleaned markdown text: top-aligned, 15px/1.65, max-w 64ch */}
                   <div className="max-w-[64ch] text-[15px] leading-[1.65] text-[var(--text)]">
                     <ReactMarkdown
                       components={{
@@ -1176,10 +1208,10 @@ export default function Home() {
                         li: ({ children }) => <li className="text-[14px] leading-relaxed">{children}</li>,
                       }}
                     >
-                      {cleanRootCause(result.root_cause)}
+                      {precedentInfo.cleanedText}
                     </ReactMarkdown>
                   </div>
-                </ScrollArea>
+                </div>
               ) : (
                 <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
                   Root cause synthesis will be generated by the model
@@ -1196,7 +1228,7 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-5 md:order-7 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] max-h-[560px] ${
+            className={`order-5 md:order-7 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
@@ -1227,7 +1259,7 @@ export default function Home() {
               )}
             </div>
 
-            <div className="p-4 flex-1 flex flex-col justify-start items-stretch overflow-hidden">
+            <div className="p-4 flex-1 flex flex-col justify-start items-stretch">
               {loading ? (
                 <div className="space-y-3 w-full">
                   <Skeleton className="h-5 w-full bg-[var(--border)]" />
@@ -1235,59 +1267,57 @@ export default function Home() {
                   <Skeleton className="h-5 w-5/6 bg-[var(--border)]" />
                 </div>
               ) : result && remediationList.length > 0 ? (
-                <ScrollArea className="w-full max-h-[460px] pr-2">
-                  <div className="space-y-2.5">
-                    {remediationList.map((step, idx) => {
-                      const isDone = !!checkedSteps[idx];
-                      return (
-                        <div
-                          key={idx}
-                          onClick={() =>
-                            setCheckedSteps((prev) => ({
-                              ...prev,
-                              [idx]: !prev[idx],
-                            }))
-                          }
-                          className="flex items-start gap-3 p-2 rounded-lg hover:bg-[var(--tile-2)] transition-colors cursor-pointer group"
+                <div className="space-y-2.5 w-full">
+                  {remediationList.map((step, idx) => {
+                    const isDone = !!checkedSteps[idx];
+                    return (
+                      <div
+                        key={idx}
+                        onClick={() =>
+                          setCheckedSteps((prev) => ({
+                            ...prev,
+                            [idx]: !prev[idx],
+                          }))
+                        }
+                        className="flex items-start gap-3 p-2 rounded-lg hover:bg-[var(--tile-2)] transition-colors cursor-pointer group"
+                      >
+                        <button
+                          type="button"
+                          aria-label={`Mark step ${idx + 1} as ${isDone ? "incomplete" : "complete"}`}
+                          className="mt-0.5 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors flex-shrink-0"
                         >
-                          <button
-                            type="button"
-                            aria-label={`Mark step ${idx + 1} as ${isDone ? "incomplete" : "complete"}`}
-                            className="mt-0.5 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors flex-shrink-0"
+                          {isDone ? (
+                            <CheckSquare className="h-4 w-4 text-[var(--accent)]" />
+                          ) : (
+                            <Square className="h-4 w-4" />
+                          )}
+                        </button>
+                        <div
+                          className={`text-[13px] leading-relaxed transition-colors ${
+                            isDone ? "line-through text-[var(--muted)]" : "text-[var(--text)]"
+                          }`}
+                        >
+                          <span className="font-mono text-[12px] text-[var(--muted)] mr-1.5 tabular-nums">
+                            {idx + 1}.
+                          </span>
+                          <ReactMarkdown
+                            components={{
+                              p: ({ children }) => <span className="inline">{children}</span>,
+                              strong: ({ children }) => <strong className="font-semibold text-[var(--text)]">{children}</strong>,
+                              code: ({ children }) => (
+                                <code className="font-mono text-[12px] px-1 py-0.5 rounded bg-[var(--tile-2)] border border-[var(--border)] text-[var(--text)]">
+                                  {children}
+                                </code>
+                              ),
+                            }}
                           >
-                            {isDone ? (
-                              <CheckSquare className="h-4 w-4 text-[var(--accent)]" />
-                            ) : (
-                              <Square className="h-4 w-4" />
-                            )}
-                          </button>
-                          <div
-                            className={`text-[13px] leading-relaxed transition-colors ${
-                              isDone ? "line-through text-[var(--muted)]" : "text-[var(--text)]"
-                            }`}
-                          >
-                            <span className="font-mono text-[12px] text-[var(--muted)] mr-1.5 tabular-nums">
-                              {idx + 1}.
-                            </span>
-                            <ReactMarkdown
-                              components={{
-                                p: ({ children }) => <span className="inline">{children}</span>,
-                                strong: ({ children }) => <strong className="font-semibold text-[var(--text)]">{children}</strong>,
-                                code: ({ children }) => (
-                                  <code className="font-mono text-[12px] px-1 py-0.5 rounded bg-[var(--tile-2)] border border-[var(--border)] text-[var(--text)]">
-                                    {children}
-                                  </code>
-                                ),
-                              }}
-                            >
-                              {step}
-                            </ReactMarkdown>
-                          </div>
+                            {step}
+                          </ReactMarkdown>
                         </div>
-                      );
-                    })}
-                  </div>
-                </ScrollArea>
+                      </div>
+                    );
+                  })}
+                </div>
               ) : (
                 <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
                   Actionable remediation checklist
