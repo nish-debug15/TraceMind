@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "sonner";
 import { useReducedMotion, motion } from "motion/react";
+import ReactMarkdown from "react-markdown";
 import {
   AlertCircle,
   Check,
@@ -138,17 +139,43 @@ function extractCompany(url: string): string {
     if (hostname.includes("gitlab")) return "GitLab";
     if (hostname.includes("heroku")) return "Heroku";
     if (hostname.includes("statuspage")) return hostname.split(".")[0];
-    return hostname.split(".")[0] || "Unknown";
+    return hostname.split(".")[0] || "Incident";
   } catch {
-    return "Unknown";
+    return "Incident";
   }
+}
+
+function truncateMiddle(str: string, maxLen = 22): string {
+  if (!str || str.length <= maxLen) return str;
+  const half = Math.floor((maxLen - 3) / 2);
+  return `${str.slice(0, half)}...${str.slice(-half)}`;
+}
+
+function cleanRootCause(raw: string): string {
+  if (!raw) return "";
+  const lines = raw.split(/\r?\n/);
+  // drop lines that are only "**" or asterisks/whitespace
+  const filtered = lines.filter((line) => {
+    const trimmed = line.trim();
+    return trimmed !== "**" && trimmed !== "***" && trimmed !== "****";
+  });
+  return filtered.join("\n").trim();
 }
 
 function parseRemediationSteps(raw: string): string[] {
   if (!raw) return [];
-  return raw
-    .split(/\n+/)
-    .map((s) => s.trim().replace(/^[\d+.\-*]+\s*/, ""))
+  const lines = raw.split(/\r?\n/);
+  return lines
+    .map((s) => s.trim())
+    .filter((s) => {
+      if (!s) return false;
+      const stripped = s.replace(/\*/g, "").trim();
+      return stripped.length > 0;
+    })
+    .map((s) => {
+      // Strip leading duplicate numbering (e.g. "1.**Roll back**" -> "**Roll back**", "1. Step" -> "Step")
+      return s.replace(/^(\d+[\.\)]\s*|\-\s+|\*\s+)/, "").trim();
+    })
     .filter(Boolean);
 }
 
@@ -174,6 +201,16 @@ function highlightTokens(text: string) {
   });
 }
 
+function getSimilarityMatchInfo(similarity: number) {
+  if (similarity >= 0.60) {
+    return { label: "Strong match", color: "text-[var(--ok)]" };
+  } else if (similarity >= 0.40) {
+    return { label: "Moderate match", color: "text-[var(--accent)]" };
+  } else {
+    return { label: "Weak match, treat as hypothesis", color: "text-[var(--warn)]" };
+  }
+}
+
 function SimilarityGauge({ value }: { value: number }) {
   const clampVal = Math.max(0, Math.min(1, value));
   const r = 38;
@@ -182,17 +219,29 @@ function SimilarityGauge({ value }: { value: number }) {
   const arcLength = Math.PI * r;
   const offset = arcLength * (1 - clampVal);
 
+  // 0.40 Threshold tick
   const tickAngle = Math.PI * (1 - 0.4);
-  const tickInnerR = r - 5;
-  const tickOuterR = r + 5;
+  const tickInnerR = r - 6;
+  const tickOuterR = r + 6;
   const x1 = cx + tickInnerR * Math.cos(tickAngle);
   const y1 = cy - tickInnerR * Math.sin(tickAngle);
   const x2 = cx + tickOuterR * Math.cos(tickAngle);
   const y2 = cy - tickOuterR * Math.sin(tickAngle);
 
+  // 0.40 Label position
+  const labelR = r + 15;
+  const lx = cx + labelR * Math.cos(tickAngle);
+  const ly = cy - labelR * Math.sin(tickAngle);
+
   return (
-    <div className="relative flex flex-col items-center justify-center">
-      <svg width="100" height="54" viewBox="0 0 100 54" className="overflow-visible" aria-hidden="true">
+    <div className="relative flex flex-col items-center justify-center flex-shrink-0 pt-1">
+      <svg
+        width="110"
+        height="62"
+        viewBox="-5 -12 110 66"
+        className="overflow-visible"
+        aria-hidden="true"
+      >
         {/* Track */}
         <path
           d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
@@ -218,17 +267,27 @@ function SimilarityGauge({ value }: { value: number }) {
           y1={y1}
           x2={x2}
           y2={y2}
-          stroke="var(--muted)"
-          strokeWidth="1.5"
+          stroke="var(--warn)"
+          strokeWidth="2"
           strokeLinecap="round"
         />
+        {/* 0.40 Label */}
+        <text
+          x={lx}
+          y={ly}
+          textAnchor="middle"
+          fill="var(--warn)"
+          className="text-[10px] font-mono font-medium select-none"
+        >
+          0.40
+        </text>
       </svg>
       <div className="absolute top-4 flex flex-col items-center">
         <span className="font-mono text-[16px] font-semibold tabular-nums text-[var(--text)]">
-          {(clampVal * 100).toFixed(0)}%
+          {clampVal.toFixed(2)}
         </span>
         <span className="text-[10px] text-[var(--muted)] font-mono uppercase tracking-wider">
-          score
+          similarity
         </span>
       </div>
     </div>
@@ -406,7 +465,9 @@ export default function Home() {
     toast.success(`${label} copied`);
   };
 
-  const lineCount = logText.split("\n").length;
+  const logicalLines = logText.split("\n");
+  const lineCount = logicalLines.length;
+  const gutterRowCount = Math.max(lineCount, 8);
   const charCount = logText.length;
   const remediationList = result ? parseRemediationSteps(result.remediation_steps) : [];
   const completedStepsCount = Object.values(checkedSteps).filter(Boolean).length;
@@ -541,7 +602,7 @@ export default function Home() {
         )}
 
         {/* Bento Grid: 12 cols desktop, 6 tablet, 1 mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-12 gap-4 items-start">
           {/* ========================================================= */}
           {/* ROW 1 - TILE A: Incident Log (col-span 7) */}
           {/* ========================================================= */}
@@ -550,7 +611,7 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className="order-1 md:order-1 col-span-1 md:col-span-3 xl:col-span-7 flex flex-col rounded-[16px] border border-[var(--border)] bg-[var(--tile)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none min-h-[460px] overflow-hidden"
+            className="order-1 md:order-1 col-span-1 md:col-span-3 xl:col-span-7 flex flex-col rounded-[16px] border border-[var(--border)] bg-[var(--tile)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none min-h-[460px] overflow-hidden justify-between"
           >
             {/* Tile Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
@@ -600,15 +661,15 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Editor Body with Gutter */}
+            {/* Editor Body with Gutter (white-space: pre, horizontal scroll, no wrapping) */}
             <div className="relative flex-1 flex min-h-[260px] bg-[var(--tile-2)]/50 font-mono text-[13px] overflow-hidden">
-              {/* Line number gutter */}
+              {/* Line number gutter (one per logical line, min 8 visible) */}
               <div
                 ref={gutterRef}
                 className="w-10 select-none py-3 text-right pr-3 text-[var(--muted)]/50 border-r border-[var(--border)] overflow-hidden font-mono text-[12px] leading-[22px] flex-shrink-0"
                 aria-hidden="true"
               >
-                {Array.from({ length: Math.max(lineCount, 12) }).map((_, i) => (
+                {Array.from({ length: gutterRowCount }).map((_, i) => (
                   <div key={i}>{i + 1}</div>
                 ))}
               </div>
@@ -619,12 +680,12 @@ export default function Home() {
                 <div
                   ref={highlightRef}
                   aria-hidden="true"
-                  className="absolute inset-0 p-3 overflow-hidden pointer-events-none whitespace-pre-wrap break-words leading-[22px]"
+                  className="absolute inset-0 p-3 overflow-hidden pointer-events-none whitespace-pre leading-[22px]"
                 >
                   {highlightTokens(logText)}
                 </div>
 
-                {/* Actual Editor Textarea */}
+                {/* Editor Textarea: white-space: pre with horizontal scroll */}
                 <textarea
                   ref={textareaRef}
                   value={logText}
@@ -633,7 +694,7 @@ export default function Home() {
                   placeholder="Paste production raw log excerpt or stack trace here..."
                   aria-label="Incident log text"
                   spellCheck={false}
-                  className="relative z-10 w-full h-full p-3 bg-transparent text-transparent caret-[var(--accent)] resize-none outline-none whitespace-pre-wrap break-words leading-[22px] font-mono text-[13px] selection:bg-[var(--accent-soft)] selection:text-[var(--accent)]"
+                  className="relative z-10 w-full h-full p-3 bg-transparent text-transparent caret-[var(--accent)] resize-none outline-none whitespace-pre overflow-x-auto leading-[22px] font-mono text-[13px] selection:bg-[var(--accent-soft)] selection:text-[var(--accent)]"
                 />
               </div>
             </div>
@@ -695,7 +756,7 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className="order-2 md:order-2 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border border-[var(--border)] bg-[var(--tile)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none min-h-[460px] p-4"
+            className="order-2 md:order-2 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border border-[var(--border)] bg-[var(--tile)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none min-h-[460px] p-4 justify-between"
           >
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
@@ -718,8 +779,8 @@ export default function Home() {
               )}
             </div>
 
-            {/* Stepper Stages */}
-            <div className="flex-1 flex flex-col justify-around py-4">
+            {/* Stepper Stages (compact spacing without dead space) */}
+            <div className="flex flex-col gap-3.5 py-4">
               {PIPELINE_STAGES.map((stage, idx) => {
                 const isFinished = result ? true : loading ? loadingStage > idx : false;
                 const isActive = loading && loadingStage === idx;
@@ -731,11 +792,11 @@ export default function Home() {
                     : stage.detail;
 
                 return (
-                  <div key={stage.name} className="flex items-start gap-3.5 relative">
+                  <div key={stage.name} className="flex items-start gap-3 relative">
                     {/* Connecting vertical line */}
                     {idx < PIPELINE_STAGES.length - 1 && (
                       <div
-                        className={`absolute left-[13px] top-[26px] bottom-[-16px] w-[2px] transition-colors ${
+                        className={`absolute left-[13px] top-[26px] bottom-[-14px] w-[2px] transition-colors ${
                           isFinished ? "bg-[var(--ok)]" : "bg-[var(--border)]"
                         }`}
                         aria-hidden="true"
@@ -793,11 +854,13 @@ export default function Home() {
             </div>
 
             {/* Cold start alert message if elapsed >3s */}
-            {isColdStart && loading && (
+            {isColdStart && loading ? (
               <div className="mt-auto p-3 rounded-[8px] bg-[var(--warn)]/10 border border-[var(--warn)]/30 text-[12px] text-[var(--warn)] flex items-center gap-2">
                 <Loader2 className="h-3.5 w-3.5 animate-spin flex-shrink-0" />
                 <span>Backend is waking up, first request can take up to a minute</span>
               </div>
+            ) : (
+              <div className="h-4" />
             )}
           </motion.div>
 
@@ -809,13 +872,13 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-6 md:order-3 col-span-1 md:col-span-2 xl:col-span-3 flex flex-col justify-between rounded-[16px] border bg-[var(--tile)] p-4 min-h-[170px] ${
+            className={`order-6 md:order-3 col-span-1 md:col-span-2 xl:col-span-3 flex flex-col justify-start rounded-[16px] border bg-[var(--tile)] p-4 min-h-[170px] ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
             }`}
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+            <div className="flex items-center justify-between pb-2 border-b border-[var(--border)] w-full">
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
                 <span className="text-[12px] font-medium tracking-wide uppercase text-[var(--muted)]">
@@ -837,12 +900,12 @@ export default function Home() {
             </div>
 
             {loading ? (
-              <div className="space-y-2 py-4">
+              <div className="space-y-2 pt-4">
                 <Skeleton className="h-8 w-24 bg-[var(--border)]" />
                 <Skeleton className="h-4 w-36 bg-[var(--border)]" />
               </div>
             ) : result ? (
-              <div className="py-2">
+              <div className="pt-3">
                 <div
                   className={`text-[28px] font-mono font-semibold tabular-nums tracking-tight ${
                     result.trace.is_noise ? "text-[var(--warn)]" : "text-[var(--text)]"
@@ -857,7 +920,7 @@ export default function Home() {
                 </div>
               </div>
             ) : (
-              <div className="py-6 text-center text-[12px] text-[var(--muted)]">
+              <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
                 Cluster assignment will appear after analysis
               </div>
             )}
@@ -871,47 +934,36 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-3 md:order-4 col-span-1 md:col-span-4 xl:col-span-5 flex flex-col justify-between rounded-[16px] border bg-[var(--tile)] p-4 min-h-[170px] ${
+            className={`order-3 md:order-4 col-span-1 md:col-span-4 xl:col-span-5 flex flex-col justify-start rounded-[16px] border bg-[var(--tile)] p-4 min-h-[170px] ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
             }`}
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+            {/* Label Row: BEST MATCH + pass badge */}
+            <div className="flex items-center justify-between pb-2 border-b border-[var(--border)] w-full">
               <div className="flex items-center gap-2">
                 <Database className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
                 <span className="text-[12px] font-medium tracking-wide uppercase text-[var(--muted)]">
                   Best Match
                 </span>
               </div>
-              {result && (
-                <div className="flex items-center gap-2">
-                  {/* Retrieval Pass Badge */}
-                  {result.retrieval_pass && (
-                    <Badge
-                      variant="outline"
-                      className={`text-[11px] font-mono ${
-                        result.retrieval_pass === 1
-                          ? "border-[var(--accent)]/30 text-[var(--accent)] bg-[var(--accent-soft)]/50"
-                          : "border-[var(--warn)]/30 text-[var(--warn)] bg-[var(--warn)]/10"
-                      }`}
-                    >
-                      {result.retrieval_pass === 1 ? "Pass 1: high quality" : "Pass 2: fallback"}
-                    </Badge>
-                  )}
-                  {/* Quality score badge if present */}
-                  {(result.trace.retrieved_incident.quality_score !== undefined ||
-                    result.trace.retrieved_incident.quality !== undefined) && (
-                    <Badge variant="outline" className="text-[11px] font-mono border-[var(--border)] text-[var(--muted)]">
-                      Q: {result.trace.retrieved_incident.quality_score ?? result.trace.retrieved_incident.quality}
-                    </Badge>
-                  )}
-                </div>
+              {result && result.retrieval_pass && (
+                <Badge
+                  variant="outline"
+                  className={`text-[11px] font-mono ${
+                    result.retrieval_pass === 1
+                      ? "border-[var(--accent)]/30 text-[var(--accent)] bg-[var(--accent-soft)]/50"
+                      : "border-[var(--warn)]/30 text-[var(--warn)] bg-[var(--warn)]/10"
+                  }`}
+                >
+                  {result.retrieval_pass === 1 ? "Pass 1: high quality" : "Pass 2: fallback"}
+                </Badge>
               )}
             </div>
 
             {loading ? (
-              <div className="flex items-center justify-between py-4">
+              <div className="flex items-center justify-between pt-4">
                 <div className="space-y-2">
                   <Skeleton className="h-5 w-32 bg-[var(--border)]" />
                   <Skeleton className="h-4 w-24 bg-[var(--border)]" />
@@ -919,28 +971,52 @@ export default function Home() {
                 <Skeleton className="h-14 w-24 rounded-full bg-[var(--border)]" />
               </div>
             ) : result ? (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2">
-                {/* Left: Incident info */}
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[14px] font-semibold text-[var(--text)]">
-                      {result.trace.retrieved_incident.incident_id}
-                    </span>
-                    <span className="text-[12px] text-[var(--muted)] font-medium">
-                      ({extractCompany(result.trace.retrieved_incident.source_url)})
-                    </span>
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pt-3">
+                {/* Left: Metadata details */}
+                <div className="flex-1 space-y-1.5">
+                  {/* Second row: company badge + quality badge */}
+                  <div className="flex items-center gap-1.5">
+                    <Badge variant="outline" className="text-[11px] font-mono border-[var(--border)] text-[var(--text)] bg-[var(--tile-2)]">
+                      {extractCompany(result.trace.retrieved_incident.source_url)}
+                    </Badge>
+                    {(result.trace.retrieved_incident.quality_score !== undefined ||
+                      result.trace.retrieved_incident.quality !== undefined) && (
+                      <Badge variant="outline" className="text-[11px] font-mono border-[var(--border)] text-[var(--muted)]">
+                        Q: {result.trace.retrieved_incident.quality_score ?? result.trace.retrieved_incident.quality}
+                      </Badge>
+                    )}
                   </div>
 
-                  {/* Weak match note if similarity < 0.40 */}
-                  {result.trace.similarity_score < 0.4 ? (
-                    <p className="text-[11px] text-[var(--warn)] font-medium">
-                      Weak match, treat as a hypothesis
-                    </p>
-                  ) : (
-                    <p className="text-[11px] text-[var(--muted)] font-mono">
-                      High confidence semantic correlation
-                    </p>
-                  )}
+                  {/* Incident id: one line, truncated middle with copy button & tooltip */}
+                  <div className="flex items-center gap-1.5 pt-0.5">
+                    <Tooltip>
+                      <TooltipTrigger className="font-mono text-[13px] font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors cursor-pointer">
+                        {truncateMiddle(result.trace.retrieved_incident.incident_id, 20)}
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="font-mono text-[12px]">
+                        {result.trace.retrieved_incident.incident_id}
+                      </TooltipContent>
+                    </Tooltip>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Copy incident ID"
+                      onClick={() => copyToClipboard(result.trace.retrieved_incident.incident_id, "Incident ID")}
+                      className="h-6 w-6 rounded text-[var(--muted)] hover:text-[var(--text)]"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
+
+                  {/* Derived match label: Strong / Moderate / Weak match */}
+                  {(() => {
+                    const matchInfo = getSimilarityMatchInfo(result.trace.similarity_score);
+                    return (
+                      <p className={`text-[11px] font-medium ${matchInfo.color}`}>
+                        {matchInfo.label}
+                      </p>
+                    );
+                  })()}
 
                   {/* Open Source Button */}
                   {result.trace.retrieved_incident.source_url && (
@@ -948,7 +1024,7 @@ export default function Home() {
                       href={result.trace.retrieved_incident.source_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[12px] text-[var(--accent)] hover:underline pt-1"
+                      className="inline-flex items-center gap-1 text-[12px] text-[var(--accent)] hover:underline pt-0.5"
                     >
                       <span>Open source</span>
                       <ExternalLink className="h-3 w-3" />
@@ -960,7 +1036,7 @@ export default function Home() {
                 <SimilarityGauge value={result.trace.similarity_score} />
               </div>
             ) : (
-              <div className="py-6 text-center text-[12px] text-[var(--muted)]">
+              <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
                 Nearest historical incident will be correlated here
               </div>
             )}
@@ -974,13 +1050,13 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-7 md:order-5 col-span-1 md:col-span-6 xl:col-span-4 flex flex-col justify-between rounded-[16px] border bg-[var(--tile)] p-4 min-h-[170px] ${
+            className={`order-7 md:order-5 col-span-1 md:col-span-6 xl:col-span-4 flex flex-col justify-start rounded-[16px] border bg-[var(--tile)] p-4 min-h-[170px] ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
             }`}
           >
-            <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+            <div className="flex items-center justify-between pb-2 border-b border-[var(--border)] w-full">
               <div className="flex items-center gap-2">
                 <Cpu className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
                 <span className="text-[12px] font-medium tracking-wide uppercase text-[var(--muted)]">
@@ -1002,13 +1078,13 @@ export default function Home() {
             </div>
 
             {loading ? (
-              <div className="space-y-2 py-3">
+              <div className="space-y-2 pt-3">
                 <Skeleton className="h-4 w-full bg-[var(--border)]" />
                 <Skeleton className="h-4 w-3/4 bg-[var(--border)]" />
                 <Skeleton className="h-4 w-1/2 bg-[var(--border)]" />
               </div>
             ) : result ? (
-              <div className="space-y-2 py-1 text-[12px] font-mono">
+              <div className="space-y-1.5 pt-2 text-[12px] font-mono">
                 {result.trace.model && (
                   <div className="flex items-center justify-between">
                     <span className="text-[var(--muted)]">Model:</span>
@@ -1035,7 +1111,7 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <div className="py-6 text-center text-[12px] text-[var(--muted)]">
+              <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
                 Telemetry and execution metadata
               </div>
             )}
@@ -1049,13 +1125,13 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-4 md:order-6 col-span-1 md:col-span-3 xl:col-span-7 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] ${
+            className={`order-4 md:order-6 col-span-1 md:col-span-3 xl:col-span-7 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] max-h-[560px] ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
             }`}
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)] flex-shrink-0">
               <div className="flex items-center gap-2">
                 <Search className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
                 <span className="text-[12px] font-medium tracking-wide uppercase text-[var(--muted)]">
@@ -1066,7 +1142,7 @@ export default function Home() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => copyToClipboard(result.root_cause, "Root cause")}
+                  onClick={() => copyToClipboard(cleanRootCause(result.root_cause), "Root cause")}
                   className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
                 >
                   <Copy className="h-3.5 w-3.5 mr-1" />
@@ -1075,20 +1151,37 @@ export default function Home() {
               )}
             </div>
 
-            <div className="p-5 flex-1 flex flex-col justify-center">
+            <div className="p-5 flex-1 flex flex-col justify-start items-start overflow-hidden">
               {loading ? (
-                <div className="space-y-3">
+                <div className="space-y-3 w-full">
                   <Skeleton className="h-4 w-full bg-[var(--border)]" />
                   <Skeleton className="h-4 w-5/6 bg-[var(--border)]" />
                   <Skeleton className="h-4 w-4/6 bg-[var(--border)]" />
                   <Skeleton className="h-4 w-3/4 bg-[var(--border)]" />
                 </div>
               ) : result ? (
-                <div className="max-w-[64ch] text-[15px] leading-[1.65] text-[var(--text)] whitespace-pre-line">
-                  {result.root_cause}
-                </div>
+                <ScrollArea className="w-full max-h-[460px] pr-3">
+                  <div className="max-w-[64ch] text-[15px] leading-[1.65] text-[var(--text)]">
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+                        strong: ({ children }) => <strong className="font-semibold text-[var(--text)]">{children}</strong>,
+                        code: ({ children }) => (
+                          <code className="font-mono text-[13px] px-1 py-0.5 rounded bg-[var(--tile-2)] border border-[var(--border)] text-[var(--text)]">
+                            {children}
+                          </code>
+                        ),
+                        ul: ({ children }) => <ul className="list-disc pl-4 mb-2 space-y-1">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal pl-4 mb-2 space-y-1">{children}</ol>,
+                        li: ({ children }) => <li className="text-[14px] leading-relaxed">{children}</li>,
+                      }}
+                    >
+                      {cleanRootCause(result.root_cause)}
+                    </ReactMarkdown>
+                  </div>
+                </ScrollArea>
               ) : (
-                <div className="text-center text-[12px] text-[var(--muted)]">
+                <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
                   Root cause synthesis will be generated by the model
                 </div>
               )}
@@ -1103,13 +1196,13 @@ export default function Home() {
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-5 md:order-7 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] ${
+            className={`order-5 md:order-7 col-span-1 md:col-span-3 xl:col-span-5 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[300px] max-h-[560px] ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
             }`}
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)] flex-shrink-0">
               <div className="flex items-center gap-2">
                 <ListChecks className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
                 <span className="text-[12px] font-medium tracking-wide uppercase text-[var(--muted)]">
@@ -1124,7 +1217,7 @@ export default function Home() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => copyToClipboard(result.remediation_steps, "Remediation steps")}
+                    onClick={() => copyToClipboard(remediationList.map((s, i) => `${i + 1}. ${s}`).join("\n"), "Remediation steps")}
                     className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
                   >
                     <Copy className="h-3.5 w-3.5 mr-1" />
@@ -1134,55 +1227,69 @@ export default function Home() {
               )}
             </div>
 
-            <div className="p-4 flex-1 flex flex-col justify-center">
+            <div className="p-4 flex-1 flex flex-col justify-start items-stretch overflow-hidden">
               {loading ? (
-                <div className="space-y-3">
+                <div className="space-y-3 w-full">
                   <Skeleton className="h-5 w-full bg-[var(--border)]" />
                   <Skeleton className="h-5 w-4/5 bg-[var(--border)]" />
                   <Skeleton className="h-5 w-5/6 bg-[var(--border)]" />
                 </div>
               ) : result && remediationList.length > 0 ? (
-                <div className="space-y-2.5">
-                  {remediationList.map((step, idx) => {
-                    const isDone = !!checkedSteps[idx];
-                    return (
-                      <div
-                        key={idx}
-                        onClick={() =>
-                          setCheckedSteps((prev) => ({
-                            ...prev,
-                            [idx]: !prev[idx],
-                          }))
-                        }
-                        className="flex items-start gap-3 p-2 rounded-lg hover:bg-[var(--tile-2)] transition-colors cursor-pointer group"
-                      >
-                        <button
-                          type="button"
-                          aria-label={`Mark step ${idx + 1} as ${isDone ? "incomplete" : "complete"}`}
-                          className="mt-0.5 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors flex-shrink-0"
-                        >
-                          {isDone ? (
-                            <CheckSquare className="h-4 w-4 text-[var(--accent)]" />
-                          ) : (
-                            <Square className="h-4 w-4" />
-                          )}
-                        </button>
+                <ScrollArea className="w-full max-h-[460px] pr-2">
+                  <div className="space-y-2.5">
+                    {remediationList.map((step, idx) => {
+                      const isDone = !!checkedSteps[idx];
+                      return (
                         <div
-                          className={`text-[13px] leading-relaxed transition-colors ${
-                            isDone ? "line-through text-[var(--muted)]" : "text-[var(--text)]"
-                          }`}
+                          key={idx}
+                          onClick={() =>
+                            setCheckedSteps((prev) => ({
+                              ...prev,
+                              [idx]: !prev[idx],
+                            }))
+                          }
+                          className="flex items-start gap-3 p-2 rounded-lg hover:bg-[var(--tile-2)] transition-colors cursor-pointer group"
                         >
-                          <span className="font-mono text-[12px] text-[var(--muted)] mr-1.5 tabular-nums">
-                            {idx + 1}.
-                          </span>
-                          {step}
+                          <button
+                            type="button"
+                            aria-label={`Mark step ${idx + 1} as ${isDone ? "incomplete" : "complete"}`}
+                            className="mt-0.5 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors flex-shrink-0"
+                          >
+                            {isDone ? (
+                              <CheckSquare className="h-4 w-4 text-[var(--accent)]" />
+                            ) : (
+                              <Square className="h-4 w-4" />
+                            )}
+                          </button>
+                          <div
+                            className={`text-[13px] leading-relaxed transition-colors ${
+                              isDone ? "line-through text-[var(--muted)]" : "text-[var(--text)]"
+                            }`}
+                          >
+                            <span className="font-mono text-[12px] text-[var(--muted)] mr-1.5 tabular-nums">
+                              {idx + 1}.
+                            </span>
+                            <ReactMarkdown
+                              components={{
+                                p: ({ children }) => <span className="inline">{children}</span>,
+                                strong: ({ children }) => <strong className="font-semibold text-[var(--text)]">{children}</strong>,
+                                code: ({ children }) => (
+                                  <code className="font-mono text-[12px] px-1 py-0.5 rounded bg-[var(--tile-2)] border border-[var(--border)] text-[var(--text)]">
+                                    {children}
+                                  </code>
+                                ),
+                              }}
+                            >
+                              {step}
+                            </ReactMarkdown>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
               ) : (
-                <div className="text-center text-[12px] text-[var(--muted)]">
+                <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
                   Actionable remediation checklist
                 </div>
               )}
@@ -1259,7 +1366,7 @@ export default function Home() {
                         {result.trace.retrieved_incident.incident_id}
                       </div>
                       <p className="text-[12px] font-mono text-[var(--muted)] tabular-nums">
-                        Sim: {(result.trace.similarity_score * 100).toFixed(1)}%
+                        Sim: {result.trace.similarity_score.toFixed(2)}
                       </p>
                       <Badge
                         variant="outline"
