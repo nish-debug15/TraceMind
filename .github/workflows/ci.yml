@@ -10,6 +10,8 @@ jobs:
   test-backend:
     name: Backend Pytest Suite
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
     steps:
       - uses: actions/checkout@v4
 
