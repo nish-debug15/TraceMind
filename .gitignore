@@ -131,4 +131,4 @@ docs/screenshots/
 *.webp
 *.bmp
 *.tiff
-
+!docs/pipeline_trace_demo.png
