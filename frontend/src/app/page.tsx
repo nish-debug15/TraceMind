@@ -341,13 +341,17 @@ export default function Home() {
 
   const shouldReduceMotion = useReducedMotion();
 
-  const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  const rawBaseUrl = (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").trim().replace(/\/+$/, "");
+  const apiBasePath = (process.env.NEXT_PUBLIC_API_BASE_PATH || "").trim().replace(/\/+$/, "");
   const baseUrl = (() => {
-    let url = rawBaseUrl.trim().replace(/\/+$/, "");
-    if (url.includes(".hf.space") && !url.includes("/gradio_api")) {
-      url = `${url}/gradio_api`;
+    if (apiBasePath) {
+      return `${rawBaseUrl}${apiBasePath.startsWith("/") ? apiBasePath : `/${apiBasePath}`}`;
     }
-    return url;
+    // Fallback for Hugging Face Spaces proxy if base path not explicitly set
+    if (rawBaseUrl.includes(".hf.space") && !rawBaseUrl.includes("/gradio_api")) {
+      return `${rawBaseUrl}/gradio_api`;
+    }
+    return rawBaseUrl;
   })();
 
   // --- Health Check Polling ---
