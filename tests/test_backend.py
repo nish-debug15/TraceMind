@@ -80,3 +80,20 @@ def test_gen_cache_roundtrip(tmp_path):
     assert cached["root_cause"] == "Memory allocation exceeded system limit"
     assert cached["remediation_steps"] == "Increase pod memory limits to 8Gi"
     assert cached["cache_hit"] is True
+
+def test_ip_rate_limiting():
+    from backend.config import IP_RATE_LIMIT_RPM
+    from backend.main import ip_limiter
+    ip_limiter.requests.clear()
+    
+    # Fill up limit
+    for _ in range(IP_RATE_LIMIT_RPM):
+        resp = client.post('/analyze', json={'log_text': 'Connection timeout pool exhausted'})
+        assert resp.status_code in (200, 502)
+
+    # Next call must be blocked with HTTP 429
+    blocked = client.post('/analyze', json={'log_text': 'Connection timeout pool exhausted'})
+    assert blocked.status_code == 429
+    data = blocked.json()
+    assert 'message' in data
+    assert 'Rate limit exceeded' in data['message']
