@@ -24,6 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Build ChromaDB index
+        run: |
+          python rag/generate.py --force
+
       - name: Run Pytest
         run: |
           python -m pytest --maxfail=1 --disable-warnings -v

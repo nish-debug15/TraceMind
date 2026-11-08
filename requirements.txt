@@ -4,6 +4,10 @@ uvicorn[standard]>=0.24.0
 pydantic>=2.0
 python-dotenv>=1.0.0
 
+# Networking & HTTP Client
+requests>=2.31.0
+httpx>=0.25.0
+
 # Clustering & NLP — BLOCK-CLUSTER-01
 sentence-transformers>=2.2.0
 hdbscan>=0.8.33
@@ -13,6 +17,11 @@ numpy>=1.24.0
 # Vector Store & RAG — BLOCK-RAG-01
 chromadb>=0.4.0
 huggingface-hub>=0.20.0
+
+# Testing & Evaluation
+pytest>=7.0.0
+pytest-cov>=4.0.0
+rouge-score>=0.1.2
 
 # Hugging Face Space UI — Gradio
 gradio>=4.0.0
