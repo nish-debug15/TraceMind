@@ -1,0 +1,948 @@
+{
+  "sample_size": 93,
+  "total_hits": 31,
+  "hit_rate_pct": 33.33,
+  "breakdown": {
+    "Capacity / Traffic Spike": 12,
+    "Software Bug / Logic Error": 33,
+    "Security / Auth / Credentials": 6,
+    "Configuration / Bad Deployment": 13,
+    "Storage / Database / Disk": 18,
+    "Network / Connectivity": 5,
+    "Third-Party / Dependency Outage": 2,
+    "Hardware / Infrastructure": 3,
+    "Memory / OOM / Resource Leak": 1
+  },
+  "details": [
+    {
+      "incident_id": "icco-3ec87435-3fcc-4edb-bf72-e80bb09d901f",
+      "company": "allegro",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-6958b648-d8f4-4965-9f5c-82dfbb54417a",
+      "retrieved_company": "reddit",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5649,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-6d1c63bd-3529-4120-8a00-18ee6647f3f0",
+      "company": "allegro",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-pz7g535gbs6p",
+      "retrieved_company": "github",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4677,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43",
+      "company": "allegro",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-pz7g535gbs6p",
+      "retrieved_company": "github",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4904,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-7d5ab17c-e367-4135-9c88-53f0f2df0073",
+      "company": "bloomberg",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-f89b8bcd-6742-4fd9-b8ab-c1c6e21691ec",
+      "retrieved_company": "linkedin",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.5016,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-ca82c550-402b-4abd-942a-163c1b084e52",
+      "company": "boeing",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-e44dd5d3-5105-45ed-9582-f9041a7cfdb9",
+      "retrieved_company": "aws",
+      "retrieved_category": "Storage / Database / Disk",
+      "similarity": 0.3593,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-018edf27-f738-448d-8c46-947cd3b6d5b0",
+      "company": "brew",
+      "query_category": "Security / Auth / Credentials",
+      "retrieved_id": "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f",
+      "retrieved_company": "github",
+      "retrieved_category": "Storage / Database / Disk",
+      "similarity": 0.5499,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-c990285e-31b4-48e1-b535-bf18869268ad",
+      "company": "buildkite",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "digitalocean-2rby4tk1q6mm",
+      "retrieved_company": "digitalocean",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.5582,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-785c5618-a34e-4dfc-bd04-559fc0635b3b",
+      "company": "chef",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "netlifystatus-75cssy1tzg06",
+      "retrieved_company": "netlify",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5357,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-0dfe934b-9234-4383-9d1c-de9b860a43d1",
+      "company": "digital",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-909573e3-5677-481d-beb6-3c5c09bf8867",
+      "retrieved_company": "collab",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.8424,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-36450ae5-3427-4ebb-ae57-16409643a473",
+      "company": "discord",
+      "query_category": "Network / Connectivity",
+      "retrieved_id": "icco-76a3bbe4-ed5a-4c4a-a851-01d77e3ae63f",
+      "retrieved_company": "aws",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5657,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-a46ebba4-2d7c-49e6-aa71-0ce989fbff97",
+      "company": "discord",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+      "retrieved_company": "google",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5967,
+      "hit": false
+    },
+    {
+      "incident_id": "discordstatus-pcg3nsfq6l2y",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5",
+      "retrieved_company": "openai",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5435,
+      "hit": true
+    },
+    {
+      "incident_id": "discordstatus-vrdywypml5lf",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "openai-01KZN8RYNZY8T4QQGB3JWMPYRW",
+      "retrieved_company": "openai",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.6488,
+      "hit": true
+    },
+    {
+      "incident_id": "discordstatus-4hpm4454hxtx",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "openai-01KZSC0T66YTVM57N5T79SV8ZV",
+      "retrieved_company": "openai",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.686,
+      "hit": true
+    },
+    {
+      "incident_id": "discordstatus-k42p6rqypf7v",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "openai-01KYDN6YPS6ARY1EC9089N089G",
+      "retrieved_company": "openai",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5708,
+      "hit": true
+    },
+    {
+      "incident_id": "discordstatus-947scltt0c6j",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "sentry-ccv3pcf00mbt",
+      "retrieved_company": "sentry",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4241,
+      "hit": true
+    },
+    {
+      "incident_id": "discordstatus-dsv750sj44fn",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-fmmsrcg5x638",
+      "retrieved_company": "github",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5602,
+      "hit": true
+    },
+    {
+      "incident_id": "discordstatus-jvqsklfdcvt8",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "twilio-1sbtd0qtkpfk",
+      "retrieved_company": "twilio",
+      "retrieved_category": "Security / Auth / Credentials",
+      "similarity": 0.3894,
+      "hit": false
+    },
+    {
+      "incident_id": "discordstatus-r7919gwty4gc",
+      "company": "discord",
+      "query_category": "Third-Party / Dependency Outage",
+      "retrieved_id": "digitalocean-qzbsmdsw9lq8",
+      "retrieved_company": "digitalocean",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5586,
+      "hit": false
+    },
+    {
+      "incident_id": "discordstatus-5sqkt5xhj2pc",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-gxycch3076xk",
+      "retrieved_company": "github",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.6532,
+      "hit": false
+    },
+    {
+      "incident_id": "discordstatus-91qwn7zg2sts",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-gxycch3076xk",
+      "retrieved_company": "github",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.6532,
+      "hit": false
+    },
+    {
+      "incident_id": "discordstatus-9bm86bnmfhfr",
+      "company": "discord",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "circleci-njbxb52z1g1y",
+      "retrieved_company": "circleci",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4526,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-3d2adf6c-a887-4db4-badf-92987c613a46",
+      "company": "epicgames",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-e696c413-9af6-4e51-b073-51edbdb1ed2a",
+      "retrieved_company": "github",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.5126,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-1c6f32bc-10ed-463a-a52d-763121f74e30",
+      "company": "etsy",
+      "query_category": "Network / Connectivity",
+      "retrieved_id": "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e",
+      "retrieved_company": "aws",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.4177,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-9f912643-516f-4592-8d71-f70c68984c73",
+      "company": "etsy",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-ecd98ce8-09ec-47d7-be67-d3edfad9fead",
+      "retrieved_company": "vzaar",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.5303,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-01494547-7ee9-4169-a0c0-d921fa309d83",
+      "company": "eveonline",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "dropbox-qw9qy8ksfzpn",
+      "retrieved_company": "dropbox",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.3785,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-be40b5ba-c37f-46d0-8891-febc43941fd0",
+      "company": "eveonline",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-cc1e5d23-573c-450c-9e61-ce71ffc91318",
+      "retrieved_company": "datadog",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5152,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-db126e26-be84-4286-a778-975bbe87df0d",
+      "company": "eveonline",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-9tpgqq1h4bs7",
+      "retrieved_company": "github",
+      "retrieved_category": "Third-Party / Dependency Outage",
+      "similarity": 0.4175,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-31874408-c4e9-4687-94a2-ec1dfdcdf8e2",
+      "company": "forbes",
+      "query_category": "Hardware / Infrastructure",
+      "retrieved_id": "icco-20834b0c-3811-4447-bcfe-2e60eeeb6251",
+      "retrieved_company": "fastly",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.522,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-cd8e3b5f-7b97-4af5-8986-28e2bf663805",
+      "company": "gentoo",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f",
+      "retrieved_company": "github",
+      "retrieved_category": "Storage / Database / Disk",
+      "similarity": 0.6588,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-3e8b0d65-84e5-4a4f-bd28-81a2693432d4",
+      "company": "gocardless",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "digitalocean-cxh9f0hgw934",
+      "retrieved_company": "digitalocean",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4571,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-50a576ca-3171-417a-b001-50093be2d910",
+      "company": "gocardless",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+      "retrieved_company": "duo",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.5215,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-0afb9162-9810-4b29-b5f3-d2f41508aede",
+      "company": "heroku",
+      "query_category": "Security / Auth / Credentials",
+      "retrieved_id": "circleci-hth87g8tfm2y",
+      "retrieved_company": "circleci",
+      "retrieved_category": "Security / Auth / Credentials",
+      "similarity": 0.4181,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-3ca9020c-e384-4964-98b6-68268d9e42ec",
+      "company": "heroku",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-aa0709c9-90b6-4b4b-9d6e-1a70fcc27ce3",
+      "retrieved_company": "github",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.5347,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-41f95c9f-d248-4a6c-802d-3648022a03dd",
+      "company": "heroku",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f",
+      "retrieved_company": "github",
+      "retrieved_category": "Storage / Database / Disk",
+      "similarity": 0.5642,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-7e14860a-fced-4a66-9fdf-40f702ceeccd",
+      "company": "heroku",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "digitalocean-lrrw084g3whn",
+      "retrieved_company": "digitalocean",
+      "retrieved_category": "Third-Party / Dependency Outage",
+      "similarity": 0.5119,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-86beec9d-3cf5-4cbd-8379-9a04b614f3e4",
+      "company": "heroku",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191",
+      "retrieved_company": "travisci",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5116,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-8aab8820-3db3-4827-b1b9-9702bddbafb1",
+      "company": "heroku",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-23713fc8-675d-4de9-9127-7950f10c6131",
+      "retrieved_company": "pagerduty",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5028,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-a532970a-0625-4ac3-8d3d-852108d2eb6b",
+      "company": "heroku",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+      "retrieved_company": "duo",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.4795,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-f6bbc0ef-8355-46ba-aba6-86fd4f312bd7",
+      "company": "heroku",
+      "query_category": "Third-Party / Dependency Outage",
+      "retrieved_id": "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e",
+      "retrieved_company": "circleci",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5567,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-019eb098-9da5-4d2c-a64c-c6498933f165",
+      "company": "honeycomb",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "githubstatus-fmmsrcg5x638",
+      "retrieved_company": "github",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4962,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-7ba9335c-25db-4dfc-b0f6-3e6a2aff2244",
+      "company": "honeycomb",
+      "query_category": "Memory / OOM / Resource Leak",
+      "retrieved_id": "icco-49335989-cc3b-4f16-bdc6-df79b7f632ea",
+      "retrieved_company": "datadog",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5224,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-b3ecf309-d821-44e9-9755-b49540b6a90c",
+      "company": "honeycomb",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-49335989-cc3b-4f16-bdc6-df79b7f632ea",
+      "retrieved_company": "datadog",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5677,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-c67e3d46-6829-4524-a849-751464295b74",
+      "company": "honeycomb",
+      "query_category": "Network / Connectivity",
+      "retrieved_id": "icco-c50f19f8-6289-405c-a459-1ac32dbd6955",
+      "retrieved_company": "scribd",
+      "retrieved_category": "Security / Auth / Credentials",
+      "similarity": 0.4482,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-029b4a8e-0332-4b91-abc3-5f84bdf70094",
+      "company": "incident",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+      "retrieved_company": "enomstatus",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5417,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-32d4756d-4a53-475d-bfc5-3a028c6192b8",
+      "company": "incident",
+      "query_category": "Security / Auth / Credentials",
+      "retrieved_id": "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+      "retrieved_company": "google",
+      "retrieved_category": "Hardware / Infrastructure",
+      "similarity": 0.6195,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-34b4a47b-a3d6-4bda-acc9-57b621f53468",
+      "company": "incident",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+      "retrieved_company": "duo",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.5495,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-9dbf5bb5-79ba-4d1f-8d14-d6f0ca264fd6",
+      "company": "incident",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-0df4b886-70fc-4365-a7a3-1d93f4936dd0",
+      "retrieved_company": "ietf",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.4555,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-eb95646f-90c2-4efe-b89e-060debafa0fc",
+      "company": "incident",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+      "retrieved_company": "google",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.6405,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-f9f4ba4c-686c-46a4-982c-8dc21bd8a448",
+      "company": "incident",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "gcp-6876619551109882402",
+      "retrieved_company": "google",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5718,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-160d35a4-38ac-49da-a261-97d12c86203c",
+      "company": "joyent",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-d5b64671-0716-4332-ba81-cec110c5baec",
+      "retrieved_company": "circleci",
+      "retrieved_category": "Storage / Database / Disk",
+      "similarity": 0.4279,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-9332c0d7-bec4-427c-8689-267bdc5840fa",
+      "company": "joyent",
+      "query_category": "Hardware / Infrastructure",
+      "retrieved_id": "icco-cc1e5d23-573c-450c-9e61-ce71ffc91318",
+      "retrieved_company": "datadog",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5949,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-5a1083d6-e8cd-410a-b8de-90967b967ac7",
+      "company": "kcl",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-759650ec-d3c6-41d9-97d5-5a11b0eb6dcf",
+      "retrieved_company": "google",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.4543,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-d44e5d9b-5c18-4cbe-b624-46bb9a311b84",
+      "company": "kickstarter",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-80919009-d534-486c-9142-284d27690da0",
+      "retrieved_company": "github",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.5333,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-edaa981d-2a23-4aab-8c09-1c20c899fb2f",
+      "company": "kickstarter",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-4da4ac8a-fb93-426e-9ae7-eb088f115959",
+      "retrieved_company": "github",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.4869,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-5bce5ed8-a675-4b38-8825-5ec0e41e0d1b",
+      "company": "lkml",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-c26d0f00-13ef-48be-9ee1-b554624b59e8",
+      "retrieved_company": "42gems",
+      "retrieved_category": "Hardware / Infrastructure",
+      "similarity": 0.3976,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-f4d13c23-5dca-4deb-8ddb-c4bdfc4fea4c",
+      "company": "lkml",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-qcvjkzcs7j74",
+      "retrieved_company": "github",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.4027,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0",
+      "company": "mailchimp",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-4be45ad5-5e02-45c6-8e5c-c81709005e47",
+      "retrieved_company": "sentry",
+      "retrieved_category": "Storage / Database / Disk",
+      "similarity": 0.5565,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-655ee350-a86f-424b-89c5-f80cc0fe527e",
+      "company": "medium",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "githubstatus-1s444p9sf9wg",
+      "retrieved_company": "github",
+      "retrieved_category": "Third-Party / Dependency Outage",
+      "similarity": 0.5575,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-7562d257-0f9d-4f6a-b7e0-69c3649f79f4",
+      "company": "medium",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-ecd98ce8-09ec-47d7-be67-d3edfad9fead",
+      "retrieved_company": "vzaar",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.5194,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-922e216e-efe1-4687-a3e7-2398fbdd8dbe",
+      "company": "medium",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "atlassian-3p4zfxggg0vv",
+      "retrieved_company": "atlassian",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.4758,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-cf16d8bc-b4cd-469d-94e4-e39fcec5aec9",
+      "company": "medium",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-bb1d9c14-e8d8-4aa4-a806-31f31f3d96fe",
+      "retrieved_company": "stackoverflow",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.357,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-d6db1e76-af37-435c-83e9-e7c7cabfaf0f",
+      "company": "medium",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-20834b0c-3811-4447-bcfe-2e60eeeb6251",
+      "retrieved_company": "fastly",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.5132,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5",
+      "company": "merrimack",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-3435a88e-1b33-447e-9b4e-fda0625db87f",
+      "retrieved_company": "wikipedia",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.6561,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-a54b2ace-5fdf-452e-bdb2-cd8a48a94e56",
+      "company": "meta",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-8d9c6ffe-67d1-4a6b-8363-7c69182b4199",
+      "retrieved_company": "thousandeyes",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.5374,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-3f376b77-6063-48a6-8ee2-92ca365194e4",
+      "company": "microsoft",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+      "retrieved_company": "google",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.5872,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-5a99836e-bbde-4dfc-9621-054eac5c5c50",
+      "company": "microsoft",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+      "retrieved_company": "metrist",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5757,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-e21166ff-b35a-4309-99cd-4a8bf5e22305",
+      "company": "microsoft",
+      "query_category": "Hardware / Infrastructure",
+      "retrieved_id": "icco-7102ef9a-a7ae-4215-a8fe-167a4a8c1de3",
+      "retrieved_company": "wikipedia",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5503,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-f4458caf-d848-419a-966e-07c9020cfc48",
+      "company": "microsoft",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+      "retrieved_company": "metrist",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5698,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-5b73c1c1-8ec4-4901-91f3-0d993f582dd4",
+      "company": "mozilla",
+      "query_category": "Security / Auth / Credentials",
+      "retrieved_id": "squarespace-wh3sbh0f58l2",
+      "retrieved_company": "squarespace",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.402,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-65ef2aac-4cc6-4592-af9b-999694efc917",
+      "company": "mozilla",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+      "retrieved_company": "google",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.6796,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-7f0cc221-46c7-485e-bf6c-1719dc4c4e49",
+      "company": "npmjs",
+      "query_category": "Configuration / Bad Deployment",
+      "retrieved_id": "githubstatus-gxycch3076xk",
+      "retrieved_company": "github",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.4344,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-414194f9-fb2c-48b4-a239-eead81523b5d",
+      "company": "okta",
+      "query_category": "Security / Auth / Credentials",
+      "retrieved_id": "icco-965912ea-d272-4080-b4e8-ec62155d6cdb",
+      "retrieved_company": "circleci",
+      "retrieved_category": "Security / Auth / Credentials",
+      "similarity": 0.4554,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-912b30f3-43b7-4d6d-a03d-322983048e5c",
+      "company": "pythonanywhere",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-b4b5957d-2c5f-4db4-b866-8d82da25bd93",
+      "retrieved_company": "keepthescore",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.4784,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-0d5441d3-c69a-4a0a-ab5f-c5ef6e7cc774",
+      "company": "razorpay",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+      "retrieved_company": "duo",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.553,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-27672984-d1e8-4a31-b08c-75c8c54e6314",
+      "company": "salesforce",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-0fb2bbd9-2967-43be-86f8-dec01edc6707",
+      "retrieved_company": "google",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.6278,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-848f9263-fe81-4bbc-b0d2-cc1671bb88a5",
+      "company": "salesforce",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-4da4ac8a-fb93-426e-9ae7-eb088f115959",
+      "retrieved_company": "github",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.5532,
+      "hit": false
+    },
+    {
+      "incident_id": "shopify-882r6x3ttyg9",
+      "company": "shopify",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "sentry-w2fsfdpcgs58",
+      "retrieved_company": "sentry",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4224,
+      "hit": true
+    },
+    {
+      "incident_id": "shopify-26hrlv896m7j",
+      "company": "shopify",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "redditstatus-rj9mggtc19wf",
+      "retrieved_company": "reddit",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.512,
+      "hit": true
+    },
+    {
+      "incident_id": "shopify-7g3scbq177td",
+      "company": "shopify",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "squarespace-kz55yg405t1q",
+      "retrieved_company": "squarespace",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4172,
+      "hit": true
+    },
+    {
+      "incident_id": "shopify-tq1zmqvw6cjz",
+      "company": "shopify",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "openai-01KZRXPE0NGXA12FJNP8WZF8D7",
+      "retrieved_company": "openai",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4894,
+      "hit": true
+    },
+    {
+      "incident_id": "shopify-x7y62nyy43mt",
+      "company": "shopify",
+      "query_category": "Network / Connectivity",
+      "retrieved_id": "digitalocean-w53965shllfq",
+      "retrieved_company": "digitalocean",
+      "retrieved_category": "Network / Connectivity",
+      "similarity": 0.6051,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2",
+      "company": "slack",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-4836907a-f5bb-4d2e-8090-fff332465eb0",
+      "retrieved_company": "github",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.4982,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-61617271-54e4-4f99-9ade-86428b8fe4c3",
+      "company": "slack",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "githubstatus-9ndxtnrwjf37",
+      "retrieved_company": "github",
+      "retrieved_category": "Capacity / Traffic Spike",
+      "similarity": 0.491,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-6bc6cd0c-5bbd-4278-a7bf-c42cd8174b50",
+      "company": "slack",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+      "retrieved_company": "launchdarkly",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.5538,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-a50e7b06-2f2c-4d13-a340-9a1e7eed59d7",
+      "company": "slack",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+      "retrieved_company": "launchdarkly",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.4582,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-d17fe136-eb00-44f8-8147-e3dc22358cba",
+      "company": "spotify",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "atlassian-wpphfps5ffpj",
+      "retrieved_company": "atlassian",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4711,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-e7d7aa93-81f7-4338-9c0b-6e6c0dcefdcb",
+      "company": "tarsnap",
+      "query_category": "Storage / Database / Disk",
+      "retrieved_id": "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+      "retrieved_company": "launchdarkly",
+      "retrieved_category": "Configuration / Bad Deployment",
+      "similarity": 0.441,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-46457692-ed7e-49df-8a45-d1b3eea8ac46",
+      "company": "therac-25",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "icco-dfca998b-0d9b-4f99-b03b-6a6d72175421",
+      "retrieved_company": "wikipedia",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.2406,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-44ce12a8-20dd-43fe-914a-c9a0747baf52",
+      "company": "ubuntu",
+      "query_category": "Security / Auth / Credentials",
+      "retrieved_id": "icco-965912ea-d272-4080-b4e8-ec62155d6cdb",
+      "retrieved_company": "circleci",
+      "retrieved_category": "Security / Auth / Credentials",
+      "similarity": 0.4746,
+      "hit": true
+    },
+    {
+      "incident_id": "icco-2590ea48-9ceb-4cb4-a034-49bffacd7b33",
+      "company": "yellerapp",
+      "query_category": "Network / Connectivity",
+      "retrieved_id": "icco-30bde82e-27e3-48da-873b-499ddc119a8f",
+      "retrieved_company": "google",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.5645,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-090ac94f-65d7-49cc-9e5d-1c8c000b2042",
+      "company": "zerodha",
+      "query_category": "Capacity / Traffic Spike",
+      "retrieved_id": "digitalocean-cxh9f0hgw934",
+      "retrieved_company": "digitalocean",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.3665,
+      "hit": false
+    },
+    {
+      "incident_id": "icco-097f2292-4ca7-41f4-abdf-585177b99669",
+      "company": "zerodha",
+      "query_category": "Software Bug / Logic Error",
+      "retrieved_id": "squarespace-0wh0fp4d6xvy",
+      "retrieved_company": "squarespace",
+      "retrieved_category": "Software Bug / Logic Error",
+      "similarity": 0.4127,
+      "hit": true
+    }
+  ]
+}

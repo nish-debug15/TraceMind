@@ -1,3 +1,4 @@
+import re
 """
 TraceMind Evaluation Suite
 --------------------------
@@ -16,6 +17,13 @@ Usage:
 import os
 import sys
 from pathlib import Path
+
+# Force UTF-8 encoding for stdout on Windows
+try:
+    if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -72,6 +80,7 @@ def call_llm_with_retry(prompt: str, api_key: str, max_retries: int = 4) -> str:
     delay = 2.0
     for attempt in range(max_retries):
         _rate_limiter.acquire()
+        time.sleep(3.0)
         try:
             resp = requests.post(
                 GROQ_API_URL,
@@ -86,16 +95,22 @@ def call_llm_with_retry(prompt: str, api_key: str, max_retries: int = 4) -> str:
                         {"role": "user", "content": prompt}
                     ],
                     "temperature": 0.2,
-                    "max_tokens": 500,
+                    "max_tokens": 800,
                 },
                 timeout=60.0
             )
             if resp.status_code == 200:
                 data = resp.json()
-                content = data["choices"][0]["message"]["content"]
-                if not content or "[MOCK]" in content:
+                raw_msg = data["choices"][0]["message"].get("content") or ""
+                cleaned = re.sub(r"<think>.*?</think>", "", raw_msg, flags=re.DOTALL).strip()
+                if not cleaned:
+                    cleaned = raw_msg.strip()
+                if not cleaned or "[MOCK]" in cleaned:
+                    if attempt < max_retries - 1:
+                        time.sleep(3.0)
+                        continue
                     raise RuntimeError("Received mock or empty response from Groq API.")
-                return content
+                return cleaned
             elif resp.status_code == 429:
                 retry_after = resp.headers.get("Retry-After")
                 sleep_sec = float(retry_after) if retry_after else delay
