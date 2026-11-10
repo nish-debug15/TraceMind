@@ -132,3 +132,10 @@ docs/screenshots/
 *.bmp
 *.tiff
 !docs/pipeline_trace_demo.png
+
+# ==========================================
+# Documents, Reports & PDFs
+# ==========================================
+*.docx
+*.pdf
+
