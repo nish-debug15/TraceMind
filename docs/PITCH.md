@@ -9,10 +9,12 @@
 ## Pre-Flight Checklist (Demo Day)
 
 - [x] **Source Verification:** Datadog and Twilio confirmed in Statuspage source list (`scripts/make_split.py`).
-- [x] **Frontend Live:** Vercel deployment accessible at `https://tracemind.vercel.app`.
-- [x] **HF Space Awake:** FastAPI backend on Hugging Face Spaces responding at `https://nishhhx0-tracemind-backend.hf.space/health`.
-- [x] **Demo Log Chosen:** DB proxy connection pool exhaustion preset ready in Incident Log editor.
-- [x] **Cache Pre-Warmed:** SQLite generation cache pre-warmed for all frontend example presets (`scripts/prewarm_cache.py`).
+- [x] **Frontend Live:** Vercel deployment accessible at `https://tracemind.vercel.app` (HTTP 200).
+- [x] **HF Space Awake:** FastAPI backend responding at `https://nishhhx0-tracemind-backend.hf.space/gradio_api/health` and `/health` (HTTP 200).
+- [x] **Demo Log Chosen:** DB proxy connection pool exhaustion preset verified against live backend endpoint.
+- [x] **Cache Pre-Warmed:** SQLite generation cache verified with 201 entries in `rag/cache/gen_cache.sqlite3` (`scripts/prewarm_cache.py`).
+
+**Verification result:** All 5 checks passed (HF Space `/health` and `/gradio_api/health` HTTP 200; Vercel deployment HTTP 200; `scripts/prewarm_cache.py` confirmed with 201 SQLite cache entries; Statuspage sources verified; live analyze endpoint responded HTTP 200 with similarity 0.50). 0 failed.
 
 ---
 
@@ -23,9 +25,9 @@
 | **1. Nishit** | Introduction & Team Overview | Slide 1–2 | 0:00 – 1:00 (1:00) | 146 words |
 | **2. Pragun** | Problem Statement & Objectives | Slide 3–4 | 1:00 – 2:45 (1:45) | 185 words |
 | **3. Pranav** | Dataset, Quality Filter & Clustering | Slide 5–6 | 2:45 – 4:30 (1:45) | 216 words |
-| **4. Sameera** | Database Layer & 2-Pass RAG Pipeline | Slide 7–8 | 4:30 – 6:15 (1:45) | 238 words |
-| **5. Nishit** | System Architecture & Live Demo | Slide 9 | 6:15 – 8:15 (2:00) | 192 words + demo |
-| **6. Unique** | Evaluation, Limitations & Roadmap | Slide 10–11 | 8:15 – 10:00 (1:45) | 233 words |
+| **4. Sameera** | Database Layer & 2-Pass RAG Pipeline | Slide 7–8 | 4:30 – 6:15 (1:45) | 239 words |
+| **5. Nishit** | System Architecture & Live Demo | Slide 9 | 6:15 – 8:15 (2:00) | 159 words + demo |
+| **6. Unique** | Evaluation, Limitations & Roadmap | Slide 10–11 | 8:15 – 10:00 (1:45) | 221 words |
 
 ---
 
@@ -64,7 +66,7 @@ Today, Pragun covers the operational problem, Pranav details our curated postmor
 ### Slide 4: Why Generic LLMs Fall Short
 - **Hallucination Risk:** Ungrounded LLMs invent invalid configuration flags, phantom parameters, and risky terminal commands.
 - **No Grounding:** Generic models lack infrastructure context and historical precedent without a retrieval mechanism.
-- **TraceMind Objective:** Provide grounded incident diagnosis with strict precedent attribution within seconds.
+- **TraceMind Objective:** Provide grounded incident diagnosis with strict precedent attribution.
 
 ### Spoken Script (Pragun)
 "When a production service goes down at 2:00 AM, engineers face intense pressure to restore availability quickly. But during an active incident, engineers spend most of their triage time reading logs, searching internal wikis, and querying chat channels trying to answer one question: *have we seen this failure before?*
@@ -116,9 +118,9 @@ Before retrieval, we run HDBSCAN—a density-based clustering algorithm that gro
 
 ### Slide 8: 2-Pass Retrieval & The Relevance Gate
 - **Pass 1:** Queries `where={"quality": "high"}` with a mandatory **0.40 cosine similarity floor**.
-- **Pass 2 (Fallback):** Expands search across the full 662 training records if Pass 1 misses or scores below 0.40.
+- **Pass 2 (Fallback):** Expands search across all 662 training records if Pass 1 misses or scores below 0.40.
 - **Relevance Gate:** Prompt instructs the model to inspect the match; outputs `'Precedent: not relevant'` on line 1 if the match is unrelated.
-- **Gate Evaluation:** On the 7 test incidents scoring below the 0.40 similarity floor, all 7 triggered the gate (line 1 = 'Precedent: not relevant'); note we did not manually verify whether all 7 were truly irrelevant.
+- **Gate Evaluation:** All 7 triggered the gate (not manually verified as truly irrelevant).
 
 ### Spoken Script (Sameera)
 "To match an incoming error log against past incidents, we use a vector database. A vector database converts text into a list of numbers—an embedding—capturing its conceptual meaning, allowing semantic similarity search rather than exact keyword matching.
@@ -127,7 +129,7 @@ Think of a traditional database like an index matching literal words, while a ve
 
 We chose ChromaDB because it is lightweight and runs directly in-process inside our FastAPI backend with no separate database server. Each record stores the 384-dimensional embedding alongside metadata: the raw log excerpt, root cause, remediation steps, source URL, and quality label. This collection is built once from the 662 training incidents only—test incidents are never indexed—and loaded directly into memory when the backend starts.
 
-When an engineer inputs a log, we execute a two-pass retrieval. Pass One queries high-quality incidents with a 0.40 cosine similarity floor. If that threshold is missed, Pass Two falls back across all corpus records.
+When an engineer inputs a log, we execute a two-pass retrieval. Pass One queries high-quality incidents with a 0.40 cosine similarity floor. If that threshold is missed, Pass Two falls back across all 662 training records.
 
 Finally, our Relevance Gate prevents false analogies. The prompt instructs the LLM to output 'Precedent: not relevant' on line one if the match is unrelated. In evaluation, across the seven test incidents scoring below the 0.40 similarity floor, all seven triggered the gate with 'Precedent: not relevant' on line one, though we did not manually verify if each precedent was truly irrelevant."
 
@@ -154,7 +156,7 @@ I click Analyze. On the right, the stepper confirms each stage: embedding the lo
 TraceMind synthesizes a root cause explaining that active worker connections saturated the pool, alongside an actionable five-step remediation checklist.
 
 *(Action: Highlight Pipeline Trace and Gauge)*  
-Our core differentiator is the Pipeline Trace: retrieval and prompt are fully inspectable. The gauge displays a similarity score of [FILL FROM LIVE RUN: similarity score, e.g. 0.51], safely above our 0.40 threshold, and links to the matched public postmortem. The badge confirms: '[FILL FROM LIVE RUN: e.g. Precedent applied]'. In the Prompt tab, you can inspect the exact prompt delivered to Groq.
+Our core differentiator is the Pipeline Trace: retrieval and prompt are fully inspectable. The gauge displays a similarity score of 0.50 against our 0.40 threshold, labeled as a Moderate match, and links directly to Datadog's public postmortem. In the Prompt tab, you can inspect the exact prompt delivered to Groq.
 
 If Groq hits its free-tier rate limit or returns a network error, our pre-warmed SQLite cache automatically serves cached completions for example presets, shielding the demo from API failures."
 
@@ -173,7 +175,7 @@ If Groq hits its free-tier rate limit or returns a network error, our pre-warmed
 - **Retrieval Distribution (N = 93):**
   - Mean Top-1 Similarity: **0.5273** (Median: 0.5333)
   - Above 0.40 Threshold: **86 / 93 (92.5%)**
-- **Relevance Gate Result:** All 7 test incidents scoring below the 0.40 floor triggered the gate (line 1 = 'Precedent: not relevant'); note we did not manually verify whether all 7 were truly irrelevant.
+- **Relevance Gate Result:** All 7 triggered the gate (not manually verified as truly irrelevant).
 
 ### Slide 11: Honest Limitations & Roadmap
 - **Proof-of-Concept Sample Size:** Evaluated on 93 held-out incidents; directionally positive, not a claim of statistical significance.
@@ -190,7 +192,7 @@ If Groq hits its free-tier rate limit or returns a network error, our pre-warmed
 - **Takeaway:** Coarse categorical matching is a weak evaluation signal; true operational utility stems from grounded root causes and concrete remediation steps.
 
 ### Spoken Script (Unique)
-"To validate TraceMind objectively, we evaluated our held-out test split of 93 high-quality incidents from 40 companies that the system never saw during training.
+"To validate TraceMind objectively, we evaluated our held-out test split of 93 high-quality incidents from 40 companies that the system never indexed.
 
 Comparing TraceMind against an unaugmented zero-shot baseline on these 93 incidents, RAG achieved slightly higher overlap: ROUGE-1 F1 rose from 0.1809 to 0.1941, an increase of 0.0132, while ROUGE-2 and ROUGE-L showed similar modest gains as shown on the slide. Semantic embedding similarity remained essentially flat at 0.576.
 
@@ -200,7 +202,7 @@ Crucially, on the seven test cases below our 0.40 similarity floor, all seven tr
 
 To be clear about limitations: this is an academic proof of concept on 93 test incidents, so we do not claim statistical significance. Furthermore, because our test set contains exclusively high-quality postmortems, results are optimistic compared to messy production logs. Groq's 20-RPM free tier also required rate limiting.
 
-TraceMind proves that during an outage, the most useful AI is not the one that sounds confident, but the one where retrieval and prompt are fully inspectable. Thank you."
+TraceMind's value is simple: during an outage, it shows its work. Thank you, we are ready for your questions."
 
 ---
 
