@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { toast } from "sonner";
 import { useReducedMotion, motion } from "motion/react";
 import ReactMarkdown from "react-markdown";
@@ -320,6 +320,8 @@ function SimilarityGauge({ value }: { value: number }) {
   );
 }
 
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export default function Home() {
   const [logText, setLogText] = useState(PRESET_EXAMPLES[0].log);
   const [loading, setLoading] = useState(false);
@@ -338,6 +340,10 @@ export default function Home() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const gutterRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
+  const mirrorRef = useRef<HTMLDivElement>(null);
+  const mirrorLineRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [lineHeights, setLineHeights] = useState<number[]>([]);
+  const [textareaWidth, setTextareaWidth] = useState<number | null>(null);
 
   const shouldReduceMotion = useReducedMotion();
 
@@ -399,16 +405,49 @@ export default function Home() {
   // --- Synchronized Editor Scroll ---
   const handleScroll = () => {
     if (textareaRef.current) {
-      const { scrollTop, scrollLeft } = textareaRef.current;
+      const { scrollTop } = textareaRef.current;
       if (highlightRef.current) {
         highlightRef.current.scrollTop = scrollTop;
-        highlightRef.current.scrollLeft = scrollLeft;
       }
       if (gutterRef.current) {
         gutterRef.current.scrollTop = scrollTop;
       }
     }
   };
+
+  // --- Measure Line Heights for Soft-Wrap Gutter Alignment ---
+  const updateLineHeights = useCallback(() => {
+    if (!textareaRef.current) return;
+    const clientWidth = textareaRef.current.clientWidth;
+    if (clientWidth > 0 && clientWidth !== textareaWidth) {
+      setTextareaWidth(clientWidth);
+    }
+    const lines = logText.split("\n");
+    const heights = lines.map((_, i) => {
+      const el = mirrorLineRefs.current[i];
+      if (!el) return 22;
+      return Math.round(el.getBoundingClientRect().height) || 22;
+    });
+    setLineHeights(heights);
+  }, [logText, textareaWidth]);
+
+  useIsomorphicLayoutEffect(() => {
+    updateLineHeights();
+  }, [logText, textareaWidth, updateLineHeights]);
+
+  useEffect(() => {
+    if (!textareaRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.target.clientWidth;
+        if (width > 0) {
+          setTextareaWidth(width);
+        }
+      }
+    });
+    observer.observe(textareaRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   // --- Submission Logic ---
   const handleSubmit = useCallback(async () => {
@@ -497,7 +536,6 @@ export default function Home() {
 
   const logicalLines = logText.split("\n");
   const lineCount = logicalLines.length;
-  const gutterRowCount = Math.max(lineCount, 8);
   const charCount = logText.length;
   const remediationList = result ? parseRemediationSteps(result.remediation_steps) : [];
   const completedStepsCount = Object.values(checkedSteps).filter(Boolean).length;
@@ -680,31 +718,82 @@ export default function Home() {
               </Button>
             </div>
 
-            {/* Editor Body with Gutter (white-space: pre, horizontal scroll, no wrapping) */}
-            <div className="relative flex-1 flex min-h-[260px] bg-[var(--tile-2)]/50 font-mono text-[13px] overflow-hidden">
-              {/* Line number gutter (one per logical line, min 8 visible) */}
+            {/* Editor Body with Gutter (soft-wrap, no horizontal scroll, logical line alignment) */}
+            <div className="relative flex-1 flex min-h-[260px] max-h-[360px] bg-[var(--tile-2)]/50 font-mono text-[13px] overflow-hidden">
+              {/* Line number gutter (one per logical line, continuation rows blank) */}
               <div
                 ref={gutterRef}
-                className="w-10 select-none py-3 text-right pr-3 text-[var(--muted)]/50 border-r border-[var(--border)] overflow-hidden font-mono text-[12px] leading-[22px] flex-shrink-0"
+                className="w-10 select-none py-3 text-right pr-3 text-[var(--muted)]/50 border-r border-[var(--border)] overflow-hidden font-mono text-[12px] flex-shrink-0"
                 aria-hidden="true"
               >
-                {Array.from({ length: gutterRowCount }).map((_, i) => (
-                  <div key={i}>{i + 1}</div>
-                ))}
+                {logicalLines.map((_, i) => {
+                  const height = lineHeights[i] ?? 22;
+                  return (
+                    <div
+                      key={i}
+                      style={{ height: `${height}px` }}
+                      className="leading-[22px] overflow-hidden"
+                    >
+                      {i + 1}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Textarea & Token Highlight container */}
               <div className="relative flex-1 overflow-hidden">
+                {/* Hidden mirror div to compute exact wrapped line heights */}
+                <div
+                  ref={mirrorRef}
+                  aria-hidden="true"
+                  className="invisible absolute top-0 left-0 p-3 pointer-events-none select-none font-mono text-[13px] leading-[22px]"
+                  style={{
+                    width: textareaWidth ? `${textareaWidth}px` : "100%",
+                    boxSizing: "border-box",
+                    whiteSpace: "pre-wrap",
+                    overflowWrap: "anywhere",
+                    wordBreak: "break-word",
+                    overflowX: "hidden",
+                    zIndex: -1,
+                  }}
+                >
+                  {logicalLines.map((line, i) => (
+                    <div
+                      key={i}
+                      ref={(el) => {
+                        mirrorLineRefs.current[i] = el;
+                      }}
+                      style={{
+                        whiteSpace: "pre-wrap",
+                        overflowWrap: "anywhere",
+                        wordBreak: "break-word",
+                        minHeight: "22px",
+                        lineHeight: "22px",
+                      }}
+                    >
+                      {line || "\u00A0"}
+                    </div>
+                  ))}
+                </div>
+
                 {/* Syntax Highlight Overlay */}
                 <div
                   ref={highlightRef}
                   aria-hidden="true"
-                  className="absolute inset-0 p-3 overflow-hidden pointer-events-none whitespace-pre leading-[22px]"
+                  className="absolute top-0 left-0 bottom-0 p-3 overflow-hidden pointer-events-none font-mono text-[13px] leading-[22px]"
+                  style={{
+                    width: textareaWidth ? `${textareaWidth}px` : "100%",
+                    boxSizing: "border-box",
+                    whiteSpace: "pre-wrap",
+                    overflowWrap: "anywhere",
+                    wordBreak: "break-word",
+                    overflowX: "hidden",
+                  }}
                 >
                   {highlightTokens(logText)}
                 </div>
 
-                {/* Editor Textarea: white-space: pre with horizontal scroll */}
+                {/* Editor Textarea: soft-wrap without horizontal scroll */}
                 <textarea
                   ref={textareaRef}
                   value={logText}
@@ -713,7 +802,13 @@ export default function Home() {
                   placeholder="Paste production raw log excerpt or stack trace here..."
                   aria-label="Incident log text"
                   spellCheck={false}
-                  className="relative z-10 w-full h-full p-3 bg-transparent text-transparent caret-[var(--accent)] resize-none outline-none whitespace-pre overflow-x-auto leading-[22px] font-mono text-[13px] selection:bg-[var(--accent-soft)] selection:text-[var(--accent)]"
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    overflowWrap: "anywhere",
+                    wordBreak: "break-word",
+                    overflowX: "hidden",
+                  }}
+                  className="relative z-10 w-full h-full p-3 bg-transparent text-transparent caret-[var(--accent)] resize-none outline-none leading-[22px] font-mono text-[13px] selection:bg-[var(--accent-soft)] selection:text-[var(--accent)]"
                 />
               </div>
             </div>
