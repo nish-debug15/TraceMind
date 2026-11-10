@@ -851,12 +851,7 @@ export default function Home() {
                     <span>Analyzing...</span>
                   </>
                 ) : (
-                  <>
-                    <span>Analyze incident</span>
-                    <kbd className="hidden sm:inline-block text-[11px] font-mono px-1.5 py-0.5 rounded bg-white/20 text-white">
-                      ⌘Enter
-                    </kbd>
-                  </>
+                  <span>Analyze incident</span>
                 )}
               </Button>
             </div>
