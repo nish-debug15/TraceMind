@@ -104,7 +104,7 @@ def render_pills_html(is_mock: bool) -> str:
     return f"""
     <div class="pills-container">
         <span class="status-pill">Corpus (828 incidents)</span>
-        <span class="status-pill">Clusters (48)</span>
+        <span class="status-pill">Clusters (39)</span>
         <span class="status-pill">Model ({model_display})</span>
         <span class="status-pill {mode_class}">
             <span class="pill-dot {dot_class}"></span> Mode ({mode_text})

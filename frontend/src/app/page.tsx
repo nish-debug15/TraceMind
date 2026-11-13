@@ -106,7 +106,7 @@ const PIPELINE_STAGES = [
   {
     name: "Cluster",
     title: "Cluster anomaly",
-    detail: "HDBSCAN, 48 clusters",
+    detail: "HDBSCAN, 39 clusters",
   },
   {
     name: "Retrieve",
