@@ -92,7 +92,7 @@ Our objective with TraceMind is to ground every diagnosis in verified, real-worl
 ### Slide 6: HDBSCAN Clustering as Preprocessing
 - **Clustering Role:** Preprocessing and deduplication, NOT the core search engine.
 - **Algorithm:** HDBSCAN on 384-dimensional dense vectors (`all-MiniLM-L6-v2`).
-- **Cluster Count:** 48 clusters identified on the training corpus (`min_cluster_size=3`).
+- **Cluster Count:** 39 clusters identified on the training corpus (`min_cluster_size=3`).
 - **Function:** Detects recurring failure signatures and isolates novel or noisy log patterns.
 
 ### Spoken Script (Pranav)
@@ -102,7 +102,7 @@ Raw quantity alone was noisy. Two hundred and eighty-four incidents were brief s
 
 To evaluate out-of-distribution generalization honestly, we enforced a strict company-disjoint split using fixed seed 42. Our training set has 662 incidents across 18 companies. Our test set contains 93 incidents across 40 completely different companies, with 100% rated high quality. You will notice 662 plus 93 equals 755: the remaining 73 low-quality incidents from those 40 test companies were completely discarded to maintain a strict company-disjoint split while keeping the test set purely high-quality.
 
-Before retrieval, we run HDBSCAN—a density-based clustering algorithm that groups similar data without forcing every outlier into a cluster. Think of HDBSCAN as a mail sorter: it groups near-duplicate logs into bundles so repetitive errors don't flood our index. It identified 48 distinct clusters in our training data. Crucially, clustering is only a deduplication filter; matching is handled by vector retrieval."
+Before retrieval, we run HDBSCAN—a density-based clustering algorithm that groups similar data without forcing every outlier into a cluster. Think of HDBSCAN as a mail sorter: it groups near-duplicate logs into bundles so repetitive errors don't flood our index. It identified 39 distinct clusters in our training data. Crucially, clustering is only a deduplication filter; matching is handled by vector retrieval."
 
 **Handoff:** *"Sameera will now walk through our vector database layer and two-pass retrieval mechanism."*
 
@@ -242,7 +242,7 @@ TraceMind's value is simple: during an outage, it shows its work. Thank you, we 
 1. **Slide 1 (Title):** TraceMind geometric logo and team roster.
 2. **Slide 3 (Outage Reality):** Visual illustration of the 'Log Firehose' vs. human MTTR timeline.
 3. **Slide 5 (Dataset Split):** Sankey diagram showing 828 corpus -> 544 high / 284 low -> 662 train (18 companies) / 93 test (40 companies), with 73 low-quality test-company records discarded.
-4. **Slide 6 (Clustering):** 2D UMAP projection visualization of the 48 HDBSCAN clusters.
+4. **Slide 6 (Clustering):** 2D UMAP projection visualization of the 39 HDBSCAN clusters.
 5. **Slide 7 (ChromaDB Architecture):** Diagram illustrating vector embedding mapping and metadata schema.
 6. **Slide 8 (RAG Flow):** Flowchart of 2-Pass retrieval with the 0.40 cosine floor and Relevance Gate decision branch.
 7. **Slide 9 (Live Demo):** Full-screen screenshot of the TraceMind console (`docs/pipeline_trace_demo.png`) highlighting the Pipeline Trace and Similarity Gauge.

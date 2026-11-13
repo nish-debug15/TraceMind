@@ -35,7 +35,7 @@ Raw Server Log Input
 Embedding Layer (sentence-transformers / all-MiniLM-L6-v2, 384-d)
          │
          ▼
-Anomaly Clustering (HDBSCAN)  ──►  Groups/deduplicates incoming log chunks (48 clusters)
+Anomaly Clustering (HDBSCAN)  ──►  Groups/deduplicates incoming log chunks (39 clusters)
          │                         Acts as preprocessing / dedup step before vector search
          ▼
 2-Pass Vector Retrieval (ChromaDB)
@@ -64,7 +64,7 @@ Structured RCA Output
 | Component | Technology | Role / Specification |
 |---|---|---|
 | **Embeddings** | `sentence-transformers` | `all-MiniLM-L6-v2` (384-dimensional normalized dense vectors) |
-| **Clustering** | `HDBSCAN` | 48 clusters on train corpus (`min_cluster_size=3`, `min_samples=2`), 71.4% of noise is high-quality |
+| **Clustering** | `HDBSCAN` | 39 clusters on train corpus (`min_cluster_size=3`, `min_samples=2`), 51.1% noise |
 | **Vector Store** | `ChromaDB` | Persistent vector index with 2-pass quality-biased retrieval and 0.40 cosine floor |
 | **LLM Generation** | Groq Cloud API | `openai/gpt-oss-120b` (prompted inference, zero fine-tuning, `relevance_gate_v2`) |
 | **Backend API** | `FastAPI` / `Uvicorn` | REST API (`/analyze`, `/health`) with per-IP rate limiting and proxy routing |
