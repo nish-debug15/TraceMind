@@ -1,22 +1,35 @@
 {
+  "-1": {
+    "id": -1,
+    "name": "Novel pattern",
+    "description": "No recurring failure signature in the historical corpus. Treat the match as a hypothesis.",
+    "size": 338,
+    "confidence": "ok",
+    "source": {
+      "top_company": "various",
+      "top_share": 0.0,
+      "company_count": 0
+    },
+    "keywords": [],
+    "typical_fixes": [],
+    "examples": []
+  },
   "0": {
     "id": 0,
-    "name": "CI build runner provisioning failures",
-    "description": "A broad group of status incidents mostly from travisci involving build runner initialization and virtual machine cleanup failures.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Travis CI infrastructure automation failures",
+    "description": "Multiple incidents at Travis CI were caused by misconfigurations or missing artifacts in automated cleanup and deployment processes, leading to VM leaks, database record issues, missing Docker tags, and deleted VM images that disrupted build services.",
     "size": 4,
-    "company_count": 1,
-    "top_companies": [
-      "travisci"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "travisci",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
-      "travis",
       "build",
-      "images",
-      "vsphere",
-      "docker"
+      "docker",
+      "service",
+      "jobs"
     ],
     "typical_fixes": [
       "Restart worker supervisor daemon",
@@ -26,39 +39,37 @@
     "examples": [
       {
         "company": "travisci",
-        "root_cause_line": "On August 9, 2016, Travis CI's GCE-backed build platform \u2014 used for jobs that need sudo or Docker-in-VM \u2014 went down because the platform's stable b...",
+        "root_cause": "On August 9, 2016, Travis CI's GCE-backed build platform \u2014 used for jobs that need `sudo` or Docker-in-VM \u2014 went down because the platfor...",
         "source_url": "https://blog.travis-ci.com/2016-09-30-the-day-we-deleted-our-vm-images/"
       },
       {
         "company": "travisci",
-        "root_cause_line": "On February 4th, it was discovered that new instances with worker v2.5.0 were not entering service because the image was missing a tag on Docker Hu...",
+        "root_cause": "On February 4th, it was discovered that new instances with worker v2.5.0 were not entering service because the image was missing a tag on...",
         "source_url": "https://www.traviscistatus.com/incidents/sxrh0l46czqn"
       },
       {
         "company": "travisci",
-        "root_cause_line": "Investigation revealed that the vsphere-janitor service, responsible for cleaning up build VMs, was failing to authenticate with the vSphere API. T...",
+        "root_cause": "Investigation revealed that the vsphere-janitor service, responsible for cleaning up build VMs, was failing to authenticate with the vSph...",
         "source_url": "https://www.traviscistatus.com/incidents/khzk8bg4p9sy"
       }
     ]
   },
   "1": {
     "id": 1,
-    "name": "Droplet regional service disruption",
-    "description": "A broad group of status incidents mostly from digitalocean involving Droplet action failures and block storage volume attachment degradation across regions.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "DigitalOcean service disruptions",
+    "description": "Multiple DigitalOcean service outages affecting Droplets, volumes, API, and related features across several regions.",
     "size": 8,
-    "company_count": 1,
-    "top_companies": [
-      "digitalocean"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "digitalocean",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "droplets",
       "droplet",
-      "cloud control",
-      "control panel",
-      "panel"
+      "team",
+      "engineering team"
     ],
     "typical_fixes": [
       "Restore regional storage controllers",
@@ -68,37 +79,34 @@
     "examples": [
       {
         "company": "digitalocean",
-        "root_cause_line": "Our Engineering team has confirmed full resolution of the issue with creating Droplets in all regions. Users should be able to create Droplets with...",
+        "root_cause": "Our Engineering team has confirmed full resolution of the issue with creating Droplets in all regions. Users should be able to create Dro...",
         "source_url": "https://status.digitalocean.com/incidents/wjyr2cz6y3xb"
       },
       {
         "company": "digitalocean",
-        "root_cause_line": "Our Engineering team has confirmed that the issue impacting Droplets in the NYC3 region has been fully resolved. Users can now perform actions on t...",
+        "root_cause": "Our Engineering team has confirmed that the issue impacting Droplets in the NYC3 region has been fully resolved. Users can now perform ac...",
         "source_url": "https://status.digitalocean.com/incidents/7vmz1hmlzzrc"
       },
       {
         "company": "digitalocean",
-        "root_cause_line": "Our Engineering team has resolved the issue that was impacting the DigitalOcean API and the Cloud Control Panel. The system is now operating normally.",
+        "root_cause": "Our Engineering team has resolved the issue that was impacting the DigitalOcean API and the Cloud Control Panel. The system is now operat...",
         "source_url": "https://status.digitalocean.com/incidents/zjd34dpv45vr"
       }
     ]
   },
   "2": {
     "id": 2,
-    "name": "DNS and certificate provisioning failures",
-    "description": "A broad group of status incidents mostly from digitalocean involving DNS API outages and automated TLS certificate provisioning degradation.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "DNS service disruptions",
+    "description": "Multiple incidents involving DNS service outages and related certificate and database provisioning failures across DigitalOcean and a temporary DNS resolution failure for crates.io.",
     "size": 4,
-    "company_count": 2,
-    "top_companies": [
-      "digitalocean",
-      "rust-lang"
-    ],
-    "top_company_share": 75.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "digitalocean",
+      "top_share": 0.75,
+      "company_count": 2
+    },
     "keywords": [
       "dns",
-      "let encrypt",
       "encrypt",
       "let",
       "certificates"
@@ -111,39 +119,37 @@
     "examples": [
       {
         "company": "digitalocean",
-        "root_cause_line": "As of 19:50 UTC, the issue affecting the DNS service has been fully resolved, and all related services, including Let's Encrypt certificate issuanc...",
+        "root_cause": "As of 19:50 UTC, the issue affecting the DNS service has been fully resolved, and all related services, including Let's Encrypt certifica...",
         "source_url": "https://status.digitalocean.com/incidents/gwgh41d5r0nz"
       },
       {
         "company": "digitalocean",
-        "root_cause_line": "Our Engineering team has identified the cause of the issue impacting our DNS API service and is actively working on a fix. During this time, users...",
+        "root_cause": "Our Engineering team has identified the cause of the issue impacting our DNS API service and is actively working on a fix. During this ti...",
         "source_url": "https://status.digitalocean.com/incidents/nnt4rfbgn1y6"
       },
       {
         "company": "digitalocean",
-        "root_cause_line": "Our Engineering team is aware of an upstream outage with Let's Encrypt (see https://letsencrypt.status.io/) which impacts the following services:",
+        "root_cause": "Our Engineering team is aware of an upstream outage with Let's Encrypt (see https://letsencrypt.status.io/) which impacts the following s...",
         "source_url": "https://status.digitalocean.com/incidents/p3zyn7c4jyx7"
       }
     ]
   },
   "3": {
     "id": 3,
-    "name": "Mac job start failures",
-    "description": "A broad group of status incidents mostly from circleci involving macOS job startup errors and network routing failures in hosted Mac runner pools.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "CircleCI Mac Jobs DDoS",
+    "description": "CircleCI experienced a DDoS attack on its Mac infrastructure provider, causing macOS job failures and network latency, which was later mitigated.",
     "size": 6,
-    "company_count": 1,
-    "top_companies": [
-      "circleci"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "circleci",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "mac",
       "jobs",
       "mac jobs",
-      "infrastructure provider",
-      "macos jobs"
+      "infrastructure provider"
     ],
     "typical_fixes": [
       "Reroute runner network traffic",
@@ -153,39 +159,37 @@
     "examples": [
       {
         "company": "circleci",
-        "root_cause_line": "All Mac jobs are running successfully.",
+        "root_cause": "All Mac jobs are running successfully.  Our infrastructure provider has confirmed that the DDoS attack has been mitigated and that servic...",
         "source_url": "https://status.circleci.com/incidents/wcsh4hxwkrh7"
       },
       {
         "company": "circleci",
-        "root_cause_line": "Mac jobs are continuing to experience failures. Our infrastructure provider is reporting they are experiencing a DDoS attack causing high network l...",
+        "root_cause": "Mac jobs are continuing to experience failures. Our infrastructure provider is reporting they are experiencing a DDoS attack causing high...",
         "source_url": "https://status.circleci.com/incidents/t7vt8j14jnbg"
       },
       {
         "company": "circleci",
-        "root_cause_line": "We are seeing improvement in Mac job network routing.",
+        "root_cause": "We are seeing improvement in Mac job network routing.  We will continue to monitor for signs of recovery.",
         "source_url": "https://status.circleci.com/incidents/gvysjmkf4ct9"
       }
     ]
   },
   "4": {
     "id": 4,
-    "name": "Search and chat connector outages",
-    "description": "A broad group of status incidents mostly from dropbox involving third-party connector timeouts and conversational search indexing disruptions.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Dropbox service outage resolved",
+    "description": "All four Dropbox incidents have been resolved.",
     "size": 4,
-    "company_count": 1,
-    "top_companies": [
-      "dropbox"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "dropbox",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "dash",
-      "drive",
       "dash chat",
       "chat",
-      "search dash"
+      "problem"
     ],
     "typical_fixes": [
       "Re-authenticate third-party OAuth tokens",
@@ -195,40 +199,37 @@
     "examples": [
       {
         "company": "dropbox",
-        "root_cause_line": "This incident has been resolved.",
-        "source_url": "https://status.dropbox.com/incidents/819myyd174x1"
-      },
-      {
-        "company": "dropbox",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.dropbox.com/incidents/x0pz71gj2kt2"
       },
       {
         "company": "dropbox",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
+        "source_url": "https://status.dropbox.com/incidents/819myyd174x1"
+      },
+      {
+        "company": "dropbox",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.dropbox.com/incidents/qg0zdcd545j2"
       }
     ]
   },
   "5": {
     "id": 5,
-    "name": "AI agent runner execution failures",
-    "description": "A broad group of status incidents mostly from netlify involving AI agent runner crashes and attachment upload failures during model execution.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Service Outage Resolutions",
+    "description": "The incidents involve the resolution of service disruptions affecting DigitalOcean's GradientAI Agent Platform Playground and multiple Netlify services.",
     "size": 4,
-    "company_count": 2,
-    "top_companies": [
-      "netlify",
-      "digitalocean"
-    ],
-    "top_company_share": 75.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "netlify",
+      "top_share": 0.75,
+      "company_count": 2
+    },
     "keywords": [
       "agent",
-      "playground",
       "agent runner",
       "runner",
-      "gradientai"
+      "runner failures"
     ],
     "typical_fixes": [
       "Scale runner container pool",
@@ -238,39 +239,37 @@
     "examples": [
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/6nsb4vl9x54l"
       },
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/qq4vfhmjht8h"
       },
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/pqmjg396rrmz"
       }
     ]
   },
   "6": {
     "id": 6,
-    "name": "CI workflow insights data delays",
-    "description": "A broad group of status incidents mostly from circleci involving telemetry aggregation lag and delayed workflow analytics reporting.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "CircleCI data processing delays",
+    "description": "CircleCI is experiencing data processing and upstream provider issues causing delays and backlogs in usage and insights data, with fixes pending deployment.",
     "size": 3,
-    "company_count": 1,
-    "top_companies": [
-      "circleci"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "circleci",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "insights",
       "data",
-      "hours",
-      "days",
-      "job"
+      "job",
+      "process"
     ],
     "typical_fixes": [
       "Increase pipeline consumer concurrency",
@@ -280,37 +279,35 @@
     "examples": [
       {
         "company": "circleci",
-        "root_cause_line": "Our engineering team has identified the root cause and has fixes prepared. Due to the nature of the data refresh process, the fix will require a de...",
+        "root_cause": "Our engineering team has identified the root cause and has fixes prepared. Due to the nature of the data refresh process, the fix will re...",
         "source_url": "https://status.circleci.com/incidents/01zmcr93tysy"
       },
       {
         "company": "circleci",
-        "root_cause_line": "We have identified an issue causing Insights workflow and job data to be delayed when requested through the Usage API. Some data for the last 24 ho...",
+        "root_cause": "We have identified an issue causing Insights workflow and job data to be delayed when requested through the Usage API. Some data for the ...",
         "source_url": "https://status.circleci.com/incidents/l7vz5yr3wrp0"
       },
       {
         "company": "circleci",
-        "root_cause_line": "We have identified the issue, and are working with our upstream provider to resolve it now.",
+        "root_cause": "We have identified the issue, and are working with our upstream provider to resolve it now.",
         "source_url": "https://status.circleci.com/incidents/xwrqk8hh14zf"
       }
     ]
   },
   "7": {
     "id": 7,
-    "name": "Usage API data delay",
-    "description": "A broad group of status incidents mostly from circleci involving delays in customer usage calculations and delayed billing API data delivery.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "CircleCI Usage API incidents",
+    "description": "Multiple CircleCI incidents related to the Usage API were identified and resolved, with fixes in progress or completed.",
     "size": 4,
-    "company_count": 1,
-    "top_companies": [
-      "circleci"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "circleci",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "usage api",
       "usage",
-      "data delayed",
       "api data",
       "data"
     ],
@@ -322,39 +319,37 @@
     "examples": [
       {
         "company": "circleci",
-        "root_cause_line": "This issue has been resolved. All data is up to date through yesterday.",
+        "root_cause": "This issue has been resolved. All data is up to date through yesterday.",
         "source_url": "https://status.circleci.com/incidents/mspf5pqp7d42"
       },
       {
         "company": "circleci",
-        "root_cause_line": "The issue has been identified and a fix is in progress.",
+        "root_cause": "The issue has been identified and a fix is in progress.",
         "source_url": "https://status.circleci.com/incidents/7l9wg4375jr4"
       },
       {
         "company": "circleci",
-        "root_cause_line": "The Usage API incident has been resolved.",
+        "root_cause": "The Usage API incident has been resolved.",
         "source_url": "https://status.circleci.com/incidents/dqlq3v1q8pvn"
       }
     ]
   },
   "8": {
     "id": 8,
-    "name": "Appointment scheduling service disruption",
-    "description": "A broad group of status incidents mostly from squarespace involving online scheduling unavailability and calendar sync processing disruptions.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Squarespace service disruption",
+    "description": "Multiple Squarespace incidents involving service disruptions, issue identification, fixes, and resolutions.",
     "size": 11,
-    "company_count": 1,
-    "top_companies": [
-      "squarespace"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "squarespace",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "scheduling",
-      "experiencing disruption",
+      "service disruption",
       "disruption",
-      "update soon",
-      "affected provide"
+      "currently"
     ],
     "typical_fixes": [
       "Failover calendar database",
@@ -364,40 +359,37 @@
     "examples": [
       {
         "company": "squarespace",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.squarespace.com/incidents/vgzv7gx8w4db"
       },
       {
         "company": "squarespace",
-        "root_cause_line": "We are currently experiencing a service disruption.",
+        "root_cause": "We are currently experiencing a service disruption.  We have identified the issue  with Acuity Scheduling elevated errors.  We will provi...",
         "source_url": "https://status.squarespace.com/incidents/s997p77zp0ll"
       },
       {
         "company": "squarespace",
-        "root_cause_line": "The issue has been identified and a fix is being implemented.",
+        "root_cause": "The issue has been identified and a fix is being implemented.",
         "source_url": "https://status.squarespace.com/incidents/fsk182w4cjtk"
       }
     ]
   },
   "9": {
     "id": 9,
-    "name": "CI/CD build queue datastore degradation",
-    "description": "A broad group of status incidents mostly from circleci involving build queue delays caused by datastore query contention and replica degradation.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "CircleCI service degradation incidents",
+    "description": "These incidents involve multiple performance and availability problems across CircleCI\u2019s infrastructure, such as datastore bottlenecks, RabbitMQ upgrade side\u2011effects, database lockouts, Kubernetes networking failures, workflow latency, and degraded service connectivity.",
     "size": 11,
-    "company_count": 2,
-    "top_companies": [
-      "circleci",
-      "github"
-    ],
-    "top_company_share": 90.9,
+    "confidence": "ok",
+    "source": {
+      "top_company": "circleci",
+      "top_share": 0.91,
+      "company_count": 2
+    },
     "keywords": [
+      "april",
       "jobs",
-      "delays",
-      "workflows",
-      "queue",
-      "pull"
+      "utc",
+      "delays"
     ],
     "typical_fixes": [
       "Add indexes on build queue collections",
@@ -407,39 +399,37 @@
     "examples": [
       {
         "company": "circleci",
-        "root_cause_line": "On April 4, 2025, CircleCI customers experienced increased latency and failures when starting and canceling workflows and jobs. This incident, whic...",
+        "root_cause": "On April 4, 2025, CircleCI customers experienced increased latency and failures when starting and canceling workflows and jobs. This inci...",
         "source_url": "https://discuss.circleci.com/t/post-incident-report-april-4-2025-delays-in-starting-workflows/53113"
       },
       {
         "company": "circleci",
-        "root_cause_line": "The core issue manifested as widespread networking failures and service-to-service communication problems across CircleCI's main production Kuberne...",
+        "root_cause": "The core issue manifested as widespread networking failures and service-to-service communication problems across CircleCI's main producti...",
         "source_url": "https://status.circleci.com/incidents/dcqb3fykhgvg"
       },
       {
         "company": "circleci",
-        "root_cause_line": "The issue manifested as degraded performance across multiple services, a drop in GitHub webhooks, and widespread connectivity issues between the fr...",
+        "root_cause": "The issue manifested as degraded performance across multiple services, a drop in GitHub webhooks, and widespread connectivity issues betw...",
         "source_url": "https://discuss.circleci.com/t/post-incident-report-april-4-2025-circleci-ui-loading-build-triggering-issues/53208"
       }
     ]
   },
   "10": {
     "id": 10,
-    "name": "API timeouts and performance degradation",
-    "description": "A broad group of status incidents mostly from sentry involving elevated HTTP 5xx responses and API request timeouts during traffic spikes.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Sentry service restoration",
+    "description": "All listed incidents involve Sentry services returning to normal operation after performance, configuration, authentication, or access issues.",
     "size": 9,
-    "company_count": 1,
-    "top_companies": [
-      "sentry"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "sentry",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "api timeouts",
       "timeouts",
-      "increased api",
       "api",
-      "region"
+      "currently"
     ],
     "typical_fixes": [
       "Scale API gateway instances",
@@ -449,39 +439,37 @@
     "examples": [
       {
         "company": "sentry",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.sentry.io/incidents/8hwy8bpsrvy1"
       },
       {
         "company": "sentry",
-        "root_cause_line": "Database performance has returned to normal",
+        "root_cause": "Database performance has returned to normal",
         "source_url": "https://status.sentry.io/incidents/w39v80r1tw7p"
       },
       {
         "company": "sentry",
-        "root_cause_line": "API performance has returned to expected levels.",
+        "root_cause": "API performance has returned to expected levels.",
         "source_url": "https://status.sentry.io/incidents/mc7gkgm6sprn"
       }
     ]
   },
   "11": {
     "id": 11,
-    "name": "Serverless inference service errors",
-    "description": "A broad group of status incidents mostly from digitalocean involving serverless AI model inference timeouts and upstream model provider errors.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "DigitalOcean Anthropic API disruptions",
+    "description": "Multiple DigitalOcean incidents involved HTTP 400 errors, connectivity problems, and ongoing issues with Anthropic models, some resolved and others still under investigation.",
     "size": 8,
-    "company_count": 1,
-    "top_companies": [
-      "digitalocean"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "digitalocean",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "inference",
       "serverless",
       "serverless inference",
-      "models",
-      "model"
+      "models"
     ],
     "typical_fixes": [
       "Reroute requests to secondary model region",
@@ -491,41 +479,37 @@
     "examples": [
       {
         "company": "digitalocean",
-        "root_cause_line": "From 23:20 UTC to 02:00 UTC, users may have experienced elevated error rates due to service instability, which resulted in intermittent HTTP 500 er...",
+        "root_cause": "From 23:20 UTC to 02:00 UTC, users may have experienced elevated error rates due to service instability, which resulted in intermittent H...",
         "source_url": "https://status.digitalocean.com/incidents/cxh9f0hgw934"
       },
       {
         "company": "digitalocean",
-        "root_cause_line": "The connectivity issues affecting our Serverless/GenAI Inference API have been fully resolved.",
+        "root_cause": "The connectivity issues affecting our Serverless/GenAI Inference API have been fully resolved. Our engineering teams successfully complet...",
         "source_url": "https://status.digitalocean.com/incidents/bfsh34myw3bc"
       },
       {
         "company": "digitalocean",
-        "root_cause_line": "The issue is resolved, and service is operating normally.",
+        "root_cause": "The issue is resolved, and service is operating normally.",
         "source_url": "https://status.digitalocean.com/incidents/5gsk0hfctqp5"
       }
     ]
   },
   "12": {
     "id": 12,
-    "name": "Datacenter power and generator failure",
-    "description": "A broad group of status incidents mostly from aws involving utility power loss and backup generator depletion causing cascading infrastructure outages.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "AWS Power and Infrastructure Outages",
+    "description": "A series of AWS incidents caused by utility power losses, transformer failures, generator and voltage\u2011sag problems, and related hardware or software faults that led to widespread service disruptions across compute, storage, and other AWS services.",
     "size": 11,
-    "company_count": 4,
-    "top_companies": [
-      "aws",
-      "netflix",
-      "reddit"
-    ],
-    "top_company_share": 72.7,
+    "confidence": "ok",
+    "source": {
+      "top_company": "aws",
+      "top_share": 0.73,
+      "company_count": 4
+    },
     "keywords": [
       "power",
       "ebs",
-      "availability zone",
-      "amazon",
-      "zone"
+      "pdt",
+      "availability zone"
     ],
     "typical_fixes": [
       "Transfer load to alternate availability zone",
@@ -535,38 +519,36 @@
     "examples": [
       {
         "company": "aws",
-        "root_cause_line": "On August 7th, at 10:41 AM PDT, a service disruption began in a single EU West Availability Zone due to a 110kV 10 megawatt transformer failure fro...",
+        "root_cause": "On August 7th, at 10:41 AM PDT, a service disruption began in a single EU West Availability Zone due to a 110kV 10 megawatt transformer f...",
         "source_url": "http://aws.amazon.com/message/2329B7/"
       },
       {
         "company": "aws",
-        "root_cause_line": "When network connectivity was restored, the isolated EBS nodes aggressively searched for new replicas, exhausting cluster capacity and creating a \"...",
+        "root_cause": "When network connectivity was restored, the isolated EBS nodes aggressively searched for new replicas, exhausting cluster capacity and cr...",
         "source_url": "https://aws.amazon.com/message/65648/"
       },
       {
         "company": "aws",
-        "root_cause_line": "The root cause was a failure in the power redundancy system. An unusually long voltage sag, rather than a complete outage, prevented breakers from...",
+        "root_cause": "The root cause was a failure in the power redundancy system. An unusually long voltage sag, rather than a complete outage, prevented brea...",
         "source_url": "https://aws.amazon.com/message/4372T8/"
       }
     ]
   },
   "13": {
     "id": 13,
-    "name": "Datacenter power loss and network partition",
-    "description": "A broad group of status incidents mostly from google involving cooling system and power disruptions leading to fiber link isolation and network partitioning.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Google Cloud infrastructure outages",
+    "description": "Multiple Google Cloud services experienced outages and performance issues due to power failures, network configuration errors, data center incidents, and software bugs affecting load balancing and control planes.",
     "size": 13,
-    "company_count": 1,
-    "top_companies": [
-      "google"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "google",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "power",
       "cloud",
       "network",
-      "pacific",
       "data"
     ],
     "typical_fixes": [
@@ -577,39 +559,37 @@
     "examples": [
       {
         "company": "google",
-        "root_cause_line": "The root cause was a combination of two normally-benign misconfigurations and a specific software bug in Google's datacenter automation software. T...",
+        "root_cause": "The root cause was a combination of two normally-benign misconfigurations and a specific software bug in Google's datacenter automation s...",
         "source_url": "https://status.cloud.google.com/incident/cloud-networking/19009"
       },
       {
         "company": "google",
-        "root_cause_line": "The core of the problem was a failure in Google's Front End load balancing service. Preliminary analysis indicated that a new infrastructure featur...",
+        "root_cause": "The core of the problem was a failure in Google's Front End load balancing service. Preliminary analysis indicated that a new infrastruct...",
         "source_url": "https://status.cloud.google.com/incidents/1xkAB1KmLrh5g3v9ZEZ7"
       },
       {
         "company": "google",
-        "root_cause_line": "The root cause was identified in the shared layer 2 load balancers responsible for inbound networking for GCE instances, load balancers, and VPN tu...",
+        "root_cause": "The root cause was identified in the shared layer 2 load balancers responsible for inbound networking for GCE instances, load balancers, ...",
         "source_url": "https://status.cloud.google.com/incident/compute/17003#5660850647990272"
       }
     ]
   },
   "14": {
     "id": 14,
-    "name": "Authoritative DNS and traffic routing outage",
-    "description": "A broad group of status incidents mostly from cloudflare involving authoritative DNS resolution degradation and edge traffic routing failures.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Cloudflare network and DNS outages",
+    "description": "These incidents involve multiple Cloudflare service disruptions, including HTTP 5xx errors, a rollback of a faulty release, BGP policy misordering, DNS resolver SERVFAILs, a leap-second-induced DNS bug, and edge-router failures triggered by a mitigation rule.",
     "size": 8,
-    "company_count": 1,
-    "top_companies": [
-      "cloudflare"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "cloudflare",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
+      "utc",
       "dns",
       "global",
-      "centers",
-      "data centers",
-      "waf"
+      "experienced"
     ],
     "typical_fixes": [
       "Withdraw poisoned BGP routes",
@@ -619,40 +599,37 @@
     "examples": [
       {
         "company": "cloudflare",
-        "root_cause_line": "The incident was caused by a system-wide failure of Cloudflare's edge routers across its 23 data centers. The immediate trigger was a router rule,...",
+        "root_cause": "The incident was caused by a system-wide failure of Cloudflare's edge routers across its 23 data centers. The immediate trigger was a rou...",
         "source_url": "https://blog.cloudflare.com/todays-outage-post-mortem-82515/"
       },
       {
         "company": "cloudflare",
-        "root_cause_line": "On July 2, 2019, Cloudflare experienced a global outage lasting 27 minutes, from 13:42 UTC to 14:09 UTC. The incident began when an engineer deploy...",
+        "root_cause": "On July 2, 2019, Cloudflare experienced a global outage lasting 27 minutes, from 13:42 UTC to 14:09 UTC. The incident began when an engin...",
         "source_url": "https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/"
       },
       {
         "company": "cloudflare",
-        "root_cause_line": "On November 18, 2025, Cloudflare's network began experiencing significant failures at 11:20 UTC, leading to widespread HTTP 5xx errors for customer...",
+        "root_cause": "On November 18, 2025, Cloudflare's network began experiencing significant failures at 11:20 UTC, leading to widespread HTTP 5xx errors fo...",
         "source_url": "https://blog.cloudflare.com/18-november-2025-outage/"
       }
     ]
   },
   "15": {
     "id": 15,
-    "name": "Managed database connection failures",
-    "description": "A broad group of status incidents mostly from atlassian involving intermittent connection drops and DNS timeouts to managed database clusters.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Intermittent connectivity and load issues",
+    "description": "The incidents involve intermittent connection failures to Atlassian Cloud, a high server load caused by a service, and DNS lookup failures between DigitalOcean Managed Kubernetes and Managed Database in the FRA1 region.",
     "size": 3,
-    "company_count": 2,
-    "top_companies": [
-      "atlassian",
-      "digitalocean"
-    ],
-    "top_company_share": 66.7,
+    "confidence": "low",
+    "source": {
+      "top_company": "atlassian",
+      "top_share": 0.67,
+      "company_count": 2
+    },
     "keywords": [
-      "managed",
       "cloud",
-      "managed database",
       "dns",
-      "database hostnames"
+      "intermittent dns",
+      "intermittent"
     ],
     "typical_fixes": [
       "Increase client connection timeout",
@@ -662,39 +639,37 @@
     "examples": [
       {
         "company": "atlassian",
-        "root_cause_line": "We have identified the root cause of the intermittent failure connecting to Atlassian Cloud for some cloud customers and have mitigated the problem...",
+        "root_cause": "We have identified the root cause of the intermittent failure connecting to Atlassian Cloud for some cloud customers and have mitigated t...",
         "source_url": "https://status.atlassian.com/incidents/kw28xr3wyxmq"
       },
       {
         "company": "digitalocean",
-        "root_cause_line": "The intermittent DNS lookup failures between Managed Kubernetes and Managed Database hostnames in the FRA1 region have been resolved for now but pl...",
+        "root_cause": "The intermittent DNS lookup failures between Managed Kubernetes and Managed Database hostnames in the FRA1 region have been resolved for ...",
         "source_url": "https://status.digitalocean.com/incidents/phwpbgwcmkjn"
       },
       {
         "company": "atlassian",
-        "root_cause_line": "We have identified the service that caused a high load on the server. We have deployed a couple of changes to mitigate the situation. The services...",
+        "root_cause": "We have identified the service that caused a high load on the server. We have deployed a couple of changes to mitigate the situation. The...",
         "source_url": "https://status.atlassian.com/incidents/3p4zfxggg0vv"
       }
     ]
   },
   "16": {
     "id": 16,
-    "name": "Cloud identity and access management downtime",
-    "description": "A broad group of status incidents mostly from atlassian involving authentication service disruptions and directory synchronization failures.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Atlassian Cloud Service Disruptions",
+    "description": "Multiple Atlassian cloud services experienced various outages and errors, including product functionality downtime, user search failures, widespread logouts, and increased API error rates.",
     "size": 5,
-    "company_count": 1,
-    "top_companies": [
-      "atlassian"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "atlassian",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "cloud",
       "management",
-      "details",
-      "work management",
-      "management management"
+      "service",
+      "service management"
     ],
     "typical_fixes": [
       "Bypass degraded SSO provider",
@@ -704,39 +679,37 @@
     "examples": [
       {
         "company": "atlassian",
-        "root_cause_line": "Between 03-07-2024 20:08 UTC to 03-07-2024 20:31 UTC, we experienced downtime for some of the products . JIRA product impacted with issue creation...",
+        "root_cause": "Between 03-07-2024 20:08 UTC to 03-07-2024 20:31 UTC, we experienced downtime for some of the products . JIRA product impacted with issue...",
         "source_url": "https://status.atlassian.com/incidents/2spys43jxslj"
       },
       {
         "company": "atlassian",
-        "root_cause_line": "Between 14:12 UTC to 16:13 UTC, we experienced increased errors rates for Access, Confluence and Jira customers connecting to our US east API endpo...",
+        "root_cause": "Between 14:12 UTC to 16:13 UTC, we experienced increased errors rates for Access, Confluence and Jira customers connecting to our US east...",
         "source_url": "https://status.atlassian.com/incidents/gzrclxcqvdsp"
       },
       {
         "company": "atlassian",
-        "root_cause_line": "Between 15/Apr/21 17:20 AM PDT to 27/Apr/21 10:00 PM PDT, we experienced some cloud customers of Atlassian Support, Confluence, Jira Work Managemen...",
+        "root_cause": "Between 15/Apr/21 17:20 AM PDT to 27/Apr/21 10:00 PM PDT, we experienced some cloud customers of Atlassian Support, Confluence, Jira Work...",
         "source_url": "https://status.atlassian.com/incidents/yz4mkc6j501q"
       }
     ]
   },
   "17": {
     "id": 17,
-    "name": "Cloud file synchronization and sharing outage",
-    "description": "A broad group of status incidents mostly from dropbox involving file sharing link degradation and client file synchronization service disruptions.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Dropbox service incidents",
+    "description": "All listed Dropbox incidents have been resolved.",
     "size": 18,
-    "company_count": 1,
-    "top_companies": [
-      "dropbox"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "dropbox",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
-      "share update",
-      "share",
+      "problem",
       "unavailable",
-      "update",
-      "trouble services"
+      "resolved",
+      "incident"
     ],
     "typical_fixes": [
       "Restart metadata sync workers",
@@ -746,39 +719,37 @@
     "examples": [
       {
         "company": "dropbox",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.dropbox.com/incidents/pczflzc6zgnh"
       },
       {
         "company": "dropbox",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.dropbox.com/incidents/cvj5nhhgxghg"
       },
       {
         "company": "dropbox",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.dropbox.com/incidents/hxfmj9qrw6qr"
       }
     ]
   },
   "18": {
     "id": 18,
-    "name": "Multi-product telemetry latency",
-    "description": "A broad group of status incidents mostly from datadog involving cross-product telemetry delays affecting RUM, APM traces, and log processing pipelines.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Datadog platform latency issues",
+    "description": "Datadog experienced increased latency and data processing delays across multiple products, affecting metrics, tracing, RUM, CCM, analytics, and vulnerability scanning, with ongoing recovery efforts.",
     "size": 4,
-    "company_count": 1,
-    "top_companies": [
-      "datadog"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "datadog",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "products",
       "data",
       "product",
-      "delays",
-      "impaired"
+      "delays"
     ],
     "typical_fixes": [
       "Scale streaming ingestion buffers",
@@ -788,38 +759,36 @@
     "examples": [
       {
         "company": "datadog",
-        "root_cause_line": "We are continuing to work on a fix for this issue.",
+        "root_cause": "We are continuing to work on a fix for this issue.",
         "source_url": "https://status.datadoghq.com/incidents/71vvxf0rxxnz"
       },
       {
         "company": "datadog",
-        "root_cause_line": "We are seeing recovery for APM.",
+        "root_cause": "We are seeing recovery for APM. We continue to see delays in processing that impact the following products: Distribution Metrics, RUM, CC...",
         "source_url": "https://status.datadoghq.com/incidents/vjgmxjdf0ps5"
       },
       {
         "company": "datadog",
-        "root_cause_line": "We are investigating and have identified a fix for increased latency across multiple products. As a result of this issue, some users may see delays...",
+        "root_cause": "We are investigating and have identified a fix for increased latency across multiple products. As a result of this issue, some users may ...",
         "source_url": "https://status.datadoghq.com/incidents/p0gz2w4ng7hp"
       }
     ]
   },
   "19": {
     "id": 19,
-    "name": "Edge Function and CDN network errors",
-    "description": "A broad group of status incidents mostly from netlify involving serverless edge function runtime errors and CDN origin gateway timeouts.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Netlify Edge Functions Outage",
+    "description": "A subset of Netlify's Edge Functions infrastructure experienced elevated 504 errors, which have since been mitigated and resolved.",
     "size": 5,
-    "company_count": 1,
-    "top_companies": [
-      "netlify"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "netlify",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "edge",
       "edge network",
       "edge function",
-      "function errors",
       "function"
     ],
     "typical_fixes": [
@@ -830,38 +799,36 @@
     "examples": [
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/94dlvfpltv41"
       },
       {
         "company": "netlify",
-        "root_cause_line": "We have identified an issue with a subset of our Edge Functions infrastructure causing elevated 504 errors for some sites beginning at approximatel...",
+        "root_cause": "We have identified an issue with a subset of our Edge Functions infrastructure causing elevated 504 errors for some sites beginning at ap...",
         "source_url": "https://www.netlifystatus.com/incidents/3p2nrdlccqhb"
       },
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/ts7ghgzkys69"
       }
     ]
   },
   "20": {
     "id": 20,
-    "name": "Carrier SMS delivery degradation",
-    "description": "A broad group of status incidents mostly from twilio involving SMS delivery delays and carrier network routing failures across long codes.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Twilio carrier communication disruptions",
+    "description": "Twilio is experiencing multiple SMS and voice call delivery issues affecting various carriers and regions, including delays to Verizon in the US, failures to Zong in Pakistan, configuration problems, and voice call outages in Europe and Germany.",
     "size": 34,
-    "company_count": 1,
-    "top_companies": [
-      "twilio"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "twilio",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "delivery",
       "sms",
       "sms delivery",
-      "network subscribers",
       "subscribers"
     ],
     "typical_fixes": [
@@ -872,39 +839,37 @@
     "examples": [
       {
         "company": "twilio",
-        "root_cause_line": "Twilio customers may be experiencing SMS delivery delays and failures from Twilio Phone Numbers to National Telecom and True network subscribers in...",
+        "root_cause": "Twilio customers may be experiencing SMS delivery delays and failures from Twilio Phone Numbers to National Telecom and True network subs...",
         "source_url": "https://status.twilio.com/incidents/1v4367vswsrm"
       },
       {
         "company": "twilio",
-        "root_cause_line": "Twilio customers may be experiencing SMS delivery delays and failures from Twilio Long Codes to network subscribers on multiple networks in South A...",
+        "root_cause": "Twilio customers may be experiencing SMS delivery delays and failures from Twilio Long Codes to network subscribers on multiple networks ...",
         "source_url": "https://status.twilio.com/incidents/qnkkh09swxch"
       },
       {
         "company": "twilio",
-        "root_cause_line": "Twilio customers may be experiencing SMS delivery delays from a subset of Twilio Short Codes and Toll-Free Numbers to Verizon network subscribers i...",
+        "root_cause": "Twilio customers may be experiencing SMS delivery delays from a subset of Twilio Short Codes and Toll-Free Numbers to Verizon network sub...",
         "source_url": "https://status.twilio.com/incidents/4qs7x4lhfmg0"
       }
     ]
   },
   "21": {
     "id": 21,
-    "name": "Carrier identity and authentication failure",
-    "description": "A broad group of status incidents mostly from twilio involving mobile subscriber identity verification drops and gateway API failures in the UK.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Twilio User Authentication",
+    "description": "These incidents involve Twilio's User Authentication Identity service experiencing gateway API failures and missing redirects for Three in the United Kingdom.",
     "size": 3,
-    "company_count": 1,
-    "top_companies": [
-      "twilio"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "twilio",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
-      "authentication",
-      "authentication identity",
       "identity",
       "user authentication",
-      "kingdom"
+      "authentication identity",
+      "authentication"
     ],
     "typical_fixes": [
       "Failover to SMS OTP verification fallback",
@@ -914,39 +879,37 @@
     "examples": [
       {
         "company": "twilio",
-        "root_cause_line": "Twilio customers may be experiencing User Authentication Identity SNA missing redirects for Three in the United Kingdom. Our team has identified th...",
+        "root_cause": "Twilio customers may be experiencing User Authentication Identity SNA missing redirects for Three in the United Kingdom. Our team has ide...",
         "source_url": "https://status.twilio.com/incidents/46yjhmkypqrf"
       },
       {
         "company": "twilio",
-        "root_cause_line": "The incident has been resolved and User Authentication Identity SNA missing redirects for Three in the United Kingdom is operating normally.",
+        "root_cause": "The incident has been resolved and User Authentication Identity SNA missing redirects for Three in the United Kingdom is operating normally.",
         "source_url": "https://status.twilio.com/incidents/xksxfs85vhxm"
       },
       {
         "company": "twilio",
-        "root_cause_line": "The incident has been resolved and User Authentication Identity Gateway API failure increase for Three in the United Kingdom is operating normally.",
+        "root_cause": "The incident has been resolved and User Authentication Identity Gateway API failure increase for Three in the United Kingdom is operating...",
         "source_url": "https://status.twilio.com/incidents/1sbtd0qtkpfk"
       }
     ]
   },
   "22": {
     "id": 22,
-    "name": "Site build and deployment latency",
-    "description": "A broad group of status incidents mostly from netlify involving static site deployment pipeline latency and build container creation delays.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Netlify service disruptions",
+    "description": "Multiple Netlify incidents involving elevated errors, latency, and intermittent site availability that have been resolved or are being addressed.",
     "size": 6,
-    "company_count": 1,
-    "top_companies": [
-      "netlify"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "netlify",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "latency",
-      "create",
-      "performance create",
-      "performance",
-      "degraded"
+      "latency affecting",
+      "times",
+      "response times"
     ],
     "typical_fixes": [
       "Scale build scheduling daemon",
@@ -956,39 +919,36 @@
     "examples": [
       {
         "company": "netlify",
-        "root_cause_line": "The issue has been identified and we are working on a resolution.",
+        "root_cause": "The issue has been identified and we are working on a resolution.",
         "source_url": "https://www.netlifystatus.com/incidents/5915gspnb59r"
       },
       {
         "company": "netlify",
-        "root_cause_line": "The issue has been identified and a fix is being implemented.",
+        "root_cause": "The issue has been identified and a fix is being implemented.",
         "source_url": "https://www.netlifystatus.com/incidents/nxz9qw1s1p3g"
       },
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/4j2c00jmyqvw"
       }
     ]
   },
   "23": {
     "id": 23,
-    "name": "Monitor evaluation and metrics backlog",
-    "description": "A broad group of status incidents mostly from datadog involving alert monitor evaluation delays and metric ingestion backlog during peak load.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Datadog Service Latency Issues",
+    "description": "Multiple Datadog incidents involve identified problems and fixes, such as RUM delays, distribution metric mitigation, and increased latency in APM trace metrics, with no data loss.",
     "size": 30,
-    "company_count": 2,
-    "top_companies": [
-      "datadog",
-      "netlify"
-    ],
-    "top_company_share": 96.7,
+    "confidence": "ok",
+    "source": {
+      "top_company": "datadog",
+      "top_share": 0.97,
+      "company_count": 2
+    },
     "keywords": [
       "monitors",
       "metrics",
       "apm",
-      "delayed",
       "data"
     ],
     "typical_fixes": [
@@ -999,39 +959,37 @@
     "examples": [
       {
         "company": "datadog",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.datadoghq.com/incidents/7ht7d7xsnbhy"
       },
       {
         "company": "datadog",
-        "root_cause_line": "We have identified increased latency processing APM Trace Metrics and are working on a fix.",
+        "root_cause": "We have identified increased latency processing APM Trace Metrics and are working on a fix. As a result of this issue, some users may see...",
         "source_url": "https://status.datadoghq.com/incidents/29t1p0vx8sjz"
       },
       {
         "company": "datadog",
-        "root_cause_line": "We are continuing to work on a fix for this issue. During this time, the following components are affected:",
+        "root_cause": "We are continuing to work on a fix for this issue. During this time, the following components are affected:  Monitor evaluation Metrics a...",
         "source_url": "https://status.datadoghq.com/incidents/3fnvmf6kckds"
       }
     ]
   },
   "24": {
     "id": 24,
-    "name": "Telemetry spans and metrics ingestion failure",
-    "description": "A broad group of status incidents mostly from sentry involving distributed tracing span processing failures and regional metric ingestion lag.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Sentry ingestion and dashboard issues",
+    "description": "Sentry experienced EU ingestion delays, a migration-related outage affecting both regions, and intermittent dashboard failures.",
     "size": 3,
-    "company_count": 1,
-    "top_companies": [
-      "sentry"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "sentry",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "ingestion",
-      "spans logs",
       "spans",
       "logs",
-      "logs metrics"
+      "metrics"
     ],
     "typical_fixes": [
       "Scale trace ingestion cluster",
@@ -1041,39 +999,37 @@
     "examples": [
       {
         "company": "sentry",
-        "root_cause_line": "US ingestion is back to normal.",
+        "root_cause": "US ingestion is back to normal.   EU ingestion is still delayed, but we are now recovering. We have created a new Statuspage incident for...",
         "source_url": "https://status.sentry.io/incidents/p4n5p1x5klvq"
       },
       {
         "company": "sentry",
-        "root_cause_line": "We have identified that the core problem is related to the Intermittent dashboard failures. Please follow https://status.sentry.io/incidents/z3g2bj...",
+        "root_cause": "We have identified that the core problem is related to the Intermittent dashboard failures. Please follow https://status.sentry.io/incide...",
         "source_url": "https://status.sentry.io/incidents/fty690573g6b"
       },
       {
         "company": "sentry",
-        "root_cause_line": "We have identified a migration as the cause of the issue. We have reverted the migration in EU and are working on doing so in the US",
+        "root_cause": "We have identified a migration as the cause of the issue. We have reverted the migration in EU and are working on doing so in the US",
         "source_url": "https://status.sentry.io/incidents/k6hr3xpvzv40"
       }
     ]
   },
   "25": {
     "id": 25,
-    "name": "Event ingestion latency and backlog",
-    "description": "A broad group of status incidents mostly from sentry involving event ingestion latency and queue backlog processing across regional clusters.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Sentry ingestion backlog recovery",
+    "description": "These incidents involve Sentry experiencing ingestion latency and backlogs for events, errors, profiles, and spans, which were mitigated and recovered.",
     "size": 12,
-    "company_count": 1,
-    "top_companies": [
-      "sentry"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "sentry",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "ingestion",
       "error ingestion",
       "region",
-      "ingestion delays",
-      "error"
+      "ingestion delays"
     ],
     "typical_fixes": [
       "Add consumer partitions to event queue",
@@ -1083,38 +1039,36 @@
     "examples": [
       {
         "company": "sentry",
-        "root_cause_line": "A fix has been made and the backlog is being processed.",
+        "root_cause": "A fix has been made and the backlog is being processed.",
         "source_url": "https://status.sentry.io/incidents/1vb2qjjjm88k"
       },
       {
         "company": "sentry",
-        "root_cause_line": "We've processed all backlogged events and have fully recovered.",
+        "root_cause": "We've processed all backlogged events and have fully recovered.",
         "source_url": "https://status.sentry.io/incidents/9wr3wq715fny"
       },
       {
         "company": "sentry",
-        "root_cause_line": "Ingestion for symbolicated issues is back to normal.",
+        "root_cause": "Ingestion for symbolicated issues is back to normal.",
         "source_url": "https://status.sentry.io/incidents/8jr1xp5pz85r"
       }
     ]
   },
   "26": {
     "id": 26,
-    "name": "Alerting notification and ingestion delay",
-    "description": "A broad group of status incidents mostly from sentry involving notification webhook delays and alert state transition backlog.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Sentry ingestion alert recovery",
+    "description": "The incidents report that Sentry's ingestion and alerting services have returned to normal operation.",
     "size": 4,
-    "company_count": 1,
-    "top_companies": [
-      "sentry"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "sentry",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "ingestion",
-      "ingestion alerts",
-      "ingestion alerting",
       "alerting delays",
+      "alerting",
       "alerts"
     ],
     "typical_fixes": [
@@ -1125,40 +1079,37 @@
     "examples": [
       {
         "company": "sentry",
-        "root_cause_line": "Ingestions and alerts are caught up and the incident is resolved.",
+        "root_cause": "Ingestions and alerts are caught up and the incident is resolved.",
         "source_url": "https://status.sentry.io/incidents/0j4dfbzjdrys"
       },
       {
         "company": "sentry",
-        "root_cause_line": "We have implemented a fix. Ingestion and alerting have returned to normal operation",
+        "root_cause": "We have implemented a fix. Ingestion and alerting have returned to normal operation",
         "source_url": "https://status.sentry.io/incidents/4mr92qjf3wdt"
       },
       {
         "company": "sentry",
-        "root_cause_line": "Ingestion and alerts should be back to normal",
+        "root_cause": "Ingestion and alerts should be back to normal",
         "source_url": "https://status.sentry.io/incidents/w2fsfdpcgs58"
       }
     ]
   },
   "27": {
     "id": 27,
-    "name": "Static site build failures",
-    "description": "A broad group of status incidents mostly from netlify involving build container failure spikes and asset compilation timeouts.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Build and service disruptions",
+    "description": "Multiple incidents involving Netlify build delays and failures linked to GitHub issues, along with a resolved CircleCI incident.",
     "size": 5,
-    "company_count": 2,
-    "top_companies": [
-      "netlify",
-      "circleci"
-    ],
-    "top_company_share": 80.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "netlify",
+      "top_share": 0.8,
+      "company_count": 2
+    },
     "keywords": [
       "build",
       "build failures",
-      "failures",
-      "rate build",
-      "delayed builds"
+      "incident",
+      "failures"
     ],
     "typical_fixes": [
       "Roll back build image update",
@@ -1168,39 +1119,37 @@
     "examples": [
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/4lcqlyck1pts"
       },
       {
         "company": "netlify",
-        "root_cause_line": "In addition to delayed builds, we are also experiencing build failures due to the current incident at Github.",
+        "root_cause": "In addition to delayed builds, we are also experiencing build failures due to the current incident at Github.",
         "source_url": "https://www.netlifystatus.com/incidents/4csqvcm0hhx3"
       },
       {
         "company": "netlify",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.netlifystatus.com/incidents/xzbvsv46032j"
       }
     ]
   },
   "28": {
     "id": 28,
-    "name": "Web performance degradation and gateway timeouts",
-    "description": "A broad group of status incidents mostly from reddit involving elevated HTTP 504 gateway timeouts and frontend web performance degradation.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Reddit service disruptions",
+    "description": "These incidents involve Reddit experiencing service disruptions that have been resolved or are being fixed.",
     "size": 10,
-    "company_count": 1,
-    "top_companies": [
-      "reddit"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "reddit",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
-      "performance",
-      "degraded",
-      "degraded performance",
-      "performance identified",
-      "performance degraded"
+      "currently",
+      "resolved",
+      "incident",
+      "site"
     ],
     "typical_fixes": [
       "Scale upstream web application pods",
@@ -1210,36 +1159,34 @@
     "examples": [
       {
         "company": "reddit",
-        "root_cause_line": "This incident has been resolved.",
-        "source_url": "https://www.redditstatus.com/incidents/v3twwbc6srn5"
-      },
-      {
-        "company": "reddit",
-        "root_cause_line": "This incident has been resolved.",
-        "source_url": "https://www.redditstatus.com/incidents/cjzbd0ksrkqx"
-      },
-      {
-        "company": "reddit",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.redditstatus.com/incidents/2vjc8h5hrrq5"
+      },
+      {
+        "company": "reddit",
+        "root_cause": "This incident has been resolved.",
+        "source_url": "https://www.redditstatus.com/incidents/rvrpcx0smnh8"
+      },
+      {
+        "company": "reddit",
+        "root_cause": "This incident has been resolved.",
+        "source_url": "https://www.redditstatus.com/incidents/xrnjyrbj4t2m"
       }
     ]
   },
   "29": {
     "id": 29,
-    "name": "Web UI and dashboard loading failures",
-    "description": "A broad group of status incidents mostly from datadog involving web console single-page application loading errors and asset delivery timeouts.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Datadog incident resolutions",
+    "description": "These incidents involve identification, mitigation, and resolution of issues within Datadog services.",
     "size": 5,
-    "company_count": 1,
-    "top_companies": [
-      "datadog"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "datadog",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "web application",
-      "loading web",
       "application",
       "loading",
       "web"
@@ -1252,40 +1199,33 @@
     "examples": [
       {
         "company": "datadog",
-        "root_cause_line": "This incident has been resolved.",
-        "source_url": "https://status.datadoghq.com/incidents/92sk80qxml0t"
-      },
-      {
-        "company": "datadog",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.datadoghq.com/incidents/0vy6kj9tgmt6"
       },
       {
         "company": "datadog",
-        "root_cause_line": "This incident has been resolved as of 2:32PM ET.",
+        "root_cause": "This incident has been resolved.",
+        "source_url": "https://status.datadoghq.com/incidents/92sk80qxml0t"
+      },
+      {
+        "company": "datadog",
+        "root_cause": "This incident has been resolved as of 2:32PM ET.",
         "source_url": "https://status.datadoghq.com/incidents/cvdjtf81756n"
       }
     ]
   },
   "30": {
     "id": 30,
-    "name": "Comment processing and vote counting lag",
-    "description": "A broad group of status incidents mostly from reddit involving delayed comment submission processing and vote tally indexing lag.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Reddit comment delay issue",
+    "description": "Reddit experienced issues with delayed comment processing, which are being resolved through fixes and mitigations.",
     "size": 3,
-    "company_count": 1,
-    "top_companies": [
-      "reddit"
-    ],
-    "top_company_share": 100.0,
-    "keywords": [
-      "comments",
-      "delayed comments",
-      "delayed",
-      "identified deploying",
-      "comments identified"
-    ],
+    "confidence": "low",
+    "source": {
+      "top_company": "reddit",
+      "top_share": 1.0,
+      "company_count": 1
+    },
+    "keywords": [],
     "typical_fixes": [
       "Scale async write queue workers",
       "Throttle non-essential batch recalculations",
@@ -1294,40 +1234,37 @@
     "examples": [
       {
         "company": "reddit",
-        "root_cause_line": "We've identified the issue and are deploying mitigations. Hang tight as delayed comments are being processed.",
+        "root_cause": "We've identified the issue and are deploying mitigations. Hang tight as delayed comments are being processed.",
         "source_url": "https://www.redditstatus.com/incidents/4c1vjlptgddq"
       },
       {
         "company": "reddit",
-        "root_cause_line": "We have identified the issue and are deploying a fix.",
+        "root_cause": "We have identified the issue and are deploying a fix.",
         "source_url": "https://www.redditstatus.com/incidents/f40dgv6fr8qk"
       },
       {
         "company": "reddit",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.redditstatus.com/incidents/6bkg7hsl8zf3"
       }
     ]
   },
   "31": {
     "id": 31,
-    "name": "Elevated web and API error rates",
-    "description": "A broad group of status incidents mostly from reddit involving elevated HTTP 5xx error rates and sporadic request failures across public web endpoints.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Netlify and Reddit incidents",
+    "description": "The incidents involve resolved and ongoing issues across Netlify and Reddit platforms.",
     "size": 18,
-    "company_count": 2,
-    "top_companies": [
-      "reddit",
-      "netlify"
-    ],
-    "top_company_share": 88.9,
+    "confidence": "ok",
+    "source": {
+      "top_company": "reddit",
+      "top_share": 0.89,
+      "company_count": 2
+    },
     "keywords": [
-      "errors",
-      "errors experiencing",
-      "errors identified",
-      "identified errors",
-      "site errors"
+      "currently",
+      "comments",
+      "site",
+      "api"
     ],
     "typical_fixes": [
       "Restart degraded backend application servers",
@@ -1337,39 +1274,37 @@
     "examples": [
       {
         "company": "reddit",
-        "root_cause_line": "The issue has been identified and a fix is being implemented.",
-        "source_url": "https://www.redditstatus.com/incidents/s9szfhh4bqb9"
-      },
-      {
-        "company": "reddit",
-        "root_cause_line": "The issue has been identified and a fix is being implemented.",
+        "root_cause": "The issue has been identified and a fix is being implemented.",
         "source_url": "https://www.redditstatus.com/incidents/6d1m99b88gnt"
       },
       {
         "company": "reddit",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "The issue has been identified and a fix is being implemented.",
+        "source_url": "https://www.redditstatus.com/incidents/s9szfhh4bqb9"
+      },
+      {
+        "company": "reddit",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://www.redditstatus.com/incidents/1hcw0z152lmf"
       }
     ]
   },
   "32": {
     "id": 32,
-    "name": "Website connectivity and 503 errors",
-    "description": "A broad group of status incidents mostly from squarespace involving HTTP 503 service unavailable errors and edge proxy connectivity drops for hosted sites.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "Squarespace service disruptions",
+    "description": "Multiple Squarespace incidents were identified and resolved, with one still being fixed.",
     "size": 6,
-    "company_count": 1,
-    "top_companies": [
-      "squarespace"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "squarespace",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
+      "connectivity issues",
       "connectivity",
-      "connectivity connectivity",
-      "sites",
-      "sites connectivity",
-      "connectivity sites"
+      "issues",
+      "sites"
     ],
     "typical_fixes": [
       "Restart edge proxy instances",
@@ -1379,39 +1314,37 @@
     "examples": [
       {
         "company": "squarespace",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.squarespace.com/incidents/6ywvxc1nfltm"
       },
       {
         "company": "squarespace",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.squarespace.com/incidents/0tb05yk7rckm"
       },
       {
         "company": "squarespace",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.squarespace.com/incidents/m5hk8njy4h4q"
       }
     ]
   },
   "33": {
     "id": 33,
-    "name": "Site loading and domain timeouts",
-    "description": "A broad group of status incidents mostly from squarespace involving custom domain resolution timeouts and slow initial site loading times.",
-    "kind": "broad",
-    "confidence": "low",
+    "name": "Squarespace service disruptions",
+    "description": "Multiple Squarespace incidents were identified, with fixes applied and resolutions completed.",
     "size": 3,
-    "company_count": 1,
-    "top_companies": [
-      "squarespace"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "low",
+    "source": {
+      "top_company": "squarespace",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
+      "issues",
       "loading",
-      "loading sites",
-      "sites loading",
       "sites",
-      "connectivity"
+      "connectivity issues"
     ],
     "typical_fixes": [
       "Purge stale DNS resolver cache",
@@ -1421,39 +1354,37 @@
     "examples": [
       {
         "company": "squarespace",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.squarespace.com/incidents/0s244pzwf3h8"
       },
       {
         "company": "squarespace",
-        "root_cause_line": "The issue has been identified and a fix is being implemented.",
+        "root_cause": "The issue has been identified and a fix is being implemented.",
         "source_url": "https://status.squarespace.com/incidents/jgb9hw49q55s"
       },
       {
         "company": "squarespace",
-        "root_cause_line": "This incident has been resolved.",
+        "root_cause": "This incident has been resolved.",
         "source_url": "https://status.squarespace.com/incidents/2xrbw049lql2"
       }
     ]
   },
   "34": {
     "id": 34,
-    "name": "AI model provider and Copilot disruptions",
-    "description": "A broad group of status incidents mostly from github involving third-party AI model provider timeouts and degraded code completion availability.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "GitHub Copilot model outages",
+    "description": "Multiple GitHub Copilot incidents involved increased failures and latency for specific AI models due to degradation of an upstream model provider.",
     "size": 11,
-    "company_count": 1,
-    "top_companies": [
-      "github"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "github",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "model",
       "models",
       "gpt",
-      "model providers",
-      "providers"
+      "fable"
     ],
     "typical_fixes": [
       "Failover to backup model provider",
@@ -1463,39 +1394,37 @@
     "examples": [
       {
         "company": "github",
-        "root_cause_line": "On July 30, 2026, the Claude Fable 5 model in GitHub Copilot experienced degraded availability for approximately 73 minutes, from 08:33 to 09:46 UT...",
+        "root_cause": "On July 30, 2026, the Claude Fable 5 model in GitHub Copilot experienced degraded availability for approximately 73 minutes, from 08:33 t...",
         "source_url": "https://www.githubstatus.com/incidents/9tpgqq1h4bs7"
       },
       {
         "company": "github",
-        "root_cause_line": "On August 1, 2026, between 17:47 UTC and 18:20 UTC, users of the Fable 5 model in GitHub Copilot experienced increased request failures and latency...",
+        "root_cause": "On August 1, 2026, between 17:47 UTC and 18:20 UTC, users of the Fable 5 model in GitHub Copilot experienced increased request failures a...",
         "source_url": "https://www.githubstatus.com/incidents/sj1tzyrx599x"
       },
       {
         "company": "github",
-        "root_cause_line": "On July 16, 2026, GitHub Copilot users experienced elevated errors when using Claude Fable 5 from 17:33 UTC until mitigation at 22:04 UTC. The aver...",
+        "root_cause": "On July 16, 2026, GitHub Copilot users experienced elevated errors when using Claude Fable 5 from 17:33 UTC until mitigation at 22:04 UTC...",
         "source_url": "https://www.githubstatus.com/incidents/0f6hndclsk21"
       }
     ]
   },
   "35": {
     "id": 35,
-    "name": "Conversational AI generation timeouts",
-    "description": "A broad group of status incidents mostly from openai involving conversational chat generation timeouts and response streaming interruptions.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "OpenAI service error incidents",
+    "description": "Multiple OpenAI incidents involve elevated or intermittent errors in services, with mitigation efforts and recovery.",
     "size": 5,
-    "company_count": 1,
-    "top_companies": [
-      "openai"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "openai",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
-      "impacted services",
-      "errors impacted",
-      "identified experiencing",
       "conversations",
-      "errors"
+      "affecting",
+      "experience",
+      "error rates"
     ],
     "typical_fixes": [
       "Scale inference model replica pods",
@@ -1505,39 +1434,37 @@
     "examples": [
       {
         "company": "openai",
-        "root_cause_line": "We have identified that users are experiencing elevated errors for the impacted services.",
+        "root_cause": "We have identified that users are experiencing elevated errors for the impacted services.  We are working on implementing a mitigation.",
         "source_url": "https://status.openai.com/incidents/01KYSQ7PC81PV3PZE3ZEVFK6K5"
       },
       {
         "company": "openai",
-        "root_cause_line": "We have identified that users are experiencing elevated errors for the impacted services.",
+        "root_cause": "We have identified that users are experiencing elevated errors for the impacted services.  We are working on implementing a mitigation.",
         "source_url": "https://status.openai.com/incidents/01KY81XMFAV8KXNJGVNEMKAK15"
       },
       {
         "company": "openai",
-        "root_cause_line": "We have identified that users are experiencing elevated errors for the impacted services.",
+        "root_cause": "We have identified that users are experiencing elevated errors for the impacted services.  We are working on implementing a mitigation.",
         "source_url": "https://status.openai.com/incidents/01KZN8RYNZY8T4QQGB3JWMPYRW"
       }
     ]
   },
   "36": {
     "id": 36,
-    "name": "AI model API elevated error rates",
-    "description": "A broad group of status incidents mostly from openai involving elevated HTTP 5xx responses and rate-limit drops on public model completion endpoints.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "OpenAI Service Outage",
+    "description": "The incidents involve elevated errors in OpenAI services, ongoing mitigations, and subsequent recoveries.",
     "size": 5,
-    "company_count": 1,
-    "top_companies": [
-      "openai"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "openai",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
-      "impacted services",
-      "errors impacted",
-      "identified experiencing",
-      "services",
-      "experiencing errors"
+      "error rates",
+      "rates",
+      "error",
+      "listed"
     ],
     "typical_fixes": [
       "Scale inference cluster capacity",
@@ -1547,39 +1474,37 @@
     "examples": [
       {
         "company": "openai",
-        "root_cause_line": "All impacted services have now fully recovered.",
+        "root_cause": "All impacted services have now fully recovered.",
         "source_url": "https://status.openai.com/incidents/01KZNZTPWMV06Z6TQNMY1R1QDR"
       },
       {
         "company": "openai",
-        "root_cause_line": "We have identified that users are experiencing elevated errors for the impacted services.",
+        "root_cause": "We have identified that users are experiencing elevated errors for the impacted services.  We are working on implementing a mitigation.",
         "source_url": "https://status.openai.com/incidents/01KYCGY017EG43XZS6GFVXA8VH"
       },
       {
         "company": "openai",
-        "root_cause_line": "We have identified that users are experiencing elevated errors for the impacted services.",
+        "root_cause": "We have identified that users are experiencing elevated errors for the impacted services.  We are working on implementing a mitigation.",
         "source_url": "https://status.openai.com/incidents/01KZRE6ZA1RE1ZH4HQ111CX1S8"
       }
     ]
   },
   "37": {
     "id": 37,
-    "name": "Database connection pool exhaustion and failover",
-    "description": "A broad group of status incidents mostly from github involving database CPU spikes, replication lag, and connection pool exhaustion.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "GitHub service degradation incidents",
+    "description": "These incidents involve intermittent outages and performance degradation on GitHub caused by database, MySQL cluster, fileserver, and DNS-related issues.",
     "size": 11,
-    "company_count": 1,
-    "top_companies": [
-      "github"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "github",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
-      "performance",
+      "experienced",
       "database",
-      "degraded",
       "cluster",
-      "led"
+      "period"
     ],
     "typical_fixes": [
       "Terminate long-running blocking transactions",
@@ -1589,39 +1514,37 @@
     "examples": [
       {
         "company": "github",
-        "root_cause_line": "On Friday, November 30th, 2012, GitHub experienced a day-long period of sporadic slow responses and intermittent errors, including 18 minutes of co...",
+        "root_cause": "On Friday, November 30th, 2012, GitHub experienced a day-long period of sporadic slow responses and intermittent errors, including 18 min...",
         "source_url": "https://github.blog/news-insights/the-library/network-problems-last-friday/"
       },
       {
         "company": "github",
-        "root_cause_line": "GitHub.com experienced two outages and a period of degraded performance early in the week of September 10, 2012, totaling one hour and 46 minutes o...",
+        "root_cause": "GitHub.com experienced two outages and a period of degraded performance early in the week of September 10, 2012, totaling one hour and 46...",
         "source_url": "https://github.blog/news-insights/the-library/github-availability-this-week/"
       },
       {
         "company": "github",
-        "root_cause_line": "On October 11, 2024, starting at 05:59 UTC, GitHub experienced an incident that resulted in degraded performance across various services. The root...",
+        "root_cause": "On October 11, 2024, starting at 05:59 UTC, GitHub experienced an incident that resulted in degraded performance across various services....",
         "source_url": "https://github.blog/news-insights/company-news/github-availability-report-october-2024/"
       }
     ]
   },
   "38": {
     "id": 38,
-    "name": "CI workflow execution and runner queue delays",
-    "description": "A broad group of status incidents mostly from github involving CI workflow queue delays and hosted runner execution timeouts.",
-    "kind": "broad",
-    "confidence": "ok",
+    "name": "GitHub Actions service outages",
+    "description": "Multiple GitHub Actions incidents in August\u2011July 2026 involving degraded availability, delayed or failed workflow runs and Copilot cloud agent jobs due to internal deployments, rate\u2011limit misconfigurations, under\u2011provisioned services, and backend data service issues.",
     "size": 7,
-    "company_count": 1,
-    "top_companies": [
-      "github"
-    ],
-    "top_company_share": 100.0,
+    "confidence": "ok",
+    "source": {
+      "top_company": "github",
+      "top_share": 1.0,
+      "company_count": 1
+    },
     "keywords": [
       "actions",
       "runners",
-      "agent",
       "jobs",
-      "hosted runners"
+      "agent"
     ],
     "typical_fixes": [
       "Scale hosted runner pool",
@@ -1631,37 +1554,19 @@
     "examples": [
       {
         "company": "github",
-        "root_cause_line": "On July 22, 2026, between 19:36 UTC and 22:04 UTC, GitHub Actions experienced delayed and failed job starts on GitHub-hosted runners. The incident...",
+        "root_cause": "On July 22, 2026, between 19:36 UTC and 22:04 UTC, GitHub Actions experienced delayed and failed job starts on GitHub-hosted runners. The...",
         "source_url": "https://www.githubstatus.com/incidents/20frdtvv3yg6"
       },
       {
         "company": "github",
-        "root_cause_line": "On July 9, 2026, between 03:29 UTC and 13:39 UTC, GitHub Actions experienced delayed and failed job starts on GitHub-hosted runners. The incident w...",
+        "root_cause": "On July 9, 2026, between 03:29 UTC and 13:39 UTC, GitHub Actions experienced delayed and failed job starts on GitHub-hosted runners. The ...",
         "source_url": "https://www.githubstatus.com/incidents/cstx3v63mklm"
       },
       {
         "company": "github",
-        "root_cause_line": "On July 13, 2026, between 13:11 and 13:53 UTC, some customers experienced failures starting and running GitHub Actions workflows, which also affect...",
+        "root_cause": "On July 13, 2026, between 13:11 and 13:53 UTC, some customers experienced failures starting and running GitHub Actions workflows, which a...",
         "source_url": "https://www.githubstatus.com/incidents/q27ttsnp0x4g"
       }
     ]
-  },
-  "-1": {
-    "id": -1,
-    "name": "Novel pattern",
-    "description": "No recurring failure signature in the historical corpus. Treat the match as a hypothesis.",
-    "kind": "specific",
-    "confidence": "ok",
-    "size": 338,
-    "company_count": 63,
-    "top_companies": [
-      "github",
-      "squarespace",
-      "circleci"
-    ],
-    "top_company_share": 11.2,
-    "keywords": [],
-    "typical_fixes": [],
-    "examples": []
   }
 }
