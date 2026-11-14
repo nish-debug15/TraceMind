@@ -35,8 +35,8 @@ Raw Server Log Input
 Embedding Layer (sentence-transformers / all-MiniLM-L6-v2, 384-d)
          │
          ▼
-Anomaly Clustering (HDBSCAN)  ──►  Groups/deduplicates incoming log chunks (39 clusters)
-         │                         Acts as preprocessing / dedup step before vector search
+Anomaly Clustering (HDBSCAN)  ──►  Groups similar incident reports; the group label is shown in the Pipeline Trace and does not change retrieval (39 clusters)
+         │
          ▼
 2-Pass Vector Retrieval (ChromaDB)
   ├── Pass 1: Filter quality:high postmortems (0.40 cosine similarity floor)

@@ -90,10 +90,10 @@ Our objective with TraceMind is to ground every diagnosis in verified, real-worl
 - **Company-Disjoint Split:** 662 train (18 companies) + 93 test (40 companies). The 73 low-quality incidents from test companies are discarded to prevent company leakage.
 
 ### Slide 6: HDBSCAN Clustering as Preprocessing
-- **Clustering Role:** Preprocessing and deduplication, NOT the core search engine.
+- **Clustering Role:** groups similar incident reports; the group label is shown in the Pipeline Trace and does not change retrieval.
 - **Algorithm:** HDBSCAN on 384-dimensional dense vectors (`all-MiniLM-L6-v2`).
 - **Cluster Count:** 39 clusters identified on the training corpus (`min_cluster_size=3`).
-- **Function:** Detects recurring failure signatures and isolates novel or noisy log patterns.
+- **Function:** Groups similar incident reports and isolates novel or noisy log patterns; does not change retrieval.
 
 ### Spoken Script (Pranav)
 "A retrieval system is only as good as the ground truth behind it. We constructed a dataset of 828 real postmortems sourced aggregator-first from curated repositories like icco, official Statuspage histories across 20 platforms like Datadog and Twilio, and public retrospectives from Google Cloud and Cloudflare.
@@ -102,7 +102,7 @@ Raw quantity alone was noisy. Two hundred and eighty-four incidents were brief s
 
 To evaluate out-of-distribution generalization honestly, we enforced a strict company-disjoint split using fixed seed 42. Our training set has 662 incidents across 18 companies. Our test set contains 93 incidents across 40 completely different companies, with 100% rated high quality. You will notice 662 plus 93 equals 755: the remaining 73 low-quality incidents from those 40 test companies were completely discarded to maintain a strict company-disjoint split while keeping the test set purely high-quality.
 
-Before retrieval, we run HDBSCAN—a density-based clustering algorithm that groups similar data without forcing every outlier into a cluster. Think of HDBSCAN as a mail sorter: it groups near-duplicate logs into bundles so repetitive errors don't flood our index. It identified 39 distinct clusters in our training data. Crucially, clustering is only a deduplication filter; matching is handled by vector retrieval."
+Before retrieval, we run HDBSCAN—a density-based clustering algorithm that groups similar data without forcing every outlier into a cluster. It groups similar incident reports; the group label is shown in the Pipeline Trace and does not change retrieval. It identified 39 distinct clusters in our training data. Crucially, clustering does not change retrieval or generation; matching is handled entirely by vector retrieval."
 
 **Handoff:** *"Sameera will now walk through our vector database layer and two-pass retrieval mechanism."*
 
@@ -212,7 +212,7 @@ TraceMind's value is simple: during an outage, it shows its work. Thank you, we 
 **Answer:** Fine-tuning was out of scope for a one-semester project, and an 828-record corpus is too small to fine-tune effectively without overfitting. Additionally, fine-tuning bakes historical facts into static model weights, causing catastrophic forgetting and hallucinations that cannot be cited. With RAG, updating the system requires only adding a new JSON postmortem to ChromaDB without GPU re-training, and every prediction provides a direct hyperlink to the retrieved document.
 
 ### Q2: If ChromaDB already performs vector retrieval, why is HDBSCAN clustering needed?
-**Answer:** Clustering serves as a preprocessing and deduplication filter, not the matching engine. Note that clustering is not included in our quantitative ablation; its practical contribution is providing the cluster ID in the Pipeline Trace and performing burst deduplication so that repetitive error spikes during a service failure do not overwhelm the retrieval pipeline.
+**Answer:** Clustering groups similar incident reports; the group label is shown in the Pipeline Trace and does not change retrieval. Note that clustering is not included in our quantitative ablation; its practical contribution is displaying cluster assignment and novelty in the Pipeline Trace so SREs can see historical groupings, while semantic matching and generation are handled independently by ChromaDB and the LLM.
 
 ### Q3: How do you prevent the LLM from hallucinating when retrieval returns an irrelevant incident?
 **Answer:** We implemented a two-part defense. First, a mathematical threshold: if Pass One retrieval similarity falls below 0.40, it is flagged as weak precedent. Second, our `relevance_gate_v2` prompt explicitly instructs the LLM: if the historical case does not clearly match the failure, it must write 'Precedent: not relevant' on line one and synthesize the cause from the log alone. On our test set, all seven incidents scoring below the 0.40 floor triggered the gate with that exact header, though we did not manually verify whether all seven were truly irrelevant.
