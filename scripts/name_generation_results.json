@@ -1,0 +1,804 @@
+{
+  "0": {
+    "id": 0,
+    "size": 4,
+    "old_name": "CI build runner provisioning failures",
+    "new_name": "Travis CI infrastructure automation failures",
+    "description": "Multiple incidents at Travis CI were caused by misconfigurations or missing artifacts in automated cleanup and deployment processes, leading to VM leaks, database record issues, missing Docker tags, and deleted VM images that disrupted build services.",
+    "valid": false,
+    "qualifying": [
+      "travis(2/4)"
+    ],
+    "members_sample": [
+      [
+        "travisci",
+        "Investigation revealed that the vsphere-janitor service, responsible for cleaning up build VMs, was "
+      ],
+      [
+        "travisci",
+        "During those 30 minutes, anyone who signed in to travis-ci.com saw a blank profile. Their old user r"
+      ]
+    ]
+  },
+  "1": {
+    "id": 1,
+    "size": 8,
+    "old_name": "Droplet regional service disruption",
+    "new_name": "DigitalOcean service disruptions",
+    "description": "Multiple DigitalOcean service outages affecting Droplets, volumes, API, and related features across several regions.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "digitalocean",
+        "Our Engineering team continues to work on implementing and rolling out a fix for the issue affecting"
+      ],
+      [
+        "digitalocean",
+        "Our Engineering team has confirmed that the issue regarding volume attachment to Droplets in the NYC"
+      ]
+    ]
+  },
+  "2": {
+    "id": 2,
+    "size": 4,
+    "old_name": "DNS and certificate provisioning failures",
+    "new_name": "DNS service disruptions",
+    "description": "Multiple incidents involving DNS service outages and related certificate and database provisioning failures across DigitalOcean and a temporary DNS resolution failure for crates.io.",
+    "valid": true,
+    "qualifying": [
+      "dns(3/4)",
+      "service(3/4)"
+    ],
+    "members_sample": [
+      [
+        "digitalocean",
+        "Our Engineering team has identified the cause of the issue impacting our DNS API service and is acti"
+      ],
+      [
+        "digitalocean",
+        "As of 19:50 UTC, the issue affecting the DNS service has been fully resolved, and all related servic"
+      ]
+    ]
+  },
+  "3": {
+    "id": 3,
+    "size": 6,
+    "old_name": "Mac job start failures",
+    "new_name": "CircleCI Mac Jobs DDoS",
+    "description": "CircleCI experienced a DDoS attack on its Mac infrastructure provider, causing macOS job failures and network latency, which was later mitigated.",
+    "valid": true,
+    "qualifying": [
+      "mac(5/6)",
+      "jobs(4/6)"
+    ],
+    "members_sample": [
+      [
+        "circleci",
+        "We're working with our Mac infrastructure provider to attempt a mitigation. Will update again shortl"
+      ],
+      [
+        "circleci",
+        "We are seeing improvement in Mac job network routing.  We will continue to monitor for signs of reco"
+      ]
+    ]
+  },
+  "4": {
+    "id": 4,
+    "size": 4,
+    "old_name": "Search and chat connector outages",
+    "new_name": "Dropbox service outage resolved",
+    "description": "All four Dropbox incidents have been resolved.",
+    "valid": false,
+    "qualifying": [
+      "resolved(4/4)"
+    ],
+    "members_sample": [
+      [
+        "dropbox",
+        "This incident has been resolved."
+      ],
+      [
+        "dropbox",
+        "This incident has been resolved."
+      ]
+    ]
+  },
+  "5": {
+    "id": 5,
+    "size": 4,
+    "old_name": "AI agent runner execution failures",
+    "new_name": "Service Outage Resolutions",
+    "description": "The incidents involve the resolution of service disruptions affecting DigitalOcean's GradientAI Agent Platform Playground and multiple Netlify services.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "digitalocean",
+        "A fix has been applied for the issue affecting the GradientAI Agent Platform Playground, and we are "
+      ],
+      [
+        "netlify",
+        "This incident has been resolved."
+      ]
+    ]
+  },
+  "6": {
+    "id": 6,
+    "size": 3,
+    "old_name": "CI workflow insights data delays",
+    "new_name": "CircleCI data processing delays",
+    "description": "CircleCI is experiencing data processing and upstream provider issues causing delays and backlogs in usage and insights data, with fixes pending deployment.",
+    "valid": true,
+    "qualifying": [
+      "data(2/3)",
+      "processing(2/3)"
+    ],
+    "members_sample": [
+      [
+        "circleci",
+        "We have identified the issue, and are working with our upstream provider to resolve it now."
+      ],
+      [
+        "circleci",
+        "We have identified an issue causing Insights workflow and job data to be delayed when requested thro"
+      ]
+    ]
+  },
+  "7": {
+    "id": 7,
+    "size": 4,
+    "old_name": "Usage API data delay",
+    "new_name": "CircleCI Usage API incidents",
+    "description": "Multiple CircleCI incidents related to the Usage API were identified and resolved, with fixes in progress or completed.",
+    "valid": true,
+    "qualifying": [
+      "usage(2/4)",
+      "api(2/4)"
+    ],
+    "members_sample": [
+      [
+        "circleci",
+        "The issue has been identified and a fix is in progress."
+      ],
+      [
+        "circleci",
+        "The Usage API incident has been resolved."
+      ]
+    ]
+  },
+  "8": {
+    "id": 8,
+    "size": 11,
+    "old_name": "Appointment scheduling service disruption",
+    "new_name": "Squarespace service disruption",
+    "description": "Multiple Squarespace incidents involving service disruptions, issue identification, fixes, and resolutions.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "squarespace",
+        "We are currently experiencing a service disruption.  Our Engineering team has identified the issue a"
+      ],
+      [
+        "squarespace",
+        "We are currently experiencing a service disruption.  We have identified the issue  with Acuity Sched"
+      ]
+    ]
+  },
+  "9": {
+    "id": 9,
+    "size": 11,
+    "old_name": "CI/CD build queue datastore degradation",
+    "new_name": "CircleCI service degradation incidents",
+    "description": "These incidents involve multiple performance and availability problems across CircleCI\u2019s infrastructure, such as datastore bottlenecks, RabbitMQ upgrade side\u2011effects, database lockouts, Kubernetes networking failures, workflow latency, and degraded service connectivity.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "circleci",
+        "The core problem stemmed from the datastore backing the builds queue, specifically MongoDB replica s"
+      ],
+      [
+        "circleci",
+        "The incident's root cause stemmed from a routine RabbitMQ upgrade on May 20, which updated the syste"
+      ]
+    ]
+  },
+  "10": {
+    "id": 10,
+    "size": 9,
+    "old_name": "API timeouts and performance degradation",
+    "new_name": "Sentry service restoration",
+    "description": "All listed incidents involve Sentry services returning to normal operation after performance, configuration, authentication, or access issues.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "sentry",
+        "API performance has returned to expected levels."
+      ],
+      [
+        "sentry",
+        "Between July 6th 20:25 UTC and July 7th 12:25 UTC, a wrong configuration change was deployed causing"
+      ]
+    ]
+  },
+  "11": {
+    "id": 11,
+    "size": 8,
+    "old_name": "Serverless inference service errors",
+    "new_name": "DigitalOcean Anthropic API disruptions",
+    "description": "Multiple DigitalOcean incidents involved HTTP 400 errors, connectivity problems, and ongoing issues with Anthropic models, some resolved and others still under investigation.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "digitalocean",
+        "This incident has been resolved."
+      ],
+      [
+        "digitalocean",
+        "Our Engineering team has resolved the issue that was causing HTTP 400 errors for requests to Anthrop"
+      ]
+    ]
+  },
+  "12": {
+    "id": 12,
+    "size": 11,
+    "old_name": "Datacenter power and generator failure",
+    "new_name": "AWS Power and Infrastructure Outages",
+    "description": "A series of AWS incidents caused by utility power losses, transformer failures, generator and voltage\u2011sag problems, and related hardware or software faults that led to widespread service disruptions across compute, storage, and other AWS services.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "aws",
+        "This degradation in Lambda function invocations led to increased error rates and latencies in severa"
+      ],
+      [
+        "aws",
+        "On August 7th, at 10:41 AM PDT, a service disruption began in a single EU West Availability Zone due"
+      ]
+    ]
+  },
+  "13": {
+    "id": 13,
+    "size": 13,
+    "old_name": "Datacenter power loss and network partition",
+    "new_name": "Google Cloud infrastructure outages",
+    "description": "Multiple Google Cloud services experienced outages and performance issues due to power failures, network configuration errors, data center incidents, and software bugs affecting load balancing and control planes.",
+    "valid": false,
+    "qualifying": [
+      "google(10/13)"
+    ],
+    "members_sample": [
+      [
+        "google",
+        "## \\# Incident Report ## \\#\\# Summary On Wednesday, 15 July 2026, Google Cloud VMware Engine (GCVE),"
+      ],
+      [
+        "google",
+        "## Incident Report ## Summary On Tuesday, 14 July 2026 10:00 PT, Google Cloud VMware Engine (GCVE) S"
+      ]
+    ]
+  },
+  "14": {
+    "id": 14,
+    "size": 8,
+    "old_name": "Authoritative DNS and traffic routing outage",
+    "new_name": "Cloudflare network and DNS outages",
+    "description": "These incidents involve multiple Cloudflare service disruptions, including HTTP 5xx errors, a rollback of a faulty release, BGP policy misordering, DNS resolver SERVFAILs, a leap-second-induced DNS bug, and edge-router failures triggered by a mitigation rule.",
+    "valid": false,
+    "qualifying": [
+      "cloudflare(6/8)"
+    ],
+    "members_sample": [
+      [
+        "cloudflare",
+        "On November 18, 2025, Cloudflare's network began experiencing significant failures at 11:20 UTC, lea"
+      ],
+      [
+        "cloudflare",
+        "Cloudflare initiated a rollback of the faulty release, confirming the root cause at 17:03 UTC. An ac"
+      ]
+    ]
+  },
+  "15": {
+    "id": 15,
+    "size": 3,
+    "old_name": "Managed database connection failures",
+    "new_name": "Intermittent connectivity and load issues",
+    "description": "The incidents involve intermittent connection failures to Atlassian Cloud, a high server load caused by a service, and DNS lookup failures between DigitalOcean Managed Kubernetes and Managed Database in the FRA1 region.",
+    "valid": false,
+    "qualifying": [
+      "intermittent(2/3)"
+    ],
+    "members_sample": [
+      [
+        "atlassian",
+        "We have identified the root cause of the intermittent failure connecting to Atlassian Cloud for some"
+      ],
+      [
+        "atlassian",
+        "We have identified the service that caused a high load on the server. We have deployed a couple of c"
+      ]
+    ]
+  },
+  "16": {
+    "id": 16,
+    "size": 5,
+    "old_name": "Cloud identity and access management downtime",
+    "new_name": "Atlassian Cloud Service Disruptions",
+    "description": "Multiple Atlassian cloud services experienced various outages and errors, including product functionality downtime, user search failures, widespread logouts, and increased API error rates.",
+    "valid": false,
+    "qualifying": [
+      "service(5/5)"
+    ],
+    "members_sample": [
+      [
+        "atlassian",
+        "Between 03-07-2024 20:08 UTC to 03-07-2024 20:31 UTC, we experienced downtime for some of the produc"
+      ],
+      [
+        "atlassian",
+        "Between 15:40 UTC to 15:57 UTC customers experienced intermittent failures when searching for users "
+      ]
+    ]
+  },
+  "17": {
+    "id": 17,
+    "size": 18,
+    "old_name": "Cloud file synchronization and sharing outage",
+    "new_name": "Dropbox service incidents",
+    "description": "All listed Dropbox incidents have been resolved.",
+    "valid": false,
+    "qualifying": [
+      "incidents(14/18)"
+    ],
+    "members_sample": [
+      [
+        "dropbox",
+        "This incident has been resolved."
+      ],
+      [
+        "dropbox",
+        "This incident has been resolved."
+      ]
+    ]
+  },
+  "18": {
+    "id": 18,
+    "size": 4,
+    "old_name": "Multi-product telemetry latency",
+    "new_name": "Datadog platform latency issues",
+    "description": "Datadog experienced increased latency and data processing delays across multiple products, affecting metrics, tracing, RUM, CCM, analytics, and vulnerability scanning, with ongoing recovery efforts.",
+    "valid": false,
+    "qualifying": [
+      "issues(3/4)"
+    ],
+    "members_sample": [
+      [
+        "datadog",
+        "We are continuing to work on a fix for this issue."
+      ],
+      [
+        "datadog",
+        "We are investigating and have identified a fix for increased latency across multiple products. As a "
+      ]
+    ]
+  },
+  "19": {
+    "id": 19,
+    "size": 5,
+    "old_name": "Edge Function and CDN network errors",
+    "new_name": "Netlify Edge Functions Outage",
+    "description": "A subset of Netlify's Edge Functions infrastructure experienced elevated 504 errors, which have since been mitigated and resolved.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "netlify",
+        "This incident has been resolved."
+      ],
+      [
+        "netlify",
+        "We have identified an issue with a subset of our Edge Functions infrastructure causing elevated 504 "
+      ]
+    ]
+  },
+  "20": {
+    "id": 20,
+    "size": 34,
+    "old_name": "Carrier SMS delivery degradation",
+    "new_name": "Twilio carrier communication disruptions",
+    "description": "Twilio is experiencing multiple SMS and voice call delivery issues affecting various carriers and regions, including delays to Verizon in the US, failures to Zong in Pakistan, configuration problems, and voice call outages in Europe and Germany.",
+    "valid": false,
+    "qualifying": [
+      "twilio(34/34)"
+    ],
+    "members_sample": [
+      [
+        "twilio",
+        "Twilio customers may be experiencing SMS delivery delays from a subset of Twilio Short Codes and Tol"
+      ],
+      [
+        "twilio",
+        "The incident has been resolved and voice calls from a subset of Twilio Phone Numbers to Verizon netw"
+      ]
+    ]
+  },
+  "21": {
+    "id": 21,
+    "size": 3,
+    "old_name": "Carrier identity and authentication failure",
+    "new_name": "Twilio User Authentication",
+    "description": "These incidents involve Twilio's User Authentication Identity service experiencing gateway API failures and missing redirects for Three in the United Kingdom.",
+    "valid": true,
+    "qualifying": [
+      "user(3/3)",
+      "authentication(3/3)"
+    ],
+    "members_sample": [
+      [
+        "twilio",
+        "The incident has been resolved and User Authentication Identity Gateway API failure increase for Thr"
+      ],
+      [
+        "twilio",
+        "The incident has been resolved and User Authentication Identity SNA missing redirects for Three in t"
+      ]
+    ]
+  },
+  "22": {
+    "id": 22,
+    "size": 6,
+    "old_name": "Site build and deployment latency",
+    "new_name": "Netlify service disruptions",
+    "description": "Multiple Netlify incidents involving elevated errors, latency, and intermittent site availability that have been resolved or are being addressed.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "netlify",
+        "This incident has been resolved."
+      ],
+      [
+        "netlify",
+        "This incident has been resolved. The issue that was causing elevated errors, increased latency, and "
+      ]
+    ]
+  },
+  "23": {
+    "id": 23,
+    "size": 30,
+    "old_name": "Monitor evaluation and metrics backlog",
+    "new_name": "Datadog Service Latency Issues",
+    "description": "Multiple Datadog incidents involve identified problems and fixes, such as RUM delays, distribution metric mitigation, and increased latency in APM trace metrics, with no data loss.",
+    "valid": false,
+    "qualifying": [
+      "issues(20/30)"
+    ],
+    "members_sample": [
+      [
+        "datadog",
+        "The issue has been identified and a fix is being implemented."
+      ],
+      [
+        "datadog",
+        "The issue has been identified and a fix is being implemented."
+      ]
+    ]
+  },
+  "24": {
+    "id": 24,
+    "size": 3,
+    "old_name": "Telemetry spans and metrics ingestion failure",
+    "new_name": "Sentry ingestion and dashboard issues",
+    "description": "Sentry experienced EU ingestion delays, a migration-related outage affecting both regions, and intermittent dashboard failures.",
+    "valid": false,
+    "qualifying": [
+      "sentry(2/3)"
+    ],
+    "members_sample": [
+      [
+        "sentry",
+        "US ingestion is back to normal.   EU ingestion is still delayed, but we are now recovering. We have "
+      ],
+      [
+        "sentry",
+        "We have identified a migration as the cause of the issue. We have reverted the migration in EU and a"
+      ]
+    ]
+  },
+  "25": {
+    "id": 25,
+    "size": 12,
+    "old_name": "Event ingestion latency and backlog",
+    "new_name": "Sentry ingestion backlog recovery",
+    "description": "These incidents involve Sentry experiencing ingestion latency and backlogs for events, errors, profiles, and spans, which were mitigated and recovered.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "sentry",
+        "We've mitigated the source of ingestion latency and are processing the backlog."
+      ],
+      [
+        "sentry",
+        "A fix has been made and the backlog is being processed."
+      ]
+    ]
+  },
+  "26": {
+    "id": 26,
+    "size": 4,
+    "old_name": "Alerting notification and ingestion delay",
+    "new_name": "Sentry ingestion alert recovery",
+    "description": "The incidents report that Sentry's ingestion and alerting services have returned to normal operation.",
+    "valid": true,
+    "qualifying": [
+      "ingestion(4/4)",
+      "alert(4/4)"
+    ],
+    "members_sample": [
+      [
+        "sentry",
+        "We have implemented a fix. Ingestion and alerting have returned to normal operation"
+      ],
+      [
+        "sentry",
+        "Ingestion and alerting are back to steady state in the US region."
+      ]
+    ]
+  },
+  "27": {
+    "id": 27,
+    "size": 5,
+    "old_name": "Static site build failures",
+    "new_name": "Build and service disruptions",
+    "description": "Multiple incidents involving Netlify build delays and failures linked to GitHub issues, along with a resolved CircleCI incident.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "circleci",
+        "This incident has been resolved."
+      ],
+      [
+        "netlify",
+        "In addition to delayed builds, we are also experiencing build failures due to the current incident a"
+      ]
+    ]
+  },
+  "28": {
+    "id": 28,
+    "size": 10,
+    "old_name": "Web performance degradation and gateway timeouts",
+    "new_name": "Reddit service disruptions",
+    "description": "These incidents involve Reddit experiencing service disruptions that have been resolved or are being fixed.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "reddit",
+        "This incident has been resolved."
+      ],
+      [
+        "reddit",
+        "The issue has been identified and a fix is being implemented."
+      ]
+    ]
+  },
+  "29": {
+    "id": 29,
+    "size": 5,
+    "old_name": "Web UI and dashboard loading failures",
+    "new_name": "Datadog incident resolutions",
+    "description": "These incidents involve identification, mitigation, and resolution of issues within Datadog services.",
+    "valid": false,
+    "qualifying": [
+      "incident(3/5)"
+    ],
+    "members_sample": [
+      [
+        "datadog",
+        "The issue has been identified and a fix is being implemented."
+      ],
+      [
+        "datadog",
+        "This incident has been resolved."
+      ]
+    ]
+  },
+  "30": {
+    "id": 30,
+    "size": 3,
+    "old_name": "Comment processing and vote counting lag",
+    "new_name": "Reddit comment delay issue",
+    "description": "Reddit experienced issues with delayed comment processing, which are being resolved through fixes and mitigations.",
+    "valid": false,
+    "qualifying": [
+      "issue(2/3)"
+    ],
+    "members_sample": [
+      [
+        "reddit",
+        "This incident has been resolved."
+      ],
+      [
+        "reddit",
+        "We have identified the issue and are deploying a fix."
+      ]
+    ]
+  },
+  "31": {
+    "id": 31,
+    "size": 18,
+    "old_name": "Elevated web and API error rates",
+    "new_name": "Netlify and Reddit incidents",
+    "description": "The incidents involve resolved and ongoing issues across Netlify and Reddit platforms.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "netlify",
+        "This incident has been resolved."
+      ],
+      [
+        "netlify",
+        "This incident has been resolved."
+      ]
+    ]
+  },
+  "32": {
+    "id": 32,
+    "size": 6,
+    "old_name": "Website connectivity and 503 errors",
+    "new_name": "Squarespace service disruptions",
+    "description": "Multiple Squarespace incidents were identified and resolved, with one still being fixed.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "squarespace",
+        "The issue has been identified and a fix is being implemented."
+      ],
+      [
+        "squarespace",
+        "This incident has been resolved."
+      ]
+    ]
+  },
+  "33": {
+    "id": 33,
+    "size": 3,
+    "old_name": "Site loading and domain timeouts",
+    "new_name": "Squarespace service disruptions",
+    "description": "Multiple Squarespace incidents were identified, with fixes applied and resolutions completed.",
+    "valid": false,
+    "qualifying": [],
+    "members_sample": [
+      [
+        "squarespace",
+        "The issue has been identified and a fix is being implemented."
+      ],
+      [
+        "squarespace",
+        "This incident has been resolved."
+      ]
+    ]
+  },
+  "34": {
+    "id": 34,
+    "size": 11,
+    "old_name": "AI model provider and Copilot disruptions",
+    "new_name": "GitHub Copilot model outages",
+    "description": "Multiple GitHub Copilot incidents involved increased failures and latency for specific AI models due to degradation of an upstream model provider.",
+    "valid": true,
+    "qualifying": [
+      "github(8/11)",
+      "copilot(9/11)",
+      "model(9/11)"
+    ],
+    "members_sample": [
+      [
+        "github",
+        "This incident has been resolved. Thank you for your patience and understanding as we addressed this "
+      ],
+      [
+        "github",
+        "This incident has been resolved. Thank you for your patience and understanding as we addressed this "
+      ]
+    ]
+  },
+  "35": {
+    "id": 35,
+    "size": 5,
+    "old_name": "Conversational AI generation timeouts",
+    "new_name": "OpenAI service error incidents",
+    "description": "Multiple OpenAI incidents involve elevated or intermittent errors in services, with mitigation efforts and recovery.",
+    "valid": true,
+    "qualifying": [
+      "service(4/5)",
+      "error(4/5)"
+    ],
+    "members_sample": [
+      [
+        "openai",
+        "We have identified that users are experiencing elevated errors for the impacted services.  We are wo"
+      ],
+      [
+        "openai",
+        "All impacted services have now fully recovered."
+      ]
+    ]
+  },
+  "36": {
+    "id": 36,
+    "size": 5,
+    "old_name": "AI model API elevated error rates",
+    "new_name": "OpenAI Service Outage",
+    "description": "The incidents involve elevated errors in OpenAI services, ongoing mitigations, and subsequent recoveries.",
+    "valid": false,
+    "qualifying": [
+      "service(4/5)"
+    ],
+    "members_sample": [
+      [
+        "openai",
+        "We have identified that users are experiencing elevated errors for the impacted services.  We are wo"
+      ],
+      [
+        "openai",
+        "All impacted services have now fully recovered."
+      ]
+    ]
+  },
+  "37": {
+    "id": 37,
+    "size": 11,
+    "old_name": "Database connection pool exhaustion and failover",
+    "new_name": "GitHub service degradation incidents",
+    "description": "These incidents involve intermittent outages and performance degradation on GitHub caused by database, MySQL cluster, fileserver, and DNS-related issues.",
+    "valid": true,
+    "qualifying": [
+      "github(9/11)",
+      "service(6/11)",
+      "incidents(8/11)"
+    ],
+    "members_sample": [
+      [
+        "github",
+        "On Friday, November 30th, 2012, GitHub experienced a day-long period of sporadic slow responses and "
+      ],
+      [
+        "github",
+        "GitHub.com experienced two outages and a period of degraded performance early in the week of Septemb"
+      ]
+    ]
+  },
+  "38": {
+    "id": 38,
+    "size": 7,
+    "old_name": "CI workflow execution and runner queue delays",
+    "new_name": "GitHub Actions service outages",
+    "description": "Multiple GitHub Actions incidents in August\u2011July 2026 involving degraded availability, delayed or failed workflow runs and Copilot cloud agent jobs due to internal deployments, rate\u2011limit misconfigurations, under\u2011provisioned services, and backend data service issues.",
+    "valid": true,
+    "qualifying": [
+      "github(6/7)",
+      "actions(5/7)",
+      "service(6/7)"
+    ],
+    "members_sample": [
+      [
+        "github",
+        "On August 6, 2026, between 15:05 UTC and 00:14 UTC on August 7, GitHub Actions experienced degraded "
+      ],
+      [
+        "github",
+        "On August 5, 2026, between 11:02 and 11:54 UTC, the GitHub Copilot cloud agent service was degraded "
+      ]
+    ]
+  }
+}
