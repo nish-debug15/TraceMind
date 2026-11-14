@@ -1,0 +1,112 @@
+[
+  {
+    "scenario": "Redis failover",
+    "cluster_id": 38,
+    "name": "GitHub Actions service outages",
+    "confidence": "ok",
+    "centroid_sim": 0.4605,
+    "is_noise": "No",
+    "retrieved_company": "github",
+    "retrieved_root_cause": "On August 6, 2026, at 07:00 UTC, a configuration change inadvertently reduced the capacity of the se",
+    "retrieved_sim": 0.5251337289810181
+  },
+  {
+    "scenario": "DB pool exhaustion",
+    "cluster_id": 15,
+    "name": "Intermittent connectivity and load issues",
+    "confidence": "low",
+    "centroid_sim": 0.4721,
+    "is_noise": "No",
+    "retrieved_company": "reddit",
+    "retrieved_root_cause": "Outage for over 5 hours when a critical Kubernetes cluster upgrade failed. The failure was caused by",
+    "retrieved_sim": 0.5117745995521545
+  },
+  {
+    "scenario": "OOMKilled",
+    "cluster_id": 38,
+    "name": "GitHub Actions service outages",
+    "confidence": "ok",
+    "centroid_sim": 0.4577,
+    "is_noise": "No",
+    "retrieved_company": "circleci",
+    "retrieved_root_cause": "The core issue manifested as widespread networking failures and service-to-service communication pro",
+    "retrieved_sim": 0.4993974566459656
+  },
+  {
+    "scenario": "Expired TLS",
+    "cluster_id": -1,
+    "name": "Novel pattern",
+    "confidence": "ok",
+    "centroid_sim": 0.3997,
+    "is_noise": "Yes",
+    "retrieved_company": "stripe",
+    "retrieved_root_cause": "Manual operations are regularly executed on production databases. A manual operation was done incorr",
+    "retrieved_sim": 0.5329425930976868
+  },
+  {
+    "scenario": "Kafka lag",
+    "cluster_id": 23,
+    "name": "Datadog Service Latency Issues",
+    "confidence": "ok",
+    "centroid_sim": 0.4604,
+    "is_noise": "No",
+    "retrieved_company": "datadog",
+    "retrieved_root_cause": "Recovery is in progress and the new estimated time of recovery would be 14h30 UTC.",
+    "retrieved_sim": 0.46433985233306885
+  },
+  {
+    "scenario": "DNS failures",
+    "cluster_id": 15,
+    "name": "Intermittent connectivity and load issues",
+    "confidence": "low",
+    "centroid_sim": 0.5411,
+    "is_noise": "No",
+    "retrieved_company": "digitalocean",
+    "retrieved_root_cause": "The issue affecting Kubernetes deployments in the NYC1 region has been resolved. Our investigation f",
+    "retrieved_sim": 0.5840350985527039
+  },
+  {
+    "scenario": "Disk full",
+    "cluster_id": 24,
+    "name": "Sentry ingestion and dashboard issues",
+    "confidence": "low",
+    "centroid_sim": 0.4065,
+    "is_noise": "No",
+    "retrieved_company": "digitalocean",
+    "retrieved_root_cause": "From 00:00 UTC to 01:40 UTC, users may have experienced degraded write performance and intermittent ",
+    "retrieved_sim": 0.46180176734924316
+  },
+  {
+    "scenario": "Bad config push",
+    "cluster_id": -1,
+    "name": "Novel pattern",
+    "confidence": "ok",
+    "centroid_sim": 0.2928,
+    "is_noise": "Yes",
+    "retrieved_company": "dropbox",
+    "retrieved_root_cause": "The issue has been identified and a fix is being implemented.",
+    "retrieved_sim": 0.3781595230102539
+  },
+  {
+    "scenario": "Duplicate burst",
+    "cluster_id": -1,
+    "name": "Novel pattern",
+    "confidence": "ok",
+    "centroid_sim": 0.3533,
+    "is_noise": "Yes",
+    "retrieved_company": "squarespace",
+    "retrieved_root_cause": "The incident has been resolved.",
+    "retrieved_sim": 0.429204523563385
+  },
+  {
+    "scenario": "Printer/HVAC out-of-domain",
+    "cluster_id": -1,
+    "name": "Novel pattern",
+    "confidence": "ok",
+    "centroid_sim": 0.2019,
+    "is_noise": "Yes",
+    "retrieved_company": "squarespace",
+    "retrieved_root_cause": "The incident has been resolved.",
+    "retrieved_sim": 0.2942075729370117
+  }
+]
