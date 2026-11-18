@@ -1,4 +1,5 @@
 import os
+os.environ["GRADIO_SSR_MODE"] = "false"
 from pathlib import Path
 import gradio as gr
 from backend.main import app as fastapi_app
@@ -13,29 +14,16 @@ from rag.generate import ingest, LLM_MODEL
 # 1. ZeroGPU runtime compatibility hook
 try:
     import spaces
-    @spaces.GPU
-    def zero_gpu_anchor():
-        """Satisfies Hugging Face ZeroGPU runtime requirement."""
-        return True
+    gpu_decorator = spaces.GPU
 except (ImportError, Exception):
-    def zero_gpu_anchor():
-        return True
+    def gpu_decorator(fn):
+        return fn
 
-# 2. Hook into Gradio's App.create_app so all launches include FastAPI REST routes
-_original_create_app = gr.routes.App.create_app
+@gpu_decorator
+def zero_gpu_anchor():
+    return True
 
-@staticmethod
-def _custom_create_app(*args, **kwargs):
-    app = _original_create_app(*args, **kwargs)
-    app.include_router(fastapi_app.router)
-    app.include_router(fastapi_app.router, prefix="/gradio_api")
-    for exc, handler in fastapi_app.exception_handlers.items():
-        app.add_exception_handler(exc, handler)
-    return app
-
-gr.routes.App.create_app = _custom_create_app
-
-# 3. Cold-start index verification
+# 2. Cold-start index verification
 if not INDEX_PATH.exists():
     print("[Startup] Cluster index not found. Building from train.json...")
     build()
@@ -169,6 +157,7 @@ with gr.Blocks(title="TraceMind RCA API") as demo:
                 with gr.Accordion("View Exact Prompt Sent to LLM", open=False):
                     prompt_viewer = gr.Code(language="markdown", interactive=False, show_label=False)
 
+    @gpu_decorator
     def on_analyze(log_text: str):
         if not log_text or not log_text.strip():
             return (
@@ -280,12 +269,18 @@ with gr.Blocks(title="TraceMind RCA API") as demo:
         outputs=[rc_output, rem_output, mock_banner, status_pills_view, trace_summary_view, prompt_viewer]
     )
 
+# Mount Gradio onto the existing FastAPI backend
+# /health and /analyze remain FastAPI endpoints; Gradio UI is mounted at root /
+app = gr.mount_gradio_app(
+    fastapi_app,
+    demo,
+    path="/",
+    theme=editorial_theme,
+    css=custom_css,
+    head=head_html,
+)
+
 if __name__ == "__main__":
+    import uvicorn
     port = int(os.environ.get("PORT", os.environ.get("GRADIO_SERVER_PORT", 7860)))
-    demo.launch(
-        server_name="0.0.0.0",
-        server_port=port,
-        theme=editorial_theme,
-        css=custom_css,
-        head=head_html,
-    )
+    uvicorn.run(app, host="0.0.0.0", port=port)
