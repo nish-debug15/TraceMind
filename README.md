@@ -64,12 +64,12 @@ Structured RCA Output
 | Component | Technology | Role / Specification |
 |---|---|---|
 | **Embeddings** | `sentence-transformers` | `all-MiniLM-L6-v2` (384-dimensional normalized dense vectors) |
-| **Clustering** | `HDBSCAN` | 39 clusters on train corpus (`min_cluster_size=3`, `min_samples=2`), 51.1% noise |
+| **Clustering** | `HDBSCAN` | 39 clusters + 338 noise on train corpus (`min_cluster_size=3`, `min_samples=2`), observational only |
 | **Vector Store** | `ChromaDB` | Persistent vector index with 2-pass quality-biased retrieval and 0.40 cosine floor |
 | **LLM Generation** | Groq Cloud API | `openai/gpt-oss-120b` (prompted inference, zero fine-tuning, `relevance_gate_v2`) |
-| **Backend API** | `FastAPI` / `Uvicorn` | REST API (`/analyze`, `/health`) with per-IP rate limiting and proxy routing |
-| **Frontend UI** | `Next.js 16` (Turbopack) | Dark/light Bento dashboard, Tailwind CSS v4, shadcn/ui, `react-markdown` |
-| **Evaluation** | Python / Pytest | ROUGE (1, 2, L), Embedding Cosine Similarity, Retrieval Category Hit Rate, Actionability Rubric |
+| **Backend API** | `FastAPI` / `Uvicorn` | REST API (`/analyze`, `/health`) with per-IP rate limiting and proxy routing (Hosted on Hugging Face Spaces) |
+| **Frontend UI** | `Next.js 16` (Turbopack) | Dark/light Bento dashboard, Tailwind CSS v4, shadcn/ui (Hosted on Vercel) |
+| **Evaluation** | Python / Pytest | ROUGE (1, 2, L), BERTScore (F1), Embedding Cosine Similarity, Bootstrap 95% CIs |
 
 ---
 
@@ -125,64 +125,16 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 
 ## Quantitative Evaluation & Benchmark Results
 
-Evaluation is executed on the held-out **93-record test set** (`data/test.json`) using `eval/evaluate.py`. All evaluations use real inference via `openai/gpt-oss-120b` (mock completions cause hard assertion failures).
+Comprehensive evaluation results, prompt robustness ablation, bootstrap confidence intervals, and failure analyses are generated directly from committed benchmark outputs: see `eval/results/`.
 
-### 1. RAG vs. Zero-Shot Ablation ($N = 93$)
+---
 
-Direct comparison of TraceMind (RAG with ChromaDB retrieval) against an unaugmented Zero-Shot baseline:
+## Known Limitations
 
-| Metric | Zero-Shot (No RAG) | RAG (TraceMind) | Delta |
-|---|---|---|---|
-| **ROUGE-1 F1** | 0.1809 | **0.1941** | **+0.0132** |
-| **ROUGE-2 F1** | 0.0384 | **0.0439** | **+0.0055** |
-| **ROUGE-L F1** | 0.1061 | **0.1210** | **+0.0149** |
-| **Semantic Similarity** | 0.5743 | **0.5764** | **+0.0021** |
-
-### 2. Retrieval Quality & Similarity Distribution ($N = 93$)
-
-Measured against the 662 training postmortems in ChromaDB (`scripts/verify_no_leakage.py`):
-
-| Retrieval Statistic | Value | Notes |
-|---|---|---|
-| **Mean Top-1 Similarity** | **0.5273** | Consistent correlation across heterogeneous infra logs |
-| **Median Top-1 Similarity** | **0.5333** | Robust central tendency |
-| **Similarity Range** | 0.2406 – 0.8424 | Verified minimum and maximum bounds |
-| **Incidents Below 0.40 Floor** | **7 / 93 (7.53%)** | Routed to Pass 2 fallback / marked as weak precedent |
-| **Self-Retrieval Leakage** | **0 / 93 (0.0%)** | Programmatically verified zero identity leakage |
-| **Same-Company Leakage** | **0 / 93 (0.0%)** | Zero company overlap across splits |
-
-### 3. Relevance Gate Audit ($N = 7$)
-
-To prevent RAG hallucination when retrieval similarity is weak, the `relevance_gate_v2` prompt instructs the model to inspect the correlation and output `Precedent: not relevant` on line 1 if the retrieved postmortem does not match the failure mode:
-
-- **Test Sample:** The 7 test postmortems below the 0.40 similarity floor (Boeing 0.359, Discord 0.389, EVE Online 0.378, LKML 0.398, Medium 0.357, Therac-25 0.241, Zerodha 0.366).
-- **Result:** **7 / 7 (100.0%)** correctly identified `Precedent: not relevant` and synthesized root causes derived solely from the log excerpt without hallucinating false historical analogies.
-
-### 4. Retrieval Category Hit Rate ($N = 93$)
-
-Evaluated using `eval/category_benchmark.py` across 9 infrastructure failure modes:
-
-| Failure Category | Test Incidents | Category Hit Rate |
-|---|---|---|
-| **Software Bug / Logic Error** | 33 | 54.5% (18/33) |
-| **Storage / Database / Disk** | 18 | 16.7% (3/18) |
-| **Configuration / Bad Deployment** | 13 | 15.4% (2/13) |
-| **Capacity / Traffic Spike** | 12 | 25.0% (3/12) |
-| **Security / Auth / Credentials** | 6 | 50.0% (3/6) |
-| **Network / Connectivity** | 5 | 40.0% (2/5) |
-| **Hardware / Infrastructure** | 3 | 0.0% (0/3) |
-| **Third-Party / Dependency Outage** | 2 | 0.0% (0/2) |
-| **Memory / OOM / Resource Leak** | 1 | 0.0% (0/1) |
-| **Overall Top-1 Category Hit Rate** | **93** | **33.33% (31/93)** |
-
-### 5. Actionability Rubric (1–5 Scale)
-
-Remediation steps are evaluated against the SRE Actionability Rubric (`eval/actionability_rubric.md`):
-- **Score 1:** Harmful / Hallucinatory
-- **Score 2:** Generic / Boilerplate (*"Restart the server and monitor logs"*)
-- **Score 3:** Directionally Correct (identifies component but lacks parameters)
-- **Score 4:** Specific & Actionable (concrete flags, commands, rollback steps)
-- **Score 5:** Production-Ready & Mitigative (immediate mitigation + rollback + long-term alert threshold)
+1. **Vendor Style Concentration in Clusters**: 89.7% of clusters (35 of 39) have ≥80% of members belonging to a single company. Clustering primarily captures vendor postmortem writing style and domain terminology rather than platform-agnostic failure mechanisms.
+2. **Re-Clustering Grid Invariance**: An extensive 24-run HDBSCAN hyperparameter search across 3 text variants (raw concatenation, quality:high root cause only, and company/boilerplate stripped) found no configuration capable of achieving both ≥70% multi-company representation (≥3 companies per cluster) and acceptable noise (≤45%).
+3. **Index vs. Runtime Text Asymmetry**: Centroids in `clustering/cluster_index.pkl` were generated from concatenated incident logs and retrospective root-cause analyses (`raw_log_excerpt [SEP] root_cause`), whereas runtime queries (`/analyze`) embed only incoming raw log text.
+4. **Observational Clustering Role**: HDBSCAN cluster assignment is purely observational in the Pipeline Trace for SRE visibility. It does not gate, filter, or alter ChromaDB vector retrieval, LLM prompts, or synthesis.
 
 ---
 
