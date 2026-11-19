@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "num_test_incidents": 93,
+    "num_unique_companies": 40,
+    "median_gt_truncation_limit": 51,
+    "bootstrap_resamples": 10000,
+    "seed": 42,
+    "ci_level": 0.95
+  },
+  "ground_truth_stats": {
+    "mean": 48.3441,
+    "median": 51.0,
+    "p10": 16.2,
+    "p90": 73.0
+  },
+  "cells_word_count_stats": {
+    "baseline_zeroshot": {
+      "mean": 215.4516,
+      "median": 217.0,
+      "p10": 150.2,
+      "p90": 277.4,
+      "mean_abs_diff_vs_ground_truth": 167.6667
+    },
+    "baseline_rag": {
+      "mean": 196.0323,
+      "median": 187.0,
+      "p10": 134.6,
+      "p90": 265.8,
+      "mean_abs_diff_vs_ground_truth": 147.7312
+    },
+    "gate_v2_zeroshot": {
+      "mean": 32.8817,
+      "median": 32.0,
+      "p10": 25.0,
+      "p90": 43.8,
+      "mean_abs_diff_vs_ground_truth": 20.7527
+    },
+    "gate_v2_rag": {
+      "mean": 37.7634,
+      "median": 37.0,
+      "p10": 30.0,
+      "p90": 44.8,
+      "mean_abs_diff_vs_ground_truth": 18.4516
+    }
+  },
+  "length_matched_evaluation": {
+    "truncation_word_limit": 51,
+    "cells": {
+      "baseline_zeroshot": {
+        "rougeL_f1": {
+          "mean": 0.1629,
+          "ci_95": [
+            0.1423,
+            0.1848
+          ],
+          "significant_under_cluster_bootstrap": true
+        }
+      },
+      "baseline_rag": {
+        "rougeL_f1": {
+          "mean": 0.1737,
+          "ci_95": [
+            0.1485,
+            0.2006
+          ],
+          "significant_under_cluster_bootstrap": true
+        }
+      },
+      "gate_v2_zeroshot": {
+        "rougeL_f1": {
+          "mean": 0.1951,
+          "ci_95": [
+            0.1587,
+            0.2401
+          ],
+          "significant_under_cluster_bootstrap": true
+        }
+      },
+      "gate_v2_rag": {
+        "rougeL_f1": {
+          "mean": 0.1969,
+          "ci_95": [
+            0.1627,
+            0.2378
+          ],
+          "significant_under_cluster_bootstrap": true
+        }
+      }
+    },
+    "deltas": {
+      "baseline_format_rag_effect": {
+        "mean": 0.0108,
+        "ci_95": [
+          -0.002,
+          0.0249
+        ],
+        "significant_under_cluster_bootstrap": false
+      },
+      "gate_v2_format_rag_effect": {
+        "mean": 0.0018,
+        "ci_95": [
+          -0.0133,
+          0.0161
+        ],
+        "significant_under_cluster_bootstrap": false
+      }
+    }
+  },
+  "summary": "Ground-truth root_cause median word count is 51.0 (mean: 48.3441, p10: 16.2, p90: 73.0). Mean absolute word count difference vs ground truth is 167.6667 (baseline zero-shot), 147.7312 (baseline RAG), 20.7527 (gate-v2 zero-shot), and 18.4516 (gate-v2 RAG). When truncated to median GT word count (51 words), length-matched ROUGE-L F1 is: baseline zero-shot = 0.1629 [0.1423, 0.1848], baseline RAG = 0.1737 [0.1485, 0.2006], gate-v2 zero-shot = 0.1951 [0.1587, 0.2401], gate-v2 RAG = 0.1969 [0.1627, 0.2378]. The retrieval delta under gate-v2 format after length matching is +0.0018 [-0.0133, 0.0161]. The retrieval delta under gate-v2 format does not change sign (+0.0019 unconstrained vs +0.0018 length-matched) and its CI status does not change: both cross zero and remain non-significant under company-clustered bootstrap."
+}
