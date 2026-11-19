@@ -97,3 +97,4 @@ def test_ip_rate_limiting():
     data = blocked.json()
     assert 'message' in data
     assert 'Rate limit exceeded' in data['message']
+    ip_limiter.requests.clear()
