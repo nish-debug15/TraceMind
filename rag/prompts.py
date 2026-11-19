@@ -50,6 +50,17 @@ PROMPT_VARIANTS = {
         "REMEDIATION STEPS:\n"
         "(at most 5 numbered steps, ordered by priority, immediate mitigation first, each one sentence)"
     ),
+    "zero_shot_gate_format": (
+        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
+        "Analyze the incident log excerpt.\n\n"
+        "New Incident Log Excerpt:\n"
+        "{log_text}\n\n"
+        "Provide your response in the following format:\nROOT CAUSE:\n"
+        "(a concise, precise analysis of the technical root cause derived from the current log alone)\n\n"
+        "REMEDIATION STEPS:\n"
+        "(at most 5 numbered steps, ordered by priority, immediate mitigation first, each one sentence)\n\n"
+        "Do not output internal chain-of-thought, reasoning scratchpads, or conversational preambles."
+    ),
 }
 
 __all__ = ["PROMPT_REGISTRY", "PROMPT_VARIANTS"]
