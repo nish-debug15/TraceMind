@@ -1,0 +1,168 @@
+{
+  "similarity_floor_threshold": 0.4,
+  "total_test_incidents": 93,
+  "groups": {
+    "answered": {
+      "n": 86,
+      "low_n": false,
+      "mean_top1_similarity": 0.5286,
+      "median_top1_similarity": 0.5263,
+      "baseline_rag": {
+        "rouge1_f1": {
+          "mean": 0.2041,
+          "ci_95": [
+            0.1843,
+            0.2241
+          ],
+          "std": 0.0945
+        },
+        "rouge2_f1": {
+          "mean": 0.0473,
+          "ci_95": [
+            0.0382,
+            0.0571
+          ],
+          "std": 0.0451
+        },
+        "rougeL_f1": {
+          "mean": 0.1256,
+          "ci_95": [
+            0.1135,
+            0.1378
+          ],
+          "std": 0.0579
+        },
+        "bert_score_f1": {
+          "mean": 0.5086,
+          "ci_95": [
+            0.4944,
+            0.5221
+          ],
+          "std": 0.0653
+        },
+        "cosine": {
+          "mean": 0.5971,
+          "ci_95": [
+            0.562,
+            0.6312
+          ],
+          "std": 0.1607
+        }
+      },
+      "gate_v2_rag": {
+        "rouge1_f1": {
+          "mean": 0.2955,
+          "ci_95": [
+            0.2686,
+            0.3228
+          ],
+          "std": 0.1295
+        },
+        "rouge2_f1": {
+          "mean": 0.0721,
+          "ci_95": [
+            0.0548,
+            0.0908
+          ],
+          "std": 0.0861
+        },
+        "rougeL_f1": {
+          "mean": 0.1984,
+          "ci_95": [
+            0.1771,
+            0.22
+          ],
+          "std": 0.102
+        },
+        "bert_score_f1": {
+          "mean": 0.5677,
+          "ci_95": [
+            0.5509,
+            0.5843
+          ],
+          "std": 0.0794
+        },
+        "cosine": {
+          "mean": 0.6066,
+          "ci_95": [
+            0.5676,
+            0.644
+          ],
+          "std": 0.1803
+        }
+      }
+    },
+    "abstained": {
+      "n": 7,
+      "low_n": true,
+      "mean_top1_similarity": 0.3556,
+      "median_top1_similarity": 0.3665,
+      "ci_withheld_reason": "sample size too small for reliable inference",
+      "baseline_rag": {
+        "rouge1_f1": {
+          "mean": 0.1919,
+          "std": 0.0761,
+          "min": 0.1017,
+          "max": 0.347
+        },
+        "rouge2_f1": {
+          "mean": 0.0418,
+          "std": 0.0367,
+          "min": 0.008,
+          "max": 0.1106
+        },
+        "rougeL_f1": {
+          "mean": 0.1071,
+          "std": 0.0325,
+          "min": 0.0593,
+          "max": 0.1644
+        },
+        "bert_score_f1": {
+          "mean": 0.517,
+          "std": 0.0506,
+          "min": 0.4699,
+          "max": 0.6028
+        },
+        "cosine": {
+          "mean": 0.6063,
+          "std": 0.1557,
+          "min": 0.4025,
+          "max": 0.8338
+        }
+      },
+      "gate_v2_rag": {
+        "rouge1_f1": {
+          "mean": 0.2565,
+          "std": 0.094,
+          "min": 0.1455,
+          "max": 0.3441
+        },
+        "rouge2_f1": {
+          "mean": 0.0609,
+          "std": 0.0424,
+          "min": 0.0,
+          "max": 0.1053
+        },
+        "rougeL_f1": {
+          "mean": 0.1777,
+          "std": 0.0697,
+          "min": 0.0833,
+          "max": 0.2581
+        },
+        "bert_score_f1": {
+          "mean": 0.5426,
+          "std": 0.0659,
+          "min": 0.4699,
+          "max": 0.6307
+        },
+        "cosine": {
+          "mean": 0.6209,
+          "std": 0.1366,
+          "min": 0.4789,
+          "max": 0.8419
+        }
+      }
+    }
+  },
+  "note": "Abstained group has n=7 (low_n: true). In accordance with statistical validity guidelines, confidence intervals are withheld and raw descriptive statistics are reported only."
+}
