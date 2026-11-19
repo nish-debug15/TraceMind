@@ -166,16 +166,13 @@ If Groq hits its free-tier rate limit or returns a network error, our pre-warmed
 
 ## 6. Unique — Evaluation, Limitations & Future Work (1:45)
 
-### Slide 10: Quantitative Benchmarks (Held-Out Test Set, N = 93)
-- **Ablation Study (N = 93):**
-  - ROUGE-1 F1: 0.1809 (Zero-Shot) -> **0.1941** (RAG) [**+0.0132**]
-  - ROUGE-2 F1: 0.0384 (Zero-Shot) -> **0.0439** (RAG) [**+0.0055**]
-  - ROUGE-L F1: 0.1061 (Zero-Shot) -> **0.1210** (RAG) [**+0.0149**]
-  - Semantic Cosine Similarity: 0.5743 (Zero-Shot) -> **0.5764** (RAG) [**+0.0021**]
-- **Retrieval Distribution (N = 93):**
-  - Mean Top-1 Similarity: **0.5273** (Median: 0.5333)
-  - Above 0.40 Threshold: **86 / 93 (92.5%)**
-- **Relevance Gate Result:** All 7 triggered the gate (not manually verified as truly irrelevant).
+### Slide 10: Controlled Benchmarks & Finding (Held-Out Test Set, N = 93)
+- **2x2 Factorial Control (Prompt Format × Retrieval):**
+  - **Format Effect:** Conciseness and strict structure lift ROUGE-L by **+0.0851** (Zero-Shot) and **+0.0727** (RAG) as output word count drops from ~215 words to ~35 words with 3.3× higher precision.
+  - **Retrieval Effect:** Historical precedent retrieval provides **+0.0143** ROUGE-L in baseline format (`[0.0084, 0.0202]`), but only **+0.0019** in gate-v2 format (`[-0.0095, 0.0128]`, crosses zero).
+- **Company-Clustered Bootstrap:** Accounting for vendor logging correlation widens CIs: BERTScore delta crosses zero (`[-0.0001, 0.0131]`), erasing statistical significance under vendor clustering.
+- **Exploratory Similarity Dose-Response:** Spearman $\rho$ between retrieval similarity and generation gain crosses zero under clustered bootstrap ($\rho = +0.2249$ baseline ROUGE-L, $\rho = -0.0476$ gate-v2 ROUGE-L).
+- **Retrieval Distribution (N = 93):** Mean Top-1 Similarity: **0.5156**; 86 / 93 (92.5%) above 0.40 floor; 7 / 93 trigger relevance gate abstention.
 
 ### Slide 11: Honest Limitations & Roadmap
 - **Proof-of-Concept Sample Size:** Evaluated on 93 held-out incidents; directionally positive, not a claim of statistical significance.
@@ -192,17 +189,13 @@ If Groq hits its free-tier rate limit or returns a network error, our pre-warmed
 - **Takeaway:** Coarse categorical matching is a weak evaluation signal; true operational utility stems from grounded root causes and concrete remediation steps.
 
 ### Spoken Script (Unique)
-"To validate TraceMind objectively, we evaluated our held-out test split of 93 high-quality incidents from 40 companies that the system never indexed.
+"To evaluate TraceMind rigorously, we ran a controlled 2x2 factorial evaluation across all 93 held-out test incidents from 40 unseen companies, isolating the effect of precedent retrieval from prompt formatting.
 
-Comparing TraceMind against an unaugmented zero-shot baseline on these 93 incidents, RAG achieved slightly higher overlap: ROUGE-1 F1 rose from 0.1809 to 0.1941, an increase of 0.0132, while ROUGE-2 and ROUGE-L showed similar modest gains as shown on the slide. Semantic embedding similarity remained essentially flat at 0.576.
+Our findings reveal that the apparent jump in ROUGE-L from 0.124 to 0.197 is overwhelmingly driven by prompt format and conciseness—a format effect of +0.073 to +0.085 as answers condensed from 215 words to 35 words, tripling precision. Within the structured gate format, precedent retrieval contributes a modest +0.0019 ROUGE-L. Furthermore, when accounting for vendor-level correlation using a two-stage company-clustered bootstrap, confidence intervals widen and BERTScore gain crosses zero. In exploratory dose-response testing, retrieval similarity does not significantly correlate with generation delta.
 
-In our failure category benchmark, retrieval hit the exact category in 33.3 percent of test incidents. That is slightly below the 35.5 percent majority-class baseline—meaning always guessing software bugs—because category matching is a weak, coarse signal. Our value is not labeling the bucket, but delivering the specific, grounded root cause and verified remediation checklist.
+Crucially, TraceMind does not rely on opaque RAG claims. Its core value is the Pipeline Trace: on the seven test cases below our 0.40 similarity floor, the system explicitly abstains from precedent transfer. During an outage, SREs see the exact retrieved document, the mathematical similarity score, and the raw prompt.
 
-Crucially, on the seven test cases below our 0.40 similarity floor, all seven triggered the gate with 'Precedent: not relevant' on line one, though we did not manually verify irrelevance.
-
-To be clear about limitations: this is an academic proof of concept on 93 test incidents, so we do not claim statistical significance. Furthermore, because our test set contains exclusively high-quality postmortems, results are optimistic compared to messy production logs. Groq's 20-RPM free tier also required rate limiting.
-
-TraceMind's value is simple: during an outage, it shows its work. Thank you, we are ready for your questions."
+To be clear about limitations: our test set contains exclusively high-quality postmortems, vendor writing styles cluster heavily, and retrieval relevance is unmeasured without manual gold labels. TraceMind's promise is auditability: during an outage, it shows its work. Thank you, we are ready for your questions."
 
 ---
 

@@ -11,7 +11,7 @@ license: mit
 
 # TraceMind — RAG-Powered Root Cause Analysis for SRE Logs
 
-An automated NLP pipeline that clusters log anomalies and uses Retrieval-Augmented Generation (RAG) to match incoming infrastructure failures against historical incident postmortems. TraceMind synthesizes root cause analyses and prioritized remediation checklists with full pipeline transparency, enabling Site Reliability Engineers (SREs) to audit the reasoning rather than trusting a black box.
+An automated NLP pipeline that clusters log anomalies and correlates incoming infrastructure failures against a curated corpus of 828 historical incident postmortems. TraceMind surfaces an interactive Pipeline Trace—exposing matched historical incident URLs, cosine similarity scores, and prompts—so SREs can audit retrieval evidence rather than trusting an opaque model. In controlled 2x2 factorial evaluation (N=93), prompt conciseness and instruction formatting drive the observed score gains (+0.0727 to +0.0851 ROUGE-L F1), while precedent retrieval contributes a modest effect (+0.0143 in baseline format, +0.0019 in gate-v2 format; non-significant under company-clustered bootstrap).
 
 ---
 
@@ -159,6 +159,47 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 | **BERTScore F1** | **+0.0069** | `[0.0018, 0.0119]` | `[-0.0001, 0.0131]` | Crosses zero |
 | **Embedding Cosine Sim** | **-0.0047** | `[-0.0195, 0.0095]` | `[-0.0273, 0.0155]` | Crosses zero |
 
+#### Length Diagnostics & Length-Matched Sensitivity (Test Set, N = 93)
+
+> Ground-truth root_cause median length is 51.0 words (mean: 48.3, p10: 16.2, p90: 73.0). Evaluates ROUGE-L F1 when generated outputs are truncated to median GT length (51 words) with company-clustered 95% CIs.
+
+| Experimental Cell | Word Count (Mean / Median) | Mean Abs Diff vs GT | Length-Matched ROUGE-L [95% CI] | Clustered CI Excludes Zero? |
+|:---|:---:|:---:|:---:|:---:|
+| **Baseline Format — Zero-Shot** | 215.5 / 217.0 | 167.7 | 0.1629 `[0.1423, 0.1848]` | Yes |
+| **Baseline Format — RAG** | 196.0 / 187.0 | 147.7 | 0.1737 `[0.1485, 0.2006]` | Yes |
+| **Gate-v2 Format — Zero-Shot** | 32.9 / 32.0 | 20.8 | 0.1951 `[0.1587, 0.2401]` | Yes |
+| **Gate-v2 Format — RAG** | 37.8 / 37.0 | 18.5 | 0.1969 `[0.1627, 0.2378]` | Yes |
+
+> **Length-Matched Retrieval Effect:** Baseline format RAG delta = **+0.0108** `[-0.0020, 0.0249]` (crosses zero under company clustering: True); Gate-v2 format RAG delta = **+0.0018** `[-0.0133, 0.0161]` (crosses zero under company clustering: True).
+
+#### Exploratory Retrieval Similarity Dose-Response (Test Set, N = 93)
+
+> Relates top-1 ChromaDB cosine retrieval similarity to downstream generation gains (RAG minus Zero-Shot delta). Evaluated with company-clustered bootstrap 95% CIs (10,000 resamples, seed 42). *Note: Labeled as exploratory.*
+
+| Prompt Format | Metric | Spearman $\rho$ [95% CI] | CI Excludes Zero? | Low Tercile Mean $\Delta$ (sim $\le 0.478$) | Mid Tercile Mean $\Delta$ ($0.480 \le \text{sim} \le 0.553$) | High Tercile Mean $\Delta$ (sim $\ge 0.554$) |
+|:---|:---|:---:|:---:|:---:|:---:|:---:|
+| **Baseline Format** | ROUGE-L F1 $\Delta$ | +0.2249 `[-0.0342, 0.5201]` | No | +0.0068 | +0.0122 | +0.0238 |
+| **Baseline Format** | BERTScore F1 $\Delta$ | +0.1284 `[-0.1430, 0.3700]` | No | +0.0051 | +0.0016 | +0.0141 |
+| **Gate-v2 Format** | ROUGE-L F1 $\Delta$ | -0.0476 `[-0.3082, 0.2309]` | No | +0.0076 | -0.0056 | +0.0037 |
+| **Gate-v2 Format** | BERTScore F1 $\Delta$ | +0.1199 `[-0.1300, 0.3792]` | No | -0.0068 | -0.0094 | -0.0031 |
+
+> Scatter plots with tercile mean diamonds and confidence intervals are saved in [`eval/figures/dose_response.png`](eval/figures/dose_response.png).
+
+#### Remediation Checklist Scoring & Coverage (Eligible N = 93, Excluded GT < 5 words = 0)
+
+> Evaluates the actionable remediation checklist section (`REMEDIATION STEPS:`) against human postmortem ground truth across all 4 cells. Evaluated with company-clustered 95% CIs.
+
+| Experimental Cell | Parse Failures / Total | Coverage Rate | ROUGE-L F1 [95% CI] | BERTScore F1 [95% CI] |
+|:---|:---:|:---:|:---:|:---:|
+| **Baseline Format — Zero-Shot** | 33 / 93 | 64.5% | 0.0457 `[0.0314, 0.0620]` | 0.3680 `[0.3421, 0.3957]` |
+| **Baseline Format — RAG** | 20 / 93 | 78.5% | 0.0688 `[0.0562, 0.0834]` | 0.4074 `[0.3829, 0.4330]` |
+| **Gate-v2 Format — Zero-Shot** | 1 / 93 | 98.9% | 0.1116 `[0.0967, 0.1263]` | 0.4946 `[0.4752, 0.5133]` |
+| **Gate-v2 Format — RAG** | 0 / 93 | 100.0% | 0.1183 `[0.1045, 0.1320]` | 0.5023 `[0.4845, 0.5188]` |
+
+> **Remediation Paired Deltas (RAG - Zero-Shot, Clustered 95% CIs):**
+> - Baseline format: ROUGE-L $\Delta$ = **+0.0231** `[0.0058, 0.0403]` (significant: True); BERTScore $\Delta$ = **+0.0394** `[0.0162, 0.0634]` (significant: True).
+> - Gate-v2 format: ROUGE-L $\Delta$ = **+0.0067** `[-0.0009, 0.0141]` (significant: False); BERTScore $\Delta$ = **+0.0077** `[0.0019, 0.0162]` (significant: True).
+
 #### Retrieval Distribution & Guardrail Abstention Split
 
 - **Answered Partition (Sim ≥ 0.40, N = 86):** Mean top-1 cosine similarity = `0.5286`.
@@ -213,6 +254,9 @@ Detailed failure analysis and individual incident evaluations are documented in 
 10. **Single-Company Cluster Concentration**: 89.7% of clusters (35 of 39) have ≥80% of members belonging to a single company. Clustering primarily captures vendor postmortem writing style and domain terminology rather than platform-agnostic failure mechanisms.
 11. **Index vs. Runtime Text Asymmetry**: Centroids in `clustering/cluster_index.pkl` were generated from concatenated incident logs and retrospective root-cause analyses (`raw_log_excerpt [SEP] root_cause`), whereas runtime queries (`/analyze`) embed only incoming raw log text.
 12. **Failure-Type Clustering Invariance**: An extensive 24-run HDBSCAN hyperparameter search across 3 text variants (raw concatenation, quality:high root cause only, and company/boilerplate stripped) found no configuration capable of achieving both ≥70% multi-company representation (≥3 companies per cluster) and acceptable noise (≤45%).
+13. **Length-Matched Retrieval Sensitivity**: When generated outputs are truncated to the median ground-truth length (51 words), baseline RAG delta is +0.0108 `[-0.0020, 0.0249]` (crosses zero under company clustering) and gate-v2 RAG delta is +0.0018 `[-0.0133, 0.0161]` (crosses zero). Length matching confirms that precedent retrieval effect is negligible once length disparity is controlled.
+14. **Remediation-Scoring Coverage & Truncation**: While 0 of 93 ground-truth postmortems were excluded (< 5 words), generated remediation section coverage varied dramatically by prompt format: verbose baseline prompts exhausted output token limits during root-cause synthesis, failing to output remediation steps for 35.5% (33/93) of zero-shot and 21.5% (20/93) of RAG incidents. In contrast, concise gate-v2 prompts achieved 98.9% (zero-shot) and 100.0% (RAG) coverage. Under gate-v2 format, the RAG remediation delta is +0.0067 ROUGE-L F1 (95% CI `[-0.0009, 0.0141]`, crosses zero) and +0.0077 BERTScore F1.
+15. **Subset Audit Outcome**: An independent audit verified that the numerical coincidence of $n=7$ retrieval floor abstentions (top-1 similarity < 0.40) and $n=7$ ground-truth boilerplate noise incidents is completely coincidental: the two sets are completely disjoint (intersection count = 0, Jaccard similarity = 0.0000). All 7 abstained incidents belong to the clean evaluation subset, and all 7 boilerplate incidents scored $\ge 0.40$ in retrieval.
 
 ---
 
