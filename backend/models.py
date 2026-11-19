@@ -11,6 +11,7 @@ class RetrievedIncident(BaseModel):
     root_cause: str
     remediation_steps: str
     source_url: str
+    company: Optional[str] = None
 
 class PipelineTrace(BaseModel):
     cluster_id: int

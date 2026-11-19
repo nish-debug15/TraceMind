@@ -213,8 +213,11 @@ npm run start
 ### 4. Running the Test Suite & Evaluation
 
 ```bash
-# Run backend, clustering, and split verification tests (30 tests)
+# Run backend, clustering, split, and smoke verification tests
 python -m pytest
+
+# Run live deployment smoke test (defaults to http://127.0.0.1:8000 or custom BACKEND_URL)
+BACKEND_URL=https://nishhhx0-tracemind-backend.hf.space python scripts/smoke_live.py
 
 # Run full RAG vs. Zero-Shot evaluation on 93 test incidents
 python eval/evaluate.py
