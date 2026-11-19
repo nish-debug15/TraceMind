@@ -417,7 +417,7 @@ def run_2x2_control(limit: int = None, force_refresh: bool = False):
         f"~{cell_metrics['gate_v2_zeroshot']['summary_stats']['word_count']['mean']} words. "
         f"In contrast, the RAG retrieval effect within fixed formats was "
         f"{rl_rag_base:+.4f} (baseline format) and {rl_rag_gate:+.4f} (gate-v2 format). "
-        f"For BERTScore F1, the format effect was {rl_fmt_zs:+.4f} vs retrieval effect of {rl_rag_base:+.4f}. "
+        f"For BERTScore F1, the format effect was {bs_fmt_zs:+.4f} (zero-shot) and {bs_fmt_rag:+.4f} (RAG) vs retrieval effect of {bs_rag_base:+.4f} (baseline format) and {bs_rag_gate:+.4f} (gate-v2 format). "
         f"Conclusion: the ROUGE-L improvement previously observed when moving from baseline RAG to relevance_gate_v2 RAG "
         f"is primarily an output-format/conciseness effect rather than a retrieval precedent effect."
     )

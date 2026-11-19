@@ -125,40 +125,75 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 
 ## Quantitative Evaluation & Benchmark Results
 
-### Benchmark Evaluation: RAG vs. Zero-Shot Baseline (Held-Out Test Set, N = 93)
+### 2x2 Factorial Control: Prompt Format × Retrieval (Held-Out Test Set, N = 93)
 
-> Evaluated strictly on held-out postmortems (`data/splits/test.json`) across 40 unseen companies against the TRAIN-ONLY retrieval index (`rag/chroma_db_train`, 662 incidents). Zero data leakage verified. 95% confidence intervals computed via 10,000 paired bootstrap resamples (seed 42).
+> Evaluates whether generation gains stem from historical precedent retrieval or output conciseness/formatting instructions. 95% bootstrap confidence intervals computed across 10,000 resamples (seed 42).
 
-| Metric | Zero-Shot Baseline [95% CI] | TraceMind RAG [95% CI] | Paired Delta [95% CI] | Statistically Significant |
+| Experimental Cell | ROUGE-L F1 [95% CI] | ROUGE-L Precision | ROUGE-L Recall | BERTScore F1 | Mean Word Count |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| **Baseline Format — Zero-Shot** | 0.1099 `[0.1016, 0.1179]` | 0.0706 | 0.3109 | 0.5022 | 215.5 (med: 217.0) |
+| **Baseline Format — RAG** | 0.1242 `[0.1128, 0.1357]` | 0.0822 | 0.3223 | 0.5092 | 196.0 (med: 187.0) |
+| **Gate-v2 Format — Zero-Shot** | 0.1950 `[0.1735, 0.2172]` | 0.2327 | 0.1841 | 0.5722 | 32.9 (med: 32.0) |
+| **Gate-v2 Format — RAG** | 0.1969 `[0.1772, 0.2175]` | 0.2254 | 0.1918 | 0.5658 | 37.8 (med: 37.0) |
+
+#### Factorial Paired Deltas
+
+| Comparison | ROUGE-L Delta [95% CI] | BERTScore Delta [95% CI] | CI Excludes Zero? | Primary Driver |
+|:---|:---:|:---:|:---:|:---|
+| **RAG Effect** (within Baseline format) | **+0.0143** `[0.0084, 0.0202]` | **+0.0069** `[0.0018, 0.0119]` | Yes | Precedent Retrieval |
+| **RAG Effect** (within Gate-v2 format) | **+0.0019** `[-0.0095, 0.0128]` | **-0.0064** `[-0.0139, 0.0017]` | No | Precedent Retrieval |
+| **Format Effect** (within Zero-Shot arm) | **+0.0851** `[0.0669, 0.1043]` | **+0.0700** `[0.0569, 0.0830]` | Yes | Conciseness / Precision |
+| **Format Effect** (within RAG arm) | **+0.0727** `[0.0582, 0.0883]` | **+0.0566** `[0.0468, 0.0669]` | Yes | Conciseness / Precision |
+
+> **2x2 Control Finding:** In the 2x2 factorial control (Prompt Format x Retrieval, N=93), the prompt format effect is substantially larger than the retrieval effect on ROUGE-L and BERTScore. Switching from baseline format to gate-v2 format changed ROUGE-L F1 by +0.0851 (zero-shot) and +0.0727 (RAG), driven by a dramatic increase in precision as output length decreased from ~215.5 words to ~32.9 words. In contrast, the RAG retrieval effect within fixed formats was +0.0143 (baseline format) and +0.0019 (gate-v2 format). For BERTScore F1, the format effect was +0.0700 (zero-shot) and +0.0566 (RAG) vs retrieval effect of +0.0069 (baseline format) and -0.0064 (gate-v2 format). Conclusion: the ROUGE-L improvement previously observed when moving from baseline RAG to relevance_gate_v2 RAG is primarily an output-format/conciseness effect rather than a retrieval precedent effect.
+
+### Benchmark Evaluation: Baseline RAG vs. Zero-Shot Baseline (Held-Out Test Set, N = 93)
+
+> Evaluated strictly on held-out postmortems (`data/splits/test.json`) across 40 unseen companies against the TRAIN-ONLY retrieval index (`rag/chroma_db_train`, 662 incidents). Zero data leakage verified. Confidence intervals computed via 10,000 resamples (seed 42) comparing per-incident i.i.d. bootstrap vs. two-stage company-clustered bootstrap.
+
+| Metric | Paired Delta Mean | Per-Incident 95% CI | Company-Clustered 95% CI | CI Excludes Zero (Clustered) |
 |:---|:---:|:---:|:---:|:---:|
-| **ROUGE-1 F1** | 0.1902 `[0.1742, 0.2059]` | 0.2032 `[0.1845, 0.2217]` | **+0.0130** `[0.0035, 0.0226]` | **Yes** (CI > 0) |
-| **ROUGE-2 F1** | 0.0422 `[0.0358, 0.0490]` | 0.0469 `[0.0383, 0.0563]` | **+0.0046** `[-0.0005, 0.0099]` | No |
-| **ROUGE-L F1** | 0.1099 `[0.1016, 0.1179]` | 0.1242 `[0.1128, 0.1357]` | **+0.0143** `[0.0084, 0.0202]` | **Yes** (CI > 0) |
-| **BERTScore F1** | 0.5022 `[0.4892, 0.5138]` | 0.5092 `[0.4960, 0.5217]` | **+0.0069** `[0.0018, 0.0119]` | **Yes** (CI > 0) |
-| **Embedding Cosine Sim** | 0.6027 `[0.5697, 0.6334]` | 0.5981 `[0.5657, 0.6298]` | **-0.0047** `[-0.0195, 0.0095]` | No |
+| **ROUGE-1 F1** | **+0.0130** | `[0.0035, 0.0226]` | `[0.0012, 0.0246]` | CI excludes zero |
+| **ROUGE-2 F1** | **+0.0046** | `[-0.0005, 0.0099]` | `[-0.0017, 0.0108]` | Crosses zero |
+| **ROUGE-L F1** | **+0.0143** | `[0.0085, 0.0202]` | `[0.0064, 0.0229]` | CI excludes zero |
+| **BERTScore F1** | **+0.0069** | `[0.0018, 0.0119]` | `[-0.0001, 0.0131]` | Crosses zero |
+| **Embedding Cosine Sim** | **-0.0047** | `[-0.0195, 0.0095]` | `[-0.0273, 0.0155]` | Crosses zero |
 
-#### Performance Breakdown by Report Quality
+#### Retrieval Distribution & Guardrail Abstention Split
 
-| Quality Subset | N | Zero-Shot ROUGE-L | RAG ROUGE-L | Delta ROUGE-L | Zero-Shot Cosine | RAG Cosine | Delta Cosine |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Full Set | 93 | 0.1099 | 0.1242 | **+0.0143** | 0.6027 | 0.5981 | -0.0046 |
-| Quality: High Only | 93 | 0.1099 | 0.1242 | **+0.0143** | 0.6027 | 0.5981 | -0.0046 |
+- **Answered Partition (Sim ≥ 0.40, N = 86):** Mean top-1 cosine similarity = `0.5286`.
+  - Baseline RAG: ROUGE-L = `0.1256` `[0.1135, 0.1378]`, BERTScore = `0.5086`
+  - Gate-v2 RAG:  ROUGE-L = `0.1984` `[0.1771, 0.2200]`, BERTScore = `0.5677`
+- **Abstained Partition (Sim < 0.40, N = 7, low_n: true):** Mean top-1 cosine similarity = `0.3556`.
+  - Baseline RAG: ROUGE-L raw mean = `0.1071`, BERTScore raw mean = `0.5170`
+  - Gate-v2 RAG:  ROUGE-L raw mean = `0.1777`, BERTScore raw mean = `0.5426`
+  - *Note: Due to small sample size (n=7), confidence intervals are withheld and raw descriptive statistics are reported.*
 
-#### Retrieval Distribution & Guardrail Abstention
+#### Ground-Truth Noise Sensitivity Analysis (Full N = 93 vs. Clean N = 86)
 
-- **Mean Top-1 Cosine Similarity**: `0.5156` (Median: `0.5194`)
-- **Similarity Floor (< 0.40) Abstentions**: `7 / 93` (7.5%)
-- **Guardrail Action**: For incidents scoring below 0.40 cosine similarity, the relevance guardrail (`relevance_gate_v2`) abstains from precedent transfer and forces autonomous RCA synthesis from incoming telemetry alone.
+> Rule-based detector flagged 7 incidents (7.5%) containing status-page resolution boilerplate rather than technical root-cause mechanics. Evaluated with company-clustered 95% CIs.
+
+| Experimental Arm | Metric | Full Set (N=93) Clustered [95% CI] | Clean Subset (N=86) Clustered [95% CI] | Change |
+|:---|:---|:---:|:---:|:---:|
+| Zero-Shot Baseline | ROUGE-L F1 | 0.1099 `[0.0924, 0.1264]` | 0.1164 `[0.1044, 0.1274]` | **+0.0065** |
+| Zero-Shot Baseline | BERTScore F1 | 0.5022 `[0.4727, 0.5278]` | 0.5140 `[0.4953, 0.5289]` | **+0.0118** |
+| Zero-Shot Baseline | Cosine Sim | 0.6025 `[0.5306, 0.6711]` | 0.6273 `[0.5736, 0.6768]` | **+0.0248** |
+| Baseline RAG | ROUGE-L F1 | 0.1242 `[0.1025, 0.1468]` | 0.1320 `[0.1160, 0.1484]` | **+0.0078** |
+| Baseline RAG | BERTScore F1 | 0.5092 `[0.4805, 0.5364]` | 0.5210 `[0.5021, 0.5383]` | **+0.0118** |
+| Baseline RAG | Cosine Sim | 0.5978 `[0.5370, 0.6608]` | 0.6207 `[0.5761, 0.6669]` | **+0.0229** |
+| Gate-v2 RAG | ROUGE-L F1 | 0.1969 `[0.1624, 0.2383]` | 0.2063 `[0.1749, 0.2424]` | **+0.0094** |
+| Gate-v2 RAG | BERTScore F1 | 0.5658 `[0.5339, 0.6005]` | 0.5773 `[0.5529, 0.6036]` | **+0.0115** |
+| Gate-v2 RAG | Cosine Sim | 0.6077 `[0.5380, 0.6770]` | 0.6314 `[0.5767, 0.6859]` | **+0.0237** |
 
 #### Prompt Robustness Ablation (Test Set, N = 93)
 
-| Prompt Variant | ROUGE-L F1 | BERTScore F1 | Cosine Similarity | Guardrail Enforced |
-|:---|:---:|:---:|:---:|:---:|
+| Prompt Variant | ROUGE-L F1 | BERTScore F1 | Cosine Similarity | Guardrail Structure |
+|:---|:---:|:---:|:---:|:---|
 | `baseline` | 0.1242 | 0.5092 | 0.5978 | None |
-| `relevance_gate` | 0.1902 | 0.5726 | 0.6386 | Soft check |
-| `relevance_gate_v2` | 0.1969 | 0.5658 | 0.6077 | Yes (`Precedent: [relevant|not relevant]`) |
+| `relevance_gate` | 0.1902 | 0.5726 | 0.6386 | Soft instruction check |
+| `relevance_gate_v2` | 0.1969 | 0.5658 | 0.6077 | Strict machine-parseable `Precedent:` verdict header |
 
-> **Prompt Variance / Spread across variants**: ROUGE-L range: `0.0727`, Cosine range: `0.0408`.
+> **Prompt Spread across variants**: ROUGE-L spread: `0.0727`, BERTScore spread: `0.0634`, Cosine spread: `0.0408`.
 
 Detailed failure analysis and individual incident evaluations are documented in [`docs/FAILURE_ANALYSIS.md`](docs/FAILURE_ANALYSIS.md) and [`eval/results/`](eval/results/).
 
@@ -166,10 +201,18 @@ Detailed failure analysis and individual incident evaluations are documented in 
 
 ## Known Limitations
 
-1. **Vendor Style Concentration in Clusters**: 89.7% of clusters (35 of 39) have ≥80% of members belonging to a single company. Clustering primarily captures vendor postmortem writing style and domain terminology rather than platform-agnostic failure mechanisms.
-2. **Re-Clustering Grid Invariance**: An extensive 24-run HDBSCAN hyperparameter search across 3 text variants (raw concatenation, quality:high root cause only, and company/boilerplate stripped) found no configuration capable of achieving both ≥70% multi-company representation (≥3 companies per cluster) and acceptable noise (≤45%).
-3. **Index vs. Runtime Text Asymmetry**: Centroids in `clustering/cluster_index.pkl` were generated from concatenated incident logs and retrospective root-cause analyses (`raw_log_excerpt [SEP] root_cause`), whereas runtime queries (`/analyze`) embed only incoming raw log text.
-4. **Observational Clustering Role**: HDBSCAN cluster assignment is purely observational in the Pipeline Trace for SRE visibility. It does not gate, filter, or alter ChromaDB vector retrieval, LLM prompts, or synthesis.
+1. **Format Effect Dominates Retrieval Effect in Gate Prompts**: In the 2x2 factorial control, the prompt format effect is substantially larger than the retrieval effect (+0.0851 zero-shot format effect and +0.0727 RAG format effect on ROUGE-L vs +0.0019 RAG precedent retrieval effect within `relevance_gate_v2`, 95% CI `[-0.0095, 0.0128]`). The observed lift is primarily an artifact of output conciseness (dropping from ~215 words to ~35 words) and heightened precision rather than precedent retrieval.
+2. **Prompt Selection on Test Set**: The `relevance_gate_v2` prompt format was selected based on held-out test set performance rather than an independent validation split, introducing potential selection bias into reported absolute scores.
+3. **Unrescaled BERTScore Metrics**: Reported BERTScore values are raw, unrescaled scores (`bert-base-uncased`, version 0.3.12). The 0.50–0.57 range is typical for unscaled technical text and should be interpreted comparatively across arms rather than as low absolute semantic accuracy.
+4. **No Multiplicity Correction Across Endpoints**: Statistical significance across the 5 reported evaluation metrics is evaluated individually without Bonferroni or False Discovery Rate (FDR) multiplicity adjustments.
+5. **Company Clustering Impact on Significance**: Incidents from the same vendor share logging vocabulary and style. Accounting for company-level correlation via a two-stage clustered bootstrap widens confidence intervals: the BERTScore F1 delta 95% CI expands from `[0.0018, 0.0119]` (excluding zero) to `[-0.0001, 0.0131]`, crossing zero and removing statistical significance for semantic gain under vendor clustering.
+6. **Ground-Truth Boilerplate Noise**: Exactly 7 of 93 test incidents (7.53%) consist of customer-facing status-page boilerplate ("resolved", "services operational") rather than technical root-cause mechanics. Filtering out this noise lifts clean subset ($N=86$) baseline RAG ROUGE-L from 0.1242 to 0.1320 and gate-v2 RAG ROUGE-L from 0.1969 to 0.2063.
+7. **Low-N Guardrail Abstentions**: Exactly 7 of 93 incidents (7.53%) fall below the 0.40 cosine similarity threshold and abstain from precedent transfer. Because $N=7$ is too small for reliable statistical inference, abstention metrics are purely descriptive and confidence intervals are withheld.
+8. **Retrieval Relevance Unmeasured**: Retrieval evaluations measure top-1 ChromaDB cosine similarity against retrospective postmortem text, but test incidents lack manually annotated ground-truth relevance labels; top-1 matches may share vocabulary without describing the same root cause.
+9. **Observational Clustering Role**: HDBSCAN cluster assignment is purely observational in the Pipeline Trace for SRE visibility. It does not gate, filter, or alter ChromaDB vector retrieval, LLM prompts, or synthesis at runtime.
+10. **Single-Company Cluster Concentration**: 89.7% of clusters (35 of 39) have ≥80% of members belonging to a single company. Clustering primarily captures vendor postmortem writing style and domain terminology rather than platform-agnostic failure mechanisms.
+11. **Index vs. Runtime Text Asymmetry**: Centroids in `clustering/cluster_index.pkl` were generated from concatenated incident logs and retrospective root-cause analyses (`raw_log_excerpt [SEP] root_cause`), whereas runtime queries (`/analyze`) embed only incoming raw log text.
+12. **Failure-Type Clustering Invariance**: An extensive 24-run HDBSCAN hyperparameter search across 3 text variants (raw concatenation, quality:high root cause only, and company/boilerplate stripped) found no configuration capable of achieving both ≥70% multi-company representation (≥3 companies per cluster) and acceptable noise (≤45%).
 
 ---
 
