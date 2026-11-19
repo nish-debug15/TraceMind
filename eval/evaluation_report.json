@@ -2,36 +2,36 @@
   "Full Set": {
     "sample_size": 93,
     "RAG": {
-      "rouge1_f1": 0.20317061207169648,
-      "rouge2_f1": 0.04685766395095953,
-      "rougeL_f1": 0.12417699607439994,
-      "semantic_sim": 0.598055099769324
+      "rouge1_f1": 0.2032,
+      "rouge2_f1": 0.0469,
+      "rougeL_f1": 0.1242,
+      "semantic_sim": 0.5981
     },
     "ZeroShot": {
-      "rouge1_f1": 0.19015145079365844,
-      "rouge2_f1": 0.04223042924246237,
-      "rougeL_f1": 0.10991418334786447,
-      "semantic_sim": 0.6027223504927728
+      "rouge1_f1": 0.1902,
+      "rouge2_f1": 0.0422,
+      "rougeL_f1": 0.1099,
+      "semantic_sim": 0.6027
     }
   },
   "Quality: High Only": {
     "sample_size": 93,
     "RAG": {
-      "rouge1_f1": 0.20317061207169648,
-      "rouge2_f1": 0.04685766395095953,
-      "rougeL_f1": 0.12417699607439994,
-      "semantic_sim": 0.598055099769324
+      "rouge1_f1": 0.2032,
+      "rouge2_f1": 0.0469,
+      "rougeL_f1": 0.1242,
+      "semantic_sim": 0.5981
     },
     "ZeroShot": {
-      "rouge1_f1": 0.19015145079365844,
-      "rouge2_f1": 0.04223042924246237,
-      "rougeL_f1": 0.10991418334786447,
-      "semantic_sim": 0.6027223504927728
+      "rouge1_f1": 0.1902,
+      "rouge2_f1": 0.0422,
+      "rougeL_f1": 0.1099,
+      "semantic_sim": 0.6027
     }
   },
   "retrieval_analysis": {
-    "mean_similarity": 0.515619253759743,
-    "median_similarity": 0.5193671882152557,
+    "mean_similarity": 0.515615053763441,
+    "median_similarity": 0.5194,
     "above_0.40_floor_count": 86,
     "above_0.40_floor_pct": 92.5
   }
