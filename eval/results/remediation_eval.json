@@ -1,0 +1,215 @@
+{
+  "metadata": {
+    "total_test_incidents": 93,
+    "excluded_gt_under_5_words": 0,
+    "eligible_incidents": 93,
+    "num_unique_companies": 40,
+    "bootstrap_resamples": 10000,
+    "seed": 42,
+    "ci_level": 0.95
+  },
+  "parse_failures": {
+    "baseline_zeroshot": {
+      "failure_count": 33,
+      "total_eligible": 93,
+      "coverage_rate": 0.6452,
+      "failed_incident_ids": [
+        "icco-6d1c63bd-3529-4120-8a00-18ee6647f3f0",
+        "icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43",
+        "icco-7d5ab17c-e367-4135-9c88-53f0f2df0073",
+        "icco-018edf27-f738-448d-8c46-947cd3b6d5b0",
+        "icco-785c5618-a34e-4dfc-bd04-559fc0635b3b",
+        "icco-0dfe934b-9234-4383-9d1c-de9b860a43d1",
+        "icco-36450ae5-3427-4ebb-ae57-16409643a473",
+        "discordstatus-vrdywypml5lf",
+        "discordstatus-4hpm4454hxtx",
+        "discordstatus-947scltt0c6j",
+        "discordstatus-jvqsklfdcvt8",
+        "icco-3d2adf6c-a887-4db4-badf-92987c613a46",
+        "icco-1c6f32bc-10ed-463a-a52d-763121f74e30",
+        "icco-9f912643-516f-4592-8d71-f70c68984c73",
+        "icco-01494547-7ee9-4169-a0c0-d921fa309d83",
+        "icco-db126e26-be84-4286-a778-975bbe87df0d",
+        "icco-31874408-c4e9-4687-94a2-ec1dfdcdf8e2",
+        "icco-cd8e3b5f-7b97-4af5-8986-28e2bf663805",
+        "icco-3e8b0d65-84e5-4a4f-bd28-81a2693432d4",
+        "icco-50a576ca-3171-417a-b001-50093be2d910",
+        "icco-0afb9162-9810-4b29-b5f3-d2f41508aede",
+        "icco-a532970a-0625-4ac3-8d3d-852108d2eb6b",
+        "icco-019eb098-9da5-4d2c-a64c-c6498933f165",
+        "icco-c67e3d46-6829-4524-a849-751464295b74",
+        "icco-029b4a8e-0332-4b91-abc3-5f84bdf70094",
+        "icco-34b4a47b-a3d6-4bda-acc9-57b621f53468",
+        "icco-9dbf5bb5-79ba-4d1f-8d14-d6f0ca264fd6",
+        "icco-eb95646f-90c2-4efe-b89e-060debafa0fc",
+        "icco-5a1083d6-e8cd-410a-b8de-90967b967ac7",
+        "icco-d44e5d9b-5c18-4cbe-b624-46bb9a311b84",
+        "icco-5bce5ed8-a675-4b38-8825-5ec0e41e0d1b",
+        "icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0",
+        "icco-922e216e-efe1-4687-a3e7-2398fbdd8dbe"
+      ]
+    },
+    "baseline_rag": {
+      "failure_count": 20,
+      "total_eligible": 93,
+      "coverage_rate": 0.7849,
+      "failed_incident_ids": [
+        "discordstatus-dsv750sj44fn",
+        "discordstatus-9bm86bnmfhfr",
+        "icco-3d2adf6c-a887-4db4-badf-92987c613a46",
+        "icco-01494547-7ee9-4169-a0c0-d921fa309d83",
+        "icco-be40b5ba-c37f-46d0-8891-febc43941fd0",
+        "icco-db126e26-be84-4286-a778-975bbe87df0d",
+        "icco-50a576ca-3171-417a-b001-50093be2d910",
+        "icco-3ca9020c-e384-4964-98b6-68268d9e42ec",
+        "icco-7e14860a-fced-4a66-9fdf-40f702ceeccd",
+        "icco-8aab8820-3db3-4827-b1b9-9702bddbafb1",
+        "icco-a532970a-0625-4ac3-8d3d-852108d2eb6b",
+        "icco-b3ecf309-d821-44e9-9755-b49540b6a90c",
+        "icco-029b4a8e-0332-4b91-abc3-5f84bdf70094",
+        "icco-34b4a47b-a3d6-4bda-acc9-57b621f53468",
+        "icco-9dbf5bb5-79ba-4d1f-8d14-d6f0ca264fd6",
+        "icco-eb95646f-90c2-4efe-b89e-060debafa0fc",
+        "icco-5a1083d6-e8cd-410a-b8de-90967b967ac7",
+        "icco-d44e5d9b-5c18-4cbe-b624-46bb9a311b84",
+        "icco-f4d13c23-5dca-4deb-8ddb-c4bdfc4fea4c",
+        "icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0"
+      ]
+    },
+    "gate_v2_zeroshot": {
+      "failure_count": 1,
+      "total_eligible": 93,
+      "coverage_rate": 0.9892,
+      "failed_incident_ids": [
+        "shopify-882r6x3ttyg9"
+      ]
+    },
+    "gate_v2_rag": {
+      "failure_count": 0,
+      "total_eligible": 93,
+      "coverage_rate": 1.0,
+      "failed_incident_ids": []
+    }
+  },
+  "cells": {
+    "baseline_zeroshot": {
+      "rougeL_f1": {
+        "mean": 0.0457,
+        "ci_95": [
+          0.0314,
+          0.062
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "bert_score_f1": {
+        "mean": 0.368,
+        "ci_95": [
+          0.3421,
+          0.3957
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "coverage_rate": 0.6452,
+      "parse_failure_count": 33
+    },
+    "baseline_rag": {
+      "rougeL_f1": {
+        "mean": 0.0688,
+        "ci_95": [
+          0.0562,
+          0.0834
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "bert_score_f1": {
+        "mean": 0.4074,
+        "ci_95": [
+          0.3829,
+          0.433
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "coverage_rate": 0.7849,
+      "parse_failure_count": 20
+    },
+    "gate_v2_zeroshot": {
+      "rougeL_f1": {
+        "mean": 0.1116,
+        "ci_95": [
+          0.0967,
+          0.1263
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "bert_score_f1": {
+        "mean": 0.4946,
+        "ci_95": [
+          0.4752,
+          0.5133
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "coverage_rate": 0.9892,
+      "parse_failure_count": 1
+    },
+    "gate_v2_rag": {
+      "rougeL_f1": {
+        "mean": 0.1183,
+        "ci_95": [
+          0.1045,
+          0.132
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "bert_score_f1": {
+        "mean": 0.5023,
+        "ci_95": [
+          0.4845,
+          0.5188
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "coverage_rate": 1.0,
+      "parse_failure_count": 0
+    }
+  },
+  "deltas": {
+    "baseline_format_rag_effect": {
+      "rougeL_delta": {
+        "mean": 0.0231,
+        "ci_95": [
+          0.0058,
+          0.0403
+        ],
+        "significant_under_cluster_bootstrap": true
+      },
+      "bert_score_delta": {
+        "mean": 0.0394,
+        "ci_95": [
+          0.0162,
+          0.0634
+        ],
+        "significant_under_cluster_bootstrap": true
+      }
+    },
+    "gate_v2_format_rag_effect": {
+      "rougeL_delta": {
+        "mean": 0.0067,
+        "ci_95": [
+          -0.0009,
+          0.0141
+        ],
+        "significant_under_cluster_bootstrap": false
+      },
+      "bert_score_delta": {
+        "mean": 0.0077,
+        "ci_95": [
+          0.0019,
+          0.0162
+        ],
+        "significant_under_cluster_bootstrap": true
+      }
+    }
+  },
+  "summary": "Remediation section evaluation across 4 cells (N=93, excluded GT < 5 words = 0):\n1. Parse Failures / Missing Section:\n   - baseline_zeroshot: 33/93 (64.5% coverage)\n   - baseline_rag:      20/93 (78.5% coverage)\n   - gate_v2_zeroshot:  1/93 (98.9% coverage)\n   - gate_v2_rag:       0/93 (100.0% coverage)\n2. Cell Scores (All 93 test incidents, clustered 95% CIs):\n   - baseline_zeroshot: ROUGE-L=0.0457 [0.0314, 0.062], BERTScore=0.368 [0.3421, 0.3957]\n   - baseline_rag:      ROUGE-L=0.0688 [0.0562, 0.0834], BERTScore=0.4074 [0.3829, 0.433]\n   - gate_v2_zeroshot:  ROUGE-L=0.1116 [0.0967, 0.1263], BERTScore=0.4946 [0.4752, 0.5133]\n   - gate_v2_rag:       ROUGE-L=0.1183 [0.1045, 0.132], BERTScore=0.5023 [0.4845, 0.5188]\n3. Within-Format RAG-minus-Zero-Shot Deltas (Clustered 95% CIs):\n   - Baseline Format: ROUGE-L delta = +0.0231 [0.0058, 0.0403] (significant: True), BERTScore delta = +0.0394 [0.0162, 0.0634] (significant: True)\n   - Gate-v2 Format:  ROUGE-L delta = +0.0067 [-0.0009, 0.0141] (significant: False), BERTScore delta = +0.0077 [0.0019, 0.0162] (significant: True)"
+}
