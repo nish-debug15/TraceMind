@@ -8,6 +8,7 @@
     "seed": 42,
     "ci_level": 0.95
   },
+  "failure_scoring_rule": "In the unconditional evaluation (N=93), incidents where an arm failed to parse a remediation section were assigned a score of 0.0 for ROUGE-L F1 and sanitized to 'none' for BERTScore F1. In the conditional_on_both_parsed evaluation, the sample is restricted to incidents where both arms in the comparison pair successfully generated and parsed a remediation section (n=52 for baseline format, n=92 for gate-v2 format).",
   "parse_failures": {
     "baseline_zeroshot": {
       "failure_count": 33,
@@ -211,5 +212,275 @@
       }
     }
   },
-  "summary": "Remediation section evaluation across 4 cells (N=93, excluded GT < 5 words = 0):\n1. Parse Failures / Missing Section:\n   - baseline_zeroshot: 33/93 (64.5% coverage)\n   - baseline_rag:      20/93 (78.5% coverage)\n   - gate_v2_zeroshot:  1/93 (98.9% coverage)\n   - gate_v2_rag:       0/93 (100.0% coverage)\n2. Cell Scores (All 93 test incidents, clustered 95% CIs):\n   - baseline_zeroshot: ROUGE-L=0.0457 [0.0314, 0.062], BERTScore=0.368 [0.3421, 0.3957]\n   - baseline_rag:      ROUGE-L=0.0688 [0.0562, 0.0834], BERTScore=0.4074 [0.3829, 0.433]\n   - gate_v2_zeroshot:  ROUGE-L=0.1116 [0.0967, 0.1263], BERTScore=0.4946 [0.4752, 0.5133]\n   - gate_v2_rag:       ROUGE-L=0.1183 [0.1045, 0.132], BERTScore=0.5023 [0.4845, 0.5188]\n3. Within-Format RAG-minus-Zero-Shot Deltas (Clustered 95% CIs):\n   - Baseline Format: ROUGE-L delta = +0.0231 [0.0058, 0.0403] (significant: True), BERTScore delta = +0.0394 [0.0162, 0.0634] (significant: True)\n   - Gate-v2 Format:  ROUGE-L delta = +0.0067 [-0.0009, 0.0141] (significant: False), BERTScore delta = +0.0077 [0.0019, 0.0162] (significant: True)"
+  "conditional_on_both_parsed": {
+    "baseline_format": {
+      "n": 52,
+      "num_unique_companies": 27,
+      "incident_ids": [
+        "icco-3ec87435-3fcc-4edb-bf72-e80bb09d901f",
+        "icco-ca82c550-402b-4abd-942a-163c1b084e52",
+        "icco-c990285e-31b4-48e1-b535-bf18869268ad",
+        "icco-a46ebba4-2d7c-49e6-aa71-0ce989fbff97",
+        "discordstatus-pcg3nsfq6l2y",
+        "discordstatus-k42p6rqypf7v",
+        "discordstatus-r7919gwty4gc",
+        "discordstatus-5sqkt5xhj2pc",
+        "discordstatus-91qwn7zg2sts",
+        "icco-41f95c9f-d248-4a6c-802d-3648022a03dd",
+        "icco-86beec9d-3cf5-4cbd-8379-9a04b614f3e4",
+        "icco-f6bbc0ef-8355-46ba-aba6-86fd4f312bd7",
+        "icco-7ba9335c-25db-4dfc-b0f6-3e6a2aff2244",
+        "icco-32d4756d-4a53-475d-bfc5-3a028c6192b8",
+        "icco-f9f4ba4c-686c-46a4-982c-8dc21bd8a448",
+        "icco-160d35a4-38ac-49da-a261-97d12c86203c",
+        "icco-9332c0d7-bec4-427c-8689-267bdc5840fa",
+        "icco-edaa981d-2a23-4aab-8c09-1c20c899fb2f",
+        "icco-655ee350-a86f-424b-89c5-f80cc0fe527e",
+        "icco-7562d257-0f9d-4f6a-b7e0-69c3649f79f4",
+        "icco-cf16d8bc-b4cd-469d-94e4-e39fcec5aec9",
+        "icco-d6db1e76-af37-435c-83e9-e7c7cabfaf0f",
+        "icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5",
+        "icco-a54b2ace-5fdf-452e-bdb2-cd8a48a94e56",
+        "icco-3f376b77-6063-48a6-8ee2-92ca365194e4",
+        "icco-5a99836e-bbde-4dfc-9621-054eac5c5c50",
+        "icco-e21166ff-b35a-4309-99cd-4a8bf5e22305",
+        "icco-f4458caf-d848-419a-966e-07c9020cfc48",
+        "icco-5b73c1c1-8ec4-4901-91f3-0d993f582dd4",
+        "icco-65ef2aac-4cc6-4592-af9b-999694efc917",
+        "icco-7f0cc221-46c7-485e-bf6c-1719dc4c4e49",
+        "icco-414194f9-fb2c-48b4-a239-eead81523b5d",
+        "icco-912b30f3-43b7-4d6d-a03d-322983048e5c",
+        "icco-0d5441d3-c69a-4a0a-ab5f-c5ef6e7cc774",
+        "icco-27672984-d1e8-4a31-b08c-75c8c54e6314",
+        "icco-848f9263-fe81-4bbc-b0d2-cc1671bb88a5",
+        "shopify-882r6x3ttyg9",
+        "shopify-26hrlv896m7j",
+        "shopify-7g3scbq177td",
+        "shopify-tq1zmqvw6cjz",
+        "shopify-x7y62nyy43mt",
+        "icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2",
+        "icco-61617271-54e4-4f99-9ade-86428b8fe4c3",
+        "icco-6bc6cd0c-5bbd-4278-a7bf-c42cd8174b50",
+        "icco-a50e7b06-2f2c-4d13-a340-9a1e7eed59d7",
+        "icco-d17fe136-eb00-44f8-8147-e3dc22358cba",
+        "icco-e7d7aa93-81f7-4338-9c0b-6e6c0dcefdcb",
+        "icco-46457692-ed7e-49df-8a45-d1b3eea8ac46",
+        "icco-44ce12a8-20dd-43fe-914a-c9a0747baf52",
+        "icco-2590ea48-9ceb-4cb4-a034-49bffacd7b33",
+        "icco-090ac94f-65d7-49cc-9e5d-1c8c000b2042",
+        "icco-097f2292-4ca7-41f4-abdf-585177b99669"
+      ],
+      "cells": {
+        "baseline_zeroshot": {
+          "rougeL_f1": {
+            "mean": 0.0733,
+            "ci_95": [
+              0.0581,
+              0.0892
+            ],
+            "significant_under_cluster_bootstrap": true
+          },
+          "bert_score_f1": {
+            "mean": 0.4313,
+            "ci_95": [
+              0.4104,
+              0.4532
+            ],
+            "significant_under_cluster_bootstrap": true
+          }
+        },
+        "baseline_rag": {
+          "rougeL_f1": {
+            "mean": 0.085,
+            "ci_95": [
+              0.0748,
+              0.0961
+            ],
+            "significant_under_cluster_bootstrap": true
+          },
+          "bert_score_f1": {
+            "mean": 0.4517,
+            "ci_95": [
+              0.4329,
+              0.4708
+            ],
+            "significant_under_cluster_bootstrap": true
+          }
+        }
+      },
+      "deltas": {
+        "rougeL_delta": {
+          "mean": 0.0118,
+          "ci_95": [
+            -0.0016,
+            0.026
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": 0.0204,
+          "ci_95": [
+            0.0083,
+            0.0329
+          ],
+          "significant_under_cluster_bootstrap": true
+        }
+      }
+    },
+    "gate_v2_format": {
+      "n": 92,
+      "num_unique_companies": 40,
+      "incident_ids": [
+        "icco-3ec87435-3fcc-4edb-bf72-e80bb09d901f",
+        "icco-6d1c63bd-3529-4120-8a00-18ee6647f3f0",
+        "icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43",
+        "icco-7d5ab17c-e367-4135-9c88-53f0f2df0073",
+        "icco-ca82c550-402b-4abd-942a-163c1b084e52",
+        "icco-018edf27-f738-448d-8c46-947cd3b6d5b0",
+        "icco-c990285e-31b4-48e1-b535-bf18869268ad",
+        "icco-785c5618-a34e-4dfc-bd04-559fc0635b3b",
+        "icco-0dfe934b-9234-4383-9d1c-de9b860a43d1",
+        "icco-36450ae5-3427-4ebb-ae57-16409643a473",
+        "icco-a46ebba4-2d7c-49e6-aa71-0ce989fbff97",
+        "discordstatus-pcg3nsfq6l2y",
+        "discordstatus-vrdywypml5lf",
+        "discordstatus-4hpm4454hxtx",
+        "discordstatus-k42p6rqypf7v",
+        "discordstatus-947scltt0c6j",
+        "discordstatus-dsv750sj44fn",
+        "discordstatus-jvqsklfdcvt8",
+        "discordstatus-r7919gwty4gc",
+        "discordstatus-5sqkt5xhj2pc",
+        "discordstatus-91qwn7zg2sts",
+        "discordstatus-9bm86bnmfhfr",
+        "icco-3d2adf6c-a887-4db4-badf-92987c613a46",
+        "icco-1c6f32bc-10ed-463a-a52d-763121f74e30",
+        "icco-9f912643-516f-4592-8d71-f70c68984c73",
+        "icco-01494547-7ee9-4169-a0c0-d921fa309d83",
+        "icco-be40b5ba-c37f-46d0-8891-febc43941fd0",
+        "icco-db126e26-be84-4286-a778-975bbe87df0d",
+        "icco-31874408-c4e9-4687-94a2-ec1dfdcdf8e2",
+        "icco-cd8e3b5f-7b97-4af5-8986-28e2bf663805",
+        "icco-3e8b0d65-84e5-4a4f-bd28-81a2693432d4",
+        "icco-50a576ca-3171-417a-b001-50093be2d910",
+        "icco-0afb9162-9810-4b29-b5f3-d2f41508aede",
+        "icco-3ca9020c-e384-4964-98b6-68268d9e42ec",
+        "icco-41f95c9f-d248-4a6c-802d-3648022a03dd",
+        "icco-7e14860a-fced-4a66-9fdf-40f702ceeccd",
+        "icco-86beec9d-3cf5-4cbd-8379-9a04b614f3e4",
+        "icco-8aab8820-3db3-4827-b1b9-9702bddbafb1",
+        "icco-a532970a-0625-4ac3-8d3d-852108d2eb6b",
+        "icco-f6bbc0ef-8355-46ba-aba6-86fd4f312bd7",
+        "icco-019eb098-9da5-4d2c-a64c-c6498933f165",
+        "icco-7ba9335c-25db-4dfc-b0f6-3e6a2aff2244",
+        "icco-b3ecf309-d821-44e9-9755-b49540b6a90c",
+        "icco-c67e3d46-6829-4524-a849-751464295b74",
+        "icco-029b4a8e-0332-4b91-abc3-5f84bdf70094",
+        "icco-32d4756d-4a53-475d-bfc5-3a028c6192b8",
+        "icco-34b4a47b-a3d6-4bda-acc9-57b621f53468",
+        "icco-9dbf5bb5-79ba-4d1f-8d14-d6f0ca264fd6",
+        "icco-eb95646f-90c2-4efe-b89e-060debafa0fc",
+        "icco-f9f4ba4c-686c-46a4-982c-8dc21bd8a448",
+        "icco-160d35a4-38ac-49da-a261-97d12c86203c",
+        "icco-9332c0d7-bec4-427c-8689-267bdc5840fa",
+        "icco-5a1083d6-e8cd-410a-b8de-90967b967ac7",
+        "icco-d44e5d9b-5c18-4cbe-b624-46bb9a311b84",
+        "icco-edaa981d-2a23-4aab-8c09-1c20c899fb2f",
+        "icco-5bce5ed8-a675-4b38-8825-5ec0e41e0d1b",
+        "icco-f4d13c23-5dca-4deb-8ddb-c4bdfc4fea4c",
+        "icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0",
+        "icco-655ee350-a86f-424b-89c5-f80cc0fe527e",
+        "icco-7562d257-0f9d-4f6a-b7e0-69c3649f79f4",
+        "icco-922e216e-efe1-4687-a3e7-2398fbdd8dbe",
+        "icco-cf16d8bc-b4cd-469d-94e4-e39fcec5aec9",
+        "icco-d6db1e76-af37-435c-83e9-e7c7cabfaf0f",
+        "icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5",
+        "icco-a54b2ace-5fdf-452e-bdb2-cd8a48a94e56",
+        "icco-3f376b77-6063-48a6-8ee2-92ca365194e4",
+        "icco-5a99836e-bbde-4dfc-9621-054eac5c5c50",
+        "icco-e21166ff-b35a-4309-99cd-4a8bf5e22305",
+        "icco-f4458caf-d848-419a-966e-07c9020cfc48",
+        "icco-5b73c1c1-8ec4-4901-91f3-0d993f582dd4",
+        "icco-65ef2aac-4cc6-4592-af9b-999694efc917",
+        "icco-7f0cc221-46c7-485e-bf6c-1719dc4c4e49",
+        "icco-414194f9-fb2c-48b4-a239-eead81523b5d",
+        "icco-912b30f3-43b7-4d6d-a03d-322983048e5c",
+        "icco-0d5441d3-c69a-4a0a-ab5f-c5ef6e7cc774",
+        "icco-27672984-d1e8-4a31-b08c-75c8c54e6314",
+        "icco-848f9263-fe81-4bbc-b0d2-cc1671bb88a5",
+        "shopify-26hrlv896m7j",
+        "shopify-7g3scbq177td",
+        "shopify-tq1zmqvw6cjz",
+        "shopify-x7y62nyy43mt",
+        "icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2",
+        "icco-61617271-54e4-4f99-9ade-86428b8fe4c3",
+        "icco-6bc6cd0c-5bbd-4278-a7bf-c42cd8174b50",
+        "icco-a50e7b06-2f2c-4d13-a340-9a1e7eed59d7",
+        "icco-d17fe136-eb00-44f8-8147-e3dc22358cba",
+        "icco-e7d7aa93-81f7-4338-9c0b-6e6c0dcefdcb",
+        "icco-46457692-ed7e-49df-8a45-d1b3eea8ac46",
+        "icco-44ce12a8-20dd-43fe-914a-c9a0747baf52",
+        "icco-2590ea48-9ceb-4cb4-a034-49bffacd7b33",
+        "icco-090ac94f-65d7-49cc-9e5d-1c8c000b2042",
+        "icco-097f2292-4ca7-41f4-abdf-585177b99669"
+      ],
+      "cells": {
+        "gate_v2_zeroshot": {
+          "rougeL_f1": {
+            "mean": 0.1128,
+            "ci_95": [
+              0.0978,
+              0.127
+            ],
+            "significant_under_cluster_bootstrap": true
+          },
+          "bert_score_f1": {
+            "mean": 0.497,
+            "ci_95": [
+              0.4786,
+              0.514
+            ],
+            "significant_under_cluster_bootstrap": true
+          }
+        },
+        "gate_v2_rag": {
+          "rougeL_f1": {
+            "mean": 0.1185,
+            "ci_95": [
+              0.1046,
+              0.1324
+            ],
+            "significant_under_cluster_bootstrap": true
+          },
+          "bert_score_f1": {
+            "mean": 0.5027,
+            "ci_95": [
+              0.4848,
+              0.5194
+            ],
+            "significant_under_cluster_bootstrap": true
+          }
+        }
+      },
+      "deltas": {
+        "rougeL_delta": {
+          "mean": 0.0056,
+          "ci_95": [
+            -0.0013,
+            0.0123
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": 0.0057,
+          "ci_95": [
+            0.0013,
+            0.0103
+          ],
+          "significant_under_cluster_bootstrap": true
+        }
+      }
+    }
+  },
+  "summary": "Remediation section evaluation across 4 cells (N=93, excluded GT < 5 words = 0):\n1. Parse Failures / Missing Section:\n   - baseline_zeroshot: 33/93 (64.5% coverage)\n   - baseline_rag:      20/93 (78.5% coverage)\n   - gate_v2_zeroshot:  1/93 (98.9% coverage)\n   - gate_v2_rag:       0/93 (100.0% coverage)\n2. Unconditional Cell Scores (All 93 test incidents, failures scored 0.0 ROUGE-L / 'none' BERTScore, clustered 95% CIs):\n   - baseline_zeroshot: ROUGE-L=0.0457 [0.0314, 0.062], BERTScore=0.368 [0.3421, 0.3957]\n   - baseline_rag:      ROUGE-L=0.0688 [0.0562, 0.0834], BERTScore=0.4074 [0.3829, 0.433]\n   - gate_v2_zeroshot:  ROUGE-L=0.1116 [0.0967, 0.1263], BERTScore=0.4946 [0.4752, 0.5133]\n   - gate_v2_rag:       ROUGE-L=0.1183 [0.1045, 0.132], BERTScore=0.5023 [0.4845, 0.5188]\n3. Unconditional Within-Format RAG Deltas:\n   - Baseline Format: ROUGE-L delta = +0.0231 [0.0058, 0.0403] (significant: True)\n   - Gate-v2 Format:  ROUGE-L delta = +0.0067 [-0.0009, 0.0141] (significant: False)\n4. Conditional on Both Parsed Within-Format RAG Deltas:\n   - Baseline Format (n=52): ROUGE-L delta drops from +0.0231 [0.0058, 0.0403] (unconditional) to +0.0118 [-0.0016, 0.026] (conditional). The CI now crosses zero (significant: False), demonstrating that the unconditional baseline remediation gain was largely an artifact of differential parse coverage (78.5% RAG vs 64.5% Zero-Shot).\n   - Gate-v2 Format (n=92): ROUGE-L delta is +0.0056 [-0.0013, 0.0123] (significant: False)."
 }
