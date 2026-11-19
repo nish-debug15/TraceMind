@@ -1,0 +1,84 @@
+{
+  "total_incidents": 93,
+  "flagged_count": 7,
+  "clean_count": 86,
+  "noise_rate": 0.0753,
+  "detector_criteria": {
+    "max_length_threshold": 150,
+    "phrases": [
+      "resolved",
+      "recovered",
+      "fix has been deployed",
+      "fix has been implemented",
+      "monitoring all systems",
+      "monitoring the results",
+      "monitoring the issue",
+      "monitoring systems",
+      "back to normal",
+      "mitigating the issue",
+      "working towards mitigating",
+      "investigating the issue",
+      "we believe the",
+      "should be functional",
+      "fully functional",
+      "all systems operational",
+      "working as intended",
+      "no longer seeing errors",
+      "service has been restored",
+      "incident has been resolved",
+      "traffic is back",
+      "issues have been resolved"
+    ]
+  },
+  "flagged_incidents": [
+    {
+      "incident_id": "discordstatus-pcg3nsfq6l2y",
+      "company": "discord",
+      "length": 125,
+      "reason": "Length 125 <= 150 and contains 'mitigating the issue'",
+      "root_cause": "This issue has expanded and is now affecting all Discord interactions. We're continuing to work towards mitigating the issue."
+    },
+    {
+      "incident_id": "discordstatus-k42p6rqypf7v",
+      "company": "discord",
+      "length": 59,
+      "reason": "Length 59 <= 150 and contains 'resolved'",
+      "root_cause": "We've resolved the issue and messaging should be functional"
+    },
+    {
+      "incident_id": "discordstatus-dsv750sj44fn",
+      "company": "discord",
+      "length": 39,
+      "reason": "Length 39 <= 150 and contains 'resolved'",
+      "root_cause": "We believe the 503s have been resolved."
+    },
+    {
+      "incident_id": "discordstatus-5sqkt5xhj2pc",
+      "company": "discord",
+      "length": 61,
+      "reason": "Length 61 <= 150 and contains 'fix has been implemented'",
+      "root_cause": "A fix has been implemented and we are monitoring the results."
+    },
+    {
+      "incident_id": "discordstatus-9bm86bnmfhfr",
+      "company": "discord",
+      "length": 33,
+      "reason": "Length 33 <= 150 and contains 'recovered'",
+      "root_cause": "Voice calls have fully recovered."
+    },
+    {
+      "incident_id": "shopify-26hrlv896m7j",
+      "company": "shopify",
+      "length": 113,
+      "reason": "Length 113 <= 150 and contains 'back to normal'",
+      "root_cause": "All traffic is back to normal levels, we are no longer seeing errors and believe this fix has worked as intended."
+    },
+    {
+      "incident_id": "shopify-tq1zmqvw6cjz",
+      "company": "shopify",
+      "length": 62,
+      "reason": "Length 62 <= 150 and contains 'fix has been deployed'",
+      "root_cause": "A fix has been deployed and we are now monitoring all systems."
+    }
+  ]
+}
