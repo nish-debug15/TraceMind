@@ -1,0 +1,275 @@
+{
+  "exploratory": true,
+  "metadata": {
+    "num_test_incidents": 93,
+    "num_unique_companies": 40,
+    "bootstrap_resamples": 10000,
+    "seed": 42,
+    "ci_level": 0.95
+  },
+  "spearman_correlations": {
+    "baseline_format": {
+      "rougeL_delta": {
+        "spearman_rho": 0.2249,
+        "ci_95": [
+          -0.0342,
+          0.5201
+        ],
+        "excludes_zero": false
+      },
+      "bert_score_delta": {
+        "spearman_rho": 0.1284,
+        "ci_95": [
+          -0.143,
+          0.37
+        ],
+        "excludes_zero": false
+      }
+    },
+    "gate_v2_format": {
+      "rougeL_delta": {
+        "spearman_rho": -0.0476,
+        "ci_95": [
+          -0.3082,
+          0.2309
+        ],
+        "excludes_zero": false
+      },
+      "bert_score_delta": {
+        "spearman_rho": 0.1199,
+        "ci_95": [
+          -0.13,
+          0.3792
+        ],
+        "excludes_zero": false
+      }
+    }
+  },
+  "terciles": {
+    "low_tercile": {
+      "n": 31,
+      "mean_sim": 0.4218,
+      "sim_range": [
+        0.2406,
+        0.4784
+      ],
+      "baseline": {
+        "rougeL_delta": {
+          "mean": 0.0068,
+          "ci_95": [
+            -0.0008,
+            0.0149
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": 0.0051,
+          "ci_95": [
+            -0.0035,
+            0.0141
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      },
+      "gate_v2": {
+        "rougeL_delta": {
+          "mean": 0.0076,
+          "ci_95": [
+            -0.0087,
+            0.0237
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": -0.0068,
+          "ci_95": [
+            -0.0233,
+            0.0143
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      }
+    },
+    "mid_tercile": {
+      "n": 31,
+      "mean_sim": 0.5197,
+      "sim_range": [
+        0.4795,
+        0.5532
+      ],
+      "baseline": {
+        "rougeL_delta": {
+          "mean": 0.0122,
+          "ci_95": [
+            0.0014,
+            0.0219
+          ],
+          "significant_under_cluster_bootstrap": true
+        },
+        "bert_score_delta": {
+          "mean": 0.0016,
+          "ci_95": [
+            -0.0098,
+            0.0106
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      },
+      "gate_v2": {
+        "rougeL_delta": {
+          "mean": -0.0056,
+          "ci_95": [
+            -0.0309,
+            0.0206
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": -0.0094,
+          "ci_95": [
+            -0.0233,
+            0.0075
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      }
+    },
+    "high_tercile": {
+      "n": 31,
+      "mean_sim": 0.6054,
+      "sim_range": [
+        0.5538,
+        0.8424
+      ],
+      "baseline": {
+        "rougeL_delta": {
+          "mean": 0.0238,
+          "ci_95": [
+            0.0088,
+            0.0443
+          ],
+          "significant_under_cluster_bootstrap": true
+        },
+        "bert_score_delta": {
+          "mean": 0.0141,
+          "ci_95": [
+            0.0028,
+            0.024
+          ],
+          "significant_under_cluster_bootstrap": true
+        }
+      },
+      "gate_v2": {
+        "rougeL_delta": {
+          "mean": 0.0037,
+          "ci_95": [
+            -0.0199,
+            0.0287
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": -0.0031,
+          "ci_95": [
+            -0.0148,
+            0.0079
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      }
+    }
+  },
+  "retrieval_pass_split": {
+    "pass1_high_quality": {
+      "n": 82,
+      "mean_sim": 0.5339,
+      "sim_range": [
+        0.4027,
+        0.8424
+      ],
+      "baseline": {
+        "rougeL_delta": {
+          "mean": 0.0158,
+          "ci_95": [
+            0.0075,
+            0.0245
+          ],
+          "significant_under_cluster_bootstrap": true
+        },
+        "bert_score_delta": {
+          "mean": 0.0069,
+          "ci_95": [
+            -0.0006,
+            0.0131
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      },
+      "gate_v2": {
+        "rougeL_delta": {
+          "mean": 0.0022,
+          "ci_95": [
+            -0.0139,
+            0.0184
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": -0.0048,
+          "ci_95": [
+            -0.0153,
+            0.0069
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      }
+    },
+    "pass2_fallback": {
+      "n": 11,
+      "mean_sim": 0.3794,
+      "sim_range": [
+        0.2406,
+        0.4526
+      ],
+      "baseline": {
+        "rougeL_delta": {
+          "mean": 0.0025,
+          "ci_95": [
+            -0.0073,
+            0.0184
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": 0.0075,
+          "ci_95": [
+            -0.0083,
+            0.0253
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      },
+      "gate_v2": {
+        "rougeL_delta": {
+          "mean": -0.0006,
+          "ci_95": [
+            -0.0193,
+            0.0191
+          ],
+          "significant_under_cluster_bootstrap": false
+        },
+        "bert_score_delta": {
+          "mean": -0.0183,
+          "ci_95": [
+            -0.0363,
+            0.0006
+          ],
+          "significant_under_cluster_bootstrap": false
+        }
+      }
+    },
+    "pass_recorded_in_cache": false,
+    "pass_determination_rule": "Pass 1: matched incident in train.json has quality == 'high' and similarity >= 0.40; Pass 2: fallback to any quality"
+  },
+  "summary": "Exploratory dose-response analysis between top-1 retrieval similarity and downstream generation delta (N=93):\n1. Baseline Format:\n   - ROUGE-L delta vs sim: Spearman rho = +0.2249 (95% clustered CI [-0.0342, 0.5201], excludes zero: False). Tercile mean deltas: Low=+0.0068, Mid=+0.0122, High=+0.0238.\n   - BERTScore delta vs sim: Spearman rho = +0.1284 (95% clustered CI [-0.143, 0.37], excludes zero: False). Tercile mean deltas: Low=+0.0051, Mid=+0.0016, High=+0.0141.\n2. Gate-v2 Format:\n   - ROUGE-L delta vs sim: Spearman rho = -0.0476 (95% clustered CI [-0.3082, 0.2309], excludes zero: False). Tercile mean deltas: Low=+0.0076, Mid=-0.0056, High=+0.0037.\n   - BERTScore delta vs sim: Spearman rho = +0.1199 (95% clustered CI [-0.13, 0.3792], excludes zero: False). Tercile mean deltas: Low=-0.0068, Mid=-0.0094, High=-0.0031."
+}
