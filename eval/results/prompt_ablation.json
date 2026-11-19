@@ -40,10 +40,7 @@
   },
   "spread": {
     "rougeL_f1_spread": 0.0727,
-    "rougeL_f1_variance": 0.001076,
     "bert_score_f1_spread": 0.0634,
-    "bert_score_f1_variance": 0.000808,
-    "cosine_sim_spread": 0.0408,
-    "cosine_sim_variance": 0.000302
+    "cosine_sim_spread": 0.0408
   }
 }
