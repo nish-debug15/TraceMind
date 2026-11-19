@@ -125,7 +125,42 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 
 ## Quantitative Evaluation & Benchmark Results
 
-Comprehensive evaluation results, prompt robustness ablation, bootstrap confidence intervals, and failure analyses are generated directly from committed benchmark outputs: see `eval/results/`.
+### Benchmark Evaluation: RAG vs. Zero-Shot Baseline (Held-Out Test Set, N = 93)
+
+> Evaluated strictly on held-out postmortems (`data/splits/test.json`) across 40 unseen companies against the TRAIN-ONLY retrieval index (`rag/chroma_db_train`, 662 incidents). Zero data leakage verified. 95% confidence intervals computed via 10,000 paired bootstrap resamples (seed 42).
+
+| Metric | Zero-Shot Baseline [95% CI] | TraceMind RAG [95% CI] | Paired Delta [95% CI] | Statistically Significant |
+|:---|:---:|:---:|:---:|:---:|
+| **ROUGE-1 F1** | 0.1902 `[0.1742, 0.2059]` | 0.2032 `[0.1845, 0.2217]` | **+0.0130** `[0.0035, 0.0226]` | **Yes** (CI > 0) |
+| **ROUGE-2 F1** | 0.0422 `[0.0358, 0.0490]` | 0.0469 `[0.0383, 0.0563]` | **+0.0046** `[-0.0005, 0.0099]` | No |
+| **ROUGE-L F1** | 0.1099 `[0.1016, 0.1179]` | 0.1242 `[0.1128, 0.1357]` | **+0.0143** `[0.0084, 0.0202]` | **Yes** (CI > 0) |
+| **BERTScore F1** | 0.5022 `[0.4892, 0.5138]` | 0.5092 `[0.4960, 0.5217]` | **+0.0069** `[0.0018, 0.0119]` | **Yes** (CI > 0) |
+| **Embedding Cosine Sim** | 0.6027 `[0.5697, 0.6334]` | 0.5981 `[0.5657, 0.6298]` | **-0.0047** `[-0.0195, 0.0095]` | No |
+
+#### Performance Breakdown by Report Quality
+
+| Quality Subset | N | Zero-Shot ROUGE-L | RAG ROUGE-L | Delta ROUGE-L | Zero-Shot Cosine | RAG Cosine | Delta Cosine |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Full Set | 93 | 0.1099 | 0.1242 | **+0.0143** | 0.6027 | 0.5981 | -0.0046 |
+| Quality: High Only | 93 | 0.1099 | 0.1242 | **+0.0143** | 0.6027 | 0.5981 | -0.0046 |
+
+#### Retrieval Distribution & Guardrail Abstention
+
+- **Mean Top-1 Cosine Similarity**: `0.5156` (Median: `0.5194`)
+- **Similarity Floor (< 0.40) Abstentions**: `7 / 93` (7.5%)
+- **Guardrail Action**: For incidents scoring below 0.40 cosine similarity, the relevance guardrail (`relevance_gate_v2`) abstains from precedent transfer and forces autonomous RCA synthesis from incoming telemetry alone.
+
+#### Prompt Robustness Ablation (Test Set, N = 93)
+
+| Prompt Variant | ROUGE-L F1 | BERTScore F1 | Cosine Similarity | Guardrail Enforced |
+|:---|:---:|:---:|:---:|:---:|
+| `baseline` | 0.1242 | 0.5092 | 0.5978 | None |
+| `relevance_gate` | 0.1902 | 0.5726 | 0.6386 | Soft check |
+| `relevance_gate_v2` | 0.1969 | 0.5658 | 0.6077 | Yes (`Precedent: [relevant|not relevant]`) |
+
+> **Prompt Variance / Spread across variants**: ROUGE-L range: `0.0727`, Cosine range: `0.0408`.
+
+Detailed failure analysis and individual incident evaluations are documented in [`docs/FAILURE_ANALYSIS.md`](docs/FAILURE_ANALYSIS.md) and [`eval/results/`](eval/results/).
 
 ---
 

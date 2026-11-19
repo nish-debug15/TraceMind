@@ -1,0 +1,49 @@
+{
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "test_dataset": "data/splits/test.json",
+    "num_samples": 93,
+    "prompt_variants": [
+      "baseline",
+      "relevance_gate",
+      "relevance_gate_v2"
+    ],
+    "bert_score_model": "bert-base-uncased",
+    "git_sha": "3339239be5bab64737a392b7813ae8631391f56d",
+    "timestamp": "2026-11-19T07:37:48.716641+00:00"
+  },
+  "variants": {
+    "baseline": {
+      "rougeL_f1": 0.1242,
+      "rougeL_f1_std": 0.0562,
+      "bert_score_f1": 0.5092,
+      "bert_score_f1_std": 0.0638,
+      "cosine_sim": 0.5978,
+      "cosine_sim_std": 0.1586
+    },
+    "relevance_gate": {
+      "rougeL_f1": 0.1902,
+      "rougeL_f1_std": 0.0863,
+      "bert_score_f1": 0.5726,
+      "bert_score_f1_std": 0.0768,
+      "cosine_sim": 0.6386,
+      "cosine_sim_std": 0.1732
+    },
+    "relevance_gate_v2": {
+      "rougeL_f1": 0.1969,
+      "rougeL_f1_std": 0.0992,
+      "bert_score_f1": 0.5658,
+      "bert_score_f1_std": 0.078,
+      "cosine_sim": 0.6077,
+      "cosine_sim_std": 0.1758
+    }
+  },
+  "spread": {
+    "rougeL_f1_spread": 0.0727,
+    "rougeL_f1_variance": 0.001076,
+    "bert_score_f1_spread": 0.0634,
+    "bert_score_f1_variance": 0.000808,
+    "cosine_sim_spread": 0.0408,
+    "cosine_sim_variance": 0.000302
+  }
+}

@@ -1,107 +1,82 @@
 """
-Prompt Robustness Ablation Suite
---------------------------------
-Tests output sensitivity of the generation model across 3 distinct prompt formulations:
-1. Standard SRE Prompt (default in TraceMind)
-2. Minimal / Direct Context Prompt (no role persona)
-3. Step-by-Step Diagnostic Prompt (Chain-of-Thought style)
+TraceMind Prompt Robustness Ablation Suite
+-----------------------------------------
+Evaluates output sensitivity across the 3 core RAG prompt formulations:
+1. baseline: Standard SRE persona and reference format.
+2. relevance_gate: Precedent relevance checking guardrail (soft check).
+3. relevance_gate_v2: Strict machine-parseable 'Precedent: [relevant|not relevant]' header.
 
-Usage:
-    python eval/prompt_ablation.py [--limit N]
+Requirements:
+- Evaluates strictly on held-out postmortems (data/splits/test.json, 93 incidents).
+- Zero data leakage: retrieves strictly against rag/chroma_db_train (postmortems_train).
+- Caches all generations in SQLite and eval/cache/ to ensure reproducibility.
+- Saves results to eval/results/prompt_ablation.json.
 """
 
 import os
 import sys
+import re
 import json
 import time
 import argparse
+import datetime
+import subprocess
 from pathlib import Path
 from typing import Dict, Any, List
-import requests
 import numpy as np
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
+import requests
 from dotenv import load_dotenv
+
+# Force UTF-8 encoding for stdout on Windows
+try:
+    if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 load_dotenv()
 
 from rouge_score import rouge_scorer
+from bert_score import score as calc_bertscore
 from clustering.cluster import embed
-from rag.generate import retrieve, RateLimiter, LLM_MAX_RPM, GROQ_API_URL
+from rag.prompts import PROMPT_REGISTRY, PROMPT_VARIANTS
+from rag.generate import RateLimiter, LLM_MAX_RPM, GROQ_API_URL
 from rag.gen_cache import get_cached_generation, set_cached_generation
 
-TEST_FILE = Path(__file__).parent.parent / "data" / "test.json"
-CACHE_FILE = Path(__file__).parent / "cache" / "prompt_ablation_cache.json"
+DATA_DIR = PROJECT_ROOT / "data"
+TEST_FILE = DATA_DIR / "splits" / "test.json"
+RESULTS_DIR = PROJECT_ROOT / "eval" / "results"
+RESULTS_DIR.mkdir(exist_ok=True)
+CACHE_DIR = PROJECT_ROOT / "eval" / "cache"
+CACHE_DIR.mkdir(exist_ok=True)
+
+RAG_VS_ZS_FILE = RESULTS_DIR / "rag_vs_zero_shot.json"
+RAG_CACHE_FILE = CACHE_DIR / "rag_generations.json"
+OUTPUT_FILE = RESULTS_DIR / "prompt_ablation.json"
+
 MODEL_ID = os.environ.get("LLM_MODEL", "openai/gpt-oss-120b")
 _rate_limiter = RateLimiter(max_rpm=LLM_MAX_RPM)
 
-PROMPT_VARIANTS = {
-    "baseline": (
-        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
-        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n\n"
-        "Historical Incident Reference:\n"
-        "- Root Cause: {root_cause}\n"
-        "- Remediation: {remediation_steps}\n\n"
-        "New Incident Log Excerpt:\n"
-        "{log_text}\n\n"
-        "Provide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
-    ),
-    "relevance_gate": (
-        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
-        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
-        "The historical incident below may be unrelated to the current log. First judge whether it is clearly relevant. "
-        "If it is not, write 'Precedent: not relevant' on the first line of ROOT CAUSE and derive the cause from the current log alone. "
-        "Never claim the current incident 'mirrors' or 'matches' a historical one unless specific evidence in the log supports it.\n\n"
-        "Historical Incident Reference:\n"
-        "- Root Cause: {root_cause}\n"
-        "- Remediation: {remediation_steps}\n\n"
-        "New Incident Log Excerpt:\n"
-        "{log_text}\n\n"
-        "Provide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
-    ),
-    "relevance_gate_v2": (
-        "You are an expert Site Reliability Engineer (SRE) assistant analyzing infrastructure incidents.\n"
-        "Analyze the incident log excerpt and correlate it with the provided historical incident.\n"
-        "The historical incident below may be unrelated to the current log. First judge whether it is clearly relevant.\n\n"
-        "Historical Incident Reference:\n"
-        "- Root Cause: {root_cause}\n"
-        "- Remediation: {remediation_steps}\n\n"
-        "New Incident Log Excerpt:\n"
-        "{log_text}\n\n"
-        "Provide your response in the following format:\nROOT CAUSE:\n"
-        "The very first line MUST be exactly 'Precedent: relevant' or 'Precedent: not relevant'.\n"
-        "(your concise analysis)\n\n"
-        "REMEDIATION STEPS:\n"
-        "(at most 5 numbered steps, ordered by priority, immediate mitigation first, each one sentence)"
-    ),
-    "variant_1_standard": (
-        "You are an SRE assistant analyzing infrastructure incidents. Use the following historical incident to understand "
-        "the context and format, then analyze the New Log Input and provide a precise Root Cause Analysis and actionable Remediation Steps.\n\n"
-        "Historical Incident:\n- Root Cause: {root_cause}\n- Remediation: {remediation_steps}\n\n"
-        "New Log Input:\n{log_text}\n\n"
-        "Provide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
-    ),
-    "variant_2_minimal": (
-        "Context postmortem:\nCause: {root_cause}\nFix: {remediation_steps}\n\n"
-        "Given this error log:\n{log_text}\n\n"
-        "Output:\nROOT CAUSE:\n(analysis)\n\nREMEDIATION STEPS:\n(steps)"
-    ),
-    "variant_3_diagnostic_cot": (
-        "You are a Principal Reliability Architect. Review the historical incident:\n"
-        "- Prior Root Cause: {root_cause}\n"
-        "- Prior Remediation: {remediation_steps}\n\n"
-        "Analyze the following incoming log systematically:\n{log_text}\n\n"
-        "Step 1: Identify the failing component.\n"
-        "Step 2: Synthesize findings into the final response:\n"
-        "ROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
-    ),
-}
+
+def parse_rca_output(raw_text: str) -> tuple:
+    """Parse ROOT CAUSE and REMEDIATION STEPS from LLM completion."""
+    rc_match = re.search(r"ROOT CAUSE:\s*(.*?)(?=REMEDIATION STEPS:|$)", raw_text, re.DOTALL | re.IGNORECASE)
+    rem_match = re.search(r"REMEDIATION STEPS:\s*(.*)", raw_text, re.DOTALL | re.IGNORECASE)
+    rc = rc_match.group(1).strip() if rc_match else raw_text.strip()
+    rem = rem_match.group(1).strip() if rem_match else ""
+    return rc, rem
 
 
-def call_groq_llm(prompt: str, api_key: str, max_retries: int = 4) -> str:
+def call_llm_with_retry(messages: List[Dict[str, str]], api_key: str, max_retries: int = 4) -> str:
+    """Call Groq chat completion with rate limiting and retry."""
     delay = 2.0
     for attempt in range(max_retries):
         _rate_limiter.acquire()
+        time.sleep(3.0)
         try:
             resp = requests.post(
                 GROQ_API_URL,
@@ -111,12 +86,9 @@ def call_groq_llm(prompt: str, api_key: str, max_retries: int = 4) -> str:
                 },
                 json={
                     "model": MODEL_ID,
-                    "messages": [
-                        {"role": "system", "content": "You are an expert SRE assistant analyzing infrastructure incidents."},
-                        {"role": "user", "content": prompt}
-                    ],
+                    "messages": messages,
                     "temperature": 0.2,
-                    "max_tokens": 500,
+                    "max_tokens": 800,
                 },
                 timeout=60.0
             )
@@ -141,80 +113,231 @@ def call_groq_llm(prompt: str, api_key: str, max_retries: int = 4) -> str:
     raise RuntimeError("Exceeded maximum retries calling Groq API.")
 
 
-def run_prompt_ablation(limit: int = 20):
-    groq_api_key = os.environ.get("GROQ_API_KEY")
-    if not groq_api_key:
-        print("CRITICAL: GROQ_API_KEY is required for prompt ablation evaluation.")
-        sys.exit(1)
+def run_prompt_ablation(limit: int = None, force_refresh: bool = False):
+    if not TEST_FILE.exists():
+        raise FileNotFoundError(f"Missing {TEST_FILE}.")
 
     with open(TEST_FILE, "r", encoding="utf-8") as f:
-        records = json.load(f)[:limit]
+        test_records = json.load(f)
 
-    cache = {}
-    if CACHE_FILE.exists():
-        with open(CACHE_FILE, "r", encoding="utf-8") as f:
-            cache = json.load(f)
+    if limit:
+        test_records = test_records[:limit]
 
-    scorer = rouge_scorer.RougeScorer(["rouge1", "rougeL"], use_stemmer=True)
-    variant_scores = {name: {"r1": [], "rL": [], "sim": []} for name in PROMPT_VARIANTS}
+    n_incidents = len(test_records)
+    print(f"[Prompt Ablation] Evaluating {n_incidents} test incidents across 3 prompts...")
 
-    print(f"Running Prompt Robustness Ablation across {len(records)} test samples using {MODEL_ID}...")
-    for i, r in enumerate(records):
-        inc_id = r["incident_id"]
-        log_text = r["raw_log_excerpt"]
-        match_meta, _ = retrieve(log_text, k=1)
-        if not match_meta:
+    # Load pre-retrieved train matches from rag_vs_zero_shot.json to guarantee zero leakage and consistency
+    retrieval_map = {}
+    if RAG_VS_ZS_FILE.exists():
+        with open(RAG_VS_ZS_FILE, "r", encoding="utf-8") as f:
+            rvz_data = json.load(f)
+            for item in rvz_data.get("per_incident_scores", []):
+                retrieval_map[item["incident_id"]] = item["retrieval"]
+
+    # Also check baseline generations from rag_generations.json
+    baseline_cache = {}
+    if RAG_CACHE_FILE.exists():
+        with open(RAG_CACHE_FILE, "r", encoding="utf-8") as f:
+            baseline_cache = json.load(f)
+
+    groq_api_key = os.environ.get("GROQ_API_KEY", "").strip()
+
+    prompt_names = ["baseline", "relevance_gate", "relevance_gate_v2"]
+    generations_by_variant = {p: {} for p in prompt_names}
+
+    for p in prompt_names:
+        cache_path = CACHE_DIR / f"ablation_{p}.json"
+        if cache_path.exists() and not force_refresh:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                generations_by_variant[p] = json.load(f)
+
+    # Process all test incidents
+    for idx, record in enumerate(test_records):
+        inc_id = record["incident_id"]
+        log_text = record["raw_log_excerpt"]
+        retrieval_info = retrieval_map.get(inc_id)
+
+        if not retrieval_info:
+            print(f"Warning: No pre-retrieved context for {inc_id}. Skipping.")
             continue
 
-        cache.setdefault(inc_id, {})
+        ret_meta = retrieval_info.get("metadata", {})
+        similarity = retrieval_info.get("similarity_score", 0.0)
 
-        for name, template in PROMPT_VARIANTS.items():
-            prompt = template.format(
-                root_cause=match_meta["root_cause"],
-                remediation_steps=match_meta["remediation_steps"],
-                log_text=log_text
+        for p_name in prompt_names:
+            # If already in variant cache
+            if inc_id in generations_by_variant[p_name] and not force_refresh:
+                continue
+
+            # Special case for baseline: check baseline_cache
+            if p_name == "baseline" and inc_id in baseline_cache and not force_refresh:
+                b_item = baseline_cache[inc_id]
+                generations_by_variant[p_name][inc_id] = {
+                    "root_cause": b_item["root_cause"],
+                    "remediation_steps": b_item["remediation_steps"],
+                    "raw_output": b_item.get("raw_output", ""),
+                    "source": "rag_cache"
+                }
+                continue
+
+            # Check SQLite gen cache
+            sqlite_cached = get_cached_generation(
+                model=MODEL_ID,
+                prompt_variant=p_name,
+                query_text_or_id=log_text,
+                incident_id=inc_id
+            )
+            if sqlite_cached and not force_refresh:
+                generations_by_variant[p_name][inc_id] = {
+                    "root_cause": sqlite_cached["root_cause"],
+                    "remediation_steps": sqlite_cached["remediation_steps"],
+                    "raw_output": sqlite_cached.get("raw_output", ""),
+                    "source": "sqlite_cache"
+                }
+                continue
+
+            # Format messages
+            variant_def = PROMPT_REGISTRY[p_name]
+            sys_msg = variant_def["system"]
+            user_msg = variant_def["user_template"].format(
+                ref_root_cause=ret_meta.get("root_cause", ""),
+                ref_remediation_steps=ret_meta.get("remediation_steps", ""),
+                log_text=log_text,
+                similarity=similarity
+            )
+            messages = [
+                {"role": "system", "content": sys_msg},
+                {"role": "user", "content": user_msg}
+            ]
+
+            print(f"  [{idx+1}/{n_incidents}] Generating {p_name} for {inc_id}...")
+            raw_out = call_llm_with_retry(messages, groq_api_key)
+            rc, rem = parse_rca_output(raw_out)
+
+            generations_by_variant[p_name][inc_id] = {
+                "root_cause": rc,
+                "remediation_steps": rem,
+                "raw_output": raw_out,
+                "source": "live_groq"
+            }
+
+            # Update SQLite cache
+            set_cached_generation(
+                model=MODEL_ID,
+                prompt_variant=p_name,
+                query_text_or_id=log_text,
+                root_cause=rc,
+                remediation_steps=rem,
+                raw_output=raw_out,
+                incident_id=inc_id
             )
 
-            # Check SQLite gen_cache first
-            cached_item = get_cached_generation(model=MODEL_ID, prompt_variant=name, query_text_or_id=log_text)
-            if cached_item:
-                resp = cached_item["raw_output"] or cached_item["root_cause"]
-                cache[inc_id][name] = resp
-            elif name in cache[inc_id]:
-                resp = cache[inc_id][name]
-            else:
-                print(f"  [{i+1}/{len(records)}] Generating {name} for {inc_id}...")
-                resp = call_groq_llm(prompt, groq_api_key)
-                cache[inc_id][name] = resp
-                set_cached_generation(
-                    model=MODEL_ID,
-                    prompt_variant=name,
-                    query_text_or_id=log_text,
-                    root_cause=resp,
-                    remediation_steps="",
-                    raw_output=resp
-                )
-                with open(CACHE_FILE, "w", encoding="utf-8") as f:
-                    json.dump(cache, f, indent=2)
+            # Persist local cache file
+            with open(CACHE_DIR / f"ablation_{p_name}.json", "w", encoding="utf-8") as f:
+                json.dump(generations_by_variant[p_name], f, indent=2)
 
-            # Score against ground truth
-            scores = scorer.score(r["root_cause"], resp)
-            v_pred = np.array(embed(resp[:1000]))
-            v_ref = np.array(embed(r["root_cause"][:1000]))
+    # Save all caches
+    for p_name in prompt_names:
+        with open(CACHE_DIR / f"ablation_{p_name}.json", "w", encoding="utf-8") as f:
+            json.dump(generations_by_variant[p_name], f, indent=2)
 
-            variant_scores[name]["r1"].append(scores["rouge1"].fmeasure)
-            variant_scores[name]["rL"].append(scores["rougeL"].fmeasure)
-            variant_scores[name]["sim"].append(float(v_pred @ v_ref))
+    # Now score all variants against ground truth
+    print("\n[Prompt Ablation] Scoring all variants against ground truth...")
+    scorer = rouge_scorer.RougeScorer(["rougeL"], use_stemmer=True)
 
-    print("\n--- Prompt Robustness Results ---")
-    print(f"{'Variant':<28} | {'ROUGE-1 F1':<12} | {'ROUGE-L F1':<12} | {'Cosine Sim':<12}")
+    gt_by_id = {r["incident_id"]: r["root_cause"] for r in test_records}
+    valid_ids = [r["incident_id"] for r in test_records if r["incident_id"] in retrieval_map]
+    ground_truth = [gt_by_id[i] for i in valid_ids]
+
+    results_summary = {}
+
+    for p_name in prompt_names:
+        p_preds = [generations_by_variant[p_name][i]["root_cause"] for i in valid_ids]
+
+        # ROUGE-L
+        rl_scores = [scorer.score(gt, pred)["rougeL"].fmeasure for gt, pred in zip(ground_truth, p_preds)]
+
+        # BERTScore F1
+        print(f"  Scoring BERTScore for {p_name}...")
+        _, _, bs_f1 = calc_bertscore(p_preds, ground_truth, model_type="bert-base-uncased", verbose=False)
+        bs_vals = bs_f1.numpy().tolist()
+
+        # Cosine Similarity
+        cos_sims = []
+        for gt, pred in zip(ground_truth, p_preds):
+            v_pred = np.array(embed(pred[:1000]))
+            v_ref = np.array(embed(gt[:1000]))
+            cos_sims.append(float(v_pred @ v_ref))
+
+        results_summary[p_name] = {
+            "rougeL_f1": round(float(np.mean(rl_scores)), 4),
+            "rougeL_f1_std": round(float(np.std(rl_scores)), 4),
+            "bert_score_f1": round(float(np.mean(bs_vals)), 4),
+            "bert_score_f1_std": round(float(np.std(bs_vals)), 4),
+            "cosine_sim": round(float(np.mean(cos_sims)), 4),
+            "cosine_sim_std": round(float(np.std(cos_sims)), 4),
+        }
+
+    # Compute spread / variance across prompts
+    rl_means = [results_summary[p]["rougeL_f1"] for p in prompt_names]
+    bs_means = [results_summary[p]["bert_score_f1"] for p in prompt_names]
+    cos_means = [results_summary[p]["cosine_sim"] for p in prompt_names]
+
+    spread = {
+        "rougeL_f1_spread": round(float(max(rl_means) - min(rl_means)), 4),
+        "rougeL_f1_variance": round(float(np.var(rl_means)), 6),
+        "bert_score_f1_spread": round(float(max(bs_means) - min(bs_means)), 4),
+        "bert_score_f1_variance": round(float(np.var(bs_means)), 6),
+        "cosine_sim_spread": round(float(max(cos_means) - min(cos_means)), 4),
+        "cosine_sim_variance": round(float(np.var(cos_means)), 6),
+    }
+
+    try:
+        git_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True, cwd=str(PROJECT_ROOT)).strip()
+    except Exception:
+        git_sha = "unknown"
+
+    output_payload = {
+        "config": {
+            "model": MODEL_ID,
+            "test_dataset": "data/splits/test.json",
+            "num_samples": len(valid_ids),
+            "prompt_variants": prompt_names,
+            "bert_score_model": "bert-base-uncased",
+            "git_sha": git_sha,
+            "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        },
+        "variants": results_summary,
+        "spread": spread,
+    }
+
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(output_payload, f, indent=2)
+
+    print("\n" + "=" * 80)
+    print("PROMPT ROBUSTNESS ABLATION RESULTS (N = 93)")
+    print("=" * 80)
+    print(f"{'Prompt Variant':<22} | {'ROUGE-L F1':<14} | {'BERTScore F1':<14} | {'Cosine Sim':<14}")
     print("-" * 72)
-    for name, s in variant_scores.items():
-        print(f"{name:<28} | {np.mean(s['r1']):<12.4f} | {np.mean(s['rL']):<12.4f} | {np.mean(s['sim']):<12.4f}")
+    for p_name in prompt_names:
+        r = results_summary[p_name]
+        print(f"{p_name:<22} | {r['rougeL_f1']:<14.4f} | {r['bert_score_f1']:<14.4f} | {r['cosine_sim']:<14.4f}")
+    print("-" * 72)
+    print(f"{'Spread (Max - Min)':<22} | {spread['rougeL_f1_spread']:<14.4f} | {spread['bert_score_f1_spread']:<14.4f} | {spread['cosine_sim_spread']:<14.4f}")
+    print(f"{'Variance':<22} | {spread['rougeL_f1_variance']:<14.6f} | {spread['bert_score_f1_variance']:<14.6f} | {spread['cosine_sim_variance']:<14.6f}")
+    print(f"\n[Artifact] Saved prompt ablation results to {OUTPUT_FILE}")
+
+    return output_payload
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Evaluate prompt robustness ablation")
+    parser.add_argument("--limit", type=int, default=None, help="Limit number of test records to evaluate")
+    parser.add_argument("--force-refresh", action="store_true", help="Ignore cache and regenerate completions")
+    args = parser.parse_args()
+
+    run_prompt_ablation(limit=args.limit, force_refresh=args.force_refresh)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--limit", type=int, default=20)
-    args = parser.parse_args()
-    run_prompt_ablation(limit=args.limit)
+    main()
