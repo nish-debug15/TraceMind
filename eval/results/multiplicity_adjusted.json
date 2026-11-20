@@ -1,0 +1,240 @@
+{
+  "metadata": {
+    "num_incidents": 93,
+    "num_unique_companies": 40,
+    "bootstrap_resamples": 10000,
+    "seed": 42,
+    "method": "two-stage company-clustered bootstrap with Bonferroni correction"
+  },
+  "family_1_root_cause": {
+    "description": "Root-cause paired deltas (RAG - Zero-Shot, Baseline Format). m = 5 tests. Alpha = 0.05 / 5 = 0.01 (99% CI).",
+    "family_size_m": 5,
+    "family_alpha": 0.01,
+    "ci_level": 0.99,
+    "tests": {
+      "rouge1_f1": {
+        "mean": 0.013,
+        "unadjusted_ci_95": [
+          0.0012,
+          0.0246
+        ],
+        "excludes_zero_unadjusted": true,
+        "adjusted_alpha": 0.01,
+        "adjusted_ci_level": 0.99,
+        "adjusted_ci": [
+          -0.0026,
+          0.0282
+        ],
+        "excludes_zero_after_adjustment": false,
+        "status": "unadjusted only"
+      },
+      "rouge2_f1": {
+        "mean": 0.0046,
+        "unadjusted_ci_95": [
+          -0.0017,
+          0.0108
+        ],
+        "excludes_zero_unadjusted": false,
+        "adjusted_alpha": 0.01,
+        "adjusted_ci_level": 0.99,
+        "adjusted_ci": [
+          -0.0038,
+          0.0131
+        ],
+        "excludes_zero_after_adjustment": false,
+        "status": "crosses zero"
+      },
+      "rougeL_f1": {
+        "mean": 0.0143,
+        "unadjusted_ci_95": [
+          0.0064,
+          0.0229
+        ],
+        "excludes_zero_unadjusted": true,
+        "adjusted_alpha": 0.01,
+        "adjusted_ci_level": 0.99,
+        "adjusted_ci": [
+          0.0039,
+          0.0258
+        ],
+        "excludes_zero_after_adjustment": true,
+        "status": "excludes zero"
+      },
+      "bert_score_f1": {
+        "mean": 0.0069,
+        "unadjusted_ci_95": [
+          -0.0001,
+          0.0131
+        ],
+        "excludes_zero_unadjusted": false,
+        "adjusted_alpha": 0.01,
+        "adjusted_ci_level": 0.99,
+        "adjusted_ci": [
+          -0.0023,
+          0.0149
+        ],
+        "excludes_zero_after_adjustment": false,
+        "status": "crosses zero"
+      },
+      "semantic_sim": {
+        "mean": -0.0047,
+        "unadjusted_ci_95": [
+          -0.0273,
+          0.0155
+        ],
+        "excludes_zero_unadjusted": false,
+        "adjusted_alpha": 0.01,
+        "adjusted_ci_level": 0.99,
+        "adjusted_ci": [
+          -0.0343,
+          0.0214
+        ],
+        "excludes_zero_after_adjustment": false,
+        "status": "crosses zero"
+      }
+    }
+  },
+  "family_2_remediation": {
+    "description": "Remediation paired deltas (RAG - Zero-Shot). m = 2 tests per comparison (ROUGE-L, BERTScore). Alpha = 0.05 / 2 = 0.025 (97.5% CI).",
+    "family_size_m": 2,
+    "family_alpha": 0.025,
+    "ci_level": 0.975,
+    "baseline_format_unconditional": {
+      "rougeL_delta": {
+        "mean": 0.0231,
+        "unadjusted_ci_95": [
+          0.0058,
+          0.0403
+        ],
+        "excludes_zero_unadjusted": true,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          0.0033,
+          0.043
+        ],
+        "excludes_zero_after_adjustment": true,
+        "status": "excludes zero"
+      },
+      "bert_score_delta": {
+        "mean": 0.0394,
+        "unadjusted_ci_95": [
+          0.0162,
+          0.0634
+        ],
+        "excludes_zero_unadjusted": true,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          0.0127,
+          0.0672
+        ],
+        "excludes_zero_after_adjustment": true,
+        "status": "excludes zero"
+      }
+    },
+    "baseline_format_conditional": {
+      "rougeL_delta": {
+        "mean": 0.0118,
+        "unadjusted_ci_95": [
+          -0.0016,
+          0.026
+        ],
+        "excludes_zero_unadjusted": false,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          -0.0036,
+          0.0282
+        ],
+        "excludes_zero_after_adjustment": false,
+        "status": "crosses zero"
+      },
+      "bert_score_delta": {
+        "mean": 0.0204,
+        "unadjusted_ci_95": [
+          0.0083,
+          0.0329
+        ],
+        "excludes_zero_unadjusted": true,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          0.0062,
+          0.0349
+        ],
+        "excludes_zero_after_adjustment": true,
+        "status": "excludes zero"
+      }
+    },
+    "gate_v2_format_unconditional": {
+      "rougeL_delta": {
+        "mean": 0.0067,
+        "unadjusted_ci_95": [
+          -0.0009,
+          0.0141
+        ],
+        "excludes_zero_unadjusted": false,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          -0.0021,
+          0.0153
+        ],
+        "excludes_zero_after_adjustment": false,
+        "status": "crosses zero"
+      },
+      "bert_score_delta": {
+        "mean": 0.0077,
+        "unadjusted_ci_95": [
+          0.0019,
+          0.0162
+        ],
+        "excludes_zero_unadjusted": true,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          0.0012,
+          0.0176
+        ],
+        "excludes_zero_after_adjustment": true,
+        "status": "excludes zero"
+      }
+    },
+    "gate_v2_format_conditional": {
+      "rougeL_delta": {
+        "mean": 0.0056,
+        "unadjusted_ci_95": [
+          -0.0013,
+          0.0123
+        ],
+        "excludes_zero_unadjusted": false,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          -0.0023,
+          0.0134
+        ],
+        "excludes_zero_after_adjustment": false,
+        "status": "crosses zero"
+      },
+      "bert_score_delta": {
+        "mean": 0.0057,
+        "unadjusted_ci_95": [
+          0.0013,
+          0.0103
+        ],
+        "excludes_zero_unadjusted": true,
+        "adjusted_alpha": 0.025,
+        "adjusted_ci_level": 0.975,
+        "adjusted_ci": [
+          0.0008,
+          0.0111
+        ],
+        "excludes_zero_after_adjustment": true,
+        "status": "excludes zero"
+      }
+    }
+  },
+  "summary": "Multiplicity-adjusted inference across 2 pre-specified families (10,000 company-clustered resamples, seed 42):\n1. Family 1 (Root-cause paired deltas, baseline format, m=5, Bonferroni alpha=0.01 / 99% CI):\n   - ROUGE-1 F1: delta = +0.0130, unadj 95% [0.0012, 0.0246], adj 99% [-0.0026, 0.0282] -> status: 'unadjusted only'\n   - ROUGE-2 F1: delta = +0.0046, unadj 95% [-0.0017, 0.0108], adj 99% [-0.0038, 0.0131] -> status: 'crosses zero'\n   - ROUGE-L F1: delta = +0.0143, unadj 95% [0.0064, 0.0229], adj 99% [0.0039, 0.0258] -> status: 'excludes zero'\n   - BERTScore F1: delta = +0.0069, unadj 95% [-0.0001, 0.0131], adj 99% [-0.0023, 0.0149] -> status: 'crosses zero'\n   - Cosine Sim: delta = -0.0047, unadj 95% [-0.0273, 0.0155], adj 99% [-0.0343, 0.0214] -> status: 'crosses zero'\n2. Family 2 (Remediation paired deltas, m=2, Bonferroni alpha=0.025 / 97.5% CI):\n   - Baseline unconditional ROUGE-L: delta = +0.0231, unadj 95% [0.0058, 0.0403], adj 97.5% [0.0033, 0.043] -> status: 'excludes zero'\n   - Baseline unconditional BERTScore: delta = +0.0394, unadj 95% [0.0162, 0.0634], adj 97.5% [0.0127, 0.0672] -> status: 'excludes zero'\n   - Baseline conditional ROUGE-L (n=52): delta = +0.0118, unadj 95% [-0.0016, 0.026], adj 97.5% [-0.0036, 0.0282] -> status: 'crosses zero'\n   - Baseline conditional BERTScore (n=52): delta = +0.0204, unadj 95% [0.0083, 0.0329], adj 97.5% [0.0062, 0.0349] -> status: 'excludes zero'\n"
+}

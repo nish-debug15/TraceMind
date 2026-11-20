@@ -149,15 +149,15 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 
 ### Benchmark Evaluation: Baseline RAG vs. Zero-Shot Baseline (Held-Out Test Set, N = 93)
 
-> Evaluated strictly on held-out postmortems (`data/splits/test.json`) across 40 unseen companies against the TRAIN-ONLY retrieval index (`rag/chroma_db_train`, 662 incidents). Zero data leakage verified. Confidence intervals computed via 10,000 resamples (seed 42) comparing per-incident i.i.d. bootstrap vs. two-stage company-clustered bootstrap.
+> Evaluated strictly on held-out postmortems (`data/splits/test.json`) across 40 unseen companies against the TRAIN-ONLY retrieval index (`rag/chroma_db_train`, 662 incidents). Zero data leakage verified. Confidence intervals computed via 10,000 resamples (seed 42) comparing per-incident i.i.d. bootstrap, two-stage company-clustered bootstrap, and Bonferroni multiplicity-adjusted intervals ($m=5$, $\alpha=0.01$).
 
-| Metric | Paired Delta Mean | Per-Incident 95% CI | Company-Clustered 95% CI | CI Excludes Zero (Clustered) |
-|:---|:---:|:---:|:---:|:---:|
-| **ROUGE-1 F1** | **+0.0130** | `[0.0035, 0.0226]` | `[0.0012, 0.0246]` | CI excludes zero |
-| **ROUGE-2 F1** | **+0.0046** | `[-0.0005, 0.0099]` | `[-0.0017, 0.0108]` | Crosses zero |
-| **ROUGE-L F1** | **+0.0143** | `[0.0085, 0.0202]` | `[0.0064, 0.0229]` | CI excludes zero |
-| **BERTScore F1** | **+0.0069** | `[0.0018, 0.0119]` | `[-0.0001, 0.0131]` | Crosses zero |
-| **Embedding Cosine Sim** | **-0.0047** | `[-0.0195, 0.0095]` | `[-0.0273, 0.0155]` | Crosses zero |
+| Metric | Paired Delta Mean | Per-Incident 95% CI | Company-Clustered 95% CI | Bonferroni 99% CI ($m=5$) | Multiplicity Status |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| **ROUGE-1 F1** | **+0.0130** | `[0.0035, 0.0226]` | `[0.0012, 0.0246]` | `[-0.0026, 0.0282]` | ⚠️ **unadjusted only** |
+| **ROUGE-2 F1** | **+0.0046** | `[-0.0005, 0.0099]` | `[-0.0017, 0.0108]` | `[-0.0038, 0.0131]` | crosses zero |
+| **ROUGE-L F1** | **+0.0143** | `[0.0085, 0.0202]` | `[0.0064, 0.0229]` | `[0.0039, 0.0258]` | **excludes zero** |
+| **BERTScore F1** | **+0.0069** | `[0.0018, 0.0119]` | `[-0.0001, 0.0131]` | `[-0.0023, 0.0149]` | crosses zero |
+| **Embedding Cosine Sim** | **-0.0047** | `[-0.0195, 0.0095]` | `[-0.0273, 0.0155]` | `[-0.0343, 0.0214]` | crosses zero |
 
 #### Length Diagnostics & Length-Matched Sensitivity (Test Set, N = 93)
 
@@ -196,9 +196,10 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 | **Gate-v2 Format — Zero-Shot** | 1 / 93 | 98.9% | 0.1116 `[0.0967, 0.1263]` | 0.4946 `[0.4752, 0.5133]` |
 | **Gate-v2 Format — RAG** | 0 / 93 | 100.0% | 0.1183 `[0.1045, 0.1320]` | 0.5023 `[0.4845, 0.5188]` |
 
-> **Remediation Paired Deltas (RAG - Zero-Shot, Clustered 95% CIs):**
-> - Baseline format: ROUGE-L $\Delta$ = **+0.0231** `[0.0058, 0.0403]` (significant: True); BERTScore $\Delta$ = **+0.0394** `[0.0162, 0.0634]` (significant: True).
-> - Gate-v2 format: ROUGE-L $\Delta$ = **+0.0067** `[-0.0009, 0.0141]` (significant: False); BERTScore $\Delta$ = **+0.0077** `[0.0019, 0.0162]` (significant: True).
+> **Remediation Paired Deltas (RAG - Zero-Shot, Clustered 95% CIs & Bonferroni 97.5% CIs, m=2):**
+> - **Baseline Format (Unconditional, N=93):** ROUGE-L $\Delta$ = **+0.0231** `[0.0058, 0.0403]` (Adj: `[0.0033, 0.0430]`, status: `excludes zero`); BERTScore $\Delta$ = **+0.0394** `[0.0162, 0.0634]` (status: `excludes zero`).
+> - **Baseline Format (Conditional on Both Parsed, N=52):** ROUGE-L $\Delta$ = **+0.0118** `[-0.0016, 0.0260]` (status: `crosses zero`); BERTScore $\Delta$ = **+0.0204** `[0.0083, 0.0329]` (status: `excludes zero`). *Note: Restricting to parsed incidents erases baseline ROUGE-L significance, revealing unconditional gain was an artifact of parse coverage disparity (78.5% RAG vs 64.5% Zero-Shot).*
+> - **Gate-v2 Format (Conditional on Both Parsed, N=92):** ROUGE-L $\Delta$ = **+0.0056** `[-0.0013, 0.0123]` (status: `crosses zero`); BERTScore $\Delta$ = **+0.0057** `[0.0013, 0.0103]` (status: `excludes zero`).
 
 #### Retrieval Distribution & Guardrail Abstention Split
 

@@ -20,6 +20,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RESULTS_DIR = PROJECT_ROOT / "eval" / "results"
 CONTROL_2X2_FILE = RESULTS_DIR / "control_2x2.json"
 CLUSTER_CI_FILE = RESULTS_DIR / "cluster_bootstrap_ci.json"
+MULTI_ADJ_FILE = RESULTS_DIR / "multiplicity_adjusted.json"
 LENGTH_DIAG_FILE = RESULTS_DIR / "length_diagnostics.json"
 DOSE_RESP_FILE = RESULTS_DIR / "dose_response.json"
 REMEDIATION_FILE = RESULTS_DIR / "remediation_eval.json"
@@ -109,17 +110,24 @@ def render_markdown_tables() -> str:
             lines.append(f"> **2x2 Control Finding:** {c2_data['summary']}")
         lines.append("")
 
-    # 2. Benchmark Evaluation Table (Clustered vs iid CIs)
+    # 2. Benchmark Evaluation Table (Clustered vs iid CIs & Multiplicity-Adjusted)
     if CLUSTER_CI_FILE.exists():
         with open(CLUSTER_CI_FILE, "r", encoding="utf-8") as f:
             ci_data = json.load(f)
 
+        multi_data = {}
+        if MULTI_ADJ_FILE.exists():
+            with open(MULTI_ADJ_FILE, "r", encoding="utf-8") as f:
+                multi_data = json.load(f)
+
+        f1_tests = multi_data.get("family_1_root_cause", {}).get("tests", {})
+
         lines.append("### Benchmark Evaluation: Baseline RAG vs. Zero-Shot Baseline (Held-Out Test Set, N = 93)")
         lines.append("")
-        lines.append("> Evaluated strictly on held-out postmortems (`data/splits/test.json`) across 40 unseen companies against the TRAIN-ONLY retrieval index (`rag/chroma_db_train`, 662 incidents). Zero data leakage verified. Confidence intervals computed via 10,000 resamples (seed 42) comparing per-incident i.i.d. bootstrap vs. two-stage company-clustered bootstrap.")
+        lines.append("> Evaluated strictly on held-out postmortems (`data/splits/test.json`) across 40 unseen companies against the TRAIN-ONLY retrieval index (`rag/chroma_db_train`, 662 incidents). Zero data leakage verified. Confidence intervals computed via 10,000 resamples (seed 42) comparing per-incident i.i.d. bootstrap, two-stage company-clustered bootstrap, and Bonferroni multiplicity-adjusted intervals ($m=5$, $\\alpha=0.01$).")
         lines.append("")
-        lines.append("| Metric | Paired Delta Mean | Per-Incident 95% CI | Company-Clustered 95% CI | CI Excludes Zero (Clustered) |")
-        lines.append("|:---|:---:|:---:|:---:|:---:|")
+        lines.append("| Metric | Paired Delta Mean | Per-Incident 95% CI | Company-Clustered 95% CI | Bonferroni 99% CI ($m=5$) | Multiplicity Status |")
+        lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
 
         metrics_map = [
             ("rouge1_f1", "**ROUGE-1 F1**"),
@@ -136,10 +144,21 @@ def render_markdown_tables() -> str:
                 mean_val = d.get("mean", 0.0)
                 iid_ci = d.get("per_incident_ci_95", [0, 0])
                 clust_ci = d.get("cluster_ci_95", [0, 0])
-                sig_clust = d.get("significant_under_cluster_bootstrap", False)
-                sig_str = "CI excludes zero" if sig_clust else "Crosses zero"
+                
+                # Check multiplicity adjusted info
+                t_info = f1_tests.get(key, {})
+                adj_ci = t_info.get("adjusted_ci", [0, 0])
+                status = t_info.get("status", "crosses zero")
+                
+                if status == "excludes zero":
+                    status_str = "**excludes zero**"
+                elif status == "unadjusted only":
+                    status_str = "⚠️ **unadjusted only**"
+                else:
+                    status_str = "crosses zero"
+
                 lines.append(
-                    f"| {label} | **{mean_val:+.4f}** | `[{iid_ci[0]:.4f}, {iid_ci[1]:.4f}]` | `[{clust_ci[0]:.4f}, {clust_ci[1]:.4f}]` | {sig_str} |"
+                    f"| {label} | **{mean_val:+.4f}** | `[{iid_ci[0]:.4f}, {iid_ci[1]:.4f}]` | `[{clust_ci[0]:.4f}, {clust_ci[1]:.4f}]` | `[{adj_ci[0]:.4f}, {adj_ci[1]:.4f}]` | {status_str} |"
                 )
         lines.append("")
 
@@ -267,12 +286,19 @@ def render_markdown_tables() -> str:
         lines.append("")
         base_d = deltas.get("baseline_format_rag_effect", {})
         gate_d = deltas.get("gate_v2_format_rag_effect", {})
+        cond = rem_data.get("conditional_on_both_parsed", {})
+        cond_base = cond.get("baseline_format", {}).get("deltas", {})
+        cond_gate = cond.get("gate_v2_format", {}).get("deltas", {})
+        f2_multi = multi_data.get("family_2_remediation", {})
+        
         lines.append(
-            f"> **Remediation Paired Deltas (RAG - Zero-Shot, Clustered 95% CIs):**\n"
-            f"> - Baseline format: ROUGE-L $\\Delta$ = **{base_d.get('rougeL_delta', {}).get('mean', 0.0):+.4f}** `[{base_d.get('rougeL_delta', {}).get('ci_95', [0,0])[0]:.4f}, {base_d.get('rougeL_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (significant: {base_d.get('rougeL_delta', {}).get('significant_under_cluster_bootstrap', False)}); "
-            f"BERTScore $\\Delta$ = **{base_d.get('bert_score_delta', {}).get('mean', 0.0):+.4f}** `[{base_d.get('bert_score_delta', {}).get('ci_95', [0,0])[0]:.4f}, {base_d.get('bert_score_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (significant: {base_d.get('bert_score_delta', {}).get('significant_under_cluster_bootstrap', False)}).\n"
-            f"> - Gate-v2 format: ROUGE-L $\\Delta$ = **{gate_d.get('rougeL_delta', {}).get('mean', 0.0):+.4f}** `[{gate_d.get('rougeL_delta', {}).get('ci_95', [0,0])[0]:.4f}, {gate_d.get('rougeL_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (significant: {gate_d.get('rougeL_delta', {}).get('significant_under_cluster_bootstrap', False)}); "
-            f"BERTScore $\\Delta$ = **{gate_d.get('bert_score_delta', {}).get('mean', 0.0):+.4f}** `[{gate_d.get('bert_score_delta', {}).get('ci_95', [0,0])[0]:.4f}, {gate_d.get('bert_score_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (significant: {gate_d.get('bert_score_delta', {}).get('significant_under_cluster_bootstrap', False)})."
+            f"> **Remediation Paired Deltas (RAG - Zero-Shot, Clustered 95% CIs & Bonferroni 97.5% CIs, m=2):**\n"
+            f"> - **Baseline Format (Unconditional, N=93):** ROUGE-L $\\Delta$ = **{base_d.get('rougeL_delta', {}).get('mean', 0.0):+.4f}** `[{base_d.get('rougeL_delta', {}).get('ci_95', [0,0])[0]:.4f}, {base_d.get('rougeL_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (Adj: `[{f2_multi.get('baseline_format_unconditional', {}).get('rougeL_delta', {}).get('adjusted_ci', [0,0])[0]:.4f}, {f2_multi.get('baseline_format_unconditional', {}).get('rougeL_delta', {}).get('adjusted_ci', [0,0])[1]:.4f}]`, status: `{f2_multi.get('baseline_format_unconditional', {}).get('rougeL_delta', {}).get('status', 'unknown')}`); "
+            f"BERTScore $\\Delta$ = **{base_d.get('bert_score_delta', {}).get('mean', 0.0):+.4f}** `[{base_d.get('bert_score_delta', {}).get('ci_95', [0,0])[0]:.4f}, {base_d.get('bert_score_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (status: `{f2_multi.get('baseline_format_unconditional', {}).get('bert_score_delta', {}).get('status', 'unknown')}`).\n"
+            f"> - **Baseline Format (Conditional on Both Parsed, N={cond.get('baseline_format', {}).get('n', 52)}):** ROUGE-L $\\Delta$ = **{cond_base.get('rougeL_delta', {}).get('mean', 0.0):+.4f}** `[{cond_base.get('rougeL_delta', {}).get('ci_95', [0,0])[0]:.4f}, {cond_base.get('rougeL_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (status: `{f2_multi.get('baseline_format_conditional', {}).get('rougeL_delta', {}).get('status', 'crosses zero')}`); "
+            f"BERTScore $\\Delta$ = **{cond_base.get('bert_score_delta', {}).get('mean', 0.0):+.4f}** `[{cond_base.get('bert_score_delta', {}).get('ci_95', [0,0])[0]:.4f}, {cond_base.get('bert_score_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (status: `{f2_multi.get('baseline_format_conditional', {}).get('bert_score_delta', {}).get('status', 'excludes zero')}`). *Note: Restricting to parsed incidents erases baseline ROUGE-L significance, revealing unconditional gain was an artifact of parse coverage disparity (78.5% RAG vs 64.5% Zero-Shot).*\n"
+            f"> - **Gate-v2 Format (Conditional on Both Parsed, N={cond.get('gate_v2_format', {}).get('n', 92)}):** ROUGE-L $\\Delta$ = **{cond_gate.get('rougeL_delta', {}).get('mean', 0.0):+.4f}** `[{cond_gate.get('rougeL_delta', {}).get('ci_95', [0,0])[0]:.4f}, {cond_gate.get('rougeL_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (status: `{f2_multi.get('gate_v2_format_conditional', {}).get('rougeL_delta', {}).get('status', 'crosses zero')}`); "
+            f"BERTScore $\\Delta$ = **{cond_gate.get('bert_score_delta', {}).get('mean', 0.0):+.4f}** `[{cond_gate.get('bert_score_delta', {}).get('ci_95', [0,0])[0]:.4f}, {cond_gate.get('bert_score_delta', {}).get('ci_95', [0,0])[1]:.4f}]` (status: `{f2_multi.get('gate_v2_format_conditional', {}).get('bert_score_delta', {}).get('status', 'excludes zero')}`)."
         )
         lines.append("")
 
