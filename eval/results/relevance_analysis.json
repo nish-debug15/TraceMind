@@ -1,0 +1,175 @@
+{
+  "exploratory": true,
+  "metadata": {
+    "num_queries": 93,
+    "num_companies": 40,
+    "bootstrap_resamples": 10000,
+    "seed": 42
+  },
+  "relevance_rates": {
+    "relevance_at_1_score_2": {
+      "fraction": 0.043,
+      "percentage": 4.3,
+      "count": 4,
+      "total": 93,
+      "company_clustered_ci_95": [
+        0.0088,
+        0.0941
+      ]
+    },
+    "relevance_at_1_score_ge_1": {
+      "fraction": 0.4516,
+      "percentage": 45.16,
+      "count": 42,
+      "total": 93,
+      "company_clustered_ci_95": [
+        0.297,
+        0.5905
+      ]
+    },
+    "best_of_3_score_2": {
+      "fraction": 0.0538,
+      "percentage": 5.38,
+      "count": 5,
+      "total": 93,
+      "company_clustered_ci_95": [
+        0.0107,
+        0.1129
+      ]
+    },
+    "best_of_3_score_ge_1": {
+      "fraction": 0.6559,
+      "percentage": 65.59,
+      "count": 61,
+      "total": 93,
+      "company_clustered_ci_95": [
+        0.5063,
+        0.7766
+      ]
+    }
+  },
+  "similarity_prediction": {
+    "spearman_rho": 0.3165,
+    "spearman_rho_clustered_ci_95": [
+      0.0962,
+      0.5272
+    ],
+    "rho_excludes_zero": true,
+    "auroc_relevance_ge_1": 0.6671
+  },
+  "stratified_gain_by_relevance": {
+    "score_0": {
+      "n_incidents": 51,
+      "n_companies": 29,
+      "low_n": false,
+      "rougeL_delta": {
+        "mean": 0.0143,
+        "ci_95": [
+          0.0044,
+          0.0242
+        ]
+      },
+      "bert_score_delta": {
+        "mean": 0.0053,
+        "ci_95": [
+          -0.0046,
+          0.0149
+        ]
+      },
+      "remediation_conditional_rougeL_delta": {
+        "n_parsed": 25,
+        "n_companies": 19,
+        "low_n": false,
+        "mean": 0.0132,
+        "ci_95": [
+          -0.0039,
+          0.0325
+        ]
+      }
+    },
+    "score_1": {
+      "n_incidents": 38,
+      "n_companies": 18,
+      "low_n": false,
+      "rougeL_delta": {
+        "mean": 0.0134,
+        "ci_95": [
+          0.003,
+          0.0273
+        ]
+      },
+      "bert_score_delta": {
+        "mean": 0.0098,
+        "ci_95": [
+          0.0009,
+          0.0171
+        ]
+      },
+      "remediation_conditional_rougeL_delta": {
+        "n_parsed": 25,
+        "n_companies": 14,
+        "low_n": false,
+        "mean": 0.009,
+        "ci_95": [
+          -0.0061,
+          0.0275
+        ]
+      }
+    },
+    "score_2": {
+      "n_incidents": 4,
+      "n_companies": 4,
+      "low_n": true,
+      "rougeL_delta": {
+        "mean": 0.0224,
+        "ci_95": null
+      },
+      "bert_score_delta": {
+        "mean": 0.0006,
+        "ci_95": null
+      },
+      "remediation_conditional_rougeL_delta": {
+        "n_parsed": 2,
+        "n_companies": 2,
+        "low_n": true,
+        "mean": 0.0288,
+        "ci_95": null
+      }
+    }
+  },
+  "guardrail_check": {
+    "abstained_n7": {
+      "n": 7,
+      "score_0": {
+        "count": 6,
+        "pct": 85.71
+      },
+      "score_1": {
+        "count": 1,
+        "pct": 14.29
+      },
+      "score_2": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "relevance_ge_1_pct": 14.29
+    },
+    "answered_n86": {
+      "n": 86,
+      "score_0": {
+        "count": 45,
+        "pct": 52.33
+      },
+      "score_1": {
+        "count": 37,
+        "pct": 43.02
+      },
+      "score_2": {
+        "count": 4,
+        "pct": 4.65
+      },
+      "relevance_ge_1_pct": 47.67
+    },
+    "difference_relevance_ge_1_pct": 33.38
+  }
+}
