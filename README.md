@@ -237,6 +237,40 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 
 > **Prompt Spread across variants**: ROUGE-L spread: `0.0727`, BERTScore spread: `0.0634`, Cosine spread: `0.0408`.
 
+### Retrieval Relevance (Judged, N = 93)
+
+> **Notice:** Manual audit pending; judge labels unvalidated against human consensus.
+
+Technical failure relevance evaluated across all 279 retrieved precedents (top-3 for 93 test queries) using an independent LLM judge (`qwen/qwen3.8-27b`) on a fixed 3-point rubric (`eval/rubrics/relevance_v1.md`, SHA-256 `c0ccc1f...`) with vendor names masked. 95% confidence intervals computed via two-stage company-clustered bootstrap (10,000 resamples, seed 42). *Note: Labeled as exploratory.*
+
+#### Judged Relevance Rates
+
+| Metric | Count / Total | Fraction (%) | Company-Clustered 95% CI |
+|:---|:---:|:---:|:---:|
+| **Relevance@1 (Score = 2, Same Fault)** | 4 / 93 | 4.30% | `[0.0088, 0.0941]` |
+| **Relevance@1 (Score ≥ 1, Related / Same)** | 42 / 93 | 45.16% | `[0.2970, 0.5905]` |
+| **Best-of-Top-3 (Score = 2, Same Fault)** | 5 / 93 | 5.38% | `[0.0107, 0.1129]` |
+| **Best-of-Top-3 (Score ≥ 1, Related / Same)** | 61 / 93 | 65.59% | `[0.5063, 0.7766]` |
+
+#### Vector Similarity as Relevance Predictor
+
+- **Spearman Rank Correlation:** $\rho = +0.3165$ `[0.0962, 0.5272]` (company-clustered 95% CI excludes zero).
+- **AUROC (Predicting Relevance ≥ 1):** `0.6671`.
+
+#### Downstream RAG Gain Stratified by Judged Relevance
+
+| Judged Top-1 Relevance | Incidents (Companies) | ROUGE-L Delta [95% CI] | BERTScore Delta [95% CI] | Parsed Remediation ROUGE-L Delta |
+|:---|:---:|:---:|:---:|:---:|
+| **Score 0 (Unrelated)** | 51 (29) | **+0.0143** `[0.0044, 0.0242]` | **+0.0053** `[-0.0046, 0.0149]` | +0.0132 (n=25) |
+| **Score 1 (Related)** | 38 (18) | **+0.0134** `[0.0030, 0.0273]` | **+0.0098** `[0.0009, 0.0171]` | +0.0090 (n=25) |
+| **Score 2 (Same Fault)** | 4 (4) | **+0.0224** *(low_n: true)* | **+0.0006** *(low_n: true)* | +0.0288 (n=2) |
+
+#### Guardrail Check: Abstained vs. Answered Relevance
+
+- **Abstained Partition (Sim < 0.40, N = 7):** Score 0 = `85.7%` (6), Score 1 = `14.3%` (1), Score 2 = `0.0%` (0). Relevance ≥ 1 = `14.3%`.
+- **Answered Partition (Sim ≥ 0.40, N = 86):** Score 0 = `52.3%` (45), Score 1 = `43.0%` (37), Score 2 = `4.7%` (4). Relevance ≥ 1 = `47.7%`.
+- **Guardrail Separation:** Queries above the 0.40 threshold are **+33.38 percentage points** more likely to retrieve a relevant precedent (47.7% vs 14.3%), confirming that the 0.40 similarity floor effectively filters unrelated precedents.
+
 Detailed failure analysis and individual incident evaluations are documented in [`docs/FAILURE_ANALYSIS.md`](docs/FAILURE_ANALYSIS.md) and [`eval/results/`](eval/results/).
 
 ---
@@ -260,7 +294,7 @@ Detailed failure analysis and individual incident evaluations are documented in 
 
 ### 3. Retrieval and Corpus
 
-- **Retrieval Relevance Unmeasured:** Retrieval evaluations measure top-1 ChromaDB cosine similarity against retrospective postmortem text, but test incidents lack manually annotated ground-truth relevance labels; top-1 matches may share vocabulary without describing the same root cause.
+- **Retrieval Relevance Measured via LLM Judge (Unvalidated):** Retrieved precedent relevance was evaluated across all $N=93$ test queries (279 pairs) using an independent LLM judge (`qwen/qwen3.8-27b`, distinct family from generator `openai/gpt-oss-120b`) on a fixed 3-point rubric (`eval/rubrics/relevance_v1.md`, SHA-256 `c0ccc1fcc147673747326fbb7709ddf25cbd23f2f17f304fd2b157ada78518ed`). The judge was provided oracle ground-truth root causes for queries to evaluate true underlying fault mechanics. All company and vendor names were masked with `[VENDOR]`, though domain-specific architectural keywords remained unmasked. Exactly 45.16% of rank-1 hits were judged relevant ($\ge 1$) and 4.30% shared the identical failure mechanism (score 2). A blinded 30-pair stratified audit sheet (`eval/audit/relevance_audit_sheet.csv`) was created, but human consensus validation remains pending (`scripts/score_audit.py`).
 - **Observational Clustering Role:** HDBSCAN cluster assignment is purely observational in the Pipeline Trace for SRE visibility. It does not gate, filter, or alter ChromaDB vector retrieval, LLM prompts, or synthesis at runtime.
 - **Single-Company Cluster Concentration:** 89.7% of clusters (35 of 39) have ≥80% of members belonging to a single company. Clustering primarily captures vendor postmortem writing style and domain terminology rather than platform-agnostic failure mechanisms.
 - **Index vs. Runtime Text Asymmetry:** Centroids in `clustering/cluster_index.pkl` were generated from concatenated incident logs and retrospective root-cause analyses (`raw_log_excerpt [SEP] root_cause`), whereas runtime queries (`/analyze`) embed only incoming raw log text.

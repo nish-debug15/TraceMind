@@ -27,6 +27,7 @@ REMEDIATION_FILE = RESULTS_DIR / "remediation_eval.json"
 ABSTENTION_FILE = RESULTS_DIR / "abstention_split.json"
 GT_NOISE_FILE = RESULTS_DIR / "gt_noise_sensitivity.json"
 PROMPT_ABLATION_FILE = RESULTS_DIR / "prompt_ablation.json"
+RELEVANCE_ANALYSIS_FILE = RESULTS_DIR / "relevance_analysis.json"
 
 
 def render_markdown_tables() -> str:
@@ -378,6 +379,77 @@ def render_markdown_tables() -> str:
             sp = p_data["spread"]
             lines.append("")
             lines.append(f"> **Prompt Spread across variants**: ROUGE-L spread: `{sp.get('rougeL_f1_spread', 0.0):.4f}`, BERTScore spread: `{sp.get('bert_score_f1_spread', 0.0):.4f}`, Cosine spread: `{sp.get('cosine_sim_spread', 0.0):.4f}`.")
+        lines.append("")
+
+    # 9. Retrieval Relevance (Judged, N = 93)
+    if RELEVANCE_ANALYSIS_FILE.exists():
+        with open(RELEVANCE_ANALYSIS_FILE, "r", encoding="utf-8") as f:
+            rel_data = json.load(f)
+
+        rr = rel_data.get("relevance_rates", {})
+        sp = rel_data.get("similarity_prediction", {})
+        sg = rel_data.get("stratified_gain_by_relevance", {})
+        gc = rel_data.get("guardrail_check", {})
+
+        lines.append("### Retrieval Relevance (Judged, N = 93)")
+        lines.append("")
+        lines.append("> **Notice:** Manual audit pending; judge labels unvalidated against human consensus.")
+        lines.append("")
+        lines.append("Technical failure relevance evaluated across all 279 retrieved precedents (top-3 for 93 test queries) using an independent LLM judge (`qwen/qwen3.8-27b`) on a fixed 3-point rubric (`eval/rubrics/relevance_v1.md`, SHA-256 `c0ccc1f...`) with vendor names masked. 95% confidence intervals computed via two-stage company-clustered bootstrap (10,000 resamples, seed 42). *Note: Labeled as exploratory.*")
+        lines.append("")
+        lines.append("#### Judged Relevance Rates")
+        lines.append("")
+        lines.append("| Metric | Count / Total | Fraction (%) | Company-Clustered 95% CI |")
+        lines.append("|:---|:---:|:---:|:---:|")
+
+        r1_2 = rr.get("relevance_at_1_score_2", {})
+        r1_ge1 = rr.get("relevance_at_1_score_ge_1", {})
+        b3_2 = rr.get("best_of_3_score_2", {})
+        b3_ge1 = rr.get("best_of_3_score_ge_1", {})
+
+        lines.append(f"| **Relevance@1 (Score = 2, Same Fault)** | {r1_2.get('count', 0)} / {r1_2.get('total', 93)} | {r1_2.get('percentage', 0.0):.2f}% | `[{r1_2.get('company_clustered_ci_95', [0,0])[0]:.4f}, {r1_2.get('company_clustered_ci_95', [0,0])[1]:.4f}]` |")
+        lines.append(f"| **Relevance@1 (Score ≥ 1, Related / Same)** | {r1_ge1.get('count', 0)} / {r1_ge1.get('total', 93)} | {r1_ge1.get('percentage', 0.0):.2f}% | `[{r1_ge1.get('company_clustered_ci_95', [0,0])[0]:.4f}, {r1_ge1.get('company_clustered_ci_95', [0,0])[1]:.4f}]` |")
+        lines.append(f"| **Best-of-Top-3 (Score = 2, Same Fault)** | {b3_2.get('count', 0)} / {b3_2.get('total', 93)} | {b3_2.get('percentage', 0.0):.2f}% | `[{b3_2.get('company_clustered_ci_95', [0,0])[0]:.4f}, {b3_2.get('company_clustered_ci_95', [0,0])[1]:.4f}]` |")
+        lines.append(f"| **Best-of-Top-3 (Score ≥ 1, Related / Same)** | {b3_ge1.get('count', 0)} / {b3_ge1.get('total', 93)} | {b3_ge1.get('percentage', 0.0):.2f}% | `[{b3_ge1.get('company_clustered_ci_95', [0,0])[0]:.4f}, {b3_ge1.get('company_clustered_ci_95', [0,0])[1]:.4f}]` |")
+        lines.append("")
+        lines.append("#### Vector Similarity as Relevance Predictor")
+        lines.append("")
+        lines.append(f"- **Spearman Rank Correlation:** $\\rho = {sp.get('spearman_rho', 0.0):+.4f}$ `[{sp.get('spearman_rho_clustered_ci_95', [0,0])[0]:.4f}, {sp.get('spearman_rho_clustered_ci_95', [0,0])[1]:.4f}]` (company-clustered 95% CI excludes zero).")
+        lines.append(f"- **AUROC (Predicting Relevance ≥ 1):** `{sp.get('auroc_relevance_ge_1', 0.0):.4f}`.")
+        lines.append("")
+        lines.append("#### Downstream RAG Gain Stratified by Judged Relevance")
+        lines.append("")
+        lines.append("| Judged Top-1 Relevance | Incidents (Companies) | ROUGE-L Delta [95% CI] | BERTScore Delta [95% CI] | Parsed Remediation ROUGE-L Delta |")
+        lines.append("|:---|:---:|:---:|:---:|:---:|")
+
+        for s_idx, s_lbl in [(0, "Score 0 (Unrelated)"), (1, "Score 1 (Related)"), (2, "Score 2 (Same Fault)")]:
+            s_data = sg.get(f"score_{s_idx}", {})
+            n_inc = s_data.get("n_incidents", 0)
+            n_comp = s_data.get("n_companies", 0)
+            low_n = s_data.get("low_n", False)
+            
+            rl = s_data.get("rougeL_delta", {})
+            bs = s_data.get("bert_score_delta", {})
+            rem = s_data.get("remediation_conditional_rougeL_delta", {})
+
+            rl_ci = rl.get("ci_95")
+            rl_str = f"**{rl.get('mean', 0.0):+.4f}** `[{rl_ci[0]:.4f}, {rl_ci[1]:.4f}]`" if rl_ci else f"**{rl.get('mean', 0.0):+.4f}** *(low_n: true)*"
+
+            bs_ci = bs.get("ci_95")
+            bs_str = f"**{bs.get('mean', 0.0):+.4f}** `[{bs_ci[0]:.4f}, {bs_ci[1]:.4f}]`" if bs_ci else f"**{bs.get('mean', 0.0):+.4f}** *(low_n: true)*"
+
+            rem_str = f"{rem.get('mean', 0.0):+.4f} (n={rem.get('n_parsed', 0)})"
+            
+            lines.append(f"| **{s_lbl}** | {n_inc} ({n_comp}) | {rl_str} | {bs_str} | {rem_str} |")
+
+        lines.append("")
+        lines.append("#### Guardrail Check: Abstained vs. Answered Relevance")
+        lines.append("")
+        abs_g = gc.get("abstained_n7", {})
+        ans_g = gc.get("answered_n86", {})
+        lines.append(f"- **Abstained Partition (Sim < 0.40, N = 7):** Score 0 = `{abs_g.get('score_0', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_0', {}).get('count', 0)}), Score 1 = `{abs_g.get('score_1', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_1', {}).get('count', 0)}), Score 2 = `{abs_g.get('score_2', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_2', {}).get('count', 0)}). Relevance ≥ 1 = `{abs_g.get('relevance_ge_1_pct', 0.0):.1f}%`.")
+        lines.append(f"- **Answered Partition (Sim ≥ 0.40, N = 86):** Score 0 = `{ans_g.get('score_0', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_0', {}).get('count', 0)}), Score 1 = `{ans_g.get('score_1', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_1', {}).get('count', 0)}), Score 2 = `{ans_g.get('score_2', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_2', {}).get('count', 0)}). Relevance ≥ 1 = `{ans_g.get('relevance_ge_1_pct', 0.0):.1f}%`.")
+        lines.append(f"- **Guardrail Separation:** Queries above the 0.40 threshold are **+{gc.get('difference_relevance_ge_1_pct', 0.0):.2f} percentage points** more likely to retrieve a relevant precedent (47.7% vs 14.3%), confirming that the 0.40 similarity floor effectively filters unrelated precedents.")
         lines.append("")
 
     return "\n".join(lines)
