@@ -1,0 +1,317 @@
+pair_id,query_id,precedent_id,rank,similarity_score,query_text_masked,precedent_text_masked,human_label,human_notes
+pair_01,icco-edaa981d-2a23-4aab-8c09-1c20c899fb2f,icco-80919009-d534-486c-9142-284d27690da0,2,0.4248,"Log:
+Primary DB became inconsistent with all replicas, which wasn't detected until a query failed. This was caused by a MySQL bug which sometimes caused `order by` to be ignored.
+
+Root Cause:
+Primary DB became inconsistent with all replicas, which wasn't detected until a query failed. This was caused by a MySQL bug which sometimes caused `order by` to be ignored.","Log:
+On November 27, 2021, starting at 20:40 UTC and lasting 2 hours and 50 minutes, [VENDOR] experienced an [VENDOR] that significantly impacted the availability of core services. Affected services included [VENDOR] Actions, API Requests, Codespaces, Git Operations, Issues, [VENDOR] Packages, [VENDOR] Pages, Pull Requests, and Webhooks.
+
+Root Cause:
+The [VENDOR] stemmed from a novel failure mode during a schema migration on a large MySQL table. Specifically, during the final rename step of the migration, a significant portion of [VENDOR] 's MySQL read replicas entered a semaphore deadlock. This caused the affected read replicas to enter a crash-recovery state.",,
+pair_02,icco-3ca9020c-e384-4964-98b6-68268d9e42ec,icco-aa0709c9-90b6-4b4b-9d6e-1a70fcc27ce3,1,0.5347,"Log:
+On September 3, an [VENDOR] occurred with [VENDOR] 's Git server component, which handles `git push [VENDOR] main` operations. The issue arose during a deployment that required a new configuration variable for an internal API endpoint.
+
+Root Cause:
+On September 3, an [VENDOR] occurred with [VENDOR] 's Git server component, which handles `git push [VENDOR] main` operations. The issue arose during a deployment that required a new configuration variable for an internal API endpoint.","Log:
+On May 9, 2023, [VENDOR] experienced a Git database degradation. This was triggered by a configuration change intended to prevent connection saturation. Shortly after rollout, the cluster failed over, and a subsequent rollback attempt failed due to an internal infrastructure error. This caused widespread failures, impacting 8 of 10 main services for over an hour, and led to an extended period of inconsistent pull request and push data.
+
+Root Cause:
+On May 9, 2023, [VENDOR] experienced a Git database degradation. This was triggered by a configuration change intended to prevent connection saturation. Shortly after rollout, the cluster failed over, and a subsequent rollback attempt failed due to an internal infrastructure error. This caused widespread failures, impacting 8 of 10 main services for over an hour, and led to an extended period of inconsistent pull request and push data.",,
+pair_03,icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2,icco-a551724f-9c21-472c-9901-d74081d75ae4,3,0.4642,"Log:
+A combination of factor results in a large number of [VENDOR] 's users being disconnected to the server. The subsequent massive disconnection-reconnection process exceeded the database capacity and caused cascading connection failures, leading to 5% of [VENDOR] 's users not being able to connect to the server for up to 2 hours.
+
+Root Cause:
+A combination of factor results in a large number of [VENDOR] 's users being disconnected to the server. The subsequent massive disconnection-reconnection process exceeded the database capacity and caused cascading connection failures, leading to 5% of [VENDOR] 's users not being able to connect to the server for up to 2 hours.","Log:
+On August 29th, 2018, between 14:11 and 15:13 UTC, the DUO1 deployment experienced significant performance degradation. This led to increased authentication latency and intermittent request timeouts for all customer applications protected by the [VENDOR] service on this deployment. This [VENDOR] mirrored a similar outage that occurred on August 20th.
+
+Root Cause:
+The root cause was identified as a capacity issue on the DUO1 deployment, stemming from a combination of factors including specific request types, background jobs, inefficient database queries, and automatic retry mechanisms. Critically, the application's request queue became overloaded while waiting for database connections, creating a large backlog that prevented the database from recovering and resulted in a cascading failure.",,
+pair_04,discordstatus-r7919gwty4gc,digitalocean-qzbsmdsw9lq8,1,0.5586,"Log:
+Connectivity issues
+An upstream provider is investigating a major issue, and we are currently investigating the impact to [VENDOR] .
+
+Root Cause:
+We've identified the expected upstream errors in our monitoring and are awaiting an in-progress fix from upstream provider.","Log:
+Networking in BLR1
+We are currently investigating an issue affecting outbound network traffic for Droplets in the BLR1 region. Customers may experience timeout errors or connectivity issues when attempting to reach external services.
+Our Engineering team is actively investigating the issue and working to identify the root cause. We will provide additional updates as soon as more information becomes available.
+
+Root Cause:
+Our Engineering team has identified an issue affecting upstream network connectivity for Droplet-based services in the BLR1 region and is actively working with the relevant upstream providers to implement a resolution.
+
+Customers may continue to experience intermittent timeouts or connectivity issues when attempting to reach external endpoints from Droplets in BLR1.
+
+We will provide another update once the issue has been fully resolved or when additional information becomes available.",,
+pair_05,icco-3d2adf6c-a887-4db4-badf-92987c613a46,icco-0fb2bbd9-2967-43be-86f8-dec01edc6707,3,0.4909,"Log:
+On February 3rd and 4th, 2018, Fortnite experienced a series of six distinct service incidents, ranging from partial to total disruptions. These outages occurred as the game reached a new peak of 3.4 million concurrent players, exposing various scaling challenges and bottlenecks within Epic Games' infrastructure.
+
+Root Cause:
+The MCP (Matchmaking, Chat, and Presence) database, primarily MongoDB shards, suffered from severe latency due to write queuing, particularly affecting matchmaking. This led to database operations spiking to over 40,000ms and MCP threads blocking. Additionally, a bug introduced prior to launch limited the number of available service threads for MCP, which, when corrected, paradoxically increased latency in production due to connection pool starvation. Manual primary failovers were required multi","Log:
+On January 24, 2014, an outage affected most [VENDOR] users attempting to access logged-in services such as Gmail, [VENDOR] +, Calendar, and Documents. The disruption began around 10:55 a.m. PST, with users experiencing errors starting at 11:02 a.m. PST. Service was largely restored by 11:30 a.m. PST, resulting in approximately 25 minutes of downtime for most users, and up to 55 minutes for about 10% of the user base.
+
+Root Cause:
+To prevent recurrence, [VENDOR] planned several steps. These included correcting the specific bug in the configuration generator, auditing other critical configuration systems for similar issues, adding input validation checks to prevent bad configurations from causing disruptions, and implementing additional targeted monitoring for quicker detection and diagnosis of service failures.",,
+pair_06,discordstatus-r7919gwty4gc,digitalocean-qzbsmdsw9lq8,1,0.5586,"Log:
+Connectivity issues
+An upstream provider is investigating a major issue, and we are currently investigating the impact to [VENDOR] .
+
+Root Cause:
+We've identified the expected upstream errors in our monitoring and are awaiting an in-progress fix from upstream provider.","Log:
+Networking in BLR1
+We are currently investigating an issue affecting outbound network traffic for Droplets in the BLR1 region. Customers may experience timeout errors or connectivity issues when attempting to reach external services.
+Our Engineering team is actively investigating the issue and working to identify the root cause. We will provide additional updates as soon as more information becomes available.
+
+Root Cause:
+Our Engineering team has identified an issue affecting upstream network connectivity for Droplet-based services in the BLR1 region and is actively working with the relevant upstream providers to implement a resolution.
+
+Customers may continue to experience intermittent timeouts or connectivity issues when attempting to reach external endpoints from Droplets in BLR1.
+
+We will provide another update once the issue has been fully resolved or when additional information becomes available.",,
+pair_07,icco-5b73c1c1-8ec4-4901-91f3-0d993f582dd4,squarespace-wh3sbh0f58l2,1,0.402,"Log:
+Around May 4th, 2019, most Firefox add-ons stopped functioning due to an expired certificate. The [VENDOR] was triggered when a certificate used for signing add-ons expired, preventing Firefox from validating their authenticity.
+
+Root Cause:
+Around May 4th, 2019, most Firefox add-ons stopped functioning due to an expired certificate. The [VENDOR] was triggered when a certificate used for signing add-ons expired, preventing Firefox from validating their authenticity.","Log:
+Website subscriptions are not activated
+We are currently investigating an issue with website subscriptions not being activated.
+
+Root Cause:
+This [VENDOR] has been resolved.",,
+pair_08,icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43,githubstatus-qcvjkzcs7j74,2,0.4537,"Log:
+The [[VENDOR] ](https://web.archive.org/web/20211204232004/https://[VENDOR] .pl/) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.
+
+Root Cause:
+The [[VENDOR] ](https://web.archive.org/web/20211204232004/https://[VENDOR] .pl/) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.","Log:
+[VENDOR] with Actions
+We are investigating reports of degraded performance for Actions
+
+Root Cause:
+On August 6, 2026, between 15:05 UTC and 00:14 UTC on August 7, [VENDOR] Actions experienced degraded availability. During the [VENDOR] , workflow runs failed or remained queued for an extended period of time. Customers using both [VENDOR] -hosted and self-hosted runners were affected. At peak, 71% of workflow runs experienced infrastructure failures and 75% of the remaining workflow runs were delayed by more than 5 minutes. <br /><br />The [VENDOR] was triggered by a routine deployment to an internal Actions service responsible for processing events and generating Actions jobs. The deployment exposed an existing capacity and concurrency weakness. As pods were replaced during the deployment, remaining capacity became saturated, causing services to crash and triggering a cascading impact across multiple clusters and downstream services. <br /><br />These services recovered at 17:00 after expanding capacity, throttling incoming webhook-triggered work to allow the system to recover, and increasing processing capacity for the backlog of affected events. <br /><br />As the [VENDOR] progressed, a backlog of work accumulated across the systems responsible for assigning jobs to runners. Due to a latent bug in one of the services responsible for job assignment, runners were getting assigned jobs that were no longer valid and then getting stuck retrying those jobs, preventing them from picking up valid work. <br /><br />This second stage of impact was mitigated by deploying changes to prevent runners from repeatedly attempting to acquire invalid jobs. These mitigations allowed the accumulated queues to drain and Actions to recover to normal operation. <br /><br />Some Actions Runner Controller (ARC) runners remained stuck after the [VENDOR] . A mitigation deployed during the [VENDOR] inadvertently affected these runners, causing some to remain offline until they were manually recovered. We subsequently rolled back the change and are adding automatic recovery in upcoming Runner and ARC releases. <br /><br />Some jobs created during the [VENDOR] were also left stuck unable to be retried or canceled.  CLI and UI solutions for customers to address these were shared at https://[VENDOR] .com/orgs/community/discussions/204152#discussioncomment-17946043. <br /><br />To prevent recurrence, we are making improvements to deployment and capacity safeguards for the affected services, strengthening monitoring for the conditions that preceded the [VENDOR] , improving the resiliency and recovery of queued work and runner assignment, and adding automatic recovery for self-hosted runners affected by similar failure conditions. We are also making additional improvements to reduce the risk of cascading failures and accelerate recovery during large-scale Actions disruptions.",,
+pair_09,icco-5a99836e-bbde-4dfc-9621-054eac5c5c50,digitalocean-3nt69xj3wkk9,3,0.484,"Log:
+On February 29, 2012, Windows Azure experienced a significant service disruption primarily affecting its Compute service and dependent components like Access Control Service (ACS), Windows Azure Service Bus, SQL Azure Portal, and Data Sync Services. The [VENDOR] began at 00:00 UST on February 29th, when new virtual machines (VMs) attempted to generate transfer certificates.
+
+Root Cause:
+The root cause was a ""leap day bug"" in the Guest Agent (GA) responsible for creating these certificates. The GA calculated the certificate's valid-to date by simply adding one year to the current date. On February 29, 2012, this resulted in an invalid expiration date of February 29, 2013, causing certificate creation to fail. This failure prevented GAs from connecting to Host Agents (HAs), leading to VMs being marked faulty and eventually entire clusters entering a degraded ""Human Investigate"" (","Log:
+Cloud Control Panel Access
+Beginning at 09:36 UTC on August 3, some customers may experience intermittent errors when accessing the [VENDOR] Cloud Control Panel, including an ""mTLS verification failed"" message. Our engineering team is actively investigating. 
+
+We apologise for the inconvenience this may have caused. We will provide another update as soon as more information is available.
+
+If you have any questions related to this issue, please send us a ticket from your cloud support page. https://cloudsupport.[VENDOR] .com/s/createticket
+
+Root Cause:
+Between 09:36 and 13:30 UTC on August 3, some customers experienced intermittent errors while accessing the [VENDOR] Cloud Control Panel. We renewed the affected internal certificates and restored access. The issue is resolved, and the Cloud Control Panel is operating normally. We apologize for the disruption.",,
+pair_10,icco-019eb098-9da5-4d2c-a64c-c6498933f165,githubstatus-7s119p1yxttr,3,0.4682,"Log:
+In early August 2022, [VENDOR] experienced incidents impacting query performance and alerting via triggers and SLOs. Visible issues began around 11:35 a.m. ET, with the worst impact lasting approximately 4 hours, though the investigation spanned 9 hours.
+
+Root Cause:
+The incidents stemmed from a convergence of factors. Inaccurate timestamps in a customer's telemetry data caused short trigger queries to consistently access cold storage via [VENDOR] Lambda, tying trigger performance to Lambda capacity. Concurrently, a single customer's SLO, due to an SLI never returning valid results, continuously triggered aggressive backfills of up to 60 days of cold data, consuming significant Lambda resources.","Log:
+[VENDOR] with [VENDOR] We are investigating reports of degraded performance for [VENDOR]
+
+Root Cause:
+On 2026-08-03, between 06:52 and 11:25 UTC, some [VENDOR] users experienced errors when using chat and agent features. Requests to list the available models failed, and because every chat or agent interaction begins by retrieving the list of models, affected users saw their requests fail. On average about 3% of these model-listing requests failed during the [VENDOR] (roughly 97% succeeded), but failures were significantly higher during peak-traffic periods, at times approaching 100% for the affected internal lookups. Approximately 4,066 users were affected in a single 60-minute window, concentrated among IDE-based clients. The underlying AI models themselves remained healthy throughout.<br /><br />The [VENDOR] was caused by an increase in how often clients requested the model list, which pushed an internal user-authorization lookup past a rate limit; the rate-limited responses were surfaced to users as errors. We mitigated the impact by increasing how long [VENDOR] caches that authorization lookup, which reduced load on the internal service, and we have additional capacity and rate-limit changes in progress. To prevent recurrence we are improving monitoring for this class of failure, adjusting cache and rate-limit settings, and coordinating with client teams on request patterns.",,
+pair_11,shopify-882r6x3ttyg9,sentry-ccv3pcf00mbt,2,0.4179,"Log:
+Some POS transactions are not completing on iOS devices Actions
+Some POS transactions are not completing on iOS devices, we are currently investigating and will keep you updated.
+
+Root Cause:
+Between 16:31 UTC and 19:48 UTC, we experienced an issue due to which some POS transactions could not be completed as expected. A fix was implemented at 17:44 UTC which resolved the issue. The monitoring period for this issue has ended and no further impact has been observed. Merchants still experiencing issues can try disconnecting, forgetting, and reconnecting their card readers to resolve errors.","Log:
+Notification delivery
+We're currently investigating degraded notification delivery.
+
+Root Cause:
+This issue has been resolved.",,
+pair_12,icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0,icco-4be45ad5-5e02-45c6-8e5c-c81709005e47,1,0.5565,"Log:
+Mandrill experienced a significant outage from February 4, 05:35 UTC, to February 5, 22:09 UTC, which severely impacted its ability to send emails. During this period, only 80% of queued emails were being sent. The [VENDOR] was triggered when a PostgreSQL database, specifically shard4, entered a safety shutdown mode.
+
+Root Cause:
+The root cause was a transaction ID (XID) wraparound in PostgreSQL. Postgres uses 32-bit XIDs, which increment and must be periodically cleared by an auto_vacuum process to prevent them from wrapping around and appearing to be in the future, which causes the database to shut down. Shard4 was a ""hotter"" shard due to the hashing algorithm used for load balancing, leading to a higher load of writes. This likely caused the auto_vacuum process on shard4 to fall behind or fail, resulting in the XID hi","Log:
+On Monday, July 20, 2015, hosted [VENDOR] was down for most of the US working day because the primary Postgres database hit transaction-ID wraparound protection and stopped accepting writes.
+
+Root Cause:
+On Monday, July 20, 2015, hosted [VENDOR] was down for most of the US working day because the primary Postgres database hit transaction-ID wraparound protection and stopped accepting writes.",,
+pair_13,icco-029b4a8e-0332-4b91-abc3-5f84bdf70094,icco-0fb2bbd9-2967-43be-86f8-dec01edc6707,2,0.5329,"Log:
+On Friday, November 18th, 2022, [VENDOR] .io experienced 13 minutes of intermittent downtime over a 32-minute period, from 15:40 to 16:12 GMT. This [VENDOR] led to repeated crashes of their Go monolith application, impacting customer access to the service.
+
+Root Cause:
+The core issue was an unhandled panic within the Go application, triggered by a ""poison pill"" message in the GCP Pub/Sub asynchronous message queue. This message caused a specific handler to panic, which, due to an edge case in Go's panic recovery mechanism, led to the entire application crashing.","Log:
+On January 24, 2014, an outage affected most [VENDOR] users attempting to access logged-in services such as Gmail, [VENDOR] +, Calendar, and Documents. The disruption began around 10:55 a.m. PST, with users experiencing errors starting at 11:02 a.m. PST. Service was largely restored by 11:30 a.m. PST, resulting in approximately 25 minutes of downtime for most users, and up to 55 minutes for about 10% of the user base.
+
+Root Cause:
+To prevent recurrence, [VENDOR] planned several steps. These included correcting the specific bug in the configuration generator, auditing other critical configuration systems for similar issues, adding input validation checks to prevent bad configurations from causing disruptions, and implementing additional targeted monitoring for quicker detection and diagnosis of service failures.",,
+pair_14,icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5,icco-3435a88e-1b33-447e-9b4e-fda0625db87f,1,0.6561,"Log:
+The August 14, 2003 blackout affected ~50 million people across Ohio, Michigan, Pennsylvania, New York, Vermont, Massachusetts, Connecticut, New Jersey, and Ontario. About 61,800 MW of load was lost; restoration took 4 days in parts of the U.S. and over a week of rolling blackouts in Ontario. Estimated U.S. cost: $4–10 billion; Canada's GDP fell 0.7% in August.
+
+Root Cause:
+1. **Inadequate system understanding at FirstEnergy.** FE had not adequately studied its system or maintained voltage criteria; its operators did not understand how degraded conditions would propagate.
+2. **Inadequate situational awareness at FE.** Beginning at 14:14 EDT, FE's XA/21 EMS alarm processor died silently. Operators continued to act on a stale picture of the grid for nearly two hours and missed the loss of the Eastlake 5 generator and successive 345-kV line trips.
+3. **Vegetation mana","Log:
+The Northeast blackout of 2003 began on August 14, 2003, just after 4:10 p.m. EDT, affecting parts of the Northeastern and Midwestern United States and most of Ontario, Canada. The [VENDOR] started with local failures in the FirstEnergy system, where transmission lines contacted untrimmed foliage. This led to a cascading failure across the regional electricity distribution system.
+
+Root Cause:
+The Northeast blackout of 2003 began on August 14, 2003, just after 4:10 p.m. EDT, affecting parts of the Northeastern and Midwestern United States and most of Ontario, Canada. The [VENDOR] started with local failures in the FirstEnergy system, where transmission lines contacted untrimmed foliage. This led to a cascading failure across the regional electricity distribution system.",,
+pair_15,icco-d6db1e76-af37-435c-83e9-e7c7cabfaf0f,icco-a551724f-9c21-472c-9901-d74081d75ae4,3,0.5036,"Log:
+On March 16, 2017, Square's serving infrastructure experienced a widespread service disruption, primarily affecting the ""Multipass"" customer authentication service. This [VENDOR] impacted most of Square's products and services, including payment processing, Point of Sale, Dashboard, Appointments, and Payroll.
+
+Root Cause:
+The root cause was identified as the Multipass service becoming unrecoverably overloaded. This was triggered by a deployment of the ""Roster"" service (which handles customer identity) in a single datacenter. A critical contributing factor was a harmful feedback loop within Multipass's Redis database interactions, where a specific code path had a high upper bound (500) for retries on optimistic transactions with no backoff, causing Redis to peak on capacity.","Log:
+On August 29th, 2018, between 14:11 and 15:13 UTC, the DUO1 deployment experienced significant performance degradation. This led to increased authentication latency and intermittent request timeouts for all customer applications protected by the [VENDOR] service on this deployment. This [VENDOR] mirrored a similar outage that occurred on August 20th.
+
+Root Cause:
+The root cause was identified as a capacity issue on the DUO1 deployment, stemming from a combination of factors including specific request types, background jobs, inefficient database queries, and automatic retry mechanisms. Critically, the application's request queue became overloaded while waiting for database connections, creating a large backlog that prevented the database from recovering and resulted in a cascading failure.",,
+pair_16,icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2,icco-a551724f-9c21-472c-9901-d74081d75ae4,3,0.4642,"Log:
+A combination of factor results in a large number of [VENDOR] 's users being disconnected to the server. The subsequent massive disconnection-reconnection process exceeded the database capacity and caused cascading connection failures, leading to 5% of [VENDOR] 's users not being able to connect to the server for up to 2 hours.
+
+Root Cause:
+A combination of factor results in a large number of [VENDOR] 's users being disconnected to the server. The subsequent massive disconnection-reconnection process exceeded the database capacity and caused cascading connection failures, leading to 5% of [VENDOR] 's users not being able to connect to the server for up to 2 hours.","Log:
+On August 29th, 2018, between 14:11 and 15:13 UTC, the DUO1 deployment experienced significant performance degradation. This led to increased authentication latency and intermittent request timeouts for all customer applications protected by the [VENDOR] service on this deployment. This [VENDOR] mirrored a similar outage that occurred on August 20th.
+
+Root Cause:
+The root cause was identified as a capacity issue on the DUO1 deployment, stemming from a combination of factors including specific request types, background jobs, inefficient database queries, and automatic retry mechanisms. Critically, the application's request queue became overloaded while waiting for database connections, creating a large backlog that prevented the database from recovering and resulted in a cascading failure.",,
+pair_17,icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0,icco-4be45ad5-5e02-45c6-8e5c-c81709005e47,1,0.5565,"Log:
+Mandrill experienced a significant outage from February 4, 05:35 UTC, to February 5, 22:09 UTC, which severely impacted its ability to send emails. During this period, only 80% of queued emails were being sent. The [VENDOR] was triggered when a PostgreSQL database, specifically shard4, entered a safety shutdown mode.
+
+Root Cause:
+The root cause was a transaction ID (XID) wraparound in PostgreSQL. Postgres uses 32-bit XIDs, which increment and must be periodically cleared by an auto_vacuum process to prevent them from wrapping around and appearing to be in the future, which causes the database to shut down. Shard4 was a ""hotter"" shard due to the hashing algorithm used for load balancing, leading to a higher load of writes. This likely caused the auto_vacuum process on shard4 to fall behind or fail, resulting in the XID hi","Log:
+On Monday, July 20, 2015, hosted [VENDOR] was down for most of the US working day because the primary Postgres database hit transaction-ID wraparound protection and stopped accepting writes.
+
+Root Cause:
+On Monday, July 20, 2015, hosted [VENDOR] was down for most of the US working day because the primary Postgres database hit transaction-ID wraparound protection and stopped accepting writes.",,
+pair_18,discordstatus-r7919gwty4gc,digitalocean-w53965shllfq,2,0.5109,"Log:
+Connectivity issues
+An upstream provider is investigating a major issue, and we are currently investigating the impact to [VENDOR] .
+
+Root Cause:
+We've identified the expected upstream errors in our monitoring and are awaiting an in-progress fix from upstream provider.","Log:
+Network Connectivity from India to NYC
+We have noticed ​​​​​​​network connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.
+
+Root Cause:
+We have noticed ​​​​​​​network connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.",,
+pair_19,icco-a46ebba4-2d7c-49e6-aa71-0ce989fbff97,icco-3c389d32-40ff-464d-ae81-655e85250aa2,1,0.5967,"Log:
+On October 13, 2017, at 14:01 PDT, a [VENDOR] Cloud Platform-initiated migration of a primary Redis instance caused it to drop offline. This triggered a known bug in [VENDOR] 's API instances, which failed to properly handle the Redis failover, leading to a partial outage. Engineers performed rolling restarts of API instances and escalated the issue to GCP support.
+
+Root Cause:
+However, at 15:41 PDT, new anomalies emerged, with users reporting unavailable guilds and connection problems. A misbehaving node in the ""guilds"" cluster was identified, followed by issues in the ""sessions"" cluster. These cascading failures prompted [VENDOR] engineers to initiate a full service restart at 16:07 PDT, which involved rebooting various components and correcting an improperly configured API setting for client reconnection.","Log:
+On November 12, 2021, [VENDOR] Cloud experienced networking issues beginning at 00:30 US/Pacific. The [VENDOR] was fully mitigated by 02:14 US/Pacific, lasting approximately 1 hour and 44 minutes.
+
+Root Cause:
+The core of the problem was a failure in [VENDOR] 's Front End load balancing service. Preliminary analysis indicated that a new infrastructure feature inadvertently triggered a latent issue within the internal network load balancer code.",,
+pair_20,discordstatus-r7919gwty4gc,githubstatus-yjysg0xrl67m,3,0.5101,"Log:
+Connectivity issues
+An upstream provider is investigating a major issue, and we are currently investigating the impact to [VENDOR] .
+
+Root Cause:
+We've identified the expected upstream errors in our monitoring and are awaiting an in-progress fix from upstream provider.","Log:
+Disruption with some [VENDOR] services
+We are investigating reports of degraded performance for API Requests and Issues
+
+Root Cause:
+On July 24th at 16:04 UTC, a loss of connectivity occurred in network paths in one of our three physical data center availability zones (AZs). This resulted in packet loss due to the remaining active paths becoming saturated. Our data centers use a leaf-spine switch fabric in each compute cage, and an aggregation layer interconnecting the spines from each cage within each AZ. The loss of connectivity affected links between one cage’s spine switches and the aggregation layer within that specific AZ. <br /><br />Workloads depending on compute resources in this cage became degraded due to packet loss, and exhibited intermittent errors: <br /><br />- Actions saw 10% of jobs fail during the impact window, and 5% of jobs succeeded but with delayed starts. <br />- 27% of [VENDOR] issues interactions saw slow requests or timeouts. <br />- 4% of [VENDOR] requests experienced errors, though most automatically retry. <br />- 4% of git push operations saw impacts during the affected window. <br />- Authentication requests saw increased latency during the affected window, but error rates, while elevated, were < 1% in all cases.  <br /><br />We were able to mitigate the outage by re-routing affected connections to available fiber paths that were allocated for future capacity upgrades. Sufficient network capacity to eliminate packet loss was restored at 17:07, with most services showing full recovery by 17:16. All paths were restored and services healthy at 17:36. <br /><br />This [VENDOR] affected 25% of available network interconnect capacity. Older cages utilize a 100Gbps network interface standard. To remove risk of reoccurrence, a planned upgrade to 400Gbps interfaces is being accelerated as much as possible, ensuring increased bandwidth available at all layers of the switch fabric for resiliency to path or device loss.",,
+pair_21,discordstatus-dsv750sj44fn,netlifystatus-3p2nrdlccqhb,2,0.5549,"Log:
+Applications experiencing 503 errors
+We are aware that bot traffic may be hitting 503 errors and are investigating the issue.
+
+Root Cause:
+We believe the 503s have been resolved.","Log:
+Elevated error rates for a subset of sites using Edge Functions
+Our team is investigating an increase in observed error rates affecting a subset of sites that use Edge Functions. Affected sites may see elevated 504 responses or slow page loads beginning at approximately 17:00 UTC. We are actively working to  identify the cause and will provide updates here.
+
+Root Cause:
+We have identified an issue with a subset of our Edge Functions infrastructure causing elevated 504 errors for some sites beginning at approximately 17:00 UTC. We are applying mitigations and error rates are improving. Customers do not need to take any action. We will continue to provide updates here.",,
+pair_22,icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5,icco-3435a88e-1b33-447e-9b4e-fda0625db87f,1,0.6561,"Log:
+The August 14, 2003 blackout affected ~50 million people across Ohio, Michigan, Pennsylvania, New York, Vermont, Massachusetts, Connecticut, New Jersey, and Ontario. About 61,800 MW of load was lost; restoration took 4 days in parts of the U.S. and over a week of rolling blackouts in Ontario. Estimated U.S. cost: $4–10 billion; Canada's GDP fell 0.7% in August.
+
+Root Cause:
+1. **Inadequate system understanding at FirstEnergy.** FE had not adequately studied its system or maintained voltage criteria; its operators did not understand how degraded conditions would propagate.
+2. **Inadequate situational awareness at FE.** Beginning at 14:14 EDT, FE's XA/21 EMS alarm processor died silently. Operators continued to act on a stale picture of the grid for nearly two hours and missed the loss of the Eastlake 5 generator and successive 345-kV line trips.
+3. **Vegetation mana","Log:
+The Northeast blackout of 2003 began on August 14, 2003, just after 4:10 p.m. EDT, affecting parts of the Northeastern and Midwestern United States and most of Ontario, Canada. The [VENDOR] started with local failures in the FirstEnergy system, where transmission lines contacted untrimmed foliage. This led to a cascading failure across the regional electricity distribution system.
+
+Root Cause:
+The Northeast blackout of 2003 began on August 14, 2003, just after 4:10 p.m. EDT, affecting parts of the Northeastern and Midwestern United States and most of Ontario, Canada. The [VENDOR] started with local failures in the FirstEnergy system, where transmission lines contacted untrimmed foliage. This led to a cascading failure across the regional electricity distribution system.",,
+pair_23,icco-785c5618-a34e-4dfc-bd04-559fc0635b3b,netlifystatus-75cssy1tzg06,1,0.5357,"Log:
+Approximately two hours after its launch as the official community site, Supermarket began experiencing increased latency and intermittent unresponsiveness. This issue impacted the main Supermarket site, community.opscode.com, cookbooks.opscode.com, and api.berkshelf.com, making cookbook operations problematic.
+
+Root Cause:
+Immediate stabilization steps involved adding new instances and upgrading the instance type to m3.xlarge, increasing the capacity to five instances. Long-term corrective actions include changing Berkshelf API behavior, adjusting Unicorn worker counts, improving download performance with non-blocking metrics, enhancing alerting for ELB node failures, and improving status communication.","Log:
+Service Disruption
+We are currently investigating this issue.
+
+Root Cause:
+Between 12:00 UTC and 12:28 UTC our Origin showed query contention that caused higher latencies and elevated error rates impacting different components like Origin Servers, Build Pipleine, API and UI utilization.",,
+pair_24,icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5,icco-3435a88e-1b33-447e-9b4e-fda0625db87f,1,0.6561,"Log:
+The August 14, 2003 blackout affected ~50 million people across Ohio, Michigan, Pennsylvania, New York, Vermont, Massachusetts, Connecticut, New Jersey, and Ontario. About 61,800 MW of load was lost; restoration took 4 days in parts of the U.S. and over a week of rolling blackouts in Ontario. Estimated U.S. cost: $4–10 billion; Canada's GDP fell 0.7% in August.
+
+Root Cause:
+1. **Inadequate system understanding at FirstEnergy.** FE had not adequately studied its system or maintained voltage criteria; its operators did not understand how degraded conditions would propagate.
+2. **Inadequate situational awareness at FE.** Beginning at 14:14 EDT, FE's XA/21 EMS alarm processor died silently. Operators continued to act on a stale picture of the grid for nearly two hours and missed the loss of the Eastlake 5 generator and successive 345-kV line trips.
+3. **Vegetation mana","Log:
+The Northeast blackout of 2003 began on August 14, 2003, just after 4:10 p.m. EDT, affecting parts of the Northeastern and Midwestern United States and most of Ontario, Canada. The [VENDOR] started with local failures in the FirstEnergy system, where transmission lines contacted untrimmed foliage. This led to a cascading failure across the regional electricity distribution system.
+
+Root Cause:
+The Northeast blackout of 2003 began on August 14, 2003, just after 4:10 p.m. EDT, affecting parts of the Northeastern and Midwestern United States and most of Ontario, Canada. The [VENDOR] started with local failures in the FirstEnergy system, where transmission lines contacted untrimmed foliage. This led to a cascading failure across the regional electricity distribution system.",,
+pair_25,discordstatus-dsv750sj44fn,githubstatus-fmmsrcg5x638,1,0.5602,"Log:
+Applications experiencing 503 errors
+We are aware that bot traffic may be hitting 503 errors and are investigating the issue.
+
+Root Cause:
+We believe the 503s have been resolved.","Log:
+[VENDOR] with GraphQL API Requests
+We are investigating reports of degraded performance for API Requests
+
+Root Cause:
+On July 26, 2026 at 21:34 UTC we began seeing intermittent errors on the [VENDOR] GraphQL API. A subset of GraphQL API requests returned HTTP 502 errors in short bursts. During the impact window an average of 0.09% of GraphQL API requests in the affected region failed, with a peak of 0.50% of requests failing during the worst two-minute period at 03:02 UTC on July 27. Requests that failed generally succeeded when retried, and no data was lost or altered. Other [VENDOR] services were not affected.<br /><br />The errors were traced to a single group of servers handling a share of GraphQL API traffic. Application processes on that group intermittently closed connections before completing responses. Impact ended at 03:52 UTC on July 27 when those processes were replaced, and we resolved the [VENDOR] at 04:09 UTC on July 27 after confirming error rates had returned to normal.<br /><br />We are still investigating why those processes closed connections, and that work is being carried out by the team that owns the underlying compute platform. In the meantime we are adding detection and automated mitigation for when a single group of servers behaves differently from its peers.",,
+pair_26,icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43,githubstatus-pz7g535gbs6p,1,0.4904,"Log:
+The [[VENDOR] ](https://web.archive.org/web/20211204232004/https://[VENDOR] .pl/) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.
+
+Root Cause:
+The [[VENDOR] ](https://web.archive.org/web/20211204232004/https://[VENDOR] .pl/) platform suffered a failure of a subsystem responsible for asynchronous distributed task processing. The problem affected many areas, e.g. features such as purchasing numerous offers via cart and bulk offer editing (including price list editing) did not work at all. Moreover, it partially failed to send daily newsletter with new offers. Also some parts of internal administration panel were affected.","Log:
+Actions run failures and delays
+We are investigating reports of degraded availability for Actions
+
+Root Cause:
+Please refer to the combined summary in this related [VENDOR] : https://www.githubstatus.com/incidents/s65j9gslmfm8",,
+pair_27,icco-f9f4ba4c-686c-46a4-982c-8dc21bd8a448,icco-43164f6c-de49-4e61-aa58-a394a400d431,3,0.5672,"Log:
+On Wednesday, April 9, 2025, between 14:16 and 14:27 UTC, [VENDOR] .io experienced intermittent availability issues, culminating in a 2-minute database outage from 14:25 to 14:27 UTC. This affected their dashboard, mobile app, [VENDOR] app, and API, though on-call alerts remained operational.
+
+Root Cause:
+On Wednesday, April 9, 2025, between 14:16 and 14:27 UTC, [VENDOR] .io experienced intermittent availability issues, culminating in a 2-minute database outage from 14:25 to 14:27 UTC. This affected their dashboard, mobile app, [VENDOR] app, and API, though on-call alerts remained operational.","Log:
+On October 19, 2025, at 11:50 PM PT, [VENDOR] experienced a widespread service disruption. The initial phase was triggered by a major [VENDOR] us-east-1 outage, which degraded services like EC2, Lambda, DynamoDB, and Route 53. This led to the [VENDOR] web application and API in the US becoming unstable, unable to autoscale, and flag delivery updates being delayed or unavailable. Client-side streaming SDKs in the US were significantly impacted, and event ingestion degraded, causing data loss.
+
+Root Cause:
+This cascading failure resulted in server-side SDKs across all regions experiencing connection errors, reaching approximately 99% globally. While EU and APAC regions recovered by mid-afternoon, US-based streaming remained unavailable until late that night. The US commercial environment was most affected, experiencing degradation or non-availability of the main application, flag delivery failures, and event data loss. All streaming services fully recovered by October 21, 12:05 AM PT.",,
+pair_28,discordstatus-pcg3nsfq6l2y,openai-01KYSQ7PC81PV3PZE3ZEVFK6K5,1,0.5435,"Log:
+Issues sending messages for bots and users
+We're aware of an issue preventing users and bots from sending messages, we're working on fully restoring service
+
+Root Cause:
+This issue has expanded and is now affecting all [VENDOR] interactions. We're continuing to work towards mitigating the issue.","Log:
+Elevated errors affecting [VENDOR] conversations
+We have identified that users are experiencing elevated errors for the impacted services.
+
+We are working on implementing a mitigation.
+
+Root Cause:
+We have identified that users are experiencing elevated errors for the impacted services.
+
+We are working on implementing a mitigation.",,
+pair_29,icco-0dfe934b-9234-4383-9d1c-de9b860a43d1,icco-909573e3-5677-481d-beb6-3c5c09bf8867,1,0.8424,"Log:
+The WebKit Subversion repository experienced an [VENDOR] in late February 2017 when a user committed two files with different content but identical SHA1 hashes. This SHA1 collision led to unexpected behavior and data corruption within the repository.
+
+Root Cause:
+The root cause was Subversion's ""Representation Sharing"" feature, introduced in version 1.6. This feature uses SHA1 hashes to deduplicate file content. When the two colliding files were committed, the system, encountering the same hash, stored only a pointer for the second file, effectively replacing its content with a reference to the first.","Log:
+The WebKit repository, a Subversion repository configured to use deduplication, became unavailable after two files with the same SHA-1 hash were checked in as test data, with the intention of implementing a safety check for collisions. The two files had different md5 sums and so a checkout would fail a consistency check. For context, the first public SHA-1 hash collision had very recently been announced, with an example of two colliding files.
+
+Root Cause:
+The WebKit repository, a Subversion repository configured to use deduplication, became unavailable after two files with the same SHA-1 hash were checked in as test data, with the intention of implementing a safety check for collisions. The two files had different md5 sums and so a checkout would fail a consistency check. For context, the first public SHA-1 hash collision had very recently been announced, with an example of two colliding files.",,
+pair_30,icco-db126e26-be84-4286-a778-975bbe87df0d,digitalocean-lrrw084g3whn,3,0.4063,"Log:
+CCP karkur initiated an investigation into an issue where the drone window in EVE Online would occasionally stop updating. Her initial debugging revealed that tasklets were failing to wake up from sleep, entering an unscheduled and unblocked state. A reproduction script was developed to reliably trigger this ""sleeping disorder"" in tasklets.
+
+Root Cause:
+CCP karkur initiated an investigation into an issue where the drone window in EVE Online would occasionally stop updating. Her initial debugging revealed that tasklets were failing to wake up from sleep, entering an unscheduled and unblocked state. A reproduction script was developed to reliably trigger this ""sleeping disorder"" in tasklets.","Log:
+[VENDOR] reported outage that's impacting access to their Serverless Inference models
+As of the current time, our Engineering team is aware of an ongoing [VENDOR] with our provider, [VENDOR] , that is impacting Serverless Inference. The outage is affecting all users attempting to use Sonnet 4.6 and Opus 4.7 models. According to [VENDOR] 's status page (https://status.claude.com/incidents/8z7l5zcy0v3b), they are currently experiencing an outage that is causing this disruption. We apologize for the inconvenience and will provide updates as more information becomes available.
+
+Root Cause:
+According to [VENDOR] 's status page (https://status.claude.com/incidents/8z7l5zcy0v3b), they have identified the root cause and are actively working on a fix. At this time, users may continue to experience errors when attempting to use Sonnet 4.6 and Opus 4.7 models. We will provide another update once [VENDOR] has implemented a fix and service is restored.",,

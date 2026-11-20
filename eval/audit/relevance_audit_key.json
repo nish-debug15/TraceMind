@@ -1,0 +1,242 @@
+{
+  "pair_01": {
+    "query_id": "icco-edaa981d-2a23-4aab-8c09-1c20c899fb2f",
+    "precedent_id": "icco-80919009-d534-486c-9142-284d27690da0",
+    "rank": 2,
+    "similarity_score": 0.4248,
+    "judge_score": 1,
+    "judge_rationale": "Both involve MySQL database subsystems and replication issues, but the specific failure mechanisms (query bug vs. semaphore deadlock) differ."
+  },
+  "pair_02": {
+    "query_id": "icco-3ca9020c-e384-4964-98b6-68268d9e42ec",
+    "precedent_id": "icco-aa0709c9-90b6-4b4b-9d6e-1a70fcc27ce3",
+    "rank": 1,
+    "similarity_score": 0.5347,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve Git server components and configuration changes, but the specific failure mechanisms differ (deployment config vs. connection saturation/rollback)."
+  },
+  "pair_03": {
+    "query_id": "icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2",
+    "precedent_id": "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+    "rank": 3,
+    "similarity_score": 0.4642,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents involve cascading database connection failures caused by massive reconnection/retry storms exceeding capacity."
+  },
+  "pair_04": {
+    "query_id": "discordstatus-r7919gwty4gc",
+    "precedent_id": "digitalocean-qzbsmdsw9lq8",
+    "rank": 1,
+    "similarity_score": 0.5586,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents involve upstream provider network connectivity failures causing timeouts, sharing the same fault class and component."
+  },
+  "pair_05": {
+    "query_id": "icco-3d2adf6c-a887-4db4-badf-92987c613a46",
+    "precedent_id": "icco-0fb2bbd9-2967-43be-86f8-dec01edc6707",
+    "rank": 3,
+    "similarity_score": 0.4909,
+    "judge_score": 0,
+    "judge_rationale": "Different subsystems (database scaling vs. configuration bug) and failure mechanisms (latency/queuing vs. bad config)."
+  },
+  "pair_06": {
+    "query_id": "discordstatus-r7919gwty4gc",
+    "precedent_id": "digitalocean-qzbsmdsw9lq8",
+    "rank": 1,
+    "similarity_score": 0.5586,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents involve upstream provider network connectivity failures causing timeouts, sharing the same fault class and component."
+  },
+  "pair_07": {
+    "query_id": "icco-5b73c1c1-8ec4-4901-91f3-0d993f582dd4",
+    "precedent_id": "squarespace-wh3sbh0f58l2",
+    "rank": 1,
+    "similarity_score": 0.402,
+    "judge_score": 0,
+    "judge_rationale": "The query involves certificate expiration affecting add-ons, while the precedent concerns subscription activation failures; different subsystems and mechanisms."
+  },
+  "pair_08": {
+    "query_id": "icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43",
+    "precedent_id": "githubstatus-qcvjkzcs7j74",
+    "rank": 2,
+    "similarity_score": 0.4537,
+    "judge_score": 1,
+    "judge_rationale": "Both involve distributed task processing subsystems, but the query is a general failure while the precedent is capacity saturation."
+  },
+  "pair_09": {
+    "query_id": "icco-5a99836e-bbde-4dfc-9621-054eac5c5c50",
+    "precedent_id": "digitalocean-3nt69xj3wkk9",
+    "rank": 3,
+    "similarity_score": 0.484,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve certificate-related failures causing service disruption, but the specific mechanisms (date calculation bug vs. expired internal certs) differ."
+  },
+  "pair_10": {
+    "query_id": "icco-019eb098-9da5-4d2c-a64c-c6498933f165",
+    "precedent_id": "githubstatus-7s119p1yxttr",
+    "rank": 3,
+    "similarity_score": 0.4682,
+    "judge_score": 0,
+    "judge_rationale": "Query involves Lambda capacity exhaustion from cold storage; precedent involves rate limiting on model list lookups. Different subsystems and failure mechanisms."
+  },
+  "pair_11": {
+    "query_id": "shopify-882r6x3ttyg9",
+    "precedent_id": "sentry-ccv3pcf00mbt",
+    "rank": 2,
+    "similarity_score": 0.4179,
+    "judge_score": 0,
+    "judge_rationale": "Different subsystems: POS transaction processing versus notification delivery. No shared failure mechanism or symptom."
+  },
+  "pair_12": {
+    "query_id": "icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0",
+    "precedent_id": "icco-4be45ad5-5e02-45c6-8e5c-c81709005e47",
+    "rank": 1,
+    "similarity_score": 0.5565,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents involve PostgreSQL transaction ID (XID) wraparound causing database shutdown and write failures."
+  },
+  "pair_13": {
+    "query_id": "icco-029b4a8e-0332-4b91-abc3-5f84bdf70094",
+    "precedent_id": "icco-0fb2bbd9-2967-43be-86f8-dec01edc6707",
+    "rank": 2,
+    "similarity_score": 0.5329,
+    "judge_score": 0,
+    "judge_rationale": "Query involves Go application crash from message queue panic; precedent involves configuration generator bug causing service outage."
+  },
+  "pair_14": {
+    "query_id": "icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5",
+    "precedent_id": "icco-3435a88e-1b33-447e-9b4e-fda0625db87f",
+    "rank": 1,
+    "similarity_score": 0.6561,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents describe the same August 14, 2003 blackout, sharing identical root causes including vegetation management and cascading failure mechanisms."
+  },
+  "pair_15": {
+    "query_id": "icco-d6db1e76-af37-435c-83e9-e7c7cabfaf0f",
+    "precedent_id": "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+    "rank": 3,
+    "similarity_score": 0.5036,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve authentication services suffering cascading failures due to retry mechanisms and database overload, but specific components differ."
+  },
+  "pair_16": {
+    "query_id": "icco-54e5ebdd-70a7-475a-bff4-a1e8e45367f2",
+    "precedent_id": "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+    "rank": 3,
+    "similarity_score": 0.4642,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents involve cascading database connection failures caused by massive reconnection/retry storms exceeding capacity."
+  },
+  "pair_17": {
+    "query_id": "icco-5d74f4e6-c6d3-4566-9526-7abc1fed0db0",
+    "precedent_id": "icco-4be45ad5-5e02-45c6-8e5c-c81709005e47",
+    "rank": 1,
+    "similarity_score": 0.5565,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents involve PostgreSQL transaction ID (XID) wraparound causing database shutdown and write failures."
+  },
+  "pair_18": {
+    "query_id": "discordstatus-r7919gwty4gc",
+    "precedent_id": "digitalocean-w53965shllfq",
+    "rank": 2,
+    "similarity_score": 0.5109,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve network connectivity issues, but the query is an upstream provider failure while the precedent is specific regional ISP latency."
+  },
+  "pair_19": {
+    "query_id": "icco-a46ebba4-2d7c-49e6-aa71-0ce989fbff97",
+    "precedent_id": "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+    "rank": 1,
+    "similarity_score": 0.5967,
+    "judge_score": 0,
+    "judge_rationale": "Query involves Redis failover and cluster node failures; precedent involves load balancer code defect. Different subsystems and mechanisms."
+  },
+  "pair_20": {
+    "query_id": "discordstatus-r7919gwty4gc",
+    "precedent_id": "githubstatus-yjysg0xrl67m",
+    "rank": 3,
+    "similarity_score": 0.5101,
+    "judge_score": 0,
+    "judge_rationale": "Query is upstream provider failure; precedent is internal data center network connectivity loss. Different root causes and subsystems."
+  },
+  "pair_21": {
+    "query_id": "discordstatus-dsv750sj44fn",
+    "precedent_id": "netlifystatus-3p2nrdlccqhb",
+    "rank": 2,
+    "similarity_score": 0.5549,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve elevated HTTP error rates (503 vs 504) in web infrastructure, sharing the symptom of service degradation."
+  },
+  "pair_22": {
+    "query_id": "icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5",
+    "precedent_id": "icco-3435a88e-1b33-447e-9b4e-fda0625db87f",
+    "rank": 1,
+    "similarity_score": 0.6561,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents describe the same August 14, 2003 blackout, sharing identical root causes including vegetation management and cascading failure mechanisms."
+  },
+  "pair_23": {
+    "query_id": "icco-785c5618-a34e-4dfc-bd04-559fc0635b3b",
+    "precedent_id": "netlifystatus-75cssy1tzg06",
+    "rank": 1,
+    "similarity_score": 0.5357,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve increased latency and service unresponsiveness across multiple components, but the specific root causes (capacity vs. query contention) differ."
+  },
+  "pair_24": {
+    "query_id": "icco-5b3c17cb-40a7-46dd-bbd0-233fa37a0fd5",
+    "precedent_id": "icco-3435a88e-1b33-447e-9b4e-fda0625db87f",
+    "rank": 1,
+    "similarity_score": 0.6561,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents describe the same August 14, 2003 blackout, sharing identical root causes including vegetation management and cascading failure mechanisms."
+  },
+  "pair_25": {
+    "query_id": "discordstatus-dsv750sj44fn",
+    "precedent_id": "githubstatus-fmmsrcg5x638",
+    "rank": 1,
+    "similarity_score": 0.5602,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve API request failures (503 vs 502) and degraded performance, sharing the symptom of intermittent HTTP errors in API services."
+  },
+  "pair_26": {
+    "query_id": "icco-dfdcb1b4-10b2-45d5-92c5-6b4a4e52ca43",
+    "precedent_id": "githubstatus-pz7g535gbs6p",
+    "rank": 1,
+    "similarity_score": 0.4904,
+    "judge_score": 0,
+    "judge_rationale": "Query involves e-commerce task processing failure; precedent is GitHub Actions availability degradation. Different subsystems and failure mechanisms."
+  },
+  "pair_27": {
+    "query_id": "icco-f9f4ba4c-686c-46a4-982c-8dc21bd8a448",
+    "precedent_id": "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+    "rank": 3,
+    "similarity_score": 0.5672,
+    "judge_score": 0,
+    "judge_rationale": "Query is a database outage; precedent is a regional cloud provider outage affecting streaming services. Different subsystems and failure mechanisms."
+  },
+  "pair_28": {
+    "query_id": "discordstatus-pcg3nsfq6l2y",
+    "precedent_id": "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5",
+    "rank": 1,
+    "similarity_score": 0.5435,
+    "judge_score": 1,
+    "judge_rationale": "Both incidents involve elevated errors affecting [VENDOR] interactions and messaging services, sharing the same subsystem and symptom profile."
+  },
+  "pair_29": {
+    "query_id": "icco-0dfe934b-9234-4383-9d1c-de9b860a43d1",
+    "precedent_id": "icco-909573e3-5677-481d-beb6-3c5c09bf8867",
+    "rank": 1,
+    "similarity_score": 0.8424,
+    "judge_score": 2,
+    "judge_rationale": "Both incidents involve Subversion's representation sharing feature failing due to SHA1 hash collisions, causing data corruption or unavailability."
+  },
+  "pair_30": {
+    "query_id": "icco-db126e26-be84-4286-a778-975bbe87df0d",
+    "precedent_id": "digitalocean-lrrw084g3whn",
+    "rank": 3,
+    "similarity_score": 0.4063,
+    "judge_score": 0,
+    "judge_rationale": "The query involves a client-side tasklet scheduling bug in a game, while the precedent is a third-party cloud service outage."
+  }
+}
