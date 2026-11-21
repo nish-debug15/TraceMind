@@ -28,6 +28,7 @@ ABSTENTION_FILE = RESULTS_DIR / "abstention_split.json"
 GT_NOISE_FILE = RESULTS_DIR / "gt_noise_sensitivity.json"
 PROMPT_ABLATION_FILE = RESULTS_DIR / "prompt_ablation.json"
 RELEVANCE_ANALYSIS_FILE = RESULTS_DIR / "relevance_analysis.json"
+FLOOR_STATS_FILE = RESULTS_DIR / "floor_stats.json"
 
 
 def render_markdown_tables() -> str:
@@ -447,9 +448,18 @@ def render_markdown_tables() -> str:
         lines.append("")
         abs_g = gc.get("abstained_n7", {})
         ans_g = gc.get("answered_n86", {})
-        lines.append(f"- **Abstained Partition (Sim < 0.40, N = 7):** Score 0 = `{abs_g.get('score_0', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_0', {}).get('count', 0)}), Score 1 = `{abs_g.get('score_1', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_1', {}).get('count', 0)}), Score 2 = `{abs_g.get('score_2', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_2', {}).get('count', 0)}). Relevance ≥ 1 = `{abs_g.get('relevance_ge_1_pct', 0.0):.1f}%`.")
-        lines.append(f"- **Answered Partition (Sim ≥ 0.40, N = 86):** Score 0 = `{ans_g.get('score_0', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_0', {}).get('count', 0)}), Score 1 = `{ans_g.get('score_1', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_1', {}).get('count', 0)}), Score 2 = `{ans_g.get('score_2', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_2', {}).get('count', 0)}). Relevance ≥ 1 = `{ans_g.get('relevance_ge_1_pct', 0.0):.1f}%`.")
-        lines.append(f"- **Guardrail Separation:** Queries above the 0.40 threshold are **+{gc.get('difference_relevance_ge_1_pct', 0.0):.2f} percentage points** more likely to retrieve a relevant precedent (47.7% vs 14.3%), confirming that the 0.40 similarity floor effectively filters unrelated precedents.")
+        lines.append(f"- **Abstained Partition (Sim < 0.40, N = 7):** Score 0 = `{abs_g.get('score_0', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_0', {}).get('count', 0)}), Score 1 = `{abs_g.get('score_1', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_1', {}).get('count', 0)}), Score 2 = `{abs_g.get('score_2', {}).get('pct', 0.0):.1f}%` ({abs_g.get('score_2', {}).get('count', 0)}). Relevance ≥ 1 = `{abs_g.get('relevance_ge_1_pct', 0.0):.1f}%` ({abs_g.get('score_1', {}).get('count', 0) + abs_g.get('score_2', {}).get('count', 0)}/7).")
+        lines.append(f"- **Answered Partition (Sim ≥ 0.40, N = 86):** Score 0 = `{ans_g.get('score_0', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_0', {}).get('count', 0)}), Score 1 = `{ans_g.get('score_1', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_1', {}).get('count', 0)}), Score 2 = `{ans_g.get('score_2', {}).get('pct', 0.0):.1f}%` ({ans_g.get('score_2', {}).get('count', 0)}). Relevance ≥ 1 = `{ans_g.get('relevance_ge_1_pct', 0.0):.1f}%` ({ans_g.get('score_1', {}).get('count', 0) + ans_g.get('score_2', {}).get('count', 0)}/86).")
+        
+        fs_p = 0.1232
+        fs_or = 5.4667
+        if FLOOR_STATS_FILE.exists():
+            with open(FLOOR_STATS_FILE, "r", encoding="utf-8") as f:
+                fs_data = json.load(f)
+                fs_p = fs_data.get("fisher_exact", {}).get("p_value", fs_p)
+                fs_or = fs_data.get("fisher_exact", {}).get("odds_ratio", fs_or)
+
+        lines.append(f"- **Guardrail Separation:** Queries above the 0.40 threshold retrieved judged-relevant precedents in 41/86 cases (47.7%) vs. 1/7 cases (14.3%) below threshold (Fisher's exact test p = {fs_p:.4f}, odds ratio {fs_or:.2f}). The separation is directionally consistent; n=7 abstained limits statistical power (p > 0.05). AUROC 0.667 reflects a weak-to-moderate guard rather than a sharp noise boundary.")
         lines.append("")
 
     return "\n".join(lines)

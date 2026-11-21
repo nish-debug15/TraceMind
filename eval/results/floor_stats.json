@@ -1,0 +1,25 @@
+{
+  "contingency_table": {
+    "answered": {
+      "relevant_ge_1": 41,
+      "unrelated_0": 45,
+      "total": 86,
+      "relevance_rate": 0.4767,
+      "relevance_pct": 47.67
+    },
+    "abstained": {
+      "relevant_ge_1": 1,
+      "unrelated_0": 6,
+      "total": 7,
+      "relevance_rate": 0.1429,
+      "relevance_pct": 14.29
+    }
+  },
+  "fisher_exact": {
+    "odds_ratio": 5.4667,
+    "p_value": 0.1232,
+    "statistically_significant_05": false
+  },
+  "auroc": 0.6671,
+  "summary": "At the 0.40 similarity floor, 1/7 (14.3%) abstained queries had judged-relevant rank-1 precedents vs 41/86 (47.7%) answered queries. Fisher's exact test yields odds ratio = 5.4667, p = 0.1232 (not statistically significant at alpha = 0.05). The difference is directionally consistent; n=7 abstained limits statistical power. AUROC = 0.6671 reflects a weak-to-moderate guard rather than a sharp noise boundary."
+}

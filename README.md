@@ -267,9 +267,9 @@ Technical failure relevance evaluated across all 279 retrieved precedents (top-3
 
 #### Guardrail Check: Abstained vs. Answered Relevance
 
-- **Abstained Partition (Sim < 0.40, N = 7):** Score 0 = `85.7%` (6), Score 1 = `14.3%` (1), Score 2 = `0.0%` (0). Relevance ≥ 1 = `14.3%`.
-- **Answered Partition (Sim ≥ 0.40, N = 86):** Score 0 = `52.3%` (45), Score 1 = `43.0%` (37), Score 2 = `4.7%` (4). Relevance ≥ 1 = `47.7%`.
-- **Guardrail Separation:** Queries above the 0.40 threshold are **+33.38 percentage points** more likely to retrieve a relevant precedent (47.7% vs 14.3%), confirming that the 0.40 similarity floor effectively filters unrelated precedents.
+- **Abstained Partition (Sim < 0.40, N = 7):** Score 0 = `85.7%` (6), Score 1 = `14.3%` (1), Score 2 = `0.0%` (0). Relevance ≥ 1 = `14.3%` (1/7).
+- **Answered Partition (Sim ≥ 0.40, N = 86):** Score 0 = `52.3%` (45), Score 1 = `43.0%` (37), Score 2 = `4.7%` (4). Relevance ≥ 1 = `47.7%` (41/86).
+- **Guardrail Separation:** Queries above the 0.40 threshold retrieved judged-relevant precedents in 41/86 cases (47.7%) vs. 1/7 cases (14.3%) below threshold (Fisher's exact test p = 0.1232, odds ratio 5.47). The separation is directionally consistent; n=7 abstained limits statistical power (p > 0.05). AUROC 0.667 reflects a weak-to-moderate guard rather than a sharp noise boundary.
 
 Detailed failure analysis and individual incident evaluations are documented in [`docs/FAILURE_ANALYSIS.md`](docs/FAILURE_ANALYSIS.md) and [`eval/results/`](eval/results/).
 
