@@ -3,6 +3,7 @@
     "source_corpus": "rag/chroma_db_train (collection: postmortems_train)",
     "sample_file": "eval\\loo\\sample.json",
     "num_queries": 93,
+    "candidate_pool_size": 100,
     "near_dup_thresholds": {
       "cosine_sim_ge": 0.95,
       "5gram_shingle_jaccard_ge": 0.8
@@ -10,6 +11,7 @@
     "summary_stats": {
       "num_queries": 93,
       "leak_guard_status": "PASSED (zero self-id or source-url leaks across all 3 conditions)",
+      "all_queries_have_ge_3_hits": true,
       "condition_a_total_near_duplicates_filtered": 11,
       "condition_b_total_near_duplicates_filtered": 0,
       "queries_with_divergent_top1_between_a_and_c": 7,
@@ -3103,7 +3105,44 @@
         "count_near_duplicates_removed": 0
       },
       "condition_b_cross_company_filtered": {
-        "hits": [],
+        "hits": [
+          {
+            "rank": 1,
+            "incident_id": "sentry-sym7ybpjt9dx",
+            "company": "sentry",
+            "similarity_score": 0.4647,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "US customers may experience delay in alerts. We've identified the issue and will be putting in a fix.",
+            "remediation_steps": "Ingestion and alert latency is back to normal.",
+            "raw_log_excerpt": "Alerts delayed for US customers\nUS customers may experience delay in alerts. We've identified the issue and will be putting in a fix.",
+            "source_url": "https://status.sentry.io/incidents/sym7ybpjt9dx"
+          },
+          {
+            "rank": 2,
+            "incident_id": "digitalocean-w53965shllfq",
+            "company": "digitalocean",
+            "similarity_score": 0.4502,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "We have noticed \u200b\u200b\u200b\u200b\u200b\u200b\u200bnetwork connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.",
+            "remediation_steps": "Between 07:46\u00a0 UTC & 10:24 UTC today, some users in India accessing resources in the NYC region may have experienced connectivity issues. The impact was limited to users using Airtel as their ISP.\n\nOur investigation determined that the issue was caused by an internal network issue within Airtel and was not related to DigitalOcean network. The connectivity issue now appears to be resolved, and users should no longer experience problems accessing their resources.\n\nWe apologize for any inconvenience this may have caused. However, if you continue to experience any connectivity issues, please don't hesitate to open a support ticket for further investigation; we'll be happy to assist you further.",
+            "raw_log_excerpt": "Network Connectivity from India to NYC\nWe have noticed \u200b\u200b\u200b\u200b\u200b\u200b\u200bnetwork connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.",
+            "source_url": "https://status.digitalocean.com/incidents/w53965shllfq"
+          },
+          {
+            "rank": 3,
+            "incident_id": "sentry-ccv3pcf00mbt",
+            "company": "sentry",
+            "similarity_score": 0.4331,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "This issue has been resolved.",
+            "remediation_steps": "This issue has been resolved.",
+            "raw_log_excerpt": "Notification delivery\nWe're currently investigating degraded notification delivery.",
+            "source_url": "https://status.sentry.io/incidents/ccv3pcf00mbt"
+          }
+        ],
         "near_duplicates_removed": [],
         "count_near_duplicates_removed": 0
       },
@@ -4376,7 +4415,44 @@
         "count_near_duplicates_removed": 0
       },
       "condition_b_cross_company_filtered": {
-        "hits": [],
+        "hits": [
+          {
+            "rank": 1,
+            "incident_id": "openai-01KYDN6YPS6ARY1EC9089N089G",
+            "company": "openai",
+            "similarity_score": 0.4318,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "We have identified the source of intermittent errors affecting some ChatGPT conversations and are working to mitigate the issue. Error rates have decreased, but some users may continue to experience failures.",
+            "remediation_steps": "All impacted services have now fully recovered.",
+            "raw_log_excerpt": "Elevated errors affecting ChatGPT conversations\nWe are investigating intermittent errors that may prevent some users from loading or continuing conversations in ChatGPT. The current period of impact began around 1:00 PM PT.",
+            "source_url": "https://status.openai.com/incidents/01KYDN6YPS6ARY1EC9089N089G"
+          },
+          {
+            "rank": 2,
+            "incident_id": "icco-ab8222cd-d25f-4ad7-8ab4-c06412d4aac6",
+            "company": "pagerduty",
+            "similarity_score": 0.422,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "A third party service for sending SMS and making voice calls experienced an outage due to AWS having issues in a region.",
+            "remediation_steps": "A third party service for sending SMS and making voice calls experienced an outage due to AWS having issues in a region.",
+            "raw_log_excerpt": "A third party service for sending SMS and making voice calls experienced an outage due to AWS having issues in a region.",
+            "source_url": "https://status.pagerduty.com/incidents/70m30bh7qfmx"
+          },
+          {
+            "rank": 3,
+            "incident_id": "sentry-ccv3pcf00mbt",
+            "company": "sentry",
+            "similarity_score": 0.4178,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "This issue has been resolved.",
+            "remediation_steps": "This issue has been resolved.",
+            "raw_log_excerpt": "Notification delivery\nWe're currently investigating degraded notification delivery.",
+            "source_url": "https://status.sentry.io/incidents/ccv3pcf00mbt"
+          }
+        ],
         "near_duplicates_removed": [],
         "count_near_duplicates_removed": 0
       },
@@ -4878,7 +4954,44 @@
         "count_near_duplicates_removed": 0
       },
       "condition_b_cross_company_filtered": {
-        "hits": [],
+        "hits": [
+          {
+            "rank": 1,
+            "incident_id": "sentry-sym7ybpjt9dx",
+            "company": "sentry",
+            "similarity_score": 0.4173,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "US customers may experience delay in alerts. We've identified the issue and will be putting in a fix.",
+            "remediation_steps": "Ingestion and alert latency is back to normal.",
+            "raw_log_excerpt": "Alerts delayed for US customers\nUS customers may experience delay in alerts. We've identified the issue and will be putting in a fix.",
+            "source_url": "https://status.sentry.io/incidents/sym7ybpjt9dx"
+          },
+          {
+            "rank": 2,
+            "incident_id": "circleci-7l9wg4375jr4",
+            "company": "circleci",
+            "similarity_score": 0.4168,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "The issue has been identified and a fix is in progress.",
+            "remediation_steps": "The Usage API issue has been resolved. Data has been loaded for yesterday, 8/5/2026. We appreciate your patience.",
+            "raw_log_excerpt": "Usage API data delayed for 8/5\nUsage API data is delayed for 8/5/2026. All prior data remains available. We are investigating. Thank you for your patience.",
+            "source_url": "https://status.circleci.com/incidents/7l9wg4375jr4"
+          },
+          {
+            "rank": 3,
+            "incident_id": "digitalocean-w53965shllfq",
+            "company": "digitalocean",
+            "similarity_score": 0.4088,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "We have noticed \u200b\u200b\u200b\u200b\u200b\u200b\u200bnetwork connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.",
+            "remediation_steps": "Between 07:46\u00a0 UTC & 10:24 UTC today, some users in India accessing resources in the NYC region may have experienced connectivity issues. The impact was limited to users using Airtel as their ISP.\n\nOur investigation determined that the issue was caused by an internal network issue within Airtel and was not related to DigitalOcean network. The connectivity issue now appears to be resolved, and users should no longer experience problems accessing their resources.\n\nWe apologize for any inconvenience this may have caused. However, if you continue to experience any connectivity issues, please don't hesitate to open a support ticket for further investigation; we'll be happy to assist you further.",
+            "raw_log_excerpt": "Network Connectivity from India to NYC\nWe have noticed \u200b\u200b\u200b\u200b\u200b\u200b\u200bnetwork connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.",
+            "source_url": "https://status.digitalocean.com/incidents/w53965shllfq"
+          }
+        ],
         "near_duplicates_removed": [],
         "count_near_duplicates_removed": 0
       },
@@ -6574,7 +6687,44 @@
         "count_near_duplicates_removed": 0
       },
       "condition_b_cross_company_filtered": {
-        "hits": [],
+        "hits": [
+          {
+            "rank": 1,
+            "incident_id": "atlassian-vk4mksp2hvj8",
+            "company": "atlassian",
+            "similarity_score": 0.4832,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "We mitigated the issue with Sign-ups, Product Activation, and Billing, and the systems are back to BAU, and all functionality is restored.",
+            "remediation_steps": "We mitigated the issue with Sign-ups, Product Activation, and Billing, and the systems are back to BAU, and all functionality is restored.",
+            "raw_log_excerpt": "Sign-ups, Product Activation, and Billing not working\nWe have identified the root cause of the Sign-ups, Product Activation, and Billing not working and have mitigated the problem. We are now monitoring closely.",
+            "source_url": "https://status.atlassian.com/incidents/vk4mksp2hvj8"
+          },
+          {
+            "rank": 2,
+            "incident_id": "atlassian-wkg98r6wc1b5",
+            "company": "atlassian",
+            "similarity_score": 0.4829,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "We are investigating reports of intermittent errors for some Atlassian, Confluence, Jira Core, Jira Service Desk, Jira Software, Opsgenie, Atlassian Developer, Trello, and Atlassian Bitbucket Cloud customers. We will provide more details once we identify the root cause.",
+            "remediation_steps": "Between 2020-09-28 21:32 UTC to 2020-09-29 00:09 UTC, we experienced a degradation in functionality for users attempting to authenticate using Microsoft. This affected Confluence, Jira Core, Jira Service Desk, Jira Software, Opsgenie, Atlassian Developer, Trello, and Atlassian Bitbucket. The issue has been resolved and the service is operating normally.",
+            "raw_log_excerpt": "Login / Signup with Microsoft not working\nWe are investigating reports of intermittent errors for some Atlassian, Confluence, Jira Core, Jira Service Desk, Jira Software, Opsgenie, Atlassian Developer, Trello, and Atlassian Bitbucket Cloud customers. We will provide more details once we identify the root cause.",
+            "source_url": "https://status.atlassian.com/incidents/wkg98r6wc1b5"
+          },
+          {
+            "rank": 3,
+            "incident_id": "sentry-224ybqqkrvfd",
+            "company": "sentry",
+            "similarity_score": 0.4582,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "Our auth systems are back operational",
+            "remediation_steps": "Our auth systems are back operational",
+            "raw_log_excerpt": "Users unable to login to sentry.io\nWe are currently investigating the issue.",
+            "source_url": "https://status.sentry.io/incidents/224ybqqkrvfd"
+          }
+        ],
         "near_duplicates_removed": [],
         "count_near_duplicates_removed": 0
       },
@@ -8117,7 +8267,44 @@
         "count_near_duplicates_removed": 1
       },
       "condition_b_cross_company_filtered": {
-        "hits": [],
+        "hits": [
+          {
+            "rank": 1,
+            "incident_id": "dropbox-plz0zpnzbfpx",
+            "company": "dropbox",
+            "similarity_score": 0.4419,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "The issue has been identified and a fix is being implemented.",
+            "remediation_steps": "SSO is back up and running! Thanks for bearing with us.",
+            "raw_log_excerpt": "Single Sign-On (SSO) may not be working as expected\nSingle Sign-On (SSO) may not be working as expected for some users. We are working to fix the problem as quickly as we can. We\u2019ll share another update shortly.",
+            "source_url": "https://status.dropbox.com/incidents/plz0zpnzbfpx"
+          },
+          {
+            "rank": 2,
+            "incident_id": "atlassian-wkg98r6wc1b5",
+            "company": "atlassian",
+            "similarity_score": 0.4276,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "We are investigating reports of intermittent errors for some Atlassian, Confluence, Jira Core, Jira Service Desk, Jira Software, Opsgenie, Atlassian Developer, Trello, and Atlassian Bitbucket Cloud customers. We will provide more details once we identify the root cause.",
+            "remediation_steps": "Between 2020-09-28 21:32 UTC to 2020-09-29 00:09 UTC, we experienced a degradation in functionality for users attempting to authenticate using Microsoft. This affected Confluence, Jira Core, Jira Service Desk, Jira Software, Opsgenie, Atlassian Developer, Trello, and Atlassian Bitbucket. The issue has been resolved and the service is operating normally.",
+            "raw_log_excerpt": "Login / Signup with Microsoft not working\nWe are investigating reports of intermittent errors for some Atlassian, Confluence, Jira Core, Jira Service Desk, Jira Software, Opsgenie, Atlassian Developer, Trello, and Atlassian Bitbucket Cloud customers. We will provide more details once we identify the root cause.",
+            "source_url": "https://status.atlassian.com/incidents/wkg98r6wc1b5"
+          },
+          {
+            "rank": 3,
+            "incident_id": "sentry-224ybqqkrvfd",
+            "company": "sentry",
+            "similarity_score": 0.4256,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "Our auth systems are back operational",
+            "remediation_steps": "Our auth systems are back operational",
+            "raw_log_excerpt": "Users unable to login to sentry.io\nWe are currently investigating the issue.",
+            "source_url": "https://status.sentry.io/incidents/224ybqqkrvfd"
+          }
+        ],
         "near_duplicates_removed": [],
         "count_near_duplicates_removed": 0
       },
@@ -10068,27 +10255,27 @@
           },
           {
             "rank": 2,
-            "incident_id": "dropbox-0xzfcjfbg6qj",
-            "company": "dropbox",
-            "similarity_score": 0.5859,
+            "incident_id": "openai-01KYDN6YPS6ARY1EC9089N089G",
+            "company": "openai",
+            "similarity_score": 0.4748,
             "is_same_company": false,
-            "retrieval_pass": 2,
-            "root_cause": "This incident has been resolved.",
-            "remediation_steps": "This incident has been resolved.",
-            "raw_log_excerpt": "Phone support may not be working as expected for some Team Admins\nCalling support may not be working as expected for some Team Admins. We are working to fix the problem as quickly as we can. We\u2019ll share another update shortly.",
-            "source_url": "https://status.dropbox.com/incidents/0xzfcjfbg6qj"
+            "retrieval_pass": 1,
+            "root_cause": "We have identified the source of intermittent errors affecting some ChatGPT conversations and are working to mitigate the issue. Error rates have decreased, but some users may continue to experience failures.",
+            "remediation_steps": "All impacted services have now fully recovered.",
+            "raw_log_excerpt": "Elevated errors affecting ChatGPT conversations\nWe are investigating intermittent errors that may prevent some users from loading or continuing conversations in ChatGPT. The current period of impact began around 1:00 PM PT.",
+            "source_url": "https://status.openai.com/incidents/01KYDN6YPS6ARY1EC9089N089G"
           },
           {
             "rank": 3,
-            "incident_id": "squarespace-zv2sqhnbk1hb",
-            "company": "squarespace",
-            "similarity_score": 0.5093,
+            "incident_id": "openai-01KZ6CT9K9Q52S3707W75MNBGB",
+            "company": "openai",
+            "similarity_score": 0.469,
             "is_same_company": false,
-            "retrieval_pass": 2,
-            "root_cause": "This incident has been resolved.",
-            "remediation_steps": "This incident has been resolved.",
-            "raw_log_excerpt": "Issues with Domain Registration & Billing\nWe are currently investigating an issue where domain registrations are not being completed and remain in pending status.",
-            "source_url": "https://status.squarespace.com/incidents/zv2sqhnbk1hb"
+            "retrieval_pass": 1,
+            "root_cause": "All impacted services have now fully recovered.",
+            "remediation_steps": "All impacted services have now fully recovered.",
+            "raw_log_excerpt": "Elevated ChatGPT conversation errors affecting Plus, Pro, Business, and Edu users\nWe are investigating elevated errors affecting ChatGPT conversations. Some users may experience failed or interrupted responses, and some conversation turns may not be saved. The issue is affecting users across Plus, Pro, Business and Edu ChatGPT plans.",
+            "source_url": "https://status.openai.com/incidents/01KZ6CT9K9Q52S3707W75MNBGB"
           }
         ],
         "near_duplicates_removed": [],
@@ -10577,7 +10764,44 @@
         "count_near_duplicates_removed": 0
       },
       "condition_b_cross_company_filtered": {
-        "hits": [],
+        "hits": [
+          {
+            "rank": 1,
+            "incident_id": "circleci-7l9wg4375jr4",
+            "company": "circleci",
+            "similarity_score": 0.4391,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "The issue has been identified and a fix is in progress.",
+            "remediation_steps": "The Usage API issue has been resolved. Data has been loaded for yesterday, 8/5/2026. We appreciate your patience.",
+            "raw_log_excerpt": "Usage API data delayed for 8/5\nUsage API data is delayed for 8/5/2026. All prior data remains available. We are investigating. Thank you for your patience.",
+            "source_url": "https://status.circleci.com/incidents/7l9wg4375jr4"
+          },
+          {
+            "rank": 2,
+            "incident_id": "icco-ab8222cd-d25f-4ad7-8ab4-c06412d4aac6",
+            "company": "pagerduty",
+            "similarity_score": 0.438,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "A third party service for sending SMS and making voice calls experienced an outage due to AWS having issues in a region.",
+            "remediation_steps": "A third party service for sending SMS and making voice calls experienced an outage due to AWS having issues in a region.",
+            "raw_log_excerpt": "A third party service for sending SMS and making voice calls experienced an outage due to AWS having issues in a region.",
+            "source_url": "https://status.pagerduty.com/incidents/70m30bh7qfmx"
+          },
+          {
+            "rank": 3,
+            "incident_id": "digitalocean-w53965shllfq",
+            "company": "digitalocean",
+            "similarity_score": 0.4306,
+            "is_same_company": false,
+            "retrieval_pass": 1,
+            "root_cause": "We have noticed \u200b\u200b\u200b\u200b\u200b\u200b\u200bnetwork connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.",
+            "remediation_steps": "Between 07:46\u00a0 UTC & 10:24 UTC today, some users in India accessing resources in the NYC region may have experienced connectivity issues. The impact was limited to users using Airtel as their ISP.\n\nOur investigation determined that the issue was caused by an internal network issue within Airtel and was not related to DigitalOcean network. The connectivity issue now appears to be resolved, and users should no longer experience problems accessing their resources.\n\nWe apologize for any inconvenience this may have caused. However, if you continue to experience any connectivity issues, please don't hesitate to open a support ticket for further investigation; we'll be happy to assist you further.",
+            "raw_log_excerpt": "Network Connectivity from India to NYC\nWe have noticed \u200b\u200b\u200b\u200b\u200b\u200b\u200bnetwork connectivity issues affecting some users connecting from India to resources in the NYC region. Based on our current investigation, users on Airtel and BSNL have reported increased latency, packet loss, or intermittent connectivity. We apologize for the inconvenience and will provide an update as soon as more information becomes available.",
+            "source_url": "https://status.digitalocean.com/incidents/w53965shllfq"
+          }
+        ],
         "near_duplicates_removed": [],
         "count_near_duplicates_removed": 0
       },

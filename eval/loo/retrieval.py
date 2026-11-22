@@ -6,15 +6,19 @@ Runs retrieval on the 93 LOO sample incidents from rag/chroma_db_train under 3 c
   (b) cross-company only (same company excluded, self excluded, near-duplicate filter applied)
   (c) same-company allowed (self excluded, identical source_url excluded, NO near-duplicate filter)
 
+Pool size: n_results=100 for both quality:high and all-corpus passes.
 Near-duplicate definition (eval/PREREG.md):
 - Embedding cosine similarity >= 0.95
 OR
 - 5-gram token-shingle Jaccard similarity >= 0.80 (on log excerpt or root cause)
 
-LEAK GUARD:
-Asserts query incident's own ID and source_url NEVER appear in retrieved hits for (a), (b), or (c).
+HARD ASSERTS:
+- Every query has >= 3 valid hits in EACH of conditions (a), (b), (c) after filtering.
+- Leak guard: Query incident's own ID and source_url NEVER appear in retrieved hits.
 
-Outputs: eval/loo/retrieval.json
+Outputs:
+- eval/loo/retrieval_pool_diff.json (diff report between 30-pool and 100-pool)
+- eval/loo/retrieval.json (100-pool retrieval results)
 """
 
 import sys
@@ -34,6 +38,7 @@ from clustering.cluster import embed
 SAMPLE_FILE = PROJECT_ROOT / "eval" / "loo" / "sample.json"
 CHROMA_TRAIN_DIR = PROJECT_ROOT / "rag" / "chroma_db_train"
 OUTPUT_FILE = PROJECT_ROOT / "eval" / "loo" / "retrieval.json"
+DIFF_FILE = PROJECT_ROOT / "eval" / "loo" / "retrieval_pool_diff.json"
 
 
 def tokenize_words(text: str) -> List[str]:
@@ -55,11 +60,6 @@ def compute_jaccard(s1: Set[Tuple[str, ...]], s2: Set[Tuple[str, ...]]) -> float
 
 
 def is_near_duplicate(query: Dict[str, Any], cand_meta: Dict[str, Any], sim: float) -> Tuple[bool, str, float]:
-    """
-    Checks if candidate is a near-duplicate of query:
-    1. Cosine similarity >= 0.95
-    2. 5-gram token-shingle Jaccard >= 0.80 on raw_log_excerpt or root_cause
-    """
     if sim >= 0.95:
         return True, "cosine_sim_ge_0.95", round(sim, 4)
 
@@ -81,8 +81,19 @@ def is_near_duplicate(query: Dict[str, Any], cand_meta: Dict[str, Any], sim: flo
 
 def run_loo_retrieval() -> Dict[str, Any]:
     print("=" * 60)
-    print("TraceMind E2: Leave-One-Out (LOO) Retrieval")
+    print("TraceMind E2: Leave-One-Out (LOO) Retrieval (Pool Size = 100)")
     print("=" * 60)
+
+    # 1. Load existing 30-pool retrieval if available for diff comparison
+    old_retrieval_map = {}
+    if OUTPUT_FILE.exists():
+        try:
+            with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+                old_data = json.load(f)
+            old_retrieval_map = {item["query_incident_id"]: item for item in old_data.get("retrieval", [])}
+            print(f"Loaded existing 30-pool retrieval ({len(old_retrieval_map)} queries) for diff comparison.")
+        except Exception as e:
+            print(f"Notice: Could not load previous retrieval for diff: {e}")
 
     assert SAMPLE_FILE.exists(), f"Missing LOO sample file: {SAMPLE_FILE}"
     with open(SAMPLE_FILE, "r", encoding="utf-8") as f:
@@ -107,21 +118,27 @@ def run_loo_retrieval() -> Dict[str, Any]:
     queries_with_divergent_top1_ac = 0
     queries_with_divergent_top3_ac = 0
 
+    diff_records = []
+    diff_count_a = 0
+    diff_count_b = 0
+    diff_count_c = 0
+    recovered_count_b = 0
+
     for idx, query in enumerate(sample_incidents):
         qid = query["incident_id"]
         q_comp = query.get("company", "Unknown")
         q_url = (query.get("source_url") or "").strip()
         q_emb = query_embeddings[idx]
 
-        # Query a wide pool from Chroma to allow filtering
+        # Query pool from Chroma with n_results=100 uniformly for high-quality and all-corpus passes
         res_high = collection.query(
             query_embeddings=[q_emb],
-            n_results=30,
+            n_results=100,
             where={"quality": "high"}
         )
         res_all = collection.query(
             query_embeddings=[q_emb],
-            n_results=30
+            n_results=100
         )
 
         # Merge pool maintaining order (pass 1 high quality first, then pass 2)
@@ -250,7 +267,12 @@ def run_loo_retrieval() -> Dict[str, Any]:
             if len(hits_c) >= 3:
                 break
 
-        # --- LEAK GUARD ASSERTIONS ---
+        # --- HARD ASSERTS (Rule 2) ---
+        assert len(hits_a) >= 3, f"HARD ASSERT FAILED: Query {qid} ({q_comp}) has {len(hits_a)} hits in Condition (a) (expected >= 3)"
+        assert len(hits_b) >= 3, f"HARD ASSERT FAILED: Query {qid} ({q_comp}) has {len(hits_b)} hits in Condition (b) (expected >= 3)"
+        assert len(hits_c) >= 3, f"HARD ASSERT FAILED: Query {qid} ({q_comp}) has {len(hits_c)} hits in Condition (c) (expected >= 3)"
+
+        # --- LEAK GUARD HARD ASSERTS ---
         for cond_name, hits in [("condition_a", hits_a), ("condition_b", hits_b), ("condition_c", hits_c)]:
             for h in hits:
                 if h["incident_id"] == qid:
@@ -261,15 +283,48 @@ def run_loo_retrieval() -> Dict[str, Any]:
         total_near_dups_removed_a += len(near_dups_a)
         total_near_dups_removed_b += len(near_dups_b)
 
-        top1_a = hits_a[0]["incident_id"] if hits_a else None
-        top1_c = hits_c[0]["incident_id"] if hits_c else None
+        top1_a = hits_a[0]["incident_id"]
+        top1_c = hits_c[0]["incident_id"]
         if top1_a != top1_c:
             queries_with_divergent_top1_ac += 1
 
         top3_a_ids = [h["incident_id"] for h in hits_a]
+        top3_b_ids = [h["incident_id"] for h in hits_b]
         top3_c_ids = [h["incident_id"] for h in hits_c]
         if top3_a_ids != top3_c_ids:
             queries_with_divergent_top3_ac += 1
+
+        # Diff against 30-pool
+        old_item = old_retrieval_map.get(qid)
+        if old_item:
+            old_a = [h["incident_id"] for h in old_item.get("condition_a_same_company_filtered", {}).get("hits", [])]
+            old_b = [h["incident_id"] for h in old_item.get("condition_b_cross_company_filtered", {}).get("hits", [])]
+            old_c = [h["incident_id"] for h in old_item.get("condition_c_same_company_unfiltered", {}).get("hits", [])]
+
+            chg_a = bool(old_a != top3_a_ids)
+            chg_b = bool(old_b != top3_b_ids)
+            chg_c = bool(old_c != top3_c_ids)
+            rec_b = bool(len(old_b) == 0 and len(top3_b_ids) >= 3)
+
+            if chg_a:
+                diff_count_a += 1
+            if chg_b:
+                diff_count_b += 1
+            if chg_c:
+                diff_count_c += 1
+            if rec_b:
+                recovered_count_b += 1
+
+            diff_records.append({
+                "query_incident_id": qid,
+                "company": q_comp,
+                "condition_a_changed": chg_a,
+                "condition_b_changed": chg_b,
+                "condition_c_changed": chg_c,
+                "condition_b_recovered_from_zero": rec_b,
+                "old_top3": {"condition_a": old_a, "condition_b": old_b, "condition_c": old_c},
+                "new_top3": {"condition_a": top3_a_ids, "condition_b": top3_b_ids, "condition_c": top3_c_ids},
+            })
 
         retrieval_results.append({
             "query_incident_id": qid,
@@ -292,9 +347,38 @@ def run_loo_retrieval() -> Dict[str, Any]:
             "near_dup_changed_top3": bool(top3_a_ids != top3_c_ids),
         })
 
+    # Save diff report first
+    if diff_records:
+        diff_report = {
+            "metadata": {
+                "num_queries": num_queries,
+                "old_pool_size": 30,
+                "new_pool_size": 100,
+                "queries_changed_condition_a_top3": diff_count_a,
+                "queries_changed_condition_b_top3": diff_count_b,
+                "queries_changed_condition_c_top3": diff_count_c,
+                "condition_b_recovered_from_zero_hits": recovered_count_b,
+            },
+            "diff_summary": (
+                f"Expanded retrieval candidate pool from 30 to 100. "
+                f"Condition (a) top-3 changed in {diff_count_a}/{num_queries} queries; "
+                f"Condition (b) top-3 changed in {diff_count_b}/{num_queries} queries (recovering {recovered_count_b} Twilio queries from 0 hits to 3 hits); "
+                f"Condition (c) top-3 changed in {diff_count_c}/{num_queries} queries."
+            ),
+            "per_query_diff": diff_records,
+        }
+        DIFF_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(DIFF_FILE, "w", encoding="utf-8") as f:
+            json.dump(diff_report, f, indent=2)
+        print(f"[Diff Report] Successfully written to {DIFF_FILE}")
+        print(f"  Condition A changed: {diff_count_a}/{num_queries}")
+        print(f"  Condition B changed: {diff_count_b}/{num_queries} (recovered {recovered_count_b} from 0 hits)")
+        print(f"  Condition C changed: {diff_count_c}/{num_queries}")
+
     summary_stats = {
         "num_queries": num_queries,
         "leak_guard_status": "PASSED (zero self-id or source-url leaks across all 3 conditions)",
+        "all_queries_have_ge_3_hits": True,
         "condition_a_total_near_duplicates_filtered": total_near_dups_removed_a,
         "condition_b_total_near_duplicates_filtered": total_near_dups_removed_b,
         "queries_with_divergent_top1_between_a_and_c": queries_with_divergent_top1_ac,
@@ -308,6 +392,7 @@ def run_loo_retrieval() -> Dict[str, Any]:
             "source_corpus": "rag/chroma_db_train (collection: postmortems_train)",
             "sample_file": str(SAMPLE_FILE.relative_to(PROJECT_ROOT)),
             "num_queries": num_queries,
+            "candidate_pool_size": 100,
             "near_dup_thresholds": {
                 "cosine_sim_ge": 0.95,
                 "5gram_shingle_jaccard_ge": 0.80,

@@ -1,0 +1,3896 @@
+{
+  "metadata": {
+    "num_queries": 93,
+    "old_pool_size": 30,
+    "new_pool_size": 100,
+    "queries_changed_condition_a_top3": 0,
+    "queries_changed_condition_b_top3": 7,
+    "queries_changed_condition_c_top3": 0,
+    "condition_b_recovered_from_zero_hits": 6
+  },
+  "diff_summary": "Expanded retrieval candidate pool from 30 to 100. Condition (a) top-3 changed in 0/93 queries; Condition (b) top-3 changed in 7/93 queries (recovering 6 Twilio queries from 0 hits to 3 hits); Condition (c) top-3 changed in 0/93 queries.",
+  "per_query_diff": [
+    {
+      "query_incident_id": "redditstatus-rj9mggtc19wf",
+      "company": "reddit",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_b": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_c": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_b": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_c": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "githubstatus-vm1w8zq95wkt",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-gxycch3076xk",
+          "netlifystatus-75cssy1tzg06",
+          "githubstatus-76t89hbfb09h"
+        ],
+        "condition_b": [
+          "netlifystatus-75cssy1tzg06",
+          "gcp-6876619551109882402",
+          "digitalocean-bfsh34myw3bc"
+        ],
+        "condition_c": [
+          "githubstatus-fmmsrcg5x638",
+          "githubstatus-gxycch3076xk",
+          "netlifystatus-75cssy1tzg06"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-gxycch3076xk",
+          "netlifystatus-75cssy1tzg06",
+          "githubstatus-76t89hbfb09h"
+        ],
+        "condition_b": [
+          "netlifystatus-75cssy1tzg06",
+          "gcp-6876619551109882402",
+          "digitalocean-bfsh34myw3bc"
+        ],
+        "condition_c": [
+          "githubstatus-fmmsrcg5x638",
+          "githubstatus-gxycch3076xk",
+          "netlifystatus-75cssy1tzg06"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "githubstatus-ydpk76bj34z8",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "squarespace-pljhhyxcnt0z",
+          "githubstatus-9ndxtnrwjf37",
+          "githubstatus-zq3c1jst2vkq"
+        ],
+        "condition_b": [
+          "squarespace-pljhhyxcnt0z",
+          "sentry-hsxmtdc6m5dv",
+          "redditstatus-y0gsrfy6dfrz"
+        ],
+        "condition_c": [
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z",
+          "githubstatus-9ndxtnrwjf37"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "squarespace-pljhhyxcnt0z",
+          "githubstatus-9ndxtnrwjf37",
+          "githubstatus-zq3c1jst2vkq"
+        ],
+        "condition_b": [
+          "squarespace-pljhhyxcnt0z",
+          "sentry-hsxmtdc6m5dv",
+          "redditstatus-y0gsrfy6dfrz"
+        ],
+        "condition_c": [
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z",
+          "githubstatus-9ndxtnrwjf37"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-224ybqqkrvfd",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ],
+        "condition_b": [
+          "circleci-5xrywvlmqd9b",
+          "twilio-1sbtd0qtkpfk",
+          "dropbox-plz0zpnzbfpx"
+        ],
+        "condition_c": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ],
+        "condition_b": [
+          "circleci-5xrywvlmqd9b",
+          "twilio-1sbtd0qtkpfk",
+          "dropbox-plz0zpnzbfpx"
+        ],
+        "condition_c": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-49335989-cc3b-4f16-bdc6-df79b7f632ea",
+      "company": "datadog",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-cc1e5d23-573c-450c-9e61-ce71ffc91318"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-55f106c4-1b4e-4d02-bae9-ccf07ff223c2"
+        ],
+        "condition_c": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-cc1e5d23-573c-450c-9e61-ce71ffc91318"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-cc1e5d23-573c-450c-9e61-ce71ffc91318"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-55f106c4-1b4e-4d02-bae9-ccf07ff223c2"
+        ],
+        "condition_c": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-cc1e5d23-573c-450c-9e61-ce71ffc91318"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-c73b27f9-5b62-43ee-b89d-734977ab68d0",
+      "company": "google",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_b": [
+          "icco-e16b28f3-b6d4-449b-ae93-cc8a4d074163",
+          "icco-76a3bbe4-ed5a-4c4a-a851-01d77e3ae63f",
+          "atlassian-kw28xr3wyxmq"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_b": [
+          "icco-e16b28f3-b6d4-449b-ae93-cc8a4d074163",
+          "icco-76a3bbe4-ed5a-4c4a-a851-01d77e3ae63f",
+          "atlassian-kw28xr3wyxmq"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-6df74ljyxcdx",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-5q5wlp7rt3s5",
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys"
+        ],
+        "condition_b": [
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-29fsc4rhsscg",
+          "datadoghq-c4gh438m6pp3"
+        ],
+        "condition_c": [
+          "sentry-5q5wlp7rt3s5",
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-5q5wlp7rt3s5",
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys"
+        ],
+        "condition_b": [
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-29fsc4rhsscg",
+          "datadoghq-c4gh438m6pp3"
+        ],
+        "condition_c": [
+          "sentry-5q5wlp7rt3s5",
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-dc34b433-0ddd-45dd-85bf-cfa6d8cce764",
+      "company": "circleci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-62dd1eda-63e8-4bf5-a5f8-46a222121474",
+          "icco-8afe308d-b0aa-4792-b2f1-170cd8428d8e",
+          "icco-874ed11e-fa23-4e90-b306-febd62f27a1d"
+        ],
+        "condition_b": [
+          "githubstatus-qcvjkzcs7j74",
+          "githubstatus-9ndxtnrwjf37",
+          "icco-f1af2841-ed19-40c6-a4f8-df69885253ef"
+        ],
+        "condition_c": [
+          "icco-62dd1eda-63e8-4bf5-a5f8-46a222121474",
+          "icco-8afe308d-b0aa-4792-b2f1-170cd8428d8e",
+          "icco-874ed11e-fa23-4e90-b306-febd62f27a1d"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-62dd1eda-63e8-4bf5-a5f8-46a222121474",
+          "icco-8afe308d-b0aa-4792-b2f1-170cd8428d8e",
+          "icco-874ed11e-fa23-4e90-b306-febd62f27a1d"
+        ],
+        "condition_b": [
+          "githubstatus-qcvjkzcs7j74",
+          "githubstatus-9ndxtnrwjf37",
+          "icco-f1af2841-ed19-40c6-a4f8-df69885253ef"
+        ],
+        "condition_c": [
+          "icco-62dd1eda-63e8-4bf5-a5f8-46a222121474",
+          "icco-8afe308d-b0aa-4792-b2f1-170cd8428d8e",
+          "icco-874ed11e-fa23-4e90-b306-febd62f27a1d"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+      "company": "cloudflare",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ],
+        "condition_b": [
+          "atlassian-kw28xr3wyxmq",
+          "atlassian-3p4zfxggg0vv",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469"
+        ],
+        "condition_c": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ],
+        "condition_b": [
+          "atlassian-kw28xr3wyxmq",
+          "atlassian-3p4zfxggg0vv",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469"
+        ],
+        "condition_c": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "atlassian-4jkh49j0jjh6",
+      "company": "atlassian",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-yjysg0xrl67m",
+          "digitalocean-2wql4f4sb13r",
+          "atlassian-3p4zfxggg0vv"
+        ],
+        "condition_b": [
+          "githubstatus-yjysg0xrl67m",
+          "digitalocean-2wql4f4sb13r",
+          "sentry-lnsbtfnj7wqz"
+        ],
+        "condition_c": [
+          "githubstatus-yjysg0xrl67m",
+          "digitalocean-2wql4f4sb13r",
+          "atlassian-3p4zfxggg0vv"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-yjysg0xrl67m",
+          "digitalocean-2wql4f4sb13r",
+          "atlassian-3p4zfxggg0vv"
+        ],
+        "condition_b": [
+          "githubstatus-yjysg0xrl67m",
+          "digitalocean-2wql4f4sb13r",
+          "sentry-lnsbtfnj7wqz"
+        ],
+        "condition_c": [
+          "githubstatus-yjysg0xrl67m",
+          "digitalocean-2wql4f4sb13r",
+          "atlassian-3p4zfxggg0vv"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "circleci-t7vt8j14jnbg",
+      "company": "circleci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "circleci-wcsh4hxwkrh7",
+          "circleci-2rhbvp9382px",
+          "circleci-n1tc2lw9q7l0"
+        ],
+        "condition_b": [
+          "icco-76a3bbe4-ed5a-4c4a-a851-01d77e3ae63f",
+          "digitalocean-lrrw084g3whn",
+          "githubstatus-q27ttsnp0x4g"
+        ],
+        "condition_c": [
+          "circleci-wcsh4hxwkrh7",
+          "circleci-2rhbvp9382px",
+          "circleci-n1tc2lw9q7l0"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "circleci-wcsh4hxwkrh7",
+          "circleci-2rhbvp9382px",
+          "circleci-n1tc2lw9q7l0"
+        ],
+        "condition_b": [
+          "icco-76a3bbe4-ed5a-4c4a-a851-01d77e3ae63f",
+          "digitalocean-lrrw084g3whn",
+          "githubstatus-q27ttsnp0x4g"
+        ],
+        "condition_c": [
+          "circleci-wcsh4hxwkrh7",
+          "circleci-2rhbvp9382px",
+          "circleci-n1tc2lw9q7l0"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-24049f4d-af54-4622-b0fd-a291117c7bc9",
+      "company": "openai",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f98d88c2-febd-4e0d-a4c0-06547bfc3e65",
+          "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18"
+        ],
+        "condition_b": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f98d88c2-febd-4e0d-a4c0-06547bfc3e65",
+          "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18"
+        ],
+        "condition_c": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f98d88c2-febd-4e0d-a4c0-06547bfc3e65",
+          "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f98d88c2-febd-4e0d-a4c0-06547bfc3e65",
+          "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18"
+        ],
+        "condition_b": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f98d88c2-febd-4e0d-a4c0-06547bfc3e65",
+          "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18"
+        ],
+        "condition_c": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f98d88c2-febd-4e0d-a4c0-06547bfc3e65",
+          "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-e83c06be-7df9-484d-8de6-342ae21d87c4",
+      "company": "stackoverflow",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-1t7x65n7kvt1",
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "githubstatus-24t8gsgqx2qb"
+        ],
+        "condition_b": [
+          "githubstatus-1t7x65n7kvt1",
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "githubstatus-24t8gsgqx2qb"
+        ],
+        "condition_c": [
+          "githubstatus-1t7x65n7kvt1",
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "githubstatus-24t8gsgqx2qb"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-1t7x65n7kvt1",
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "githubstatus-24t8gsgqx2qb"
+        ],
+        "condition_b": [
+          "githubstatus-1t7x65n7kvt1",
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "githubstatus-24t8gsgqx2qb"
+        ],
+        "condition_c": [
+          "githubstatus-1t7x65n7kvt1",
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "githubstatus-24t8gsgqx2qb"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-ktl4z3kd1t67",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-w2fsfdpcgs58",
+          "sentry-8mmq3ykdqwvz",
+          "sentry-4xg44g1ckg4z"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "circleci-mspf5pqp7d42"
+        ],
+        "condition_c": [
+          "sentry-w2fsfdpcgs58",
+          "sentry-8mmq3ykdqwvz",
+          "sentry-4xg44g1ckg4z"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-w2fsfdpcgs58",
+          "sentry-8mmq3ykdqwvz",
+          "sentry-4xg44g1ckg4z"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "circleci-mspf5pqp7d42"
+        ],
+        "condition_c": [
+          "sentry-w2fsfdpcgs58",
+          "sentry-8mmq3ykdqwvz",
+          "sentry-4xg44g1ckg4z"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "openai-01KZRJHTR75WDXCMC0ZERX6YJC",
+      "company": "openai",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5",
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15",
+          "openai-01KYDN6YPS6ARY1EC9089N089G"
+        ],
+        "condition_b": [
+          "twilio-3gd6hwhz94q9",
+          "netlifystatus-vgjg50pg3346",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_c": [
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5",
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15",
+          "openai-01KYDN6YPS6ARY1EC9089N089G"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5",
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15",
+          "openai-01KYDN6YPS6ARY1EC9089N089G"
+        ],
+        "condition_b": [
+          "twilio-3gd6hwhz94q9",
+          "netlifystatus-vgjg50pg3346",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_c": [
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5",
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15",
+          "openai-01KYDN6YPS6ARY1EC9089N089G"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-hsxmtdc6m5dv",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z"
+        ],
+        "condition_b": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z"
+        ],
+        "condition_c": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z"
+        ],
+        "condition_b": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z"
+        ],
+        "condition_c": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-k8vbzwqjkxzn",
+          "squarespace-pljhhyxcnt0z"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "squarespace-bf01k990bll7",
+      "company": "squarespace",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-sqw4fzmjb2yp",
+          "squarespace-7247p2zvg0ly"
+        ],
+        "condition_b": [
+          "circleci-tqh9zwszp05w",
+          "icco-8afe308d-b0aa-4792-b2f1-170cd8428d8e",
+          "circleci-qhxl36d29vfl"
+        ],
+        "condition_c": [
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-sqw4fzmjb2yp",
+          "squarespace-7247p2zvg0ly"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-sqw4fzmjb2yp",
+          "squarespace-7247p2zvg0ly"
+        ],
+        "condition_b": [
+          "circleci-tqh9zwszp05w",
+          "icco-8afe308d-b0aa-4792-b2f1-170cd8428d8e",
+          "circleci-qhxl36d29vfl"
+        ],
+        "condition_c": [
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-sqw4fzmjb2yp",
+          "squarespace-7247p2zvg0ly"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+      "company": "google",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-6330a9a4-38ab-43cb-b34d-aba1bddb66bc"
+        ],
+        "condition_b": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-e16b28f3-b6d4-449b-ae93-cc8a4d074163",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431"
+        ],
+        "condition_c": [
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-6330a9a4-38ab-43cb-b34d-aba1bddb66bc"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-6330a9a4-38ab-43cb-b34d-aba1bddb66bc"
+        ],
+        "condition_b": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-e16b28f3-b6d4-449b-ae93-cc8a4d074163",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431"
+        ],
+        "condition_c": [
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-6330a9a4-38ab-43cb-b34d-aba1bddb66bc"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "circleci-q17ysw9wn2pr",
+      "company": "circleci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9",
+          "githubstatus-5bnwwg9tzd4q"
+        ],
+        "condition_b": [
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9",
+          "githubstatus-5bnwwg9tzd4q"
+        ],
+        "condition_c": [
+          "circleci-ljvrkzc9pdfr",
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9",
+          "githubstatus-5bnwwg9tzd4q"
+        ],
+        "condition_b": [
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9",
+          "githubstatus-5bnwwg9tzd4q"
+        ],
+        "condition_c": [
+          "circleci-ljvrkzc9pdfr",
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "circleci-rfz5wdpg2nl0",
+      "company": "circleci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "circleci-l3hk1qv7hbmj",
+          "circleci-n8p81wk9xjrz",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e"
+        ],
+        "condition_b": [
+          "githubstatus-9wzhl5jr80jt",
+          "githubstatus-cstx3v63mklm",
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191"
+        ],
+        "condition_c": [
+          "circleci-l3hk1qv7hbmj",
+          "circleci-n8p81wk9xjrz",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "circleci-l3hk1qv7hbmj",
+          "circleci-n8p81wk9xjrz",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e"
+        ],
+        "condition_b": [
+          "githubstatus-9wzhl5jr80jt",
+          "githubstatus-cstx3v63mklm",
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191"
+        ],
+        "condition_c": [
+          "circleci-l3hk1qv7hbmj",
+          "circleci-n8p81wk9xjrz",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "datadoghq-xqyrslhjs303",
+      "company": "datadog",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "datadoghq-xj87f6z9mm3w",
+          "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+          "circleci-01zmcr93tysy"
+        ],
+        "condition_b": [
+          "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+          "circleci-01zmcr93tysy",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_c": [
+          "datadoghq-xj87f6z9mm3w",
+          "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+          "circleci-01zmcr93tysy"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "datadoghq-xj87f6z9mm3w",
+          "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+          "circleci-01zmcr93tysy"
+        ],
+        "condition_b": [
+          "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+          "circleci-01zmcr93tysy",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_c": [
+          "datadoghq-xj87f6z9mm3w",
+          "icco-7c9f5931-6497-43cd-b72a-a3f4a5e42e3d",
+          "circleci-01zmcr93tysy"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-759650ec-d3c6-41d9-97d5-5a11b0eb6dcf",
+      "company": "google",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "gcp-11738310674864064645"
+        ],
+        "condition_b": [
+          "icco-76f27cf3-b204-40e4-942e-19657614f658",
+          "sentry-2nb32dn3mclz",
+          "icco-2349ef07-ccb1-421c-94f8-68952f1a4058"
+        ],
+        "condition_c": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "gcp-11738310674864064645"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "gcp-11738310674864064645"
+        ],
+        "condition_b": [
+          "icco-76f27cf3-b204-40e4-942e-19657614f658",
+          "sentry-2nb32dn3mclz",
+          "icco-2349ef07-ccb1-421c-94f8-68952f1a4058"
+        ],
+        "condition_c": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "gcp-11738310674864064645"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+      "company": "stackoverflow",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-95f252f8-fef6-40a0-ab98-977f28d3dbba",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ],
+        "condition_b": [
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-06ceee47-94f1-400b-bf58-7482d740d5e6"
+        ],
+        "condition_c": [
+          "icco-95f252f8-fef6-40a0-ab98-977f28d3dbba",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-95f252f8-fef6-40a0-ab98-977f28d3dbba",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ],
+        "condition_b": [
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-06ceee47-94f1-400b-bf58-7482d740d5e6"
+        ],
+        "condition_c": [
+          "icco-95f252f8-fef6-40a0-ab98-977f28d3dbba",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-mr1s0hvl0znw",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": true,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": true,
+      "old_top3": {
+        "condition_a": [
+          "twilio-pgkr5cnrn7v5",
+          "twilio-6j49hvfdxr47",
+          "twilio-8t7mrtmr6zxr"
+        ],
+        "condition_b": [],
+        "condition_c": [
+          "twilio-pgkr5cnrn7v5",
+          "twilio-6j49hvfdxr47",
+          "twilio-8t7mrtmr6zxr"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-pgkr5cnrn7v5",
+          "twilio-6j49hvfdxr47",
+          "twilio-8t7mrtmr6zxr"
+        ],
+        "condition_b": [
+          "sentry-sym7ybpjt9dx",
+          "digitalocean-w53965shllfq",
+          "sentry-ccv3pcf00mbt"
+        ],
+        "condition_c": [
+          "twilio-pgkr5cnrn7v5",
+          "twilio-6j49hvfdxr47",
+          "twilio-8t7mrtmr6zxr"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "redditstatus-wdhk0802p7sc",
+      "company": "reddit",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-kynnbfzr4psn",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_b": [
+          "sentry-hsxmtdc6m5dv",
+          "datadoghq-29fsc4rhsscg",
+          "circleci-7l9wg4375jr4"
+        ],
+        "condition_c": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-kynnbfzr4psn",
+          "sentry-hsxmtdc6m5dv"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-kynnbfzr4psn",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_b": [
+          "sentry-hsxmtdc6m5dv",
+          "datadoghq-29fsc4rhsscg",
+          "circleci-7l9wg4375jr4"
+        ],
+        "condition_c": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-kynnbfzr4psn",
+          "sentry-hsxmtdc6m5dv"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "netlifystatus-vgjg50pg3346",
+      "company": "netlify",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "netlifystatus-75cssy1tzg06",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "netlifystatus-3p2nrdlccqhb"
+        ],
+        "condition_b": [
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KY8PGR54KXGBSFXHEJ3FM83F"
+        ],
+        "condition_c": [
+          "netlifystatus-75cssy1tzg06",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "netlifystatus-3p2nrdlccqhb"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "netlifystatus-75cssy1tzg06",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "netlifystatus-3p2nrdlccqhb"
+        ],
+        "condition_b": [
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KY8PGR54KXGBSFXHEJ3FM83F"
+        ],
+        "condition_c": [
+          "netlifystatus-75cssy1tzg06",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "netlifystatus-3p2nrdlccqhb"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "githubstatus-24t8gsgqx2qb",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-0f6hndclsk21",
+          "githubstatus-9tpgqq1h4bs7",
+          "githubstatus-dsrfymph7my0"
+        ],
+        "condition_b": [
+          "gcp-6876619551109882402",
+          "twilio-m9qjjjgywpzy",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_c": [
+          "githubstatus-0f6hndclsk21",
+          "githubstatus-9tpgqq1h4bs7",
+          "githubstatus-dsrfymph7my0"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-0f6hndclsk21",
+          "githubstatus-9tpgqq1h4bs7",
+          "githubstatus-dsrfymph7my0"
+        ],
+        "condition_b": [
+          "gcp-6876619551109882402",
+          "twilio-m9qjjjgywpzy",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_c": [
+          "githubstatus-0f6hndclsk21",
+          "githubstatus-9tpgqq1h4bs7",
+          "githubstatus-dsrfymph7my0"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-fde04641-ac3a-499a-887e-fb5d26184c09",
+      "company": "aws",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-82216044-3155-403c-9ccc-83dbfcf0e0a5",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e"
+        ],
+        "condition_b": [
+          "icco-2349ef07-ccb1-421c-94f8-68952f1a4058",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-c1672351-4518-4efa-9773-db11f0cc424b"
+        ],
+        "condition_c": [
+          "icco-82216044-3155-403c-9ccc-83dbfcf0e0a5",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-82216044-3155-403c-9ccc-83dbfcf0e0a5",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e"
+        ],
+        "condition_b": [
+          "icco-2349ef07-ccb1-421c-94f8-68952f1a4058",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-c1672351-4518-4efa-9773-db11f0cc424b"
+        ],
+        "condition_c": [
+          "icco-82216044-3155-403c-9ccc-83dbfcf0e0a5",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-f1af2841-ed19-40c6-a4f8-df69885253ef",
+      "company": "travisci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191",
+          "icco-aeca111b-f5bf-4056-b717-ab9159dc24e0",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ],
+        "condition_b": [
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f",
+          "icco-96e1c327-d6aa-49b9-870a-07f63dded6c6",
+          "icco-dc34b433-0ddd-45dd-85bf-cfa6d8cce764"
+        ],
+        "condition_c": [
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191",
+          "icco-aeca111b-f5bf-4056-b717-ab9159dc24e0",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191",
+          "icco-aeca111b-f5bf-4056-b717-ab9159dc24e0",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ],
+        "condition_b": [
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f",
+          "icco-96e1c327-d6aa-49b9-870a-07f63dded6c6",
+          "icco-dc34b433-0ddd-45dd-85bf-cfa6d8cce764"
+        ],
+        "condition_c": [
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191",
+          "icco-aeca111b-f5bf-4056-b717-ab9159dc24e0",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-5cbc4e4d-d491-4576-a9fe-6f60ca05c9d8",
+      "company": "cloudflare",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ],
+        "condition_b": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf",
+          "digitalocean-phwpbgwcmkjn"
+        ],
+        "condition_c": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ],
+        "condition_b": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf",
+          "digitalocean-phwpbgwcmkjn"
+        ],
+        "condition_c": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "openai-01KZ9DMQD2GJ8JJWDN7572RH78",
+      "company": "openai",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "openai-01KYJC3TDHZVSQFFPTC8X9RAHC",
+          "openai-01KY8PGR54KXGBSFXHEJ3FM83F",
+          "githubstatus-pz7g535gbs6p"
+        ],
+        "condition_b": [
+          "githubstatus-pz7g535gbs6p",
+          "githubstatus-fd7j2mw8xw94",
+          "githubstatus-9n670kvk0vw9"
+        ],
+        "condition_c": [
+          "openai-01KYJC3TDHZVSQFFPTC8X9RAHC",
+          "openai-01KY8PGR54KXGBSFXHEJ3FM83F",
+          "githubstatus-pz7g535gbs6p"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "openai-01KYJC3TDHZVSQFFPTC8X9RAHC",
+          "openai-01KY8PGR54KXGBSFXHEJ3FM83F",
+          "githubstatus-pz7g535gbs6p"
+        ],
+        "condition_b": [
+          "githubstatus-pz7g535gbs6p",
+          "githubstatus-fd7j2mw8xw94",
+          "githubstatus-9n670kvk0vw9"
+        ],
+        "condition_c": [
+          "openai-01KYJC3TDHZVSQFFPTC8X9RAHC",
+          "openai-01KY8PGR54KXGBSFXHEJ3FM83F",
+          "githubstatus-pz7g535gbs6p"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "dropbox-g9p0hvdq1n1k",
+      "company": "dropbox",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "digitalocean-y3p9v8vm4tfn",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "redditstatus-vj1wzh4m7f6n"
+        ],
+        "condition_b": [
+          "digitalocean-y3p9v8vm4tfn",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "redditstatus-vj1wzh4m7f6n"
+        ],
+        "condition_c": [
+          "digitalocean-y3p9v8vm4tfn",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "redditstatus-vj1wzh4m7f6n"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "digitalocean-y3p9v8vm4tfn",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "redditstatus-vj1wzh4m7f6n"
+        ],
+        "condition_b": [
+          "digitalocean-y3p9v8vm4tfn",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "redditstatus-vj1wzh4m7f6n"
+        ],
+        "condition_c": [
+          "digitalocean-y3p9v8vm4tfn",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "redditstatus-vj1wzh4m7f6n"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "squarespace-pljhhyxcnt0z",
+      "company": "squarespace",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-k8vbzwqjkxzn",
+          "githubstatus-ydpk76bj34z8",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_b": [
+          "githubstatus-k8vbzwqjkxzn",
+          "githubstatus-ydpk76bj34z8",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_c": [
+          "githubstatus-k8vbzwqjkxzn",
+          "githubstatus-ydpk76bj34z8",
+          "sentry-hsxmtdc6m5dv"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-k8vbzwqjkxzn",
+          "githubstatus-ydpk76bj34z8",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_b": [
+          "githubstatus-k8vbzwqjkxzn",
+          "githubstatus-ydpk76bj34z8",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_c": [
+          "githubstatus-k8vbzwqjkxzn",
+          "githubstatus-ydpk76bj34z8",
+          "sentry-hsxmtdc6m5dv"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-y0pvd1p6hfqg",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": true,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": true,
+      "old_top3": {
+        "condition_a": [
+          "twilio-0klphbzhvr7y",
+          "twilio-qnkkh09swxch",
+          "twilio-1v4367vswsrm"
+        ],
+        "condition_b": [],
+        "condition_c": [
+          "twilio-0klphbzhvr7y",
+          "twilio-qnkkh09swxch",
+          "twilio-1v4367vswsrm"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-0klphbzhvr7y",
+          "twilio-qnkkh09swxch",
+          "twilio-1v4367vswsrm"
+        ],
+        "condition_b": [
+          "openai-01KYDN6YPS6ARY1EC9089N089G",
+          "icco-ab8222cd-d25f-4ad7-8ab4-c06412d4aac6",
+          "sentry-ccv3pcf00mbt"
+        ],
+        "condition_c": [
+          "twilio-0klphbzhvr7y",
+          "twilio-qnkkh09swxch",
+          "twilio-1v4367vswsrm"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "openai-01KYNNX2TQ3PV0KPJ9PTRRPX6C",
+      "company": "openai",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8"
+        ],
+        "condition_b": [
+          "twilio-3gd6hwhz94q9",
+          "githubstatus-9n670kvk0vw9",
+          "netlifystatus-vgjg50pg3346"
+        ],
+        "condition_c": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8"
+        ],
+        "condition_b": [
+          "twilio-3gd6hwhz94q9",
+          "githubstatus-9n670kvk0vw9",
+          "netlifystatus-vgjg50pg3346"
+        ],
+        "condition_c": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-3aac3a45-0815-432e-8057-f8a02132cd36",
+      "company": "stackoverflow",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243"
+        ],
+        "condition_b": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff"
+        ],
+        "condition_c": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243"
+        ],
+        "condition_b": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff"
+        ],
+        "condition_c": [
+          "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "digitalocean-gwgh41d5r0nz",
+      "company": "digitalocean",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "digitalocean-nnt4rfbgn1y6",
+          "digitalocean-p3zyn7c4jyx7",
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf"
+        ],
+        "condition_b": [
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf",
+          "atlassian-kw28xr3wyxmq",
+          "icco-23713fc8-675d-4de9-9127-7950f10c6131"
+        ],
+        "condition_c": [
+          "digitalocean-nnt4rfbgn1y6",
+          "digitalocean-p3zyn7c4jyx7",
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "digitalocean-nnt4rfbgn1y6",
+          "digitalocean-p3zyn7c4jyx7",
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf"
+        ],
+        "condition_b": [
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf",
+          "atlassian-kw28xr3wyxmq",
+          "icco-23713fc8-675d-4de9-9127-7950f10c6131"
+        ],
+        "condition_c": [
+          "digitalocean-nnt4rfbgn1y6",
+          "digitalocean-p3zyn7c4jyx7",
+          "icco-9de8424e-a58a-4c21-857d-4244d8675dcf"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-9g143y4mpvcq",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": true,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": true,
+      "old_top3": {
+        "condition_a": [
+          "twilio-6j49hvfdxr47",
+          "twilio-pgkr5cnrn7v5",
+          "twilio-8t7mrtmr6zxr"
+        ],
+        "condition_b": [],
+        "condition_c": [
+          "twilio-6j49hvfdxr47",
+          "twilio-pgkr5cnrn7v5",
+          "twilio-8t7mrtmr6zxr"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-6j49hvfdxr47",
+          "twilio-pgkr5cnrn7v5",
+          "twilio-8t7mrtmr6zxr"
+        ],
+        "condition_b": [
+          "sentry-sym7ybpjt9dx",
+          "circleci-7l9wg4375jr4",
+          "digitalocean-w53965shllfq"
+        ],
+        "condition_c": [
+          "twilio-6j49hvfdxr47",
+          "twilio-pgkr5cnrn7v5",
+          "twilio-8t7mrtmr6zxr"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+      "company": "openai",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8"
+        ],
+        "condition_b": [
+          "netlifystatus-vgjg50pg3346",
+          "netlifystatus-3p2nrdlccqhb",
+          "twilio-3gd6hwhz94q9"
+        ],
+        "condition_c": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8"
+        ],
+        "condition_b": [
+          "netlifystatus-vgjg50pg3346",
+          "netlifystatus-3p2nrdlccqhb",
+          "twilio-3gd6hwhz94q9"
+        ],
+        "condition_c": [
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "dropbox-plz0zpnzbfpx",
+      "company": "dropbox",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-nszcg35tjr9f",
+          "atlassian-wkg98r6wc1b5",
+          "atlassian-vk4mksp2hvj8"
+        ],
+        "condition_b": [
+          "sentry-nszcg35tjr9f",
+          "atlassian-wkg98r6wc1b5",
+          "atlassian-vk4mksp2hvj8"
+        ],
+        "condition_c": [
+          "sentry-nszcg35tjr9f",
+          "atlassian-wkg98r6wc1b5",
+          "atlassian-vk4mksp2hvj8"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-nszcg35tjr9f",
+          "atlassian-wkg98r6wc1b5",
+          "atlassian-vk4mksp2hvj8"
+        ],
+        "condition_b": [
+          "sentry-nszcg35tjr9f",
+          "atlassian-wkg98r6wc1b5",
+          "atlassian-vk4mksp2hvj8"
+        ],
+        "condition_c": [
+          "sentry-nszcg35tjr9f",
+          "atlassian-wkg98r6wc1b5",
+          "atlassian-vk4mksp2hvj8"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "circleci-0ss2l980mvxx",
+      "company": "circleci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "circleci-6rpnwxd8zbt6",
+          "githubstatus-1xqvzyv99skw",
+          "atlassian-m0nz4gbbjmz2"
+        ],
+        "condition_b": [
+          "githubstatus-1xqvzyv99skw",
+          "atlassian-m0nz4gbbjmz2",
+          "githubstatus-5bnwwg9tzd4q"
+        ],
+        "condition_c": [
+          "circleci-6rpnwxd8zbt6",
+          "githubstatus-1xqvzyv99skw",
+          "atlassian-m0nz4gbbjmz2"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "circleci-6rpnwxd8zbt6",
+          "githubstatus-1xqvzyv99skw",
+          "atlassian-m0nz4gbbjmz2"
+        ],
+        "condition_b": [
+          "githubstatus-1xqvzyv99skw",
+          "atlassian-m0nz4gbbjmz2",
+          "githubstatus-5bnwwg9tzd4q"
+        ],
+        "condition_c": [
+          "circleci-6rpnwxd8zbt6",
+          "githubstatus-1xqvzyv99skw",
+          "atlassian-m0nz4gbbjmz2"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+      "company": "cloudflare",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ],
+        "condition_b": [
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "atlassian-3p4zfxggg0vv"
+        ],
+        "condition_c": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ],
+        "condition_b": [
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "atlassian-3p4zfxggg0vv"
+        ],
+        "condition_c": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-j9ggb9ns8zcl",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys",
+          "sentry-9yvnf1h3v721"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-476hf8wnc4l0"
+        ],
+        "condition_c": [
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys",
+          "sentry-9yvnf1h3v721"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys",
+          "sentry-9yvnf1h3v721"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-476hf8wnc4l0"
+        ],
+        "condition_c": [
+          "sentry-4mr92qjf3wdt",
+          "sentry-0j4dfbzjdrys",
+          "sentry-9yvnf1h3v721"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "circleci-tqh9zwszp05w",
+      "company": "circleci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "circleci-hth87g8tfm2y",
+          "githubstatus-gxycch3076xk",
+          "digitalocean-bfsh34myw3bc"
+        ],
+        "condition_b": [
+          "githubstatus-gxycch3076xk",
+          "digitalocean-bfsh34myw3bc",
+          "openai-01KZSC0T66YTVM57N5T79SV8ZV"
+        ],
+        "condition_c": [
+          "circleci-hth87g8tfm2y",
+          "githubstatus-gxycch3076xk",
+          "digitalocean-bfsh34myw3bc"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "circleci-hth87g8tfm2y",
+          "githubstatus-gxycch3076xk",
+          "digitalocean-bfsh34myw3bc"
+        ],
+        "condition_b": [
+          "githubstatus-gxycch3076xk",
+          "digitalocean-bfsh34myw3bc",
+          "openai-01KZSC0T66YTVM57N5T79SV8ZV"
+        ],
+        "condition_c": [
+          "circleci-hth87g8tfm2y",
+          "githubstatus-gxycch3076xk",
+          "digitalocean-bfsh34myw3bc"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190",
+          "icco-be03bbc3-6bee-4fca-9e5a-08d78b9a6402",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ],
+        "condition_b": [
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "circleci-hth87g8tfm2y",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_c": [
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190",
+          "icco-be03bbc3-6bee-4fca-9e5a-08d78b9a6402",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190",
+          "icco-be03bbc3-6bee-4fca-9e5a-08d78b9a6402",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ],
+        "condition_b": [
+          "icco-a0ea0064-ca6d-438a-b8f0-0404dcd1d91c",
+          "circleci-hth87g8tfm2y",
+          "sentry-hsxmtdc6m5dv"
+        ],
+        "condition_c": [
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190",
+          "icco-be03bbc3-6bee-4fca-9e5a-08d78b9a6402",
+          "icco-402733d3-31ee-4ca3-b769-0a9cdf7dd59f"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "redditstatus-pxtc317vq3qj",
+      "company": "reddit",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-grx0wwqcq22b",
+          "redditstatus-brsn0q8r649z"
+        ],
+        "condition_b": [
+          "twilio-xzps8r06btt0",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6"
+        ],
+        "condition_c": [
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-grx0wwqcq22b",
+          "redditstatus-brsn0q8r649z"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-grx0wwqcq22b",
+          "redditstatus-brsn0q8r649z"
+        ],
+        "condition_b": [
+          "twilio-xzps8r06btt0",
+          "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6"
+        ],
+        "condition_c": [
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-grx0wwqcq22b",
+          "redditstatus-brsn0q8r649z"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+      "company": "reddit",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "redditstatus-y0gsrfy6dfrz",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "redditstatus-vj1wzh4m7f6n"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "digitalocean-lrrw084g3whn"
+        ],
+        "condition_c": [
+          "redditstatus-y0gsrfy6dfrz",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "redditstatus-vj1wzh4m7f6n"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "redditstatus-y0gsrfy6dfrz",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "redditstatus-vj1wzh4m7f6n"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "digitalocean-lrrw084g3whn"
+        ],
+        "condition_c": [
+          "redditstatus-y0gsrfy6dfrz",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "redditstatus-vj1wzh4m7f6n"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "redditstatus-kynnbfzr4psn",
+      "company": "reddit",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-vj1wzh4m7f6n",
+          "datadoghq-cvdjtf81756n"
+        ],
+        "condition_b": [
+          "datadoghq-cvdjtf81756n",
+          "datadoghq-bg2rxpyn1hc3",
+          "circleci-l6yh0qf4c20c"
+        ],
+        "condition_c": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-vj1wzh4m7f6n",
+          "datadoghq-cvdjtf81756n"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-vj1wzh4m7f6n",
+          "datadoghq-cvdjtf81756n"
+        ],
+        "condition_b": [
+          "datadoghq-cvdjtf81756n",
+          "datadoghq-bg2rxpyn1hc3",
+          "circleci-l6yh0qf4c20c"
+        ],
+        "condition_c": [
+          "redditstatus-4c1vjlptgddq",
+          "redditstatus-vj1wzh4m7f6n",
+          "datadoghq-cvdjtf81756n"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "githubstatus-ph5nns5y4gxj",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-5bnwwg9tzd4q",
+          "githubstatus-lsvy8xsf0gxv",
+          "circleci-q17ysw9wn2pr"
+        ],
+        "condition_b": [
+          "circleci-q17ysw9wn2pr",
+          "circleci-ljvrkzc9pdfr",
+          "circleci-6rpnwxd8zbt6"
+        ],
+        "condition_c": [
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9",
+          "githubstatus-5bnwwg9tzd4q"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-5bnwwg9tzd4q",
+          "githubstatus-lsvy8xsf0gxv",
+          "circleci-q17ysw9wn2pr"
+        ],
+        "condition_b": [
+          "circleci-q17ysw9wn2pr",
+          "circleci-ljvrkzc9pdfr",
+          "circleci-6rpnwxd8zbt6"
+        ],
+        "condition_c": [
+          "githubstatus-v0b3bpsyvqtk",
+          "githubstatus-d35pngcy6sb9",
+          "githubstatus-5bnwwg9tzd4q"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-91f1928a-c9cd-4473-a761-dc0b07914b2e",
+      "company": "cloudflare",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-e81a4a73-8808-42da-9841-9bd4fcc8b9be",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ],
+        "condition_b": [
+          "icco-9deb5a9a-d55a-47fc-845f-a7fe3ebdb673",
+          "icco-ca5bc718-5852-4355-97df-90def0209e53",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_c": [
+          "icco-e81a4a73-8808-42da-9841-9bd4fcc8b9be",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-e81a4a73-8808-42da-9841-9bd4fcc8b9be",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ],
+        "condition_b": [
+          "icco-9deb5a9a-d55a-47fc-845f-a7fe3ebdb673",
+          "icco-ca5bc718-5852-4355-97df-90def0209e53",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_c": [
+          "icco-e81a4a73-8808-42da-9841-9bd4fcc8b9be",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-1sbtd0qtkpfk",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": true,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": true,
+      "old_top3": {
+        "condition_a": [
+          "twilio-b098v1vd33sy",
+          "twilio-46yjhmkypqrf",
+          "twilio-xksxfs85vhxm"
+        ],
+        "condition_b": [],
+        "condition_c": [
+          "twilio-b098v1vd33sy",
+          "twilio-46yjhmkypqrf",
+          "twilio-xksxfs85vhxm"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-b098v1vd33sy",
+          "twilio-46yjhmkypqrf",
+          "twilio-xksxfs85vhxm"
+        ],
+        "condition_b": [
+          "atlassian-vk4mksp2hvj8",
+          "atlassian-wkg98r6wc1b5",
+          "sentry-224ybqqkrvfd"
+        ],
+        "condition_c": [
+          "twilio-b098v1vd33sy",
+          "twilio-46yjhmkypqrf",
+          "twilio-xksxfs85vhxm"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-rxjtcg6mnvdd",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-mc7gkgm6sprn",
+          "sentry-4bnv32fjbj4q",
+          "sentry-w39v80r1tw7p"
+        ],
+        "condition_b": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-zq3c1jst2vkq",
+          "githubstatus-9ndxtnrwjf37"
+        ],
+        "condition_c": [
+          "sentry-mc7gkgm6sprn",
+          "sentry-4bnv32fjbj4q",
+          "sentry-w39v80r1tw7p"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-mc7gkgm6sprn",
+          "sentry-4bnv32fjbj4q",
+          "sentry-w39v80r1tw7p"
+        ],
+        "condition_b": [
+          "githubstatus-ydpk76bj34z8",
+          "githubstatus-zq3c1jst2vkq",
+          "githubstatus-9ndxtnrwjf37"
+        ],
+        "condition_c": [
+          "sentry-mc7gkgm6sprn",
+          "sentry-4bnv32fjbj4q",
+          "sentry-w39v80r1tw7p"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "dropbox-np9rsdc10d1m",
+      "company": "dropbox",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "datadoghq-q2njm9l08tjb",
+          "circleci-68kk6515ztfp",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_b": [
+          "datadoghq-q2njm9l08tjb",
+          "circleci-68kk6515ztfp",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_c": [
+          "datadoghq-q2njm9l08tjb",
+          "circleci-68kk6515ztfp",
+          "twilio-25qgkbhhn3br"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "datadoghq-q2njm9l08tjb",
+          "circleci-68kk6515ztfp",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_b": [
+          "datadoghq-q2njm9l08tjb",
+          "circleci-68kk6515ztfp",
+          "twilio-25qgkbhhn3br"
+        ],
+        "condition_c": [
+          "datadoghq-q2njm9l08tjb",
+          "circleci-68kk6515ztfp",
+          "twilio-25qgkbhhn3br"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "atlassian-lgl84rzhxd0d",
+      "company": "atlassian",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "atlassian-2spys43jxslj",
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-5187qzxv1zvg"
+        ],
+        "condition_b": [
+          "circleci-brp558x5kfn1",
+          "githubstatus-5bnwwg9tzd4q",
+          "githubstatus-1xqvzyv99skw"
+        ],
+        "condition_c": [
+          "atlassian-2spys43jxslj",
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-5187qzxv1zvg"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "atlassian-2spys43jxslj",
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-5187qzxv1zvg"
+        ],
+        "condition_b": [
+          "circleci-brp558x5kfn1",
+          "githubstatus-5bnwwg9tzd4q",
+          "githubstatus-1xqvzyv99skw"
+        ],
+        "condition_c": [
+          "atlassian-2spys43jxslj",
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-5187qzxv1zvg"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18",
+      "company": "aws",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-14024599-5ca4-479d-a537-d36c393f97a6",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e",
+          "githubstatus-9ndxtnrwjf37"
+        ],
+        "condition_b": [
+          "icco-14024599-5ca4-479d-a537-d36c393f97a6",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e",
+          "githubstatus-9ndxtnrwjf37"
+        ],
+        "condition_c": [
+          "icco-14024599-5ca4-479d-a537-d36c393f97a6",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e",
+          "githubstatus-9ndxtnrwjf37"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-14024599-5ca4-479d-a537-d36c393f97a6",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e",
+          "githubstatus-9ndxtnrwjf37"
+        ],
+        "condition_b": [
+          "icco-14024599-5ca4-479d-a537-d36c393f97a6",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e",
+          "githubstatus-9ndxtnrwjf37"
+        ],
+        "condition_c": [
+          "icco-14024599-5ca4-479d-a537-d36c393f97a6",
+          "icco-22e646c4-198c-4985-bb8e-e64e8a13d68e",
+          "githubstatus-9ndxtnrwjf37"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "squarespace-sqw4fzmjb2yp",
+      "company": "squarespace",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "squarespace-7247p2zvg0ly",
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-bf01k990bll7"
+        ],
+        "condition_b": [
+          "githubstatus-rl7f90w0n0gq",
+          "circleci-l6yh0qf4c20c",
+          "dropbox-plz0zpnzbfpx"
+        ],
+        "condition_c": [
+          "squarespace-7247p2zvg0ly",
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-bf01k990bll7"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "squarespace-7247p2zvg0ly",
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-bf01k990bll7"
+        ],
+        "condition_b": [
+          "githubstatus-rl7f90w0n0gq",
+          "circleci-l6yh0qf4c20c",
+          "dropbox-plz0zpnzbfpx"
+        ],
+        "condition_c": [
+          "squarespace-7247p2zvg0ly",
+          "squarespace-mf6wf0xnnjll",
+          "squarespace-bf01k990bll7"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-cc87682c-1689-4b23-82e1-aaf3dff8728f",
+      "company": "google",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-513195e1-adfd-4d8d-ad19-2e723988356d",
+          "gcp-6876619551109882402"
+        ],
+        "condition_b": [
+          "digitalocean-spgd2scvttth",
+          "icco-36858814-a276-4723-8bd2-ce1d46236417",
+          "netlifystatus-75cssy1tzg06"
+        ],
+        "condition_c": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-513195e1-adfd-4d8d-ad19-2e723988356d",
+          "gcp-6876619551109882402"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-513195e1-adfd-4d8d-ad19-2e723988356d",
+          "gcp-6876619551109882402"
+        ],
+        "condition_b": [
+          "digitalocean-spgd2scvttth",
+          "icco-36858814-a276-4723-8bd2-ce1d46236417",
+          "netlifystatus-75cssy1tzg06"
+        ],
+        "condition_c": [
+          "icco-c6f9fe9d-a682-428c-8e2c-7b06fb47cc70",
+          "icco-513195e1-adfd-4d8d-ad19-2e723988356d",
+          "gcp-6876619551109882402"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "datadoghq-29fsc4rhsscg",
+      "company": "datadog",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "datadoghq-476hf8wnc4l0",
+          "sentry-j9ggb9ns8zcl",
+          "sentry-sym7ybpjt9dx"
+        ],
+        "condition_b": [
+          "sentry-j9ggb9ns8zcl",
+          "sentry-sym7ybpjt9dx",
+          "sentry-5q5wlp7rt3s5"
+        ],
+        "condition_c": [
+          "datadoghq-476hf8wnc4l0",
+          "sentry-j9ggb9ns8zcl",
+          "sentry-sym7ybpjt9dx"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "datadoghq-476hf8wnc4l0",
+          "sentry-j9ggb9ns8zcl",
+          "sentry-sym7ybpjt9dx"
+        ],
+        "condition_b": [
+          "sentry-j9ggb9ns8zcl",
+          "sentry-sym7ybpjt9dx",
+          "sentry-5q5wlp7rt3s5"
+        ],
+        "condition_c": [
+          "datadoghq-476hf8wnc4l0",
+          "sentry-j9ggb9ns8zcl",
+          "sentry-sym7ybpjt9dx"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "netlifystatus-3p2nrdlccqhb",
+      "company": "netlify",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "netlifystatus-vgjg50pg3346",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_b": [
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH"
+        ],
+        "condition_c": [
+          "netlifystatus-vgjg50pg3346",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "netlifystatus-vgjg50pg3346",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ],
+        "condition_b": [
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+          "openai-01KYCGY017EG43XZS6GFVXA8VH"
+        ],
+        "condition_c": [
+          "netlifystatus-vgjg50pg3346",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KY7SX5MYJ2BP51X5MXAPYX71"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-bb1d9c14-e8d8-4aa4-a806-31f31f3d96fe",
+      "company": "stackoverflow",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-5d85d316-f0c4-4c1a-81a2-5f89aaad6148"
+        ],
+        "condition_b": [
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-5d85d316-f0c4-4c1a-81a2-5f89aaad6148",
+          "icco-6958b648-d8f4-4965-9f5c-82dfbb54417a"
+        ],
+        "condition_c": [
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-5d85d316-f0c4-4c1a-81a2-5f89aaad6148"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-5d85d316-f0c4-4c1a-81a2-5f89aaad6148"
+        ],
+        "condition_b": [
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-5d85d316-f0c4-4c1a-81a2-5f89aaad6148",
+          "icco-6958b648-d8f4-4965-9f5c-82dfbb54417a"
+        ],
+        "condition_c": [
+          "icco-f1d19832-6dec-4470-8bba-1f83e3313243",
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-5d85d316-f0c4-4c1a-81a2-5f89aaad6148"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-6330a9a4-38ab-43cb-b34d-aba1bddb66bc",
+      "company": "google",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-c73b27f9-5b62-43ee-b89d-734977ab68d0"
+        ],
+        "condition_b": [
+          "icco-adc3b69d-9cb8-40d7-941c-f63316a72eb6",
+          "netlifystatus-75cssy1tzg06",
+          "icco-e16b28f3-b6d4-449b-ae93-cc8a4d074163"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-c73b27f9-5b62-43ee-b89d-734977ab68d0"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-c73b27f9-5b62-43ee-b89d-734977ab68d0"
+        ],
+        "condition_b": [
+          "icco-adc3b69d-9cb8-40d7-941c-f63316a72eb6",
+          "netlifystatus-75cssy1tzg06",
+          "icco-e16b28f3-b6d4-449b-ae93-cc8a4d074163"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-c73b27f9-5b62-43ee-b89d-734977ab68d0"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "datadoghq-tw86ncfv8q78",
+      "company": "datadog",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-vjgmxjdf0ps5"
+        ],
+        "condition_b": [
+          "sentry-zxvswywkpd13",
+          "sentry-4mr92qjf3wdt",
+          "sentry-8mmq3ykdqwvz"
+        ],
+        "condition_c": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-vjgmxjdf0ps5"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-vjgmxjdf0ps5"
+        ],
+        "condition_b": [
+          "sentry-zxvswywkpd13",
+          "sentry-4mr92qjf3wdt",
+          "sentry-8mmq3ykdqwvz"
+        ],
+        "condition_c": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-vjgmxjdf0ps5"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-xksxfs85vhxm",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": true,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": true,
+      "old_top3": {
+        "condition_a": [
+          "twilio-1sbtd0qtkpfk",
+          "twilio-b098v1vd33sy",
+          "twilio-5128mj7z1nq8"
+        ],
+        "condition_b": [],
+        "condition_c": [
+          "twilio-46yjhmkypqrf",
+          "twilio-1sbtd0qtkpfk",
+          "twilio-b098v1vd33sy"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-1sbtd0qtkpfk",
+          "twilio-b098v1vd33sy",
+          "twilio-5128mj7z1nq8"
+        ],
+        "condition_b": [
+          "dropbox-plz0zpnzbfpx",
+          "atlassian-wkg98r6wc1b5",
+          "sentry-224ybqqkrvfd"
+        ],
+        "condition_c": [
+          "twilio-46yjhmkypqrf",
+          "twilio-1sbtd0qtkpfk",
+          "twilio-b098v1vd33sy"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "openai-01KZ9E7QD8WFJD5DMF73QGVYH8",
+      "company": "openai",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "openai-01KYDN6YPS6ARY1EC9089N089G",
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5"
+        ],
+        "condition_b": [
+          "redditstatus-brsn0q8r649z",
+          "githubstatus-7s119p1yxttr",
+          "icco-82216044-3155-403c-9ccc-83dbfcf0e0a5"
+        ],
+        "condition_c": [
+          "openai-01KYDN6YPS6ARY1EC9089N089G",
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "openai-01KYDN6YPS6ARY1EC9089N089G",
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5"
+        ],
+        "condition_b": [
+          "redditstatus-brsn0q8r649z",
+          "githubstatus-7s119p1yxttr",
+          "icco-82216044-3155-403c-9ccc-83dbfcf0e0a5"
+        ],
+        "condition_c": [
+          "openai-01KYDN6YPS6ARY1EC9089N089G",
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KYSQ7PC81PV3PZE3ZEVFK6K5"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-3gd6hwhz94q9",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "twilio-1sbtd0qtkpfk",
+          "twilio-y0pvd1p6hfqg",
+          "twilio-b098v1vd33sy"
+        ],
+        "condition_b": [
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15",
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYNNX2TQ3PV0KPJ9PTRRPX6C"
+        ],
+        "condition_c": [
+          "twilio-1sbtd0qtkpfk",
+          "twilio-y0pvd1p6hfqg",
+          "twilio-b098v1vd33sy"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-1sbtd0qtkpfk",
+          "twilio-y0pvd1p6hfqg",
+          "twilio-b098v1vd33sy"
+        ],
+        "condition_b": [
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15",
+          "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "openai-01KYNNX2TQ3PV0KPJ9PTRRPX6C"
+        ],
+        "condition_c": [
+          "twilio-1sbtd0qtkpfk",
+          "twilio-y0pvd1p6hfqg",
+          "twilio-b098v1vd33sy"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+      "company": "cloudflare",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-5cbc4e4d-d491-4576-a9fe-6f60ca05c9d8",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422"
+        ],
+        "condition_b": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-e9248be4-2e55-481e-bde1-f53f60667e21",
+          "icco-23713fc8-675d-4de9-9127-7950f10c6131"
+        ],
+        "condition_c": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-5cbc4e4d-d491-4576-a9fe-6f60ca05c9d8",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-5cbc4e4d-d491-4576-a9fe-6f60ca05c9d8",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422"
+        ],
+        "condition_b": [
+          "atlassian-kw28xr3wyxmq",
+          "icco-e9248be4-2e55-481e-bde1-f53f60667e21",
+          "icco-23713fc8-675d-4de9-9127-7950f10c6131"
+        ],
+        "condition_c": [
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+          "icco-5cbc4e4d-d491-4576-a9fe-6f60ca05c9d8",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "atlassian-kl4d5mfn26kc",
+      "company": "atlassian",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "atlassian-85fh4cc7749r",
+          "atlassian-d8jljnw353f3",
+          "atlassian-dgsyrnqfr2r0"
+        ],
+        "condition_b": [
+          "circleci-xwrqk8hh14zf",
+          "netlifystatus-nxz9qw1s1p3g",
+          "digitalocean-8sjb7kmqnvk9"
+        ],
+        "condition_c": [
+          "atlassian-85fh4cc7749r",
+          "atlassian-d8jljnw353f3",
+          "atlassian-dgsyrnqfr2r0"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "atlassian-85fh4cc7749r",
+          "atlassian-d8jljnw353f3",
+          "atlassian-dgsyrnqfr2r0"
+        ],
+        "condition_b": [
+          "circleci-xwrqk8hh14zf",
+          "netlifystatus-nxz9qw1s1p3g",
+          "digitalocean-8sjb7kmqnvk9"
+        ],
+        "condition_c": [
+          "atlassian-85fh4cc7749r",
+          "atlassian-d8jljnw353f3",
+          "atlassian-dgsyrnqfr2r0"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-4mr92qjf3wdt",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-j9ggb9ns8zcl",
+          "sentry-0j4dfbzjdrys",
+          "sentry-8mmq3ykdqwvz"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-tw86ncfv8q78"
+        ],
+        "condition_c": [
+          "sentry-j9ggb9ns8zcl",
+          "sentry-0j4dfbzjdrys",
+          "sentry-8mmq3ykdqwvz"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-j9ggb9ns8zcl",
+          "sentry-0j4dfbzjdrys",
+          "sentry-8mmq3ykdqwvz"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-tw86ncfv8q78"
+        ],
+        "condition_c": [
+          "sentry-j9ggb9ns8zcl",
+          "sentry-0j4dfbzjdrys",
+          "sentry-8mmq3ykdqwvz"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-b79bbd0b-b4d9-459e-90b6-15cbf95857b2",
+      "company": "atlassian",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-4dh7m57xqhfq",
+          "atlassian-2spys43jxslj"
+        ],
+        "condition_b": [
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-34721eea-9a6a-469f-8865-48286476cf29"
+        ],
+        "condition_c": [
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-4dh7m57xqhfq",
+          "atlassian-2spys43jxslj"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-4dh7m57xqhfq",
+          "atlassian-2spys43jxslj"
+        ],
+        "condition_b": [
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95",
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-34721eea-9a6a-469f-8865-48286476cf29"
+        ],
+        "condition_c": [
+          "atlassian-3p4zfxggg0vv",
+          "atlassian-4dh7m57xqhfq",
+          "atlassian-2spys43jxslj"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "gcp-5362718329524538692",
+      "company": "google",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "gcp-11738310674864064645",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07"
+        ],
+        "condition_b": [
+          "atlassian-3p4zfxggg0vv",
+          "digitalocean-2wql4f4sb13r",
+          "githubstatus-yjysg0xrl67m"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "gcp-11738310674864064645",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "gcp-11738310674864064645",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07"
+        ],
+        "condition_b": [
+          "atlassian-3p4zfxggg0vv",
+          "digitalocean-2wql4f4sb13r",
+          "githubstatus-yjysg0xrl67m"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "gcp-11738310674864064645",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-e81a4a73-8808-42da-9841-9bd4fcc8b9be",
+      "company": "cloudflare",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ],
+        "condition_b": [
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5"
+        ],
+        "condition_c": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ],
+        "condition_b": [
+          "icco-ac43196d-9cca-4310-b1a5-916322e2a469",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5"
+        ],
+        "condition_c": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-95f252f8-fef6-40a0-ab98-977f28d3dbba",
+      "company": "stackoverflow",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_b": [
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-f89b8bcd-6742-4fd9-b8ab-c1c6e21691ec"
+        ],
+        "condition_c": [
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_b": [
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-f89b8bcd-6742-4fd9-b8ab-c1c6e21691ec"
+        ],
+        "condition_c": [
+          "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+          "icco-a85a5f3e-1830-4e94-a8bf-b277e4990b07",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-4da4ac8a-fb93-426e-9ae7-eb088f115959",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-4836907a-f5bb-4d2e-8090-fff332465eb0",
+          "icco-402b4363-40e1-497c-8e58-67d6b27ca37c",
+          "icco-b1b44424-63b6-4e26-8654-b1bfb77ac481"
+        ],
+        "condition_b": [
+          "icco-a0f08b74-a805-417d-84a8-d0948e80476c",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e"
+        ],
+        "condition_c": [
+          "icco-4836907a-f5bb-4d2e-8090-fff332465eb0",
+          "icco-402b4363-40e1-497c-8e58-67d6b27ca37c",
+          "icco-b1b44424-63b6-4e26-8654-b1bfb77ac481"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-4836907a-f5bb-4d2e-8090-fff332465eb0",
+          "icco-402b4363-40e1-497c-8e58-67d6b27ca37c",
+          "icco-b1b44424-63b6-4e26-8654-b1bfb77ac481"
+        ],
+        "condition_b": [
+          "icco-a0f08b74-a805-417d-84a8-d0948e80476c",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e"
+        ],
+        "condition_c": [
+          "icco-4836907a-f5bb-4d2e-8090-fff332465eb0",
+          "icco-402b4363-40e1-497c-8e58-67d6b27ca37c",
+          "icco-b1b44424-63b6-4e26-8654-b1bfb77ac481"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "digitalocean-y3p9v8vm4tfn",
+      "company": "digitalocean",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "digitalocean-2rby4tk1q6mm",
+          "atlassian-wpphfps5ffpj",
+          "digitalocean-cg3q7h89dbnq"
+        ],
+        "condition_b": [
+          "atlassian-wpphfps5ffpj",
+          "circleci-90354ss2tb8t",
+          "sentry-3mstbq6rdw2n"
+        ],
+        "condition_c": [
+          "digitalocean-2rby4tk1q6mm",
+          "atlassian-wpphfps5ffpj",
+          "digitalocean-cg3q7h89dbnq"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "digitalocean-2rby4tk1q6mm",
+          "atlassian-wpphfps5ffpj",
+          "digitalocean-cg3q7h89dbnq"
+        ],
+        "condition_b": [
+          "atlassian-wpphfps5ffpj",
+          "circleci-90354ss2tb8t",
+          "sentry-3mstbq6rdw2n"
+        ],
+        "condition_c": [
+          "digitalocean-2rby4tk1q6mm",
+          "atlassian-wpphfps5ffpj",
+          "digitalocean-cg3q7h89dbnq"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "redditstatus-grx0wwqcq22b",
+      "company": "reddit",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "redditstatus-pxtc317vq3qj",
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-brsn0q8r649z"
+        ],
+        "condition_b": [
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+          "sentry-9yvnf1h3v721",
+          "digitalocean-spgd2scvttth"
+        ],
+        "condition_c": [
+          "redditstatus-pxtc317vq3qj",
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-brsn0q8r649z"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "redditstatus-pxtc317vq3qj",
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-brsn0q8r649z"
+        ],
+        "condition_b": [
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+          "sentry-9yvnf1h3v721",
+          "digitalocean-spgd2scvttth"
+        ],
+        "condition_c": [
+          "redditstatus-pxtc317vq3qj",
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-brsn0q8r649z"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "githubstatus-s65j9gslmfm8",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-pz7g535gbs6p",
+          "githubstatus-76t89hbfb09h",
+          "githubstatus-fz9sdc2q008p"
+        ],
+        "condition_b": [
+          "redditstatus-y0gsrfy6dfrz",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+        ],
+        "condition_c": [
+          "githubstatus-pz7g535gbs6p",
+          "githubstatus-76t89hbfb09h",
+          "githubstatus-fz9sdc2q008p"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-pz7g535gbs6p",
+          "githubstatus-76t89hbfb09h",
+          "githubstatus-fz9sdc2q008p"
+        ],
+        "condition_b": [
+          "redditstatus-y0gsrfy6dfrz",
+          "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8",
+          "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+        ],
+        "condition_c": [
+          "githubstatus-pz7g535gbs6p",
+          "githubstatus-76t89hbfb09h",
+          "githubstatus-fz9sdc2q008p"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "openai-01KYJFG4S86K8FMTB4N6BDZS7F",
+      "company": "openai",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15"
+        ],
+        "condition_b": [
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-brsn0q8r649z",
+          "digitalocean-lrrw084g3whn"
+        ],
+        "condition_c": [
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+          "openai-01KZ9E7QD8WFJD5DMF73QGVYH8"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+          "openai-01KY81XMFAV8KXNJGVNEMKAK15"
+        ],
+        "condition_b": [
+          "redditstatus-rj9mggtc19wf",
+          "redditstatus-brsn0q8r649z",
+          "digitalocean-lrrw084g3whn"
+        ],
+        "condition_c": [
+          "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+          "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+          "openai-01KZ9E7QD8WFJD5DMF73QGVYH8"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-mszff4pbzmjq",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": true,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "twilio-358nbbp7zs3l",
+          "twilio-9lyqqq72b184",
+          "twilio-1fw4hphh0r0s"
+        ],
+        "condition_b": [
+          "atlassian-vk4mksp2hvj8",
+          "dropbox-0xzfcjfbg6qj",
+          "squarespace-zv2sqhnbk1hb"
+        ],
+        "condition_c": [
+          "twilio-358nbbp7zs3l",
+          "twilio-9lyqqq72b184",
+          "twilio-1fw4hphh0r0s"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-358nbbp7zs3l",
+          "twilio-9lyqqq72b184",
+          "twilio-1fw4hphh0r0s"
+        ],
+        "condition_b": [
+          "atlassian-vk4mksp2hvj8",
+          "openai-01KYDN6YPS6ARY1EC9089N089G",
+          "openai-01KZ6CT9K9Q52S3707W75MNBGB"
+        ],
+        "condition_c": [
+          "twilio-358nbbp7zs3l",
+          "twilio-9lyqqq72b184",
+          "twilio-1fw4hphh0r0s"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-76a3bbe4-ed5a-4c4a-a851-01d77e3ae63f",
+      "company": "aws",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-e9248be4-2e55-481e-bde1-f53f60667e21",
+          "icco-adc3b69d-9cb8-40d7-941c-f63316a72eb6",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5"
+        ],
+        "condition_c": [
+          "icco-e9248be4-2e55-481e-bde1-f53f60667e21",
+          "icco-adc3b69d-9cb8-40d7-941c-f63316a72eb6",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-e9248be4-2e55-481e-bde1-f53f60667e21",
+          "icco-adc3b69d-9cb8-40d7-941c-f63316a72eb6",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9",
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5"
+        ],
+        "condition_c": [
+          "icco-e9248be4-2e55-481e-bde1-f53f60667e21",
+          "icco-adc3b69d-9cb8-40d7-941c-f63316a72eb6",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-4be45ad5-5e02-45c6-8e5c-c81709005e47",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ],
+        "condition_b": [
+          "twilio-5xq8sct98dhc",
+          "icco-8f92b6a5-b6d4-4a0f-be02-28242069f691",
+          "icco-cc87682c-1689-4b23-82e1-aaf3dff8728f"
+        ],
+        "condition_c": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ],
+        "condition_b": [
+          "twilio-5xq8sct98dhc",
+          "icco-8f92b6a5-b6d4-4a0f-be02-28242069f691",
+          "icco-cc87682c-1689-4b23-82e1-aaf3dff8728f"
+        ],
+        "condition_c": [
+          "sentry-k829yyv0pf1j",
+          "sentry-3mstbq6rdw2n",
+          "sentry-w39v80r1tw7p"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "datadoghq-476hf8wnc4l0",
+      "company": "datadog",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "datadoghq-29fsc4rhsscg",
+          "sentry-z3g2bjxxwv9l",
+          "datadoghq-tw86ncfv8q78"
+        ],
+        "condition_b": [
+          "sentry-z3g2bjxxwv9l",
+          "sentry-8mmq3ykdqwvz",
+          "sentry-zxvswywkpd13"
+        ],
+        "condition_c": [
+          "datadoghq-29fsc4rhsscg",
+          "sentry-z3g2bjxxwv9l",
+          "datadoghq-tw86ncfv8q78"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "datadoghq-29fsc4rhsscg",
+          "sentry-z3g2bjxxwv9l",
+          "datadoghq-tw86ncfv8q78"
+        ],
+        "condition_b": [
+          "sentry-z3g2bjxxwv9l",
+          "sentry-8mmq3ykdqwvz",
+          "sentry-zxvswywkpd13"
+        ],
+        "condition_c": [
+          "datadoghq-29fsc4rhsscg",
+          "sentry-z3g2bjxxwv9l",
+          "datadoghq-tw86ncfv8q78"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "twilio-1v4367vswsrm",
+      "company": "twilio",
+      "condition_a_changed": false,
+      "condition_b_changed": true,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": true,
+      "old_top3": {
+        "condition_a": [
+          "twilio-3vfkkjzj3ctc",
+          "twilio-0nyb325khwp7",
+          "twilio-2rpmqsgryxg3"
+        ],
+        "condition_b": [],
+        "condition_c": [
+          "twilio-3vfkkjzj3ctc",
+          "twilio-0nyb325khwp7",
+          "twilio-2rpmqsgryxg3"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "twilio-3vfkkjzj3ctc",
+          "twilio-0nyb325khwp7",
+          "twilio-2rpmqsgryxg3"
+        ],
+        "condition_b": [
+          "circleci-7l9wg4375jr4",
+          "icco-ab8222cd-d25f-4ad7-8ab4-c06412d4aac6",
+          "digitalocean-w53965shllfq"
+        ],
+        "condition_c": [
+          "twilio-3vfkkjzj3ctc",
+          "twilio-0nyb325khwp7",
+          "twilio-2rpmqsgryxg3"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "circleci-l7vz5yr3wrp0",
+      "company": "circleci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "circleci-01zmcr93tysy",
+          "circleci-xwrqk8hh14zf",
+          "circleci-2v2q3ht88fh1"
+        ],
+        "condition_b": [
+          "sentry-w2fsfdpcgs58",
+          "datadoghq-xj87f6z9mm3w",
+          "githubstatus-75g5xmzptjqb"
+        ],
+        "condition_c": [
+          "circleci-01zmcr93tysy",
+          "circleci-xwrqk8hh14zf",
+          "circleci-2v2q3ht88fh1"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "circleci-01zmcr93tysy",
+          "circleci-xwrqk8hh14zf",
+          "circleci-2v2q3ht88fh1"
+        ],
+        "condition_b": [
+          "sentry-w2fsfdpcgs58",
+          "datadoghq-xj87f6z9mm3w",
+          "githubstatus-75g5xmzptjqb"
+        ],
+        "condition_c": [
+          "circleci-01zmcr93tysy",
+          "circleci-xwrqk8hh14zf",
+          "circleci-2v2q3ht88fh1"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-be03bbc3-6bee-4fca-9e5a-08d78b9a6402",
+      "company": "github",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-a9c1fb57-921d-4362-806a-2d6de86afba7",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294",
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190"
+        ],
+        "condition_b": [
+          "netlifystatus-4csqvcm0hhx3",
+          "sentry-hsxmtdc6m5dv",
+          "circleci-hth87g8tfm2y"
+        ],
+        "condition_c": [
+          "icco-a9c1fb57-921d-4362-806a-2d6de86afba7",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294",
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-a9c1fb57-921d-4362-806a-2d6de86afba7",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294",
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190"
+        ],
+        "condition_b": [
+          "netlifystatus-4csqvcm0hhx3",
+          "sentry-hsxmtdc6m5dv",
+          "circleci-hth87g8tfm2y"
+        ],
+        "condition_c": [
+          "icco-a9c1fb57-921d-4362-806a-2d6de86afba7",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294",
+          "icco-a089d03f-cb1b-41fc-be88-cb8a36c13190"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "netlifystatus-4csqvcm0hhx3",
+      "company": "netlify",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "githubstatus-v0b3bpsyvqtk",
+          "circleci-hth87g8tfm2y",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294"
+        ],
+        "condition_b": [
+          "githubstatus-v0b3bpsyvqtk",
+          "circleci-hth87g8tfm2y",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294"
+        ],
+        "condition_c": [
+          "githubstatus-v0b3bpsyvqtk",
+          "circleci-hth87g8tfm2y",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "githubstatus-v0b3bpsyvqtk",
+          "circleci-hth87g8tfm2y",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294"
+        ],
+        "condition_b": [
+          "githubstatus-v0b3bpsyvqtk",
+          "circleci-hth87g8tfm2y",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294"
+        ],
+        "condition_c": [
+          "githubstatus-v0b3bpsyvqtk",
+          "circleci-hth87g8tfm2y",
+          "icco-3e19eb5a-6ce8-4245-943e-63492587f294"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-36858814-a276-4723-8bd2-ce1d46236417",
+      "company": "aws",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e",
+          "icco-4f96113f-c48f-4b51-9c18-a7f32e649ec2"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "gcp-6876619551109882402",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_c": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e",
+          "icco-4f96113f-c48f-4b51-9c18-a7f32e649ec2"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e",
+          "icco-4f96113f-c48f-4b51-9c18-a7f32e649ec2"
+        ],
+        "condition_b": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "gcp-6876619551109882402",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2"
+        ],
+        "condition_c": [
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-9abb2c8e-c33c-45ea-8699-4ae61f00830e",
+          "icco-4f96113f-c48f-4b51-9c18-a7f32e649ec2"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-8f92b6a5-b6d4-4a0f-be02-28242069f691",
+      "company": "travisci",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-da6d262f-9aa9-43a3-881c-66c0afa03fb2",
+          "icco-f1af2841-ed19-40c6-a4f8-df69885253ef",
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191"
+        ],
+        "condition_b": [
+          "icco-6958b648-d8f4-4965-9f5c-82dfbb54417a",
+          "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+          "icco-402b4363-40e1-497c-8e58-67d6b27ca37c"
+        ],
+        "condition_c": [
+          "icco-da6d262f-9aa9-43a3-881c-66c0afa03fb2",
+          "icco-f1af2841-ed19-40c6-a4f8-df69885253ef",
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-da6d262f-9aa9-43a3-881c-66c0afa03fb2",
+          "icco-f1af2841-ed19-40c6-a4f8-df69885253ef",
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191"
+        ],
+        "condition_b": [
+          "icco-6958b648-d8f4-4965-9f5c-82dfbb54417a",
+          "icco-a551724f-9c21-472c-9901-d74081d75ae4",
+          "icco-402b4363-40e1-497c-8e58-67d6b27ca37c"
+        ],
+        "condition_c": [
+          "icco-da6d262f-9aa9-43a3-881c-66c0afa03fb2",
+          "icco-f1af2841-ed19-40c6-a4f8-df69885253ef",
+          "icco-e0a66df6-a56a-4082-9f0e-60755cbb8191"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+      "company": "google",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9"
+        ],
+        "condition_b": [
+          "openai-01KYJC3TDHZVSQFFPTC8X9RAHC",
+          "twilio-xzps8r06btt0",
+          "openai-01KYDN6YPS6ARY1EC9089N089G"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9"
+        ],
+        "condition_b": [
+          "openai-01KYJC3TDHZVSQFFPTC8X9RAHC",
+          "twilio-xzps8r06btt0",
+          "openai-01KYDN6YPS6ARY1EC9089N089G"
+        ],
+        "condition_c": [
+          "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+          "icco-3c389d32-40ff-464d-ae81-655e85250aa2",
+          "icco-d9ae38c1-c5da-4138-9919-5fc5e21a70a9"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95",
+      "company": "cloudflare",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ],
+        "condition_b": [
+          "atlassian-dgsyrnqfr2r0",
+          "atlassian-kw28xr3wyxmq",
+          "atlassian-m0nz4gbbjmz2"
+        ],
+        "condition_c": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ],
+        "condition_b": [
+          "atlassian-dgsyrnqfr2r0",
+          "atlassian-kw28xr3wyxmq",
+          "atlassian-m0nz4gbbjmz2"
+        ],
+        "condition_c": [
+          "icco-24be1eec-6da2-4825-853c-4b2561bdd422",
+          "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+          "icco-852f277c-afc3-4e42-97e3-05b71652b36b"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "icco-76f27cf3-b204-40e4-942e-19657614f658",
+      "company": "aws",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-a0f08b74-a805-417d-84a8-d0948e80476c",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-00b7f759-21f8-4767-8803-f09d863005cd"
+        ],
+        "condition_b": [
+          "icco-79613fc4-6dc8-4496-a3fd-f4ce96c5b950",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-300cba9e-d50d-45c4-86fd-0142c6cb9101"
+        ],
+        "condition_c": [
+          "icco-a0f08b74-a805-417d-84a8-d0948e80476c",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-00b7f759-21f8-4767-8803-f09d863005cd"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-a0f08b74-a805-417d-84a8-d0948e80476c",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-00b7f759-21f8-4767-8803-f09d863005cd"
+        ],
+        "condition_b": [
+          "icco-79613fc4-6dc8-4496-a3fd-f4ce96c5b950",
+          "icco-43164f6c-de49-4e61-aa58-a394a400d431",
+          "icco-300cba9e-d50d-45c4-86fd-0142c6cb9101"
+        ],
+        "condition_c": [
+          "icco-a0f08b74-a805-417d-84a8-d0948e80476c",
+          "icco-cee00e02-03d4-4354-a5a6-ad10b48c812e",
+          "icco-00b7f759-21f8-4767-8803-f09d863005cd"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "netlifystatus-qvlyvz9rj25f",
+      "company": "netlify",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+          "sentry-8220ms0cqx66",
+          "datadoghq-cvdjtf81756n"
+        ],
+        "condition_b": [
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+          "sentry-8220ms0cqx66",
+          "datadoghq-cvdjtf81756n"
+        ],
+        "condition_c": [
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+          "sentry-8220ms0cqx66",
+          "datadoghq-cvdjtf81756n"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+          "sentry-8220ms0cqx66",
+          "datadoghq-cvdjtf81756n"
+        ],
+        "condition_b": [
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+          "sentry-8220ms0cqx66",
+          "datadoghq-cvdjtf81756n"
+        ],
+        "condition_c": [
+          "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+          "sentry-8220ms0cqx66",
+          "datadoghq-cvdjtf81756n"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "sentry-8mmq3ykdqwvz",
+      "company": "sentry",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "sentry-8jr1xp5pz85r",
+          "sentry-m25vz3v3xmcy",
+          "sentry-1vb2qjjjm88k"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-476hf8wnc4l0"
+        ],
+        "condition_c": [
+          "sentry-8jr1xp5pz85r",
+          "sentry-m25vz3v3xmcy",
+          "sentry-1vb2qjjjm88k"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "sentry-8jr1xp5pz85r",
+          "sentry-m25vz3v3xmcy",
+          "sentry-1vb2qjjjm88k"
+        ],
+        "condition_b": [
+          "datadoghq-c4gh438m6pp3",
+          "datadoghq-xj87f6z9mm3w",
+          "datadoghq-476hf8wnc4l0"
+        ],
+        "condition_c": [
+          "sentry-8jr1xp5pz85r",
+          "sentry-m25vz3v3xmcy",
+          "sentry-1vb2qjjjm88k"
+        ]
+      }
+    },
+    {
+      "query_incident_id": "atlassian-m0nz4gbbjmz2",
+      "company": "atlassian",
+      "condition_a_changed": false,
+      "condition_b_changed": false,
+      "condition_c_changed": false,
+      "condition_b_recovered_from_zero": false,
+      "old_top3": {
+        "condition_a": [
+          "atlassian-kl4d5mfn26kc",
+          "atlassian-85fh4cc7749r",
+          "atlassian-gzrclxcqvdsp"
+        ],
+        "condition_b": [
+          "netlifystatus-75cssy1tzg06",
+          "icco-79613fc4-6dc8-4496-a3fd-f4ce96c5b950",
+          "sentry-lnsbtfnj7wqz"
+        ],
+        "condition_c": [
+          "atlassian-kl4d5mfn26kc",
+          "atlassian-85fh4cc7749r",
+          "atlassian-gzrclxcqvdsp"
+        ]
+      },
+      "new_top3": {
+        "condition_a": [
+          "atlassian-kl4d5mfn26kc",
+          "atlassian-85fh4cc7749r",
+          "atlassian-gzrclxcqvdsp"
+        ],
+        "condition_b": [
+          "netlifystatus-75cssy1tzg06",
+          "icco-79613fc4-6dc8-4496-a3fd-f4ce96c5b950",
+          "sentry-lnsbtfnj7wqz"
+        ],
+        "condition_c": [
+          "atlassian-kl4d5mfn26kc",
+          "atlassian-85fh4cc7749r",
+          "atlassian-gzrclxcqvdsp"
+        ]
+      }
+    }
+  ]
+}
