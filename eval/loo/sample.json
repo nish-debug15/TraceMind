@@ -1,0 +1,891 @@
+{
+  "metadata": {
+    "source_corpus": "data/splits/train.json",
+    "total_train_records": 662,
+    "total_high_quality_train": 451,
+    "min_company_high_threshold": 5,
+    "max_per_company_cap": 12,
+    "num_eligible_companies": 17,
+    "eligible_companies": [
+      "atlassian",
+      "aws",
+      "circleci",
+      "cloudflare",
+      "datadog",
+      "digitalocean",
+      "dropbox",
+      "github",
+      "google",
+      "netlify",
+      "openai",
+      "reddit",
+      "sentry",
+      "squarespace",
+      "stackoverflow",
+      "travisci",
+      "twilio"
+    ],
+    "capped_pool_size": 171,
+    "sample_size": 93,
+    "num_sampled_companies": 17,
+    "seed": 42,
+    "company_distribution": {
+      "sentry": 9,
+      "github": 8,
+      "twilio": 8,
+      "circleci": 7,
+      "cloudflare": 7,
+      "google": 7,
+      "openai": 7,
+      "reddit": 6,
+      "atlassian": 5,
+      "aws": 5,
+      "datadog": 5,
+      "stackoverflow": 5,
+      "netlify": 4,
+      "dropbox": 3,
+      "squarespace": 3,
+      "digitalocean": 2,
+      "travisci": 2
+    }
+  },
+  "sample": [
+    {
+      "incident_id": "redditstatus-rj9mggtc19wf",
+      "raw_log_excerpt": "Investigating elevated site errors and issues accessing media\nWe are currently investigating this issue.",
+      "root_cause": "The issue has been identified and we are working on implementing a fix. While this is ongoing, you may encounter errors and general loading issues across feeds, posts, and search. Recently uploaded images and videos may not appear as expected.",
+      "remediation_steps": "This issue is now resolved. We're seeing consistent loading across feeds, posts and search. Media should now be appearing as expected.",
+      "source_url": "https://www.redditstatus.com/incidents/rj9mggtc19wf",
+      "quality": "high",
+      "company": "reddit"
+    },
+    {
+      "incident_id": "githubstatus-vm1w8zq95wkt",
+      "raw_log_excerpt": "Incident with GraphQL API Requests\nWe are investigating reports of degraded performance for API Requests",
+      "root_cause": "On August 11, 2026, between 14:00 UTC and 16:00 UTC the GraphQL API service was degraded and customers in  saw higher than normal timeouts. On average, the timeout rate was 0.06% and peaked at 0.14% of requests routing to the service. <br /><br />This was due to increased utilization at one of our sites which caused resource contention across our dependencies, leading to an increase in timeouts for GraphQL requests. We mitigated the incident by increasing capacity to alleviate the capacity bottleneck.  <br /><br />We are working to improve our monitoring so that we can proactively reduce the impact of high consumption requests in addition to scaling up; Additionally, we will improve our time to detection and mitigation of issues like this one in the future.",
+      "remediation_steps": "On August 11, 2026, between 14:00 UTC and 16:00 UTC the GraphQL API service was degraded and customers in  saw higher than normal timeouts. On average, the timeout rate was 0.06% and peaked at 0.14% of requests routing to the service. <br /><br />This was due to increased utilization at one of our sites which caused resource contention across our dependencies, leading to an increase in timeouts for GraphQL requests. We mitigated the incident by increasing capacity to alleviate the capacity bottleneck.  <br /><br />We are working to improve our monitoring so that we can proactively reduce the impact of high consumption requests in addition to scaling up; Additionally, we will improve our time to detection and mitigation of issues like this one in the future.",
+      "source_url": "https://www.githubstatus.com/incidents/vm1w8zq95wkt",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "githubstatus-ydpk76bj34z8",
+      "raw_log_excerpt": "Incident with Webhooks\nWe are investigating reports of degraded performance for Webhooks",
+      "root_cause": "On July 14, 2026, between 15:17 and 15:37 UTC, a rollout to GitHub's internal webhook delivery pipeline caused a subset of webhook delivery records to not be written to our webhook deliveries store after being processed and delivered successfully. Affected deliveries would be missing from the webhook delivery UI and API and won\u2019t be available for redelivery. <br /><br />The root cause was an uncoordinated rollout: a change to how delivery records are handed off between pipeline components was deployed before the upstream components producing those records were updated to match. While the rollout was in progress, affected records were silently skipped rather than persisted, with no automatic retry. The impact ended as soon as the rollout was completed. <br /><br />About 2.4M delivery records were skipped (approximately 4% of the 20-minute impact window, 0.04% of a typical 24-hour period). Importantly, 95% of these deliveries reached customer endpoints successfully, only the record of the delivery is missing. Of the ~5% that failed to reach customer endpoints, only ~1.4% (5,463) map to webhooks that retried their deliveries in the past 28 days. <br /><br />To prevent recurrence, we are making delivery persistence safe-by-default, adding alert on drops in the persisted-delivery rate, and tightening rollout coordination for changes that span multiple components in the pipeline.",
+      "remediation_steps": "On July 14, 2026, between 15:17 and 15:37 UTC, a rollout to GitHub's internal webhook delivery pipeline caused a subset of webhook delivery records to not be written to our webhook deliveries store after being processed and delivered successfully. Affected deliveries would be missing from the webhook delivery UI and API and won\u2019t be available for redelivery. <br /><br />The root cause was an uncoordinated rollout: a change to how delivery records are handed off between pipeline components was deployed before the upstream components producing those records were updated to match. While the rollout was in progress, affected records were silently skipped rather than persisted, with no automatic retry. The impact ended as soon as the rollout was completed. <br /><br />About 2.4M delivery records were skipped (approximately 4% of the 20-minute impact window, 0.04% of a typical 24-hour period). Importantly, 95% of these deliveries reached customer endpoints successfully, only the record of the delivery is missing. Of the ~5% that failed to reach customer endpoints, only ~1.4% (5,463) map to webhooks that retried their deliveries in the past 28 days. <br /><br />To prevent recurrence, we are making delivery persistence safe-by-default, adding alert on drops in the persisted-delivery rate, and tightening rollout coordination for changes that span multiple components in the pipeline.",
+      "source_url": "https://www.githubstatus.com/incidents/ydpk76bj34z8",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "sentry-224ybqqkrvfd",
+      "raw_log_excerpt": "Users unable to login to sentry.io\nWe are currently investigating the issue.",
+      "root_cause": "Our auth systems are back operational",
+      "remediation_steps": "Our auth systems are back operational",
+      "source_url": "https://status.sentry.io/incidents/224ybqqkrvfd",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "icco-49335989-cc3b-4f16-bdc6-df79b7f632ea",
+      "raw_log_excerpt": "On September 24, 2020, at 14:27 UTC, Datadog's US region experienced a service degradation that lasted until September 25, 2020, at 03:00 UTC. This incident affected multiple systems including the web tier, API endpoints, logs, network performance monitoring, alerts, infrastructure monitoring, and APM, which were at times disabled, degraded, or intermittently available. Incoming data was still ingested and processed, but users faced difficulties accessing products.",
+      "root_cause": "The incident stemmed from the failure of an internal service discovery and dynamic configuration system, a core component relied upon by most Datadog software. The root cause was traced to a faulty configuration change implemented in late August. This change made a large data intake cluster dependent on the local DNS resolver, which proxies to the service discovery system, instead of a more resilient local file for DNS resolution.",
+      "remediation_steps": "The incident stemmed from the failure of an internal service discovery and dynamic configuration system, a core component relied upon by most Datadog software. The root cause was traced to a faulty configuration change implemented in late August. This change made a large data intake cluster dependent on the local DNS resolver, which proxies to the service discovery system, instead of a more resilient local file for DNS resolution.",
+      "source_url": "https://www.datadoghq.com/blog/2020-09-25-infrastructure-connectivity-issue/",
+      "quality": "high",
+      "company": "datadog"
+    },
+    {
+      "incident_id": "icco-c73b27f9-5b62-43ee-b89d-734977ab68d0",
+      "raw_log_excerpt": "On Friday, May 20, 2022, Google Cloud Networking experienced intermittent packet loss for traffic between multiple cloud regions for approximately 20 minutes, from 13:47 to 14:07 US/Pacific. This incident affected various Google Cloud services, including Cloud VPN, Cloud Router, Cloud Interconnect, Google Cloud Storage, Cloud SQL, and Messages, leading to issues such as elevated latency, errors, and service availability problems.",
+      "root_cause": "The root cause was identified as a failure of a component on a fiber path originating from one of the central US gateway campuses within Google\u2019s production backbone. This failure resulted in a decrease in available network bandwidth between the gateway and multiple edge locations. The network topology in this specific region was undergoing augmentation, and the second-best path was not yet fully augmented, forcing some traffic to reroute onto a less optimal third-best path, which extended the t",
+      "remediation_steps": "Remediation efforts include completing the network augmentation in the affected region by July 11, 2022, to ensure that any single fiber path failure can be quickly rerouted onto the second-best path. Google is also building automatic analysis to ensure that network topology during augmentation always supports fast convergence and continues to optimize its global network to minimize convergence time during failures.",
+      "source_url": "https://status.cloud.google.com/incidents/eo76pxZiDgWVz4z3kmUv",
+      "quality": "high",
+      "company": "google"
+    },
+    {
+      "incident_id": "sentry-6df74ljyxcdx",
+      "raw_log_excerpt": "Ingestion and alerts for transactions delayed in EU region\nWe've put in fixes and are monitoring the situation",
+      "root_cause": "Ingestion and alerting back to normal",
+      "remediation_steps": "Ingestion and alerting back to normal",
+      "source_url": "https://status.sentry.io/incidents/6df74ljyxcdx",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "icco-dc34b433-0ddd-45dd-85bf-cfa6d8cce764",
+      "raw_log_excerpt": "On Wednesday, October 14, 2015, starting around 20:17 UTC, CircleCI experienced a significant incident where the Linux build queue began backing up. The operations team observed that standard demand management tools were ineffective, and capacity was available but not being utilized for builds. This led to a rising queue and an escalation to engineering.",
+      "root_cause": "By Thursday 07:00 UTC, runnable builds were processing, but a large number of builds were blocked from reaching the runnable state. Attempts to promote these builds using normal code flooded the next queue. Furthermore, the build scheduler's throttling mechanisms, designed to back off during failure, were misfiring under normal conditions, preventing necessary throughput. This resulted in a 17-hour backlog of builds.",
+      "remediation_steps": "Initial investigations focused on increased database load, which was exacerbated during peak Wednesday afternoon traffic. While no direct correlation to recent changes was found, suspicious changes were rolled back. However, the database was already saturated with queued operations. A failover to a different primary database at 00:11 UTC on Thursday provided temporary relief, but queued operations quickly returned.",
+      "source_url": "https://status.circleci.com/incidents/8rklh3qqckp1",
+      "quality": "high",
+      "company": "circleci"
+    },
+    {
+      "incident_id": "icco-852f277c-afc3-4e42-97e3-05b71652b36b",
+      "raw_log_excerpt": "On March 3, 2013, at 09:47 UTC, Cloudflare experienced a global outage affecting all its services, including DNS and web proxy. Customers encountered DNS errors and \"No Route to Host\" messages, rendering Cloudflare-protected sites inaccessible. Services were fully restored by 10:49 UTC.",
+      "root_cause": "The incident was caused by a system-wide failure of Cloudflare's edge routers across its 23 data centers. The immediate trigger was a router rule, generated by an internal attack profiler, intended to mitigate a DDoS attack targeting a customer's DNS servers.",
+      "remediation_steps": "On March 3, 2013, at 09:47 UTC, Cloudflare experienced a global outage affecting all its services, including DNS and web proxy. Customers encountered DNS errors and \"No Route to Host\" messages, rendering Cloudflare-protected sites inaccessible. Services were fully restored by 10:49 UTC.",
+      "source_url": "https://blog.cloudflare.com/todays-outage-post-mortem-82515/",
+      "quality": "high",
+      "company": "cloudflare"
+    },
+    {
+      "incident_id": "atlassian-4jkh49j0jjh6",
+      "raw_log_excerpt": "Infrastructure outage affecting attachments and Bitbucket Pipelines in all regions\nA major infrastructure outage is affecting our ability to scale up in response to customer traffic. We are pre-emptively disabling any downscaling to minimize future impact. This is primarily affecting Bitbucket Pipelines, and attachment storage for all products. All regions are affected. We will provide more details in the next hour.",
+      "root_cause": "A major infrastructure outage is affecting our ability to scale up in response to customer traffic. We are pre-emptively disabling any downscaling to minimize future impact. This is primarily affecting Bitbucket Pipelines, and attachment storage for all products. All regions are affected. We will provide more details in the next hour.",
+      "remediation_steps": "Between 04:00 UTC to 05:00 UTC, we experienced a partial outage for Bitbucket Pipelines, issues viewing in-product attachments; and degraded performance across all products. The issue has been resolved and all services are operating normally.",
+      "source_url": "https://status.atlassian.com/incidents/4jkh49j0jjh6",
+      "quality": "high",
+      "company": "atlassian"
+    },
+    {
+      "incident_id": "circleci-t7vt8j14jnbg",
+      "raw_log_excerpt": "Mac jobs failing to start\nWe have identified a network outage that is preventing Mac jobs from starting. This include m4pro.medium and m4pro.large resource types.\n\nWe are working with our infrastructure provider to restore service.\n\nWe will update this incident as we work to resolve the issue.",
+      "root_cause": "Mac jobs are continuing to experience failures. Our infrastructure provider is reporting they are experiencing a DDoS attack causing high network latency and packet loss for our Mac fleet. We are working to bring up additional capacity to restore service.\n\nWe will continue to update as more information is available.",
+      "remediation_steps": "Mac jobs have now fully recovered.\n\nThank you for your patience during this incident.",
+      "source_url": "https://status.circleci.com/incidents/t7vt8j14jnbg",
+      "quality": "high",
+      "company": "circleci"
+    },
+    {
+      "incident_id": "icco-24049f4d-af54-4622-b0fd-a291117c7bc9",
+      "raw_log_excerpt": "Queues for requests and responses in a Redis cache became corrupted and out of sequence, leading to some requests revealing other people's user data to some users, including app activity data and some billing info.",
+      "root_cause": "Queues for requests and responses in a Redis cache became corrupted and out of sequence, leading to some requests revealing other people's user data to some users, including app activity data and some billing info.",
+      "remediation_steps": "Queues for requests and responses in a Redis cache became corrupted and out of sequence, leading to some requests revealing other people's user data to some users, including app activity data and some billing info.",
+      "source_url": "https://openai.com/blog/march-20-chatgpt-outage",
+      "quality": "high",
+      "company": "openai"
+    },
+    {
+      "incident_id": "icco-e83c06be-7df9-484d-8de6-342ae21d87c4",
+      "raw_log_excerpt": "Porting old Careers 2.0 code to the new Developer Story caused a leak of users' information.",
+      "root_cause": "Porting old Careers 2.0 code to the new Developer Story caused a leak of users' information.",
+      "remediation_steps": "Porting old Careers 2.0 code to the new Developer Story caused a leak of users' information.",
+      "source_url": "https://meta.stackoverflow.com/q/340960/2422776",
+      "quality": "high",
+      "company": "stackoverflow"
+    },
+    {
+      "incident_id": "sentry-ktl4z3kd1t67",
+      "raw_log_excerpt": "Ingestion Delay \u2013 All Data Types\nWe experienced a delay in data ingestion affecting all data types between 08:40 \u2013 08:55 UTC.",
+      "root_cause": "Following the ingestion delay experienced between 08:40 \u2013 08:55 UTC, all systems are now fully operational. Data ingestion is running normally across all data types.",
+      "remediation_steps": "Following the ingestion delay experienced between 08:40 \u2013 08:55 UTC, all systems are now fully operational. Data ingestion is running normally across all data types.",
+      "source_url": "https://status.sentry.io/incidents/ktl4z3kd1t67",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "openai-01KZRJHTR75WDXCMC0ZERX6YJC",
+      "raw_log_excerpt": "Elevated errors affecting ChatGPT Go conversations\nWe are investigating the issue for the listed services.",
+      "root_cause": "All impacted services have now fully recovered.",
+      "remediation_steps": "All impacted services have now fully recovered.",
+      "source_url": "https://status.openai.com/incidents/01KZRJHTR75WDXCMC0ZERX6YJC",
+      "quality": "high",
+      "company": "openai"
+    },
+    {
+      "incident_id": "sentry-hsxmtdc6m5dv",
+      "raw_log_excerpt": "Github Integration Webhook processing delay\nThe issue is mitigated and the webhook backlog is being processed. Seer code reviews will run and linked Github issues and PRs will update incrementally.",
+      "root_cause": "The webhook backlog is processing.",
+      "remediation_steps": "The webhook backlog is now resolved.",
+      "source_url": "https://status.sentry.io/incidents/hsxmtdc6m5dv",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "squarespace-bf01k990bll7",
+      "raw_log_excerpt": "Acuity Scheduling / 500 error\nWe are currently experiencing a service disruption.\n\nOur Engineering team is working to identify the root cause and implement a solution.\n\nWe will provide an update as soon as possible.",
+      "root_cause": "The incident has been resolved.",
+      "remediation_steps": "The incident has been resolved.",
+      "source_url": "https://status.squarespace.com/incidents/bf01k990bll7",
+      "quality": "high",
+      "company": "squarespace"
+    },
+    {
+      "incident_id": "icco-33d85b0f-0cc7-4b23-89b5-4521347f25c5",
+      "raw_log_excerpt": "On June 2, 2019, Google Cloud experienced a significant network congestion issue primarily affecting the eastern USA, leading to elevated packet loss and service unavailability across multiple regions. The incident began at 11:45 US/Pacific and impacted various Google Cloud and G Suite services, as well as YouTube. Initial customer impact was observed between 11:47-11:49 US/Pacific.",
+      "root_cause": "The root cause was a combination of two normally-benign misconfigurations and a specific software bug in Google's datacenter automation software. This allowed the system to deschedule multiple independent network control plane clusters simultaneously across different physical locations during a maintenance event, despite existing resilience mechanisms.",
+      "remediation_steps": "To prevent recurrence, Google immediately halted the problematic datacenter automation software. Future actions include hardening cluster management software, reconfiguring the network control plane to correctly handle maintenance and persist configuration, and extending the network's 'fail static' mode duration. Emergency response tooling and disaster recovery testing will also be enhanced.",
+      "source_url": "https://status.cloud.google.com/incident/cloud-networking/19009",
+      "quality": "high",
+      "company": "google"
+    },
+    {
+      "incident_id": "circleci-q17ysw9wn2pr",
+      "raw_log_excerpt": "GitHub service degradation may impact customers using GitHub\nGitHub is currently experiencing a service degradation (https://www.githubstatus.com/incidents/yjysg0xrl67m). Customers who use GitHub as their VCS may experience impact to their CircleCI platform experience as a result, impacting checkout and workflows.  \n\nWe will provide another update as we have more information to share.  Thank you for your patience.",
+      "root_cause": "GitHub is currently experiencing a service degradation (https://www.githubstatus.com/incidents/yjysg0xrl67m). Customers who use GitHub as their VCS may experience impact to their CircleCI platform experience as a result, impacting checkout and workflows.  \n\nWe will provide another update as we have more information to share.  Thank you for your patience.",
+      "remediation_steps": "The issue impacting customers who use GitHub as their VCS while GitHub was undergoing a service degradation (https://www.githubstatus.com/incidents/yjysg0xrl67m) has now been resolved.  GitHub has resolved the underlying issue and the affected functionality has returned to normal. \n\nWe thank you for your patience.",
+      "source_url": "https://status.circleci.com/incidents/q17ysw9wn2pr",
+      "quality": "high",
+      "company": "circleci"
+    },
+    {
+      "incident_id": "circleci-rfz5wdpg2nl0",
+      "raw_log_excerpt": "Delays starting jobs on Docker (Gen 2) resource classes\nOn July 13 between 15:30 UTC and 22:40 UTC, we experienced delays starting jobs on Docker (Gen 2) resource classes due to capacity constraints from our cloud provider. Delays reached up to approximately 1 minute 48 seconds.\n\nWe are continuing to experience these delays again since approximately 15:45 UTC. So far, delays have reached up to approximately 1 minute 19 seconds. \n\nWe are working with our cloud provider to add capacity and will update this incident as the situation changes.",
+      "root_cause": "On July 13 between 15:30 UTC and 22:40 UTC, we experienced delays starting jobs on Docker (Gen 2) resource classes due to capacity constraints from our cloud provider. Delays reached up to approximately 1 minute 48 seconds.\n\nWe are continuing to experience these delays again since approximately 15:45 UTC. So far, delays have reached up to approximately 1 minute 19 seconds. \n\nWe are working with our cloud provider to add capacity and will update this incident as the situation changes.",
+      "remediation_steps": "On July 13 between 15:30 UTC and 22:40 UTC, we experienced delays starting jobs on Docker (Gen 2) resource classes due to capacity constraints from our cloud provider. The same issue recurred on July 14 between 15:45 UTC and 22:50 UTC.\n\nDelays reached up to 25 minutes on July 13 and up to 24 minutes on July 14. The medium+ and 2 X-large+ resource classes saw the longest waits. Earlier updates in this incident reported figures based on average wait times, which didn't reflect the maximum impact some customers may have experienced.\n\nWait times have now returned to normal. We are continuing to work with our cloud provider to add capacity ahead of the next peak period. Thank you for your patience.",
+      "source_url": "https://status.circleci.com/incidents/rfz5wdpg2nl0",
+      "quality": "high",
+      "company": "circleci"
+    },
+    {
+      "incident_id": "datadoghq-xqyrslhjs303",
+      "raw_log_excerpt": "Azure Metrics Reporting\nWe are investigating an issue submitting Azure metrics.",
+      "root_cause": "We are continuing to work on a fix for this issue.",
+      "remediation_steps": "This incident has been resolved and Azure metrics are reporting as expected.",
+      "source_url": "https://status.datadoghq.com/incidents/xqyrslhjs303",
+      "quality": "high",
+      "company": "datadog"
+    },
+    {
+      "incident_id": "icco-759650ec-d3c6-41d9-97d5-5a11b0eb6dcf",
+      "raw_log_excerpt": "From 2015-08-13 09:25 PDT to 2015-08-16 09:35 PDT, Google Compute Engine's Standard Persistent Disks in the europe-west1-b zone experienced sporadic I/O errors. Approximately 5% of these disks were affected, with some management operations like snapshot creation also failing. A very small fraction, less than 0.000001% of the allocated PD space in the zone, suffered permanent data loss. SSD Persistent Disks, disk snapshots, and Local SSDs were not impacted.",
+      "root_cause": "The root cause was identified as four successive lightning strikes on the local utilities grid powering the European datacenter at 09:19 PDT on August 13, 2015. This led to a brief loss of power to storage systems hosting disk capacity for GCE instances in europe-west1-b. Despite automatic auxiliary power restoration and battery backups, some recently written data on storage systems more susceptible to power failure from extended or repeated battery drain became unrecoverable.",
+      "remediation_steps": "Google is upgrading storage hardware to be less susceptible to this type of power failure. A comprehensive review of the datacenter technology stack identified several areas for improvement, including enhancing cache data retention during transient power loss, implementing multiple orthogonal schemes for increased Persistent Disk data durability, and improving response procedures for system engineers during future incidents.",
+      "source_url": "https://status.cloud.google.com/incident/compute/15056#5719570367119360",
+      "quality": "high",
+      "company": "google"
+    },
+    {
+      "incident_id": "icco-2487d400-146b-4eba-a72a-9d715fc2128f",
+      "raw_log_excerpt": "On August 25, 2014, the entire Stack Exchange Network, including Q&A sites and Careers, experienced an outage lasting approximately 6 minutes, from 7:26 pm to 7:32 pm UTC. The incident began when an incorrect network firewall configuration change was applied to the primary HAProxy load balancer in the New York data center.",
+      "root_cause": "The root cause was a harmful change made to the iptables configuration on the HAProxy load balancers. A misleading comment in the existing iptables configuration led to a modification that prevented HAProxy systems from completing connections to the IIS web servers, specifically blocking SYN/ACK packets for response traffic.",
+      "remediation_steps": "The change was pushed to Git at 19:01 UTC, and the outage commenced at 19:26 UTC when Puppet applied the change to the active load balancer. Staff were alerted immediately, and a revert was pushed to Git within two minutes of the outage start, at 19:27 UTC. The outage was resolved at 19:32 UTC after Puppet applied the revert to the primary load balancer.",
+      "source_url": "https://stackstatus.net/post/96025967369/outage-post-mortem-august-25th-2014",
+      "quality": "high",
+      "company": "stackoverflow"
+    },
+    {
+      "incident_id": "twilio-mr1s0hvl0znw",
+      "raw_log_excerpt": "SMS Delivery Receipt Delays from a Subset of Twilio Phone Numbers to Tigo and Empresa de Telecomunicaciones de Bogota Colombia\nTwilio customers may be experiencing SMS delivery receipt delays from a subset of Twilio Phone Numbers to Tigo and Empresa de Telecomunicaciones de Bogota network subscribers in Colombia. Our team is actively investigating this issue. Message delivery may succeed, but delivery receipts may be delayed. We will provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "The incident has been resolved and SMS delivery receipts from a subset of Twilio Phone Numbers to Tigo and Empresa de Telecomunicaciones de Bogota network subscribers in Colombia are operating normally.",
+      "remediation_steps": "The incident has been resolved and SMS delivery receipts from a subset of Twilio Phone Numbers to Tigo and Empresa de Telecomunicaciones de Bogota network subscribers in Colombia are operating normally.",
+      "source_url": "https://status.twilio.com/incidents/mr1s0hvl0znw",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "redditstatus-wdhk0802p7sc",
+      "raw_log_excerpt": "Comment tree processing is delayed\nWe are aware that newly posted comments are not showing up immediately in comment trees. We are currently investigating this issue.",
+      "root_cause": "A large spike in traffic caused some scaling issues, which delayed new comment display across the site.   All comments posted during this time will be displayed as the servers work through the backlog.",
+      "remediation_steps": "Comment processing has now fully caught up. Thank you for your patience!",
+      "source_url": "https://www.redditstatus.com/incidents/wdhk0802p7sc",
+      "quality": "high",
+      "company": "reddit"
+    },
+    {
+      "incident_id": "netlifystatus-vgjg50pg3346",
+      "raw_log_excerpt": "Elevated response times affecting origin services\nWe are investigating elevated latency and errors affecting origin services. This is currently impacting request performance and may result in degraded experience or failures for some users.",
+      "root_cause": "This incident has been resolved. The issue that was causing elevated errors, increased latency, and intermittent site availability across Netlify services has been mitigated. All services, including site delivery and the build pipeline, are now operating normally. We monitored system stability following recovery and are no longer observing elevated error rates or degraded performance",
+      "remediation_steps": "This incident has been resolved. The issue that was causing elevated errors, increased latency, and intermittent site availability across Netlify services has been mitigated. All services, including site delivery and the build pipeline, are now operating normally. We monitored system stability following recovery and are no longer observing elevated error rates or degraded performance",
+      "source_url": "https://www.netlifystatus.com/incidents/vgjg50pg3346",
+      "quality": "high",
+      "company": "netlify"
+    },
+    {
+      "incident_id": "githubstatus-24t8gsgqx2qb",
+      "raw_log_excerpt": "Errors with the Fable 5 Model in Copilot\nWe are investigating reports of degraded performance for Copilot AI Model Providers",
+      "root_cause": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+      "remediation_steps": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+      "source_url": "https://www.githubstatus.com/incidents/24t8gsgqx2qb",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "icco-fde04641-ac3a-499a-887e-fb5d26184c09",
+      "raw_log_excerpt": "On February 28, 2017, at 9:37 AM PST, an incident began in the Amazon S3 US-EAST-1 region. An S3 team member, while debugging a billing system issue, inadvertently removed a larger set of servers than intended. This action impacted critical S3 subsystems, leading to service disruption. Recovery efforts saw the index subsystem begin servicing GET, LIST, and DELETE requests by 12:26 PM PST, fully recovering by 1:18 PM PST. The placement subsystem, crucial for PUT requests, completed its recovery b",
+      "root_cause": "The disruption rendered S3 unable to service GET, LIST, PUT, and DELETE requests. This had a cascading effect on other AWS services in the US-EAST-1 region that rely on S3, including the S3 console, new EC2 instance launches, EBS volumes dependent on S3 snapshots, and AWS Lambda. Communication via the AWS Service Health Dashboard was also impaired due to its dependency on S3.",
+      "remediation_steps": "In response, Amazon modified the problematic tool to ensure slower capacity removal and added safeguards to prevent operations that would take any subsystem below its minimum required capacity. An audit of other operational tools is underway. The S3 team is also reprioritizing and accelerating plans to further partition the index subsystem into smaller cells to improve recovery times. Additionally, the AWS Service Health Dashboard administration console has been reconfigured to run across multip",
+      "source_url": "https://aws.amazon.com/message/41926/",
+      "quality": "high",
+      "company": "aws"
+    },
+    {
+      "incident_id": "icco-f1af2841-ed19-40c6-a4f8-df69885253ef",
+      "raw_log_excerpt": "On August 9, 2016, Travis CI's GCE-backed build platform \u2014 used for jobs that need `sudo` or Docker-in-VM \u2014 went down because the platform's stable base VM images were deleted by an internal cleanup service. The outage itself was about 90 minutes; the recovery promoted hastily-tested replacement images and the resulting build breakage rolled on for weeks.",
+      "root_cause": "On August 9, 2016, Travis CI's GCE-backed build platform \u2014 used for jobs that need `sudo` or Docker-in-VM \u2014 went down because the platform's stable base VM images were deleted by an internal cleanup service. The outage itself was about 90 minutes; the recovery promoted hastily-tested replacement images and the resulting build breakage rolled on for weeks.",
+      "remediation_steps": "The new images broke a long tail of customer builds \u2014 they shipped without `docker-compose` in the first version, for example, which is precisely the use case GCE builds exist for \u2014 and Travis halted feature development for over a week and put every engineer on customer support to absorb the resulting flood. Committed counter-measures: a reproducible image-provisioning process so any image can be rebuilt exactly, and more frequent image updates so that any future regression is small. The cleanup",
+      "source_url": "https://blog.travis-ci.com/2016-09-30-the-day-we-deleted-our-vm-images/",
+      "quality": "high",
+      "company": "travisci"
+    },
+    {
+      "incident_id": "icco-5cbc4e4d-d491-4576-a9fe-6f60ca05c9d8",
+      "raw_log_excerpt": "On January 1, 2017, at 00:00 UTC, Cloudflare's custom RRDNS software began experiencing issues due to a leap second event. This led to some DNS resolutions failing, specifically impacting customers using CNAME DNS records. The problem was quickly identified, with engineers escalating the issue by 00:10 UTC.",
+      "root_cause": "On January 1, 2017, at 00:00 UTC, Cloudflare's custom RRDNS software began experiencing issues due to a leap second event. This led to some DNS resolutions failing, specifically impacting customers using CNAME DNS records. The problem was quickly identified, with engineers escalating the issue by 00:10 UTC.",
+      "remediation_steps": "A fix was developed and deployed within 90 minutes to the most affected machines. The remediation involved a code change that prevented the recording of negative RTT values, allowing RRDNS to normalize its performance metrics if time skipped backward. The fix was rolled out worldwide by 06:45 UTC on January 1, 2017, at which point the impact ended.",
+      "source_url": "https://blog.cloudflare.com/how-and-why-the-leap-second-affected-cloudflare-dns/",
+      "quality": "high",
+      "company": "cloudflare"
+    },
+    {
+      "incident_id": "openai-01KZ9DMQD2GJ8JJWDN7572RH78",
+      "raw_log_excerpt": "Issues with Custom GPT actions\nWe are investigating the issue for the listed services.",
+      "root_cause": "We are still implementing the mitigation.",
+      "remediation_steps": "All impacted services have now fully recovered.",
+      "source_url": "https://status.openai.com/incidents/01KZ9DMQD2GJ8JJWDN7572RH78",
+      "quality": "high",
+      "company": "openai"
+    },
+    {
+      "incident_id": "dropbox-g9p0hvdq1n1k",
+      "raw_log_excerpt": "Degraded experience on mobile Android users\nSome users may have a degraded experience on mobile Android. We are currently investigating this issue.",
+      "root_cause": "We are continuing to work on a fix for this issue.",
+      "remediation_steps": "This incident has been resolved. Users are advised to download the latest version of the mobile application.",
+      "source_url": "https://status.dropbox.com/incidents/g9p0hvdq1n1k",
+      "quality": "high",
+      "company": "dropbox"
+    },
+    {
+      "incident_id": "squarespace-pljhhyxcnt0z",
+      "raw_log_excerpt": "Acuity Scheduling / Webhook delivery delay\nWe are currently investigating a delay in webhook delivery.",
+      "root_cause": "We have identified the cause of the webhook delivery delay, and are working toward a solution.",
+      "remediation_steps": "The issue with delayed webhook delivery has been resolved.",
+      "source_url": "https://status.squarespace.com/incidents/pljhhyxcnt0z",
+      "quality": "high",
+      "company": "squarespace"
+    },
+    {
+      "incident_id": "twilio-y0pvd1p6hfqg",
+      "raw_log_excerpt": "SMS Delivery Failures from a Subset of Twilio Alphanumeric Senders and Long Codes to Orange Guinea\nTwilio customers may be experiencing SMS delivery failures from a subset of Twilio Alphanumeric Sender IDs and Long Codes to Orange network subscribers in Guinea. Our team is actively investigating this issue. We will provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "Twilio customers may be experiencing SMS delivery failures from a subset of Twilio Alphanumeric Sender IDs and Long Codes to Orange network subscribers in Guinea. Our team has identified the cause, and is working to resolve the issue. We will provide another update in 2 hours or as soon as more information becomes available.",
+      "remediation_steps": "The incident has been resolved and SMS delivery from a subset of Twilio Alphanumeric Senders and Long Codes to Orange network subscribers in Guinea is operating normally.",
+      "source_url": "https://status.twilio.com/incidents/y0pvd1p6hfqg",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "openai-01KYNNX2TQ3PV0KPJ9PTRRPX6C",
+      "raw_log_excerpt": "Elevated error rates with the invalid_prompt error code\nWe are investigating the issue for the listed services.",
+      "root_cause": "All impacted services have now fully recovered.",
+      "remediation_steps": "All impacted services have now fully recovered.",
+      "source_url": "https://status.openai.com/incidents/01KYNNX2TQ3PV0KPJ9PTRRPX6C",
+      "quality": "high",
+      "company": "openai"
+    },
+    {
+      "incident_id": "icco-3aac3a45-0815-432e-8057-f8a02132cd36",
+      "raw_log_excerpt": "On January 24, 2017, starting at 17:53 UTC, the Stack Exchange network experienced system degradation, entering a read-only state for approximately 5 minutes. This was followed by a complete site outage that lasted for 12 minutes.",
+      "root_cause": "The root cause involved a combination of the SQL Server bugcheck and a critical bug in the application-level failover logic. Although the system was designed to switch to standby SQL servers in read-only mode during such events, the failover mechanism was disabled due to this bug, leading to the complete network outage instead of a graceful degradation. The underlying cause of the SQL Server bugcheck is currently unknown, but logs suggest a potential issue with a bad DIMM.",
+      "remediation_steps": "Customer impact included the Stack Exchange network being inaccessible for 12 minutes after an initial 5-minute period of read-only access. Approximately 3.5 seconds of data may have been lost due to uncommitted transactions being rolled back.",
+      "source_url": "https://stackstatus.net/post/156407746074/outage-postmortem-january-24-2017",
+      "quality": "high",
+      "company": "stackoverflow"
+    },
+    {
+      "incident_id": "digitalocean-gwgh41d5r0nz",
+      "raw_log_excerpt": "DNS service, Certificates and Managed MongoDB\nOur Engineering team is investigating an issue affecting our DNS service. At this time, DNS resolution remains functional but any changes to DNS records are not being reflected at the edge. Additionally, customers may be unable to create new Let's Encrypt certificates at this time. Our engineering team is actively working to identify the root cause and restore full functionality.\n\nWe apologize for any inconvenience, and we'll share more information as it becomes available.",
+      "root_cause": "As of 19:50 UTC, the issue affecting the DNS service has been fully resolved, and all related services, including Let's Encrypt certificate issuance and Managed MongoDB provisioning, are now operating normally.\n\nThe backlog of delayed requests has been successfully processed, and all DNS record updates, pending certificate, and MongoDB operations should now be complete. \n\nWe apologize for the disruption this caused and appreciate your patience while our team worked to restore full functionality.\n\nHowever, if you continue to experience any issues, please don't hesitate to raise a support ticket for further investigation. We'll be happy to assist you.",
+      "remediation_steps": "As of 19:50 UTC, the issue affecting the DNS service has been fully resolved, and all related services, including Let's Encrypt certificate issuance and Managed MongoDB provisioning, are now operating normally.\n\nThe backlog of delayed requests has been successfully processed, and all DNS record updates, pending certificate, and MongoDB operations should now be complete. \n\nWe apologize for the disruption this caused and appreciate your patience while our team worked to restore full functionality.\n\nHowever, if you continue to experience any issues, please don't hesitate to raise a support ticket for further investigation. We'll be happy to assist you.",
+      "source_url": "https://status.digitalocean.com/incidents/gwgh41d5r0nz",
+      "quality": "high",
+      "company": "digitalocean"
+    },
+    {
+      "incident_id": "twilio-9g143y4mpvcq",
+      "raw_log_excerpt": "SMS Delivery Delays from Twilio to Claro Dominican Republic\nTwilio customers may be experiencing SMS delivery delays from Twilio to Claro network subscribers in the Dominican Republic. Our team has identified the cause, and is working to resolve the issue. We will provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "Twilio customers may be experiencing SMS delivery delays from Twilio to Claro network subscribers in the Dominican Republic. Our team has identified the cause, and is working to resolve the issue. We will provide another update in 8 hours or as soon as more information becomes available.",
+      "remediation_steps": "The incident has been resolved and SMS delivery from Twilio to Claro network subscribers in the Dominican Republic is operating normally.",
+      "source_url": "https://status.twilio.com/incidents/9g143y4mpvcq",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+      "raw_log_excerpt": "Elevated Error Rates\nWe are investigating the issue for the listed services.",
+      "root_cause": "We are continuing to work on implementing a mitigation.",
+      "remediation_steps": "All impacted services have now fully recovered.",
+      "source_url": "https://status.openai.com/incidents/01KY7SX5MYJ2BP51X5MXAPYX71",
+      "quality": "high",
+      "company": "openai"
+    },
+    {
+      "incident_id": "dropbox-plz0zpnzbfpx",
+      "raw_log_excerpt": "Single Sign-On (SSO) may not be working as expected\nSingle Sign-On (SSO) may not be working as expected for some users. We are working to fix the problem as quickly as we can. We\u2019ll share another update shortly.",
+      "root_cause": "The issue has been identified and a fix is being implemented.",
+      "remediation_steps": "SSO is back up and running! Thanks for bearing with us.",
+      "source_url": "https://status.dropbox.com/incidents/plz0zpnzbfpx",
+      "quality": "high",
+      "company": "dropbox"
+    },
+    {
+      "incident_id": "circleci-0ss2l980mvxx",
+      "raw_log_excerpt": "We are investigating issues with delays in pages loading\nWe will update as soon as we have more information",
+      "root_cause": "Following GitHub's service recovery, all CircleCI functionality has returned to normal operation. Jobs are processing as expected across all resource classes.",
+      "remediation_steps": "Following GitHub's service recovery, all CircleCI functionality has returned to normal operation. Jobs are processing as expected across all resource classes.",
+      "source_url": "https://status.circleci.com/incidents/0ss2l980mvxx",
+      "quality": "high",
+      "company": "circleci"
+    },
+    {
+      "incident_id": "icco-a0e252d3-10a6-4345-84c3-f271124e2d7b",
+      "raw_log_excerpt": "On July 2, 2019, Cloudflare experienced a global outage lasting 27 minutes, from 13:42 UTC to 14:09 UTC. The incident began when an engineer deployed a new rule to the WAF Managed Rules. Within minutes, PagerDuty alerts indicated widespread failures, leading to a P0 incident declaration. Cloudflare's core proxying, CDN, and WAF functionality became unavailable, causing customers worldwide to see 502 error pages.",
+      "root_cause": "On July 2, 2019, Cloudflare experienced a global outage lasting 27 minutes, from 13:42 UTC to 14:09 UTC. The incident began when an engineer deployed a new rule to the WAF Managed Rules. Within minutes, PagerDuty alerts indicated widespread failures, leading to a P0 incident declaration. Cloudflare's core proxying, CDN, and WAF functionality became unavailable, causing customers worldwide to see 502 error pages.",
+      "remediation_steps": "On July 2, 2019, Cloudflare experienced a global outage lasting 27 minutes, from 13:42 UTC to 14:09 UTC. The incident began when an engineer deployed a new rule to the WAF Managed Rules. Within minutes, PagerDuty alerts indicated widespread failures, leading to a P0 incident declaration. Cloudflare's core proxying, CDN, and WAF functionality became unavailable, causing customers worldwide to see 502 error pages.",
+      "source_url": "https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/",
+      "quality": "high",
+      "company": "cloudflare"
+    },
+    {
+      "incident_id": "sentry-j9ggb9ns8zcl",
+      "raw_log_excerpt": "Ingestion and alerting delays in us\nWe are experiencing ingestion and alerting delays in us for spans, transactions, and replays",
+      "root_cause": "Ingestion and alerting are back to steady state in the US region.",
+      "remediation_steps": "Ingestion and alerting are back to steady state in the US region.",
+      "source_url": "https://status.sentry.io/incidents/j9ggb9ns8zcl",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "circleci-tqh9zwszp05w",
+      "raw_log_excerpt": "Increased 500 Errors on Pipeline and Workflow API Endpoints and UI\nSome customers are experiencing 500 errors when making requests to the pipeline values and workflow API endpoints, as well as errors in the UI. \n\nEngineers are actively investigating.",
+      "root_cause": "Between 13:29 UTC and 18:20 UTC on June 9, 2026, some customers experienced 500 errors when making requests to the pipeline values and workflow API endpoints, as well as errors in the UI. Jobs running were not impacted during this window. The issue has been resolved and all affected functionality has returned to normal. We thank you for your patience while our team worked on implementing a fix.",
+      "remediation_steps": "Between 13:29 UTC and 18:20 UTC on June 9, 2026, some customers experienced 500 errors when making requests to the pipeline values and workflow API endpoints, as well as errors in the UI. Jobs running were not impacted during this window. The issue has been resolved and all affected functionality has returned to normal. We thank you for your patience while our team worked on implementing a fix.",
+      "source_url": "https://status.circleci.com/incidents/tqh9zwszp05w",
+      "quality": "high",
+      "company": "circleci"
+    },
+    {
+      "incident_id": "icco-6b02808c-2659-407b-9feb-9fc3860635ff",
+      "raw_log_excerpt": "On August 14, 2024, GitHub.com experienced an incident causing all services to be inaccessible for all users between 23:02 UTC and 23:38 UTC. The issue began when an erroneous configuration change was rolled out to GitHub.com databases at 22:59 UTC.",
+      "root_cause": "The root cause was this configuration change, which impacted the ability of the databases to respond to health check pings from the routing service. This led to the database hosts being marked as unhealthy, rendering the production read-only database endpoint inaccessible.",
+      "remediation_steps": "The incident was mitigated by reverting the erroneous configuration change, which restored connectivity to the databases. Traffic resumed and services recovered to full health by 23:38 UTC. The incident was officially resolved at 00:30 UTC on August 15 after continued monitoring.",
+      "source_url": "https://github.blog/news-insights/company-news/github-availability-report-august-2024/",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "redditstatus-pxtc317vq3qj",
+      "raw_log_excerpt": "Video posts are not displaying correctly\nWe are currently investigating reports that some video posts are displaying as images.",
+      "root_cause": "We've identified and mitigated the underlying problem. Newly uploaded videos should now appear correctly, and we're working on a fix for videos uploaded during the outage.",
+      "remediation_steps": "A fix has been rolled out and we have fixed the issues with impacted video posts.",
+      "source_url": "https://www.redditstatus.com/incidents/pxtc317vq3qj",
+      "quality": "high",
+      "company": "reddit"
+    },
+    {
+      "incident_id": "icco-3e3b9cb1-49a4-40cc-b353-b1cc3ddd0f98",
+      "raw_log_excerpt": "On August 11, 2016, Reddit experienced a significant outage, rendering the platform unreachable from 15:24 PDT to 16:52 PDT. This was followed by a period of degraded performance until 18:19 PDT. The incident impacted all official Reddit platforms and the API used by third-party applications, though no user data was lost.",
+      "root_cause": "Upon reactivation, the autoscaler read partially migrated Zookeeper data. This led it to incorrectly identify many application and caching servers as unhealthy, causing it to terminate them rapidly within 16 seconds. The subsequent empty caches after server restoration contributed to the extended period of degraded performance due to increased load on databases.",
+      "remediation_steps": "Reddit engineers quickly identified the issue and set the site to \"down mode\" while restoring servers. To prevent recurrence, Reddit plans to implement several improvements. These include making the autoscaler less aggressive by limiting simultaneous server shutdowns, enhancing migration processes with mandatory pair engineering for risky operations, and ensuring package management systems are properly disabled during critical migrations.",
+      "source_url": "https://www.reddit.com/r/announcements/comments/4y0m56/why_reddit_was_down_on_aug_11/",
+      "quality": "high",
+      "company": "reddit"
+    },
+    {
+      "incident_id": "redditstatus-kynnbfzr4psn",
+      "raw_log_excerpt": "Investigating elevated errors and issues loading comments\nWe're currently investigating this issue. While this is ongoing, you may have trouble loading comment threads on www.reddit.com, and the native apps",
+      "root_cause": "We've identified the issue and you should now start to see comments load properly again. We're still monitoring the situation!",
+      "remediation_steps": "This issue is now resolved. Errors have subsided and we're seeing consistent loading across comments.",
+      "source_url": "https://www.redditstatus.com/incidents/kynnbfzr4psn",
+      "quality": "high",
+      "company": "reddit"
+    },
+    {
+      "incident_id": "githubstatus-ph5nns5y4gxj",
+      "raw_log_excerpt": "Disruption with some GitHub services\nWe are investigating reports of impacted performance for some GitHub services.",
+      "root_cause": "Between July 19, 2026, at 23:05 UTC and July 20, 2026, at 03:55 UTC, Actions self-hosted and larger runners were unable to connect to GitHub. During this period, Actions jobs were delayed or failed when trying to acquire a runner. Jobs using standard and Mac hosted runners were not affected. Reconnection traffic from affected runners also increased load on GitHub APIs, resulting in 3-4 seconds of additional average request latency and elevated 5xx error rates.<br /><br />The incident was caused by a certificate lifecycle management failure in a subset of internal services, resulting in an SSL certificate expiration that disrupted runner connectivity. We restored service by rotating the affected certificate. Recovery began at 02:45 UTC. By 03:55 UTC, queued workflow backlog had been processed and workflow delay rates returned to normal.<br /><br />To prevent recurrence, we are strengthening certificate renewal automation, adding fallback expiry monitoring and alerting, and improving circuit-breaker protections during runner API disruptions to reduce the risk of cascading impact to other APIs.",
+      "remediation_steps": "Between July 19, 2026, at 23:05 UTC and July 20, 2026, at 03:55 UTC, Actions self-hosted and larger runners were unable to connect to GitHub. During this period, Actions jobs were delayed or failed when trying to acquire a runner. Jobs using standard and Mac hosted runners were not affected. Reconnection traffic from affected runners also increased load on GitHub APIs, resulting in 3-4 seconds of additional average request latency and elevated 5xx error rates.<br /><br />The incident was caused by a certificate lifecycle management failure in a subset of internal services, resulting in an SSL certificate expiration that disrupted runner connectivity. We restored service by rotating the affected certificate. Recovery began at 02:45 UTC. By 03:55 UTC, queued workflow backlog had been processed and workflow delay rates returned to normal.<br /><br />To prevent recurrence, we are strengthening certificate renewal automation, adding fallback expiry monitoring and alerting, and improving circuit-breaker protections during runner API disruptions to reduce the risk of cascading impact to other APIs.",
+      "source_url": "https://www.githubstatus.com/incidents/ph5nns5y4gxj",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "icco-91f1928a-c9cd-4473-a761-dc0b07914b2e",
+      "raw_log_excerpt": "On February 18, 2017, Google's Project Zero reported a security vulnerability in Cloudflare's edge servers. This bug, present in Cloudflare's HTML parser, caused servers to return memory containing private information such as HTTP cookies, authentication tokens, and HTTP POST bodies. While the bug had been latent for years, it became active with the rollout of certain features, with the earliest potential leak date being September 22, 2016. The period of greatest impact was from February 13 to F",
+      "root_cause": "The issue stemmed from a latent buffer overrun bug in Cloudflare's Ragel-based HTML parser. The root cause was a pointer error, specifically a missing `fhold` in an error handler, combined with an equality check (`==`) instead of a greater-than-or-equal check (`>=`) for buffer boundaries. This allowed the parser to read past the end of a buffer. The bug was exposed when the introduction of a new parser, `cf-html`, subtly changed the internal buffer handling within NGINX, causing `last_buf` to be",
+      "remediation_steps": "Cloudflare quickly mitigated the issue by disabling three features that used the vulnerable parser chain: email obfuscation, Server-side Excludes, and Automatic HTTPS Rewrites. The initial mitigation took 47 minutes from receiving the report, with global resolution achieved within 7 hours. Cloudflare also collaborated with Google, Yahoo, and Bing to identify and purge 770 unique URIs containing leaked memory from search engine caches before public disclosure.",
+      "source_url": "https://blog.cloudflare.com/incident-report-on-memory-leak-caused-by-cloudflare-parser-bug/",
+      "quality": "high",
+      "company": "cloudflare"
+    },
+    {
+      "incident_id": "twilio-1sbtd0qtkpfk",
+      "raw_log_excerpt": "User Authentication Identity Gateway API Failure Increase for Three in United Kingdom\nTwilio customers may be experiencing User Authentication Identity Gateway API failure increase to Three in the United Kingdom. Our team is actively investigating this issue. We will provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "The incident has been resolved and User Authentication Identity Gateway API failure increase for Three in the United Kingdom is operating normally.",
+      "remediation_steps": "The incident has been resolved and User Authentication Identity Gateway API failure increase for Three in the United Kingdom is operating normally.",
+      "source_url": "https://status.twilio.com/incidents/1sbtd0qtkpfk",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "sentry-rxjtcg6mnvdd",
+      "raw_log_excerpt": "Incoherent number of processed logs\nWe are currently investigating reports of inconsistent reported number of processed logs in Sentry for the last day",
+      "root_cause": "Between July 6th 20:25 UTC and July 7th 12:25 UTC, a wrong configuration change was deployed causing over-sampling of logs, spans and metrics.\nThe configuration change is now reverted and the issue is fixed.",
+      "remediation_steps": "Between July 6th 20:25 UTC and July 7th 12:25 UTC, a wrong configuration change was deployed causing over-sampling of logs, spans and metrics.\nThe configuration change is now reverted and the issue is fixed.",
+      "source_url": "https://status.sentry.io/incidents/rxjtcg6mnvdd",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "dropbox-np9rsdc10d1m",
+      "raw_log_excerpt": "DocSend unavailable\nDocSend is currently unavailable, we are investigating the issue.",
+      "root_cause": "Issue is resolved. Customers could have experienced errors or long load times from 14:21 to 14:24 UTC and 15:32 to 15:31 UTC",
+      "remediation_steps": "Issue is resolved. Customers could have experienced errors or long load times from 14:21 to 14:24 UTC and 15:32 to 15:31 UTC",
+      "source_url": "https://status.dropbox.com/incidents/np9rsdc10d1m",
+      "quality": "high",
+      "company": "dropbox"
+    },
+    {
+      "incident_id": "atlassian-lgl84rzhxd0d",
+      "raw_log_excerpt": "We are experiencing intermittent issues on Atlassian.com and Bitbucket Marketing pages\nWe are investigating cases of degraded performance for Atlassian Cloud customers. We will provide more details within the next hour.",
+      "root_cause": "Between 04:36 UTC to 17:50 UTC, we experienced intermittent issues on Atlassian.com and Bitbucket Marketing pages. The issue has been resolved and the service is operating normally.",
+      "remediation_steps": "Between 04:36 UTC to 17:50 UTC, we experienced intermittent issues on Atlassian.com and Bitbucket Marketing pages. The issue has been resolved and the service is operating normally.",
+      "source_url": "https://status.atlassian.com/incidents/lgl84rzhxd0d",
+      "quality": "high",
+      "company": "atlassian"
+    },
+    {
+      "incident_id": "icco-118fcca7-cf5d-4b6d-924a-3cb6cf976f18",
+      "raw_log_excerpt": "A surge in remote-work traffic during the early COVID-19 pandemic spiked CPU on Flowdock's application database and caused it to hang at ~13:30 UTC on April 21, 2020. The team restarted the application and database services, ending the first hard-down period.",
+      "root_cause": "The restart silently corrupted the table that maintains user-ID sequences, resetting it to a value almost 80 days old. As users logged back in over the next eight hours, the application reissued IDs that had already been allocated to users in other organizations. Customers reported missing collaborators, login failures, and \u2014 most seriously \u2014 seeing users from unrelated organizations appear inside their own flows. Sessions established before the crash were unaffected.",
+      "remediation_steps": "Flowdock was taken down manually at ~21:30 UTC on April 21 to investigate the cross-organizational leakage. Engineers restored a pre-crash snapshot of the primary database (which also repaired the corrupted sequence table) and brought the service back online. Between 04:30 and 06:30 UTC on April 22 a few users still saw cross-org flows, because the leaked user IDs were still warm in the application cache. Flowdock was taken down a second time at ~06:30 UTC, the pre-crash snapshot was restored ag",
+      "source_url": "https://flowdock-resources.s3.amazonaws.com/legal/Flowdock-RCA-For-Incident-On-2020-04-21.pdf",
+      "quality": "high",
+      "company": "aws"
+    },
+    {
+      "incident_id": "squarespace-sqw4fzmjb2yp",
+      "raw_log_excerpt": "Acuity Scheduling / Acuity doesn't load for some users\nWe are currently investigating the issue.",
+      "root_cause": "The issue appears isolated to a small set of users located in geographic regions affected by network outages.",
+      "remediation_steps": "The issue appears isolated to a small set of users located in geographic regions affected by network outages.",
+      "source_url": "https://status.squarespace.com/incidents/sqw4fzmjb2yp",
+      "quality": "high",
+      "company": "squarespace"
+    },
+    {
+      "incident_id": "icco-cc87682c-1689-4b23-82e1-aaf3dff8728f",
+      "raw_log_excerpt": "On October 13, 2022, at 23:30 US/Pacific, Google BigQuery's Storage WriteAPI experienced elevated error rates in the US Multi-Region, affecting customers for approximately 5 hours until 04:30 US/Pacific on October 14. The issue manifested as increased connection failures for users making calls to the Write API and a slight increase in failures for the InsertAll API.",
+      "root_cause": "On October 13, 2022, at 23:30 US/Pacific, Google BigQuery's Storage WriteAPI experienced elevated error rates in the US Multi-Region, affecting customers for approximately 5 hours until 04:30 US/Pacific on October 14. The issue manifested as increased connection failures for users making calls to the Write API and a slight increase in failures for the InsertAll API.",
+      "remediation_steps": "To prevent recurrence, Google has completed fixing the bug in its internal RPC library and the bug in the Write API that caused the cascading deadlock. They are also deploying additional automation in the Write API backend for automatic load balancing based on concurrent connections and improved error handling.",
+      "source_url": "https://status.cloud.google.com/incidents/mREMLwZFe3FuLLn3zfTw",
+      "quality": "high",
+      "company": "google"
+    },
+    {
+      "incident_id": "datadoghq-29fsc4rhsscg",
+      "raw_log_excerpt": "Delayed Monitors Notifications\nWe are investigating delays in RUM-based Monitors Notifications, which began at 11:30am UTC.",
+      "root_cause": "This incident has been resolved. Notification delays were only affecting our internal monitoring and were due to the ongoing Cloudflare incident: https://www.cloudflarestatus.com/incidents/8gmgl950y3h7/.",
+      "remediation_steps": "This incident has been resolved. Notification delays were only affecting our internal monitoring and were due to the ongoing Cloudflare incident: https://www.cloudflarestatus.com/incidents/8gmgl950y3h7/.",
+      "source_url": "https://status.datadoghq.com/incidents/29fsc4rhsscg",
+      "quality": "high",
+      "company": "datadog"
+    },
+    {
+      "incident_id": "netlifystatus-3p2nrdlccqhb",
+      "raw_log_excerpt": "Elevated error rates for a subset of sites using Edge Functions\nOur team is investigating an increase in observed error rates affecting a subset of sites that use Edge Functions. Affected sites may see elevated 504 responses or slow page loads beginning at approximately 17:00 UTC. We are actively working to\u00a0 identify the cause and will provide updates here.",
+      "root_cause": "We have identified an issue with a subset of our Edge Functions infrastructure causing elevated 504 errors for some sites beginning at approximately 17:00 UTC. We are applying mitigations and error rates are improving. Customers do not need to take any action. We will continue to provide updates here.",
+      "remediation_steps": "This incident has been resolved. Between approximately 17:00 and 20:30 UTC, a subset of sites using Edge Functions experienced elevated 504 error rates. We applied a mitigation and error rates have remained at normal levels since. We apologize for\u00a0 the impact to your sites and visitors.",
+      "source_url": "https://www.netlifystatus.com/incidents/3p2nrdlccqhb",
+      "quality": "high",
+      "company": "netlify"
+    },
+    {
+      "incident_id": "icco-bb1d9c14-e8d8-4aa4-a806-31f31f3d96fe",
+      "raw_log_excerpt": "On July 20, 2016, the Stack Exchange Network experienced a 34-minute outage starting at 14:44 UTC. The incident involved a rapid response, with 10 minutes to identify the cause, 14 minutes to develop a fix, and 10 minutes to deploy it, restoring Stack Overflow's availability.",
+      "root_cause": "The root cause was a specific regular expression, `^[\\s\\u200c]+|[\\s\\u200c]+$`, designed to trim unicode whitespace. A malformed post containing approximately 20,000 consecutive whitespace characters exploited a performance characteristic of the backtracking regex engine. This caused the engine to perform an O(n\u00b2) number of character checks, leading to excessive CPU usage.",
+      "remediation_steps": "To resolve the immediate issue, the problematic regular expression was replaced with a substring function. As follow-up actions, Stack Exchange plans to audit other regular expressions, improve post validation workflows, add controls to the load balancer to disable health checks during outages, and create a comprehensive outage checklist to streamline future incident responses.",
+      "source_url": "https://stackstatus.net/post/147710624694/outage-postmortem-july-20-2016",
+      "quality": "high",
+      "company": "stackoverflow"
+    },
+    {
+      "incident_id": "icco-6330a9a4-38ab-43cb-b34d-aba1bddb66bc",
+      "raw_log_excerpt": "Google Cloud Networking experienced reduced capacity for lower priority traffic, such as batch, streaming, and transfer operations, from 19:30 US/Pacific on Thursday, 14 July 2022, through 15:02 US/Pacific on Friday, 15 July 2022. This disruption affected multiple regions, including us-east1, southamerica-west1, us-central1, and us-central2, leading to elevated latency and HTTP 500 errors for Google Cloud Storage and elevated latency for Google BigQuery. High-priority user-facing traffic remaine",
+      "root_cause": "The root cause was identified as an issue with a new control plane configuration rollout. This rollout caused a reduction in capacity for low-priority classified traffic within Google\u2019s internal backbone network, which connects data centers. The reduced network capacity subsequently slowed down mitigation efforts, making it more challenging for engineering teams to safely undo the configuration change.",
+      "remediation_steps": "Google engineers observed performance degradation around 02:00 US/Pacific on July 15 and began an investigation. Initial mitigation attempts to halt the rollout were made at 03:50 US/Pacific, but ongoing actions continued to reduce capacity. The team then shifted to a global rollback of the problematic configuration, with the first attempt at 08:40 US/Pacific. By 12:40 US/Pacific, the configuration was correctly updated, mitigating the majority of the impact, and services were fully restored by",
+      "source_url": "https://status.cloud.google.com/incidents/vLsxuKoRvykNHW3nnhsJ",
+      "quality": "high",
+      "company": "google"
+    },
+    {
+      "incident_id": "datadoghq-tw86ncfv8q78",
+      "raw_log_excerpt": "Delayed Metrics for APM and distribution metrics\nWe are investigating increased latency processing Metrics from APM and distribution metrics.\nAs a result of this issue, some users may see delays or gaps for metrics on graphs.\nTo prevent spurious alerts, we have temporarily disabled monitors based on this data.",
+      "root_cause": "The distribution metrics should be back to processing live, without latency. APM metrics are still being delayed, and we're actively working at getting it back to live.",
+      "remediation_steps": "APM metrics are now processing live.",
+      "source_url": "https://status.datadoghq.com/incidents/tw86ncfv8q78",
+      "quality": "high",
+      "company": "datadog"
+    },
+    {
+      "incident_id": "twilio-xksxfs85vhxm",
+      "raw_log_excerpt": "User Authentication Identity SNA Missing Redirects for Three in United Kingdom\nTwilio customers may be experiencing User Authentication Identity SNA missing redirects for Three in the United Kingdom. Our team is actively investigating this issue. We will provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "The incident has been resolved and User Authentication Identity SNA missing redirects for Three in the United Kingdom is operating normally.",
+      "remediation_steps": "The incident has been resolved and User Authentication Identity SNA missing redirects for Three in the United Kingdom is operating normally.",
+      "source_url": "https://status.twilio.com/incidents/xksxfs85vhxm",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "openai-01KZ9E7QD8WFJD5DMF73QGVYH8",
+      "raw_log_excerpt": "Elevated errors in ChatGPT conversations with files\nError rates affecting ChatGPT conversations that use files and images have improved. We have applied the mitigation and are monitoring the recovery.",
+      "root_cause": "All impacted services have now fully recovered.",
+      "remediation_steps": "All impacted services have now fully recovered.",
+      "source_url": "https://status.openai.com/incidents/01KZ9E7QD8WFJD5DMF73QGVYH8",
+      "quality": "high",
+      "company": "openai"
+    },
+    {
+      "incident_id": "twilio-3gd6hwhz94q9",
+      "raw_log_excerpt": "Elevated 500 Errors on Multiple Twilio APIs\nAs of 16:13 UTC, we're seeing an increase in API failures on multiple Twilio APIs. The failures have tapered down to pre-event levels at 16:20 UTC. We're still monitoring our services and finding the root cause for the elevated failures.\n\nWe expect to provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "We are no longer seeing an increase in API failures on multiple Twilio APIs. This incident has been resolved.",
+      "remediation_steps": "We are no longer seeing an increase in API failures on multiple Twilio APIs. This incident has been resolved.",
+      "source_url": "https://status.twilio.com/incidents/3gd6hwhz94q9",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "icco-465ab32f-57ed-43b2-8430-c2ec691b0d1d",
+      "raw_log_excerpt": "On October 4, 2023, Cloudflare's 1.1.1.1 DNS resolver experienced lookup failures, leading to an increase in SERVFAIL responses. The incident began at 07:00 UTC when DNSSEC signatures in a stale root zone file expired, and was resolved by 11:02 UTC. External reports started at 07:57 UTC, and an internal incident was declared at 08:03 UTC.",
+      "root_cause": "On October 4, 2023, Cloudflare's 1.1.1.1 DNS resolver experienced lookup failures, leading to an increase in SERVFAIL responses. The incident began at 07:00 UTC when DNSSEC signatures in a stale root zone file expired, and was resolved by 11:02 UTC. External reports started at 07:57 UTC, and an internal incident was declared at 08:03 UTC.",
+      "remediation_steps": "On October 4, 2023, Cloudflare's 1.1.1.1 DNS resolver experienced lookup failures, leading to an increase in SERVFAIL responses. The incident began at 07:00 UTC when DNSSEC signatures in a stale root zone file expired, and was resolved by 11:02 UTC. External reports started at 07:57 UTC, and an internal incident was declared at 08:03 UTC.",
+      "source_url": "https://blog.cloudflare.com/1-1-1-1-lookup-failures-on-october-4th-2023/",
+      "quality": "high",
+      "company": "cloudflare"
+    },
+    {
+      "incident_id": "atlassian-kl4d5mfn26kc",
+      "raw_log_excerpt": "Slowness in Jira.\nOur team is currently investigating the issue. We are working to identify the cause and will provide updates as soon as possible.",
+      "root_cause": "We have identified the root cause of the issue with an internal infrastructure component that has been impacting the provisioning process for the Mumbai Region with several Atlassian Cloud products. All affected products are now back online and no further impact has been observed.",
+      "remediation_steps": "We have identified the root cause of the issue with an internal infrastructure component that has been impacting the provisioning process for the Mumbai Region with several Atlassian Cloud products. All affected products are now back online and no further impact has been observed.",
+      "source_url": "https://status.atlassian.com/incidents/kl4d5mfn26kc",
+      "quality": "high",
+      "company": "atlassian"
+    },
+    {
+      "incident_id": "sentry-4mr92qjf3wdt",
+      "raw_log_excerpt": "Ingestion and alerting delays in US\nWe are experiencing ingestion and alerting delays in us for spans, trace metrics, and logs",
+      "root_cause": "We have implemented a fix. Ingestion and alerting have returned to normal operation",
+      "remediation_steps": "We have implemented a fix. Ingestion and alerting have returned to normal operation",
+      "source_url": "https://status.sentry.io/incidents/4mr92qjf3wdt",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "icco-b79bbd0b-b4d9-459e-90b6-15cbf95857b2",
+      "raw_log_excerpt": "On April 5th, 2022, starting at 07:38 UTC, 775 Atlassian customers, representing 883 sites, lost access to their Atlassian products. The outage spanned up to 14 days for a subset of these customers, with the first sites being restored on April 8th and all customer sites progressively restored by April 18th.",
+      "root_cause": "Customer impact included prolonged loss of access to their Atlassian products, although no customer lost more than five minutes of data. Initial communication with affected customers was also challenging due to the deletion of some customer contact information. Atlassian is implementing universal \"soft deletes,\" accelerating its Disaster Recovery program for multi-site/multi-product restoration, revising incident management processes for large-scale events, and creating a large-scale incident co",
+      "remediation_steps": "On April 5th, 2022, starting at 07:38 UTC, 775 Atlassian customers, representing 883 sites, lost access to their Atlassian products. The outage spanned up to 14 days for a subset of these customers, with the first sites being restored on April 8th and all customer sites progressively restored by April 18th.",
+      "source_url": "https://www.atlassian.com/engineering/post-incident-review-april-2022-outage",
+      "quality": "high",
+      "company": "atlassian"
+    },
+    {
+      "incident_id": "gcp-5362718329524538692",
+      "raw_log_excerpt": "Google Cloud VMware Engine (GCVE) Stretched Cluster customers are experiencing zonal outages impacting network connectivity across multiple regions.",
+      "root_cause": "## Incident Report\n## Summary\nOn Tuesday, 14 July 2026 10:00 PT, Google Cloud VMware Engine (GCVE) Stretched Cluster customers in the australia-southeast2 and europe-west3 zones experienced inter-site communication failures.\nThe disruption was traced to a network configuration update that introduced a conflict, causing inter-site communication failures, which triggered VMware Stretched Cluster failover events. Google engineers successfully mitigated the impact by rolling back the issue-causing configuration change and resetting the network state.\nWe sincerely apologize for the disruption this incident caused to your business. We know how much you rely on Google Cloud, and we regret the impact on your productivity. We are working to address the root cause and prevent this from occurring in the future.\n## Root Cause\nA network configuration update intended to prepare the cloud network infrastructure for new capabilities was deployed to the foundational network control plane. While the configuration payload itself was structurally valid, it exposed an implementation gap within the control plane's routing logic.\nThis logical gap caused the underlying network hosts to misconfigure program routing tables. As a result, traffic destined for the private IP address space used by GCVE Stretched Clusters was dropped. Because Stretched Clusters rely on this private address space to establish routing sessions for inter-zonal connectivity, the traffic drops severed communications between the active zones of the clusters, triggering VMware High Availability (HA) failovers.\nStandard routing health-checking protocols, such as Border Gateway Protocol (BGP) and Bidirectional Forwarding Detection (BFD), remained fully functional because their control plane sessions run on separate, unaffected address spaces. Because the control plane remained healthy, standard failover mechanisms failed to detect that the selective private IP range used for inter-zonal data tunneling was being dropped. Automated safeguards did not block the deployment because the configuration passed initial payload validations. The impact only manifested once the update began routing data traffic through the specific affected IP range.\n## Remediation and Prevention\nTo stabilize the environment, engineers identified the working network paths and deployed configuration changes to reroute traffic and restore connectivity. GCVE Stretched Cluster inter-zonal connectivity was completely restored for all supported locations on Tuesday, 14 July 2026 at 20:40 US/Pacific.\nGoogle is committed preventing a repeat of this issue in the future and is completing the following actions:\n* **Expanded Testing:** We are adding more detailed GCVE network setups to our existing testing environments. This allows us to automatically test future network updates against these configurations before they go live.\n* **Service-Level Data Path Failover:** We are implementing additional service-level data path failover mechanisms that actively probe the specific data-tunneling traffic space. This will ensure a path failover is triggered if the data plane itself is degraded even when the BGP control plane remains functional.\n* **Detailed Alerting**: We are adding faster, more specific alerts for connection issues between zones. This builds on our current platform monitoring to catch minor disruptions early and speed up our response.\n* **Improved Cluster Resilience:** We are fine-tuning the cluster's high-availability and storage settings. This makes virtual machines more resilient to short network drops, preventing them from restarting unnecessarily if the main site is still healthy.\n* **Workload Resilience Alignment (Shared Responsibility):** We are proactively reaching out to customers utilizing non-vSAN replicated virtual machine configurations within Stretched Clusters. Because these workloads are pinned to a single zone without active cross-site replication, they cannot survive inter-site network disruptions. We are ready to assist customers in auditing their storage policies, adjusting Stretched Cluster configurations, and planning the secondary zone capacity required to enable robust high-availability failovers.\n## Detailed Description of Impact\nOn Tuesday, 14 July 2026 from 10:00 to 20:40 US/Pacific, customers utilizing GCVE Stretched Clusters in the affected zones (australia-southeast2, and europe-west3) experienced inter-site communication failures. For some customers, depending on their architecture, this disruption led to a VMWare HA event causing VM restarts/movement across zones as designed, host disconnects, VSAN alarms and intermittent access to VMware Management (vCenter/NSX Manager) components.",
+      "remediation_steps": "## Incident Report\n## Summary\nOn Tuesday, 14 July 2026 10:00 PT, Google Cloud VMware Engine (GCVE) Stretched Cluster customers in the australia-southeast2 and europe-west3 zones experienced inter-site communication failures.\nThe disruption was traced to a network configuration update that introduced a conflict, causing inter-site communication failures, which triggered VMware Stretched Cluster failover events. Google engineers successfully mitigated the impact by rolling back the issue-causing configuration change and resetting the network state.\nWe sincerely apologize for the disruption this incident caused to your business. We know how much you rely on Google Cloud, and we regret the impact on your productivity. We are working to address the root cause and prevent this from occurring in the future.\n## Root Cause\nA network configuration update intended to prepare the cloud network infrastructure for new capabilities was deployed to the foundational network control plane. While the configuration payload itself was structurally valid, it exposed an implementation gap within the control plane's routing logic.\nThis logical gap caused the underlying network hosts to misconfigure program routing tables. As a result, traffic destined for the private IP address space used by GCVE Stretched Clusters was dropped. Because Stretched Clusters rely on this private address space to establish routing sessions for inter-zonal connectivity, the traffic drops severed communications between the active zones of the clusters, triggering VMware High Availability (HA) failovers.\nStandard routing health-checking protocols, such as Border Gateway Protocol (BGP) and Bidirectional Forwarding Detection (BFD), remained fully functional because their control plane sessions run on separate, unaffected address spaces. Because the control plane remained healthy, standard failover mechanisms failed to detect that the selective private IP range used for inter-zonal data tunneling was being dropped. Automated safeguards did not block the deployment because the configuration passed initial payload validations. The impact only manifested once the update began routing data traffic through the specific affected IP range.\n## Remediation and Prevention\nTo stabilize the environment, engineers identified the working network paths and deployed configuration changes to reroute traffic and restore connectivity. GCVE Stretched Cluster inter-zonal connectivity was completely restored for all supported locations on Tuesday, 14 July 2026 at 20:40 US/Pacific.\nGoogle is committed preventing a repeat of this issue in the future and is completing the following actions:\n* **Expanded Testing:** We are adding more detailed GCVE network setups to our existing testing environments. This allows us to automatically test future network updates against these configurations before they go live.\n* **Service-Level Data Path Failover:** We are implementing additional service-level data path failover mechanisms that actively probe the specific data-tunneling traffic space. This will ensure a path failover is triggered if the data plane itself is degraded even when the BGP control plane remains functional.\n* **Detailed Alerting**: We are adding faster, more specific alerts for connection issues between zones. This builds on our current platform monitoring to catch minor disruptions early and speed up our response.\n* **Improved Cluster Resilience:** We are fine-tuning the cluster's high-availability and storage settings. This makes virtual machines more resilient to short network drops, preventing them from restarting unnecessarily if the main site is still healthy.\n* **Workload Resilience Alignment (Shared Responsibility):** We are proactively reaching out to customers utilizing non-vSAN replicated virtual machine configurations within Stretched Clusters. Because these workloads are pinned to a single zone without active cross-site replication, they cannot survive inter-site network disruptions. We are ready to assist customers in auditing their storage policies, adjusting Stretched Cluster configurations, and planning the secondary zone capacity required to enable robust high-availability failovers.\n## Detailed Description of Impact\nOn Tuesday, 14 July 2026 from 10:00 to 20:40 US/Pacific, customers utilizing GCVE Stretched Clusters in the affected zones (australia-southeast2, and europe-west3) experienced inter-site communication failures. For some customers, depending on their architecture, this disruption led to a VMWare HA event causing VM restarts/movement across zones as designed, host disconnects, VSAN alarms and intermittent access to VMware Management (vCenter/NSX Manager) components.",
+      "source_url": "https://status.cloud.google.com/incidents/T8gmtofFSTGT5tbhyciF",
+      "quality": "high",
+      "company": "google"
+    },
+    {
+      "incident_id": "icco-e81a4a73-8808-42da-9841-9bd4fcc8b9be",
+      "raw_log_excerpt": "On January 24, 2023, Cloudflare experienced an incident lasting 121 minutes, affecting several services. The issue began at 16:55 UTC when an Access engineering team initiated a code release. Although the release was rolled back at 17:05 UTC, the damage had already occurred, leading to a staggered impact across the network. The incident was declared at 18:12 UTC, and full resolution was achieved by 19:51 UTC after restoring service tokens from a database backup.",
+      "root_cause": "The incident stemmed from a new feature release for service tokens, intended to add a 'Last seen at' field. During a read-write transaction to update this field, the system inadvertently overwrote the 'client_secret' value of service tokens with an empty string. This occurred because the read operation redacted the client secret for security, and the subsequent write used this incomplete data, coupled with an insufficient database check that allowed empty strings despite a 'not null' constraint.",
+      "remediation_steps": "On January 24, 2023, Cloudflare experienced an incident lasting 121 minutes, affecting several services. The issue began at 16:55 UTC when an Access engineering team initiated a code release. Although the release was rolled back at 17:05 UTC, the damage had already occurred, leading to a staggered impact across the network. The incident was declared at 18:12 UTC, and full resolution was achieved by 19:51 UTC after restoring service tokens from a database backup.",
+      "source_url": "https://blog.cloudflare.com/cloudflare-incident-on-january-24th-2023/",
+      "quality": "high",
+      "company": "cloudflare"
+    },
+    {
+      "incident_id": "icco-95f252f8-fef6-40a0-ab98-977f28d3dbba",
+      "raw_log_excerpt": "On March 31, 2015, enabling the StackEgg feature for all logged-in users across the Stack Exchange network led to a significant increase in load on primary load balancers. This surge in traffic caused a 6-minute public outage on Stack Overflow, with general site slowness observed across the network.",
+      "root_cause": "The root cause was an unexpected increase in concurrent sessions. The initial StackEgg deployment introduced additional AJAX requests per page load. Combined with HTTP Keep-Alive tuned to 15 seconds, this resulted in an attempt to sustain over 51,000 additional concurrent sessions, exceeding the HAProxy frontend's 40,000 session capacity.",
+      "remediation_steps": "A subsequent traffic increase on April 1st prompted further action. The HTTP Keep-Alive duration for StackEgg traffic was temporarily lowered from 15 seconds to 5 seconds. This adjustment successfully reduced concurrent sessions from approximately 60,000 to around 19,000, stabilizing the network.",
+      "source_url": "https://stackstatus.net/post/115305251014/outage-postmortem-march-31-2015",
+      "quality": "high",
+      "company": "stackoverflow"
+    },
+    {
+      "incident_id": "icco-4da4ac8a-fb93-426e-9ae7-eb088f115959",
+      "raw_log_excerpt": "A 43-second network partition occurred on October 21, 2018, at 22:52 UTC, during routine maintenance to replace optical equipment. This brief loss of connectivity between GitHub's US East Coast network hub and its primary data center triggered an automated MySQL master failover managed by Orchestrator. Due to cross-continent latency, the new primaries in the US West Coast data center did not receive several seconds of writes that had occurred on the East Coast, leading to divergent database stat",
+      "root_cause": "A 43-second network partition occurred on October 21, 2018, at 22:52 UTC, during routine maintenance to replace optical equipment. This brief loss of connectivity between GitHub's US East Coast network hub and its primary data center triggered an automated MySQL master failover managed by Orchestrator. Due to cross-continent latency, the new primaries in the US West Coast data center did not receive several seconds of writes that had occurred on the East Coast, leading to divergent database stat",
+      "remediation_steps": "By October 22, 11:12 UTC, all database primaries were re-established in the US East Coast, significantly improving site responsiveness. However, many read replicas remained hours behind the primary, causing users to experience inconsistent data. The incident resulted in degraded service for 24 hours and 11 minutes, impacting various GitHub services, though no user data was ultimately lost.",
+      "source_url": "https://blog.github.com/2018-10-30-oct21-post-incident-analysis/",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "digitalocean-y3p9v8vm4tfn",
+      "raw_log_excerpt": "App Platform Deployments\nOur Engineering team is currently investigating an issue with build failures on App Platform in multiple regions. Users may experience errors when attempting to build their applications, resulting in failed deployments.\n\nOur Engineering team is working to fix the issue and will share an update once we have more details.\n\nWe apologize for the inconvenience this issue may be causing and appreciate your patience as we work to resolve it.",
+      "root_cause": "Our Engineering team has confirmed that the issue impacting build failures on App Platform has been resolved at 07:00 am UTC. All App Platform builds are now succeeding as expected. Customers who previously encountered build failures should now be able to deploy their applications without further issues.\n\nIf you continue to experience any problems, please open a ticket with our support team. Thank you for your patience, and we apologize for any inconvenience.",
+      "remediation_steps": "Our Engineering team has confirmed that the issue impacting build failures on App Platform has been resolved at 07:00 am UTC. All App Platform builds are now succeeding as expected. Customers who previously encountered build failures should now be able to deploy their applications without further issues.\n\nIf you continue to experience any problems, please open a ticket with our support team. Thank you for your patience, and we apologize for any inconvenience.",
+      "source_url": "https://status.digitalocean.com/incidents/y3p9v8vm4tfn",
+      "quality": "high",
+      "company": "digitalocean"
+    },
+    {
+      "incident_id": "redditstatus-grx0wwqcq22b",
+      "raw_log_excerpt": "Issues with new post creation\nWe are investigating reports that new posts with media are not being created correctly.",
+      "root_cause": "We have identified the underlying issue and implemented a fix. Posts which were missing media when created should have that media restored now.",
+      "remediation_steps": "We have identified the underlying issue and implemented a fix. Posts which were missing media when created should have that media restored now.",
+      "source_url": "https://www.redditstatus.com/incidents/grx0wwqcq22b",
+      "quality": "high",
+      "company": "reddit"
+    },
+    {
+      "incident_id": "githubstatus-s65j9gslmfm8",
+      "raw_log_excerpt": "Incident with Actions\nWe are investigating reports of degraded performance for Actions",
+      "root_cause": "On July 25, 2026, GitHub Actions experienced two related periods of degradation that caused some workflow runs to be delayed by more than 5 minutes or end with infrastructure failures. <br /><br />First period (08:45 \u2013 09:13 UTC): During planned maintenance on a critical-path Redis cluster for Actions, one participating region was left in a degraded state. Separately, an independent capacity operation temporarily removed another region from the cluster and redirected its traffic to the degraded region. This created cross-region inconsistencies in job-assignment state, causing workflow runs to be delayed, exhaust retries, or fail outright. At peak, about 7% of runs were delayed by more than 5 minutes, and 25% of runs failed with an infrastructure error during the course of the incident. We mitigated the incident at 09:13 UTC by returning traffic to its normal distribution. <br /><br />Second period (12:08 \u2013 12:48 UTC): As part of mitigating the first incident, traffic was returned to the regional instance that was still undergoing its capacity increase. Multiple Redis nodes in the scaling region experienced failures, increasing traffic to healthy nodes and causing connection limits to be reached on many nodes. At peak, 30% of runs were delayed by more than 5 minutes, and 60% of runs failed with an infrastructure error during the course of the incident. We mitigated the incident at 12:48 UTC by redirecting workflow traffic away from the scaling region. <br /><br />We are adding stronger regional health and capacity checks before maintenance and requiring a stable observation period before restoring traffic. We are also improving automated connection resiliency, and partnering with our platform dependency to automatically detect and remediate unhealthy cluster members and shard imbalance.  More generally, we already had work underway to improve the resiliency and scale of this piece of Actions infrastructure.",
+      "remediation_steps": "On July 25, 2026, GitHub Actions experienced two related periods of degradation that caused some workflow runs to be delayed by more than 5 minutes or end with infrastructure failures. <br /><br />First period (08:45 \u2013 09:13 UTC): During planned maintenance on a critical-path Redis cluster for Actions, one participating region was left in a degraded state. Separately, an independent capacity operation temporarily removed another region from the cluster and redirected its traffic to the degraded region. This created cross-region inconsistencies in job-assignment state, causing workflow runs to be delayed, exhaust retries, or fail outright. At peak, about 7% of runs were delayed by more than 5 minutes, and 25% of runs failed with an infrastructure error during the course of the incident. We mitigated the incident at 09:13 UTC by returning traffic to its normal distribution. <br /><br />Second period (12:08 \u2013 12:48 UTC): As part of mitigating the first incident, traffic was returned to the regional instance that was still undergoing its capacity increase. Multiple Redis nodes in the scaling region experienced failures, increasing traffic to healthy nodes and causing connection limits to be reached on many nodes. At peak, 30% of runs were delayed by more than 5 minutes, and 60% of runs failed with an infrastructure error during the course of the incident. We mitigated the incident at 12:48 UTC by redirecting workflow traffic away from the scaling region. <br /><br />We are adding stronger regional health and capacity checks before maintenance and requiring a stable observation period before restoring traffic. We are also improving automated connection resiliency, and partnering with our platform dependency to automatically detect and remediate unhealthy cluster members and shard imbalance.  More generally, we already had work underway to improve the resiliency and scale of this piece of Actions infrastructure.",
+      "source_url": "https://www.githubstatus.com/incidents/s65j9gslmfm8",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "openai-01KYJFG4S86K8FMTB4N6BDZS7F",
+      "raw_log_excerpt": "Image generation unavailable in ChatGPT\nWe have identified that users are experiencing elevated errors for the impacted services.\n\nWe are working on implementing a mitigation.",
+      "root_cause": "All impacted services have now fully recovered.",
+      "remediation_steps": "All impacted services have now fully recovered.",
+      "source_url": "https://status.openai.com/incidents/01KYJFG4S86K8FMTB4N6BDZS7F",
+      "quality": "high",
+      "company": "openai"
+    },
+    {
+      "incident_id": "twilio-mszff4pbzmjq",
+      "raw_log_excerpt": "Voice Caller ID Verification Failures\nWe are experiencing failures with Voice Caller ID verification. Our engineers are working with our carrier partner to resolve the issue. We will provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "This incident will be resolved as the issue is related to the Phone Number Configuration Failures status page.\n\nPlease follow this status post for further updates:\n\nhttps://status.twilio.com/incidents/358nbbp7zs3l",
+      "remediation_steps": "This incident will be resolved as the issue is related to the Phone Number Configuration Failures status page.\n\nPlease follow this status post for further updates:\n\nhttps://status.twilio.com/incidents/358nbbp7zs3l",
+      "source_url": "https://status.twilio.com/incidents/mszff4pbzmjq",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "icco-76a3bbe4-ed5a-4c4a-a851-01d77e3ae63f",
+      "raw_log_excerpt": "On September 2, 2021, beginning at 7:30 AM JST, AWS Direct Connect customers in the Tokyo (AP-NORTHEAST-1) Region experienced intermittent connectivity issues and elevated packet loss. Customers began to see recovery by 12:30 PM JST, with full resolution by 1:42 PM JST. Other network services, including inter-Availability Zone traffic, internet connectivity, AWS VPN, and Direct Connect to other AWS Regions, were not affected.",
+      "root_cause": "The incident was caused by the failure of a subset of network devices within a single network layer along the path from Direct Connect edge locations to the Tokyo Region's datacenter network. These devices were not correctly removed from service by the usual automated processes, which instead alerted engineers to an unusually high failure rate. Initial attempts by engineers to manually remove affected devices and reset them provided only temporary relief, as additional devices subsequently faile",
+      "remediation_steps": "To resolve the issue, engineers disabled the new protocol in a single Availability Zone to confirm its effectiveness, then prepared to roll out this change across the entire Tokyo Region. Disabling the protocol successfully stabilized the affected network devices and restored the Direct Connect service to normal operation.",
+      "source_url": "https://aws.amazon.com/message/17908/",
+      "quality": "high",
+      "company": "aws"
+    },
+    {
+      "incident_id": "icco-4be45ad5-5e02-45c6-8e5c-c81709005e47",
+      "raw_log_excerpt": "On Monday, July 20, 2015, hosted Sentry was down for most of the US working day because the primary Postgres database hit transaction-ID wraparound protection and stopped accepting writes.",
+      "root_cause": "On Monday, July 20, 2015, hosted Sentry was down for most of the US working day because the primary Postgres database hit transaction-ID wraparound protection and stopped accepting writes.",
+      "remediation_steps": "Postgres uses a 32-bit transaction ID (XID) counter to determine row visibility under MVCC. As the counter approaches its maximum (~2 billion) Postgres will refuse to accept new write commands when fewer than one million IDs remain, to prevent the catastrophic semantic outcomes of wraparound (deleted rows reappearing, updated rows reverting, broken referential integrity). Routine VACUUM (or autovacuum) freezes old XIDs and keeps the counter from running away.",
+      "source_url": "https://blog.sentry.io/2015/07/23/transaction-id-wraparound-in-postgres",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "datadoghq-476hf8wnc4l0",
+      "raw_log_excerpt": "Delayed Events\nWe are investigating increased latency processing Events.\nAs a result of this issue, some users may see delays or gaps in the event stream or for event based widgets or event based monitors.",
+      "root_cause": "Recovery is in progress and the new estimated time of recovery would be 14h30 UTC.",
+      "remediation_steps": "This incident is resolved. There's no more delay for the processing of Events, nor impact on the event stream, event based widgets and event based monitors.",
+      "source_url": "https://status.datadoghq.com/incidents/476hf8wnc4l0",
+      "quality": "high",
+      "company": "datadog"
+    },
+    {
+      "incident_id": "twilio-1v4367vswsrm",
+      "raw_log_excerpt": "SMS Delivery Delays and Failures from Twilio Phone Numbers to National Telecom and True Thailand\nTwilio customers may be experiencing SMS delivery delays and failures from Twilio Phone Numbers to National Telecom and True network subscribers in Thailand. Our team is actively investigating this issue. We will provide another update in 1 hour or as soon as more information becomes available.",
+      "root_cause": "Twilio customers may be experiencing SMS delivery delays and failures from Twilio Phone Numbers to National Telecom and True network subscribers in Thailand. Our team has identified the cause, and is working to resolve the issue. We will provide another update in 2 hours or as soon as more information becomes available.",
+      "remediation_steps": "The incident has been resolved and SMS delivery from Twilio Phone Numbers to National Telecom and True network subscribers in Thailand is operating normally.",
+      "source_url": "https://status.twilio.com/incidents/1v4367vswsrm",
+      "quality": "high",
+      "company": "twilio"
+    },
+    {
+      "incident_id": "circleci-l7vz5yr3wrp0",
+      "raw_log_excerpt": "Delays in Workflow and Job data in the Usage API\nWe have identified an issue causing Insights workflow and job data to be delayed when requested through the Usage API. Some data for the last 24 hours may not be fully reflected while we work to process the backlog of events. Insights UI is not impacted by this issue. Thank you for your patience.",
+      "root_cause": "We have identified an issue causing Insights workflow and job data to be delayed when requested through the Usage API. Some data for the last 24 hours may not be fully reflected while we work to process the backlog of events. Insights UI is not impacted by this issue. Thank you for your patience.",
+      "remediation_steps": "The Usage API incident is resolved on an ongoing basis. There was a 4-hour period yesterday 4/7 for which we did not capture RAM and CPU utilization in our logs. We will not be backfilling the data for that period. Appreciate your patience.",
+      "source_url": "https://status.circleci.com/incidents/l7vz5yr3wrp0",
+      "quality": "high",
+      "company": "circleci"
+    },
+    {
+      "incident_id": "icco-be03bbc3-6bee-4fca-9e5a-08d78b9a6402",
+      "raw_log_excerpt": "On Tuesday, March 11th, GitHub experienced a distributed denial of service (DDoS) attack, rendering the service largely unreachable for approximately two hours. The incident began at 21:25 UTC when connectivity problems were reported, and GitHub opened an incident on its status site at 21:29 UTC.",
+      "root_cause": "On Tuesday, March 11th, GitHub experienced a distributed denial of service (DDoS) attack, rendering the service largely unreachable for approximately two hours. The incident began at 21:25 UTC when connectivity problems were reported, and GitHub opened an incident on its status site at 21:29 UTC.",
+      "remediation_steps": "The initial attack vector involved several thousand HTTP requests per second from thousands of IP addresses targeting a crafted URL. These requests were sent to the non-SSL HTTP port and then redirected to HTTPS, overwhelming GitHub's load balancers and application tier. Mitigation efforts to block these requests were deployed by 22:35 UTC, at which point the site appeared to stabilize.",
+      "source_url": "https://github.blog/news-insights/the-library/denial-of-service-attacks/",
+      "quality": "high",
+      "company": "github"
+    },
+    {
+      "incident_id": "netlifystatus-4csqvcm0hhx3",
+      "raw_log_excerpt": "Failed & delayed builds due to Github incident\nWe are currently experiencing delays in our build pipeline due to a current incident at Github.",
+      "root_cause": "In addition to delayed builds, we are also experiencing build failures due to the current incident at Github.",
+      "remediation_steps": "This incident has been resolved, and builds have returned to functioning normally.",
+      "source_url": "https://www.netlifystatus.com/incidents/4csqvcm0hhx3",
+      "quality": "high",
+      "company": "netlify"
+    },
+    {
+      "incident_id": "icco-36858814-a276-4723-8bd2-ce1d46236417",
+      "raw_log_excerpt": "The incident began on October 19, 2025, at 11:48 PM PDT, with increased DynamoDB API error rates in the N. Virginia (us-east-1) Region. This initial disruption lasted until 2:40 AM PDT on October 20. The issue stemmed from endpoint resolution failures for DynamoDB, preventing new connections to the service.",
+      "root_cause": "The incident began on October 19, 2025, at 11:48 PM PDT, with increased DynamoDB API error rates in the N. Virginia (us-east-1) Region. This initial disruption lasted until 2:40 AM PDT on October 20. The issue stemmed from endpoint resolution failures for DynamoDB, preventing new connections to the service.",
+      "remediation_steps": "Engineers identified DynamoDB's DNS state as the source by 12:38 AM on October 20, and temporary mitigations were applied by 1:15 AM. All DNS information was restored by 2:25 AM. For EC2, after DynamoDB recovery, DWFM entered a \"congestive collapse\" state, requiring throttling and selective restarts of DWFM hosts. Network Manager also experienced backlogs. NLB issues were mitigated by disabling automatic health check failovers. Full recovery across all impacted services was achieved by 2:20 PM P",
+      "source_url": "https://aws.amazon.com/message/101925/",
+      "quality": "high",
+      "company": "aws"
+    },
+    {
+      "incident_id": "icco-8f92b6a5-b6d4-4a0f-be02-28242069f691",
+      "raw_log_excerpt": "On Tuesday, March 13, 2018, travis-ci.com experienced a major outage starting at 12:14 UTC, lasting approximately 5.5 hours, with a build backlog persisting for another 3.5 hours. The incident began when a database query was accidentally run against the production database, truncating all tables. Although the query was blocked for about 10 minutes, it executed at 12:14 UTC.",
+      "root_cause": "The root cause was identified as a developer executing a test suite using the Database Cleaner gem in an old terminal window. This window, part of a tmux session, unknowingly had a `DATABASE_URL` environment variable set to the production database from previous inspection activities. The tooling and processes at the time made it easier to connect to the primary database with write access rather than a read-only follower.",
+      "remediation_steps": "Customer impact included `travis-ci.com` being non-operational. For about 30 minutes after the truncation, the API remained operational but connected to an almost empty database, causing blank user profiles. Users who logged in during this window had new user records created, leading to mismatched tokens and incorrect user logins after the database was restored. All affected tokens were revoked by 14:22 UTC on March 14. Additionally, the cron scheduler was not restarted, causing errors with sche",
+      "source_url": "https://www.traviscistatus.com/incidents/z2b3lz2kwcfp",
+      "quality": "high",
+      "company": "travisci"
+    },
+    {
+      "incident_id": "icco-b20ad40a-51c0-494c-89bc-e01290d46b5f",
+      "raw_log_excerpt": "On October 25, 2021, starting at 11:00 UTC, the Google Meet Livestream feature experienced disruptions. These issues led to intermittent degraded quality of experience for a subset of viewers, including higher rebuffer rates and latency in video playback. The problem was resolved by October 26, 2021, at 17:00 UTC, with quality degraded for a total of 4 hours during this period.",
+      "root_cause": "On October 25, 2021, starting at 11:00 UTC, the Google Meet Livestream feature experienced disruptions. These issues led to intermittent degraded quality of experience for a subset of viewers, including higher rebuffer rates and latency in video playback. The problem was resolved by October 26, 2021, at 17:00 UTC, with quality degraded for a total of 4 hours during this period.",
+      "remediation_steps": "On October 25, 2021, starting at 11:00 UTC, the Google Meet Livestream feature experienced disruptions. These issues led to intermittent degraded quality of experience for a subset of viewers, including higher rebuffer rates and latency in video playback. The problem was resolved by October 26, 2021, at 17:00 UTC, with quality degraded for a total of 4 hours during this period.",
+      "source_url": "https://www.google.com/appsstatus/dashboard/incidents/k71P8nHp32hgcMSsC3mR",
+      "quality": "high",
+      "company": "google"
+    },
+    {
+      "incident_id": "icco-32b081c5-bfd7-4986-82e6-9e9cd7740c95",
+      "raw_log_excerpt": "On October 25, 2022, a software release for a Cloudflare CDN component began rolling out at 08:40 UTC, leading to a partial outage. The issue caused HTTP 530 errors, affecting approximately 5% of all HTTP requests at its peak at 17:28 UTC. Customers using Tiered Cache, Cloudflare Images, or Bandwidth Alliance were impacted if their requests required an origin fetch through the tiered cache hierarchy.",
+      "root_cause": "Cloudflare initiated a rollback of the faulty release, confirming the root cause at 17:03 UTC. An accelerated global rollback followed, with impact ending once the reversion was complete in all upper tier data centers by 18:04 UTC.",
+      "remediation_steps": "To prevent similar incidents, Cloudflare plans to include larger Tiered Cache upper tier data centers in earlier release stages, expand acceptance test coverage for various Tiered Cache topologies, implement more aggressive alerting for requests lacking full context, and ensure systems fail fast during development and testing.",
+      "source_url": "https://blog.cloudflare.com/partial-cloudflare-outage-on-october-25-2022/",
+      "quality": "high",
+      "company": "cloudflare"
+    },
+    {
+      "incident_id": "icco-76f27cf3-b204-40e4-942e-19657614f658",
+      "raw_log_excerpt": "The incident began on Monday, October 22nd, 2012, at 10:00 AM PDT, affecting the US-East Region. A latent bug in a data collection agent on Amazon Elastic Block Store (EBS) storage servers caused degraded performance and \"stuck\" volumes. This primary issue subsequently impacted Amazon Elastic Compute Cloud (EC2), Amazon Relational Database Service (RDS), and Amazon Elastic Load Balancing (ELB) services.",
+      "root_cause": "The root cause was a memory leak in an EBS data collection agent. Following a hardware failure and replacement of a data collection server, a DNS update failed to propagate to all internal DNS servers. This caused a fraction of EBS storage servers to continuously attempt to contact the failed server, triggering a latent bug where the agent slowly consumed system memory instead of gracefully handling the failed connection. Existing monitoring failed to alarm on this memory leak due to the dynamic",
+      "remediation_steps": "Remediation efforts include deploying specific memory leak monitoring, enhancing general memory monitoring, and implementing resource limits for processes on EBS servers. DNS configuration updates are planned for reliable propagation. For APIs, aggressive throttling policies were revised, and per-customer throttling monitoring is being added. RDS is receiving fixes for two failover-related software bugs. ELB improvements involve ensuring EIP capacity, reducing EBS interdependency, refining recov",
+      "source_url": "https://aws.amazon.com/message/680342/",
+      "quality": "high",
+      "company": "aws"
+    },
+    {
+      "incident_id": "netlifystatus-qvlyvz9rj25f",
+      "raw_log_excerpt": "Environment Variables Issues\nWe are investigating an issue where environment variables were not being read at runtime for some sites. We will provide an update shortly.",
+      "root_cause": "We've identified the issue and applied a fix. No new sites are affected by the issue and we are applying a fix for previously affected customers.",
+      "remediation_steps": "We\u2019ve deployed a fix for the environment variables issue affecting some sites, and this all sites have received this fix as of 4:45pm UTC 3-31.",
+      "source_url": "https://www.netlifystatus.com/incidents/qvlyvz9rj25f",
+      "quality": "high",
+      "company": "netlify"
+    },
+    {
+      "incident_id": "sentry-8mmq3ykdqwvz",
+      "raw_log_excerpt": "Error ingestion delays in US\nWe are currently investigating error ingestion latency in US.",
+      "root_cause": "We've mitigated the source of ingestion latency and are processing the backlog.",
+      "remediation_steps": "Backlogs have been processed",
+      "source_url": "https://status.sentry.io/incidents/8mmq3ykdqwvz",
+      "quality": "high",
+      "company": "sentry"
+    },
+    {
+      "incident_id": "atlassian-m0nz4gbbjmz2",
+      "raw_log_excerpt": "Slow loading times and extended response times for Cloud products in the EU-West region.\nWe are investigating issues with slow loading and long responsive time for all products (Jira, JSM, JSW and Confluence) and will provide updates here soon.",
+      "root_cause": "Systems have recovered, and the issue has been mitigated. All affected products are fully operational, with no further impact observed.",
+      "remediation_steps": "Systems have recovered, and the issue has been mitigated. All affected products are fully operational, with no further impact observed.",
+      "source_url": "https://status.atlassian.com/incidents/m0nz4gbbjmz2",
+      "quality": "high",
+      "company": "atlassian"
+    }
+  ]
+}
