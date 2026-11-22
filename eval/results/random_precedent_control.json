@@ -1,0 +1,1828 @@
+{
+  "metadata": {
+    "num_incidents": 93,
+    "num_companies": 40,
+    "bootstrap_resamples": 10000,
+    "seed": 42,
+    "family_size_m": 5,
+    "adjusted_alpha": 0.01,
+    "unadjusted_alpha": 0.05,
+    "gt_median_word_count": 51
+  },
+  "formats": {
+    "baseline": {
+      "arms": {
+        "zero_shot": {
+          "rouge1_f1": {
+            "mean": 0.1902,
+            "unadjusted_ci_95": [
+              0.1565,
+              0.2222
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1458,
+              0.228
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": 0.0422,
+            "unadjusted_ci_95": [
+              0.0306,
+              0.0543
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0273,
+              0.0579
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.1099,
+            "unadjusted_ci_95": [
+              0.0924,
+              0.1264
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0871,
+              0.1296
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.1627,
+            "unadjusted_ci_95": [
+              0.1425,
+              0.184
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1368,
+              0.1895
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.5057,
+            "unadjusted_ci_95": [
+              0.4758,
+              0.5316
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4656,
+              0.5352
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": 0.603,
+            "unadjusted_ci_95": [
+              0.5312,
+              0.6704
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.5062,
+              0.6839
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "word_count": {
+            "mean": 213.8,
+            "median": 215.0
+          }
+        },
+        "random_precedent": {
+          "rouge1_f1": {
+            "mean": 0.3034,
+            "unadjusted_ci_95": [
+              0.2515,
+              0.3569
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.2341,
+              0.3696
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": 0.0718,
+            "unadjusted_ci_95": [
+              0.0474,
+              0.0999
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0412,
+              0.1081
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.1899,
+            "unadjusted_ci_95": [
+              0.1559,
+              0.2287
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1459,
+              0.2392
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.1922,
+            "unadjusted_ci_95": [
+              0.1582,
+              0.231
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1483,
+              0.2419
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.5755,
+            "unadjusted_ci_95": [
+              0.5409,
+              0.6124
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.531,
+              0.622
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": 0.6092,
+            "unadjusted_ci_95": [
+              0.5344,
+              0.6833
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.512,
+              0.7034
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "word_count": {
+            "mean": 54.68,
+            "median": 55.0
+          }
+        },
+        "real_rag": {
+          "rouge1_f1": {
+            "mean": 0.2032,
+            "unadjusted_ci_95": [
+              0.1673,
+              0.2393
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1562,
+              0.2476
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": 0.0469,
+            "unadjusted_ci_95": [
+              0.0333,
+              0.0625
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0303,
+              0.0675
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.1242,
+            "unadjusted_ci_95": [
+              0.1025,
+              0.1468
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0965,
+              0.1526
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.1734,
+            "unadjusted_ci_95": [
+              0.1478,
+              0.2005
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1401,
+              0.2084
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.5136,
+            "unadjusted_ci_95": [
+              0.4843,
+              0.5413
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4746,
+              0.5462
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": 0.5997,
+            "unadjusted_ci_95": [
+              0.537,
+              0.6638
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.5165,
+              0.6796
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "word_count": {
+            "mean": 194.25,
+            "median": 185.0
+          }
+        }
+      },
+      "deltas": {
+        "real_minus_random": {
+          "rouge1_f1": {
+            "mean": -0.1002,
+            "unadjusted_ci_95": [
+              -0.1296,
+              -0.0736
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.1392,
+              -0.0654
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": -0.025,
+            "unadjusted_ci_95": [
+              -0.0421,
+              -0.01
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0473,
+              -0.006
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": -0.0657,
+            "unadjusted_ci_95": [
+              -0.0894,
+              -0.0455
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0973,
+              -0.0397
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": -0.0188,
+            "unadjusted_ci_95": [
+              -0.0417,
+              0.0012
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.049,
+              0.0071
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "bert_score_f1": {
+            "mean": -0.0619,
+            "unadjusted_ci_95": [
+              -0.079,
+              -0.0454
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0844,
+              -0.0401
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": -0.0096,
+            "unadjusted_ci_95": [
+              -0.041,
+              0.0205
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0513,
+              0.0302
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          }
+        },
+        "random_minus_zeroshot": {
+          "rouge1_f1": {
+            "mean": 0.1133,
+            "unadjusted_ci_95": [
+              0.0857,
+              0.1447
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0786,
+              0.1545
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": 0.0296,
+            "unadjusted_ci_95": [
+              0.0137,
+              0.0486
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0094,
+              0.0546
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.0799,
+            "unadjusted_ci_95": [
+              0.0583,
+              0.1064
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0528,
+              0.1153
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.0295,
+            "unadjusted_ci_95": [
+              0.0057,
+              0.0586
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0003,
+              0.0674
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "unadjusted only"
+          },
+          "bert_score_f1": {
+            "mean": 0.0698,
+            "unadjusted_ci_95": [
+              0.0522,
+              0.0879
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0469,
+              0.0935
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": 0.0063,
+            "unadjusted_ci_95": [
+              -0.0242,
+              0.0323
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0353,
+              0.0411
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          }
+        },
+        "real_minus_zeroshot": {
+          "rouge1_f1": {
+            "mean": 0.013,
+            "unadjusted_ci_95": [
+              0.0012,
+              0.0246
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0025,
+              0.0282
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "unadjusted only"
+          },
+          "rouge2_f1": {
+            "mean": 0.0046,
+            "unadjusted_ci_95": [
+              -0.0017,
+              0.0108
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0038,
+              0.013
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.0143,
+            "unadjusted_ci_95": [
+              0.0064,
+              0.0229
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0039,
+              0.0258
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.0106,
+            "unadjusted_ci_95": [
+              -0.0026,
+              0.0254
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.007,
+              0.0304
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.0078,
+            "unadjusted_ci_95": [
+              0.0007,
+              0.0141
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0017,
+              0.0159
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "unadjusted only"
+          },
+          "cosine": {
+            "mean": -0.0033,
+            "unadjusted_ci_95": [
+              -0.0261,
+              0.017
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0332,
+              0.0231
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          }
+        }
+      },
+      "remediation_both_parsed": {
+        "real_minus_random": {
+          "n_both_parsed": 73,
+          "arm_a_rougeL": {
+            "mean": 0.0877,
+            "unadjusted_ci_95": [
+              0.0763,
+              0.1004
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0731,
+              0.1045
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_rougeL": {
+            "mean": 0.0977,
+            "unadjusted_ci_95": [
+              0.0861,
+              0.1094
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0822,
+              0.1127
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_a_bert_score": {
+            "mean": 0.4453,
+            "unadjusted_ci_95": [
+              0.4264,
+              0.4652
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4205,
+              0.4704
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_bert_score": {
+            "mean": 0.4845,
+            "unadjusted_ci_95": [
+              0.4645,
+              0.5035
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.458,
+              0.5078
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "delta_rougeL": {
+            "mean": -0.01,
+            "unadjusted_ci_95": [
+              -0.0216,
+              0.0008
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0254,
+              0.0049
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "delta_bert_score": {
+            "mean": -0.0392,
+            "unadjusted_ci_95": [
+              -0.0547,
+              -0.0272
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0603,
+              -0.0239
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          }
+        },
+        "random_minus_zeroshot": {
+          "n_both_parsed": 60,
+          "arm_a_rougeL": {
+            "mean": 0.097,
+            "unadjusted_ci_95": [
+              0.0821,
+              0.1104
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0776,
+              0.1133
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_rougeL": {
+            "mean": 0.0708,
+            "unadjusted_ci_95": [
+              0.0539,
+              0.089
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0491,
+              0.0941
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_a_bert_score": {
+            "mean": 0.4827,
+            "unadjusted_ci_95": [
+              0.4592,
+              0.5033
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4512,
+              0.5072
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_bert_score": {
+            "mean": 0.4229,
+            "unadjusted_ci_95": [
+              0.3993,
+              0.4481
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.392,
+              0.456
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "delta_rougeL": {
+            "mean": 0.0261,
+            "unadjusted_ci_95": [
+              0.0123,
+              0.0418
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0081,
+              0.0477
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "delta_bert_score": {
+            "mean": 0.0597,
+            "unadjusted_ci_95": [
+              0.0404,
+              0.0837
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0355,
+              0.0934
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          }
+        },
+        "real_minus_zeroshot": {
+          "n_both_parsed": 52,
+          "arm_a_rougeL": {
+            "mean": 0.085,
+            "unadjusted_ci_95": [
+              0.0748,
+              0.0961
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0717,
+              0.1
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_rougeL": {
+            "mean": 0.0733,
+            "unadjusted_ci_95": [
+              0.0581,
+              0.0892
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0541,
+              0.0942
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_a_bert_score": {
+            "mean": 0.4517,
+            "unadjusted_ci_95": [
+              0.4329,
+              0.4708
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4276,
+              0.4757
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_bert_score": {
+            "mean": 0.4313,
+            "unadjusted_ci_95": [
+              0.4104,
+              0.4532
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4036,
+              0.459
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "delta_rougeL": {
+            "mean": 0.0118,
+            "unadjusted_ci_95": [
+              -0.0016,
+              0.026
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0055,
+              0.031
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "delta_bert_score": {
+            "mean": 0.0204,
+            "unadjusted_ci_95": [
+              0.0083,
+              0.0329
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0042,
+              0.0377
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          }
+        }
+      },
+      "verdict": "precedent_content"
+    },
+    "gate_v2": {
+      "arms": {
+        "zero_shot": {
+          "rouge1_f1": {
+            "mean": 0.2906,
+            "unadjusted_ci_95": [
+              0.2373,
+              0.3526
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.2225,
+              0.3712
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": 0.0789,
+            "unadjusted_ci_95": [
+              0.0504,
+              0.1135
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0442,
+              0.1246
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.195,
+            "unadjusted_ci_95": [
+              0.1586,
+              0.2399
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1496,
+              0.2554
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.1951,
+            "unadjusted_ci_95": [
+              0.1587,
+              0.2401
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1498,
+              0.2555
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.5722,
+            "unadjusted_ci_95": [
+              0.5373,
+              0.6115
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.5271,
+              0.6227
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": 0.6047,
+            "unadjusted_ci_95": [
+              0.5371,
+              0.6777
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.5157,
+              0.6989
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "word_count": {
+            "mean": 32.88,
+            "median": 32.0
+          }
+        },
+        "random_precedent": {
+          "rouge1_f1": {
+            "mean": 0.2789,
+            "unadjusted_ci_95": [
+              0.2292,
+              0.3337
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.2151,
+              0.3478
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": 0.0766,
+            "unadjusted_ci_95": [
+              0.0519,
+              0.1046
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0449,
+              0.1125
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.1985,
+            "unadjusted_ci_95": [
+              0.1624,
+              0.2391
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.152,
+              0.2499
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.2056,
+            "unadjusted_ci_95": [
+              0.1668,
+              0.2495
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1558,
+              0.2622
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.5544,
+            "unadjusted_ci_95": [
+              0.5173,
+              0.5939
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.5079,
+              0.604
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": 0.6001,
+            "unadjusted_ci_95": [
+              0.5252,
+              0.6762
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.5049,
+              0.6951
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "word_count": {
+            "mean": 40.67,
+            "median": 36.0
+          }
+        },
+        "real_rag": {
+          "rouge1_f1": {
+            "mean": 0.2926,
+            "unadjusted_ci_95": [
+              0.2445,
+              0.3454
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.2308,
+              0.3587
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rouge2_f1": {
+            "mean": 0.0713,
+            "unadjusted_ci_95": [
+              0.0446,
+              0.1023
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0385,
+              0.1113
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.1969,
+            "unadjusted_ci_95": [
+              0.1624,
+              0.2383
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1527,
+              0.2512
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.1969,
+            "unadjusted_ci_95": [
+              0.1627,
+              0.2378
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1529,
+              0.2506
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.5672,
+            "unadjusted_ci_95": [
+              0.5347,
+              0.6026
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.5254,
+              0.6123
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "cosine": {
+            "mean": 0.607,
+            "unadjusted_ci_95": [
+              0.5378,
+              0.6761
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.517,
+              0.6935
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "word_count": {
+            "mean": 37.57,
+            "median": 37.0
+          }
+        }
+      },
+      "deltas": {
+        "real_minus_random": {
+          "rouge1_f1": {
+            "mean": 0.0137,
+            "unadjusted_ci_95": [
+              -0.0022,
+              0.0305
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0076,
+              0.036
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "rouge2_f1": {
+            "mean": -0.0053,
+            "unadjusted_ci_95": [
+              -0.0237,
+              0.0105
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0313,
+              0.0155
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "rougeL_f1": {
+            "mean": -0.0017,
+            "unadjusted_ci_95": [
+              -0.0181,
+              0.0133
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0247,
+              0.0172
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "length_matched_rougeL": {
+            "mean": -0.0087,
+            "unadjusted_ci_95": [
+              -0.0386,
+              0.0123
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0509,
+              0.0166
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "bert_score_f1": {
+            "mean": 0.0128,
+            "unadjusted_ci_95": [
+              -0.0008,
+              0.028
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0045,
+              0.0341
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "cosine": {
+            "mean": 0.0069,
+            "unadjusted_ci_95": [
+              -0.0191,
+              0.0339
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0287,
+              0.0453
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          }
+        },
+        "random_minus_zeroshot": {
+          "rouge1_f1": {
+            "mean": -0.0118,
+            "unadjusted_ci_95": [
+              -0.0337,
+              0.0101
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0409,
+              0.0176
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "rouge2_f1": {
+            "mean": -0.0024,
+            "unadjusted_ci_95": [
+              -0.0225,
+              0.0185
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0293,
+              0.0264
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.0036,
+            "unadjusted_ci_95": [
+              -0.0161,
+              0.0251
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0222,
+              0.0331
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.0104,
+            "unadjusted_ci_95": [
+              -0.0159,
+              0.0446
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0226,
+              0.0604
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "bert_score_f1": {
+            "mean": -0.0178,
+            "unadjusted_ci_95": [
+              -0.0346,
+              -0.0014
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0416,
+              0.0047
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "unadjusted only"
+          },
+          "cosine": {
+            "mean": -0.0047,
+            "unadjusted_ci_95": [
+              -0.0389,
+              0.031
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0521,
+              0.0424
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          }
+        },
+        "real_minus_zeroshot": {
+          "rouge1_f1": {
+            "mean": 0.0019,
+            "unadjusted_ci_95": [
+              -0.0184,
+              0.0213
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.026,
+              0.0266
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "rouge2_f1": {
+            "mean": -0.0077,
+            "unadjusted_ci_95": [
+              -0.0207,
+              0.0046
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0254,
+              0.0084
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "rougeL_f1": {
+            "mean": 0.0019,
+            "unadjusted_ci_95": [
+              -0.013,
+              0.0161
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0183,
+              0.0204
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "length_matched_rougeL": {
+            "mean": 0.0018,
+            "unadjusted_ci_95": [
+              -0.0133,
+              0.0161
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0186,
+              0.0205
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "bert_score_f1": {
+            "mean": -0.005,
+            "unadjusted_ci_95": [
+              -0.0147,
+              0.005
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0176,
+              0.0087
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "cosine": {
+            "mean": 0.0023,
+            "unadjusted_ci_95": [
+              -0.0196,
+              0.0309
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0256,
+              0.0416
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          }
+        }
+      },
+      "remediation_both_parsed": {
+        "real_minus_random": {
+          "n_both_parsed": 78,
+          "arm_a_rougeL": {
+            "mean": 0.123,
+            "unadjusted_ci_95": [
+              0.1108,
+              0.1354
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1067,
+              0.1388
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_rougeL": {
+            "mean": 0.1132,
+            "unadjusted_ci_95": [
+              0.0997,
+              0.1274
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0958,
+              0.1318
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_a_bert_score": {
+            "mean": 0.508,
+            "unadjusted_ci_95": [
+              0.4903,
+              0.5238
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4837,
+              0.5272
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_bert_score": {
+            "mean": 0.4928,
+            "unadjusted_ci_95": [
+              0.4741,
+              0.5106
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4683,
+              0.5148
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "delta_rougeL": {
+            "mean": 0.0099,
+            "unadjusted_ci_95": [
+              -0.0003,
+              0.0201
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0037,
+              0.0236
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "delta_bert_score": {
+            "mean": 0.0152,
+            "unadjusted_ci_95": [
+              0.0083,
+              0.0232
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0064,
+              0.0263
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          }
+        },
+        "random_minus_zeroshot": {
+          "n_both_parsed": 77,
+          "arm_a_rougeL": {
+            "mean": 0.114,
+            "unadjusted_ci_95": [
+              0.1007,
+              0.1279
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0964,
+              0.1316
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_rougeL": {
+            "mean": 0.1171,
+            "unadjusted_ci_95": [
+              0.1033,
+              0.1298
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0986,
+              0.1331
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_a_bert_score": {
+            "mean": 0.4938,
+            "unadjusted_ci_95": [
+              0.4753,
+              0.5109
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4687,
+              0.5154
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_bert_score": {
+            "mean": 0.5027,
+            "unadjusted_ci_95": [
+              0.4839,
+              0.519
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4773,
+              0.5228
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "delta_rougeL": {
+            "mean": -0.0031,
+            "unadjusted_ci_95": [
+              -0.0131,
+              0.0068
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0165,
+              0.0099
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "delta_bert_score": {
+            "mean": -0.0089,
+            "unadjusted_ci_95": [
+              -0.0178,
+              -0.0009
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0213,
+              0.0014
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "unadjusted only"
+          }
+        },
+        "real_minus_zeroshot": {
+          "n_both_parsed": 92,
+          "arm_a_rougeL": {
+            "mean": 0.1185,
+            "unadjusted_ci_95": [
+              0.1046,
+              0.1324
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.1,
+              0.1358
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_rougeL": {
+            "mean": 0.1128,
+            "unadjusted_ci_95": [
+              0.0978,
+              0.127
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.092,
+              0.1299
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_a_bert_score": {
+            "mean": 0.5027,
+            "unadjusted_ci_95": [
+              0.4848,
+              0.5194
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4786,
+              0.5228
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "arm_b_bert_score": {
+            "mean": 0.497,
+            "unadjusted_ci_95": [
+              0.4786,
+              0.514
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.4722,
+              0.5172
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          },
+          "delta_rougeL": {
+            "mean": 0.0056,
+            "unadjusted_ci_95": [
+              -0.0013,
+              0.0123
+            ],
+            "excludes_zero_unadjusted": false,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              -0.0037,
+              0.0146
+            ],
+            "excludes_zero_after_adjustment": false,
+            "status": "crosses zero"
+          },
+          "delta_bert_score": {
+            "mean": 0.0057,
+            "unadjusted_ci_95": [
+              0.0013,
+              0.0103
+            ],
+            "excludes_zero_unadjusted": true,
+            "adjusted_alpha": 0.01,
+            "adjusted_ci_level": 0.99,
+            "adjusted_ci": [
+              0.0001,
+              0.0119
+            ],
+            "excludes_zero_after_adjustment": true,
+            "status": "excludes zero"
+          }
+        }
+      },
+      "verdict": "inconclusive"
+    }
+  },
+  "verdict": "inconclusive",
+  "summary": "Experiment 1 (Random-Precedent Control, N=93): Evaluated whether retrieval gains reflect domain-specific precedent content or general exemplar/style priming. Under gate-v2 format, zero-shot ROUGE-L F1 is 0.1950, random-precedent ROUGE-L F1 is 0.1985, and real top-1 RAG ROUGE-L F1 is 0.1969. Delta random_minus_zeroshot is +0.0036 (99% Bonferroni CI [-0.0222, 0.0331], status: crosses zero). Delta real_minus_random is -0.0017 (99% Bonferroni CI [-0.0247, 0.0172], status: crosses zero). Per PREREG.md criteria, the automated verdict is 'inconclusive'."
+}
