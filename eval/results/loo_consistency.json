@@ -1,0 +1,256 @@
+{
+  "metadata": {
+    "num_queries": 93,
+    "retrieval_file": "N:\\gitt\\TraceMind\\eval\\loo\\retrieval.json",
+    "sample_file": "N:\\gitt\\TraceMind\\eval\\loo\\sample.json"
+  },
+  "reconciliation": {
+    "condition_a_total_near_duplicates_filtered": 11,
+    "condition_b_total_near_duplicates_filtered": 0,
+    "queries_with_divergent_top3_between_a_and_c": 8,
+    "queries_with_divergent_top1_between_a_and_c": 7,
+    "unexplained_differences_count": 0,
+    "status": "CONSISTENT (all 8 divergent queries 100% accounted for by near-duplicate rule in Condition a)",
+    "explanation": "In earlier summaries, '0 near-duplicates removed' was erroneously cited by conflating Condition (b) (which had exactly 0 removals because cross-company pairs rarely share verbatim logs) with the whole regime. In Condition (a), exactly 11 near-duplicates were filtered across 8 queries (7 changing top-1)."
+  },
+  "divergent_queries": [
+    {
+      "query_incident_id": "githubstatus-vm1w8zq95wkt",
+      "query_company": "github",
+      "top1_changed": true,
+      "top3_a": [
+        "githubstatus-gxycch3076xk",
+        "netlifystatus-75cssy1tzg06",
+        "githubstatus-76t89hbfb09h"
+      ],
+      "top3_c": [
+        "githubstatus-fmmsrcg5x638",
+        "githubstatus-gxycch3076xk",
+        "netlifystatus-75cssy1tzg06"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "githubstatus-fmmsrcg5x638",
+          "company": "github",
+          "similarity": 0.8386,
+          "reason": "log_jaccard_ge_0.80",
+          "metric_value": 1.0
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 1 candidate(s): githubstatus-fmmsrcg5x638 (log_jaccard_ge_0.80, metric=1.0)"
+    },
+    {
+      "query_incident_id": "githubstatus-ydpk76bj34z8",
+      "query_company": "github",
+      "top1_changed": true,
+      "top3_a": [
+        "squarespace-pljhhyxcnt0z",
+        "githubstatus-9ndxtnrwjf37",
+        "githubstatus-zq3c1jst2vkq"
+      ],
+      "top3_c": [
+        "githubstatus-k8vbzwqjkxzn",
+        "squarespace-pljhhyxcnt0z",
+        "githubstatus-9ndxtnrwjf37"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "githubstatus-k8vbzwqjkxzn",
+          "company": "github",
+          "similarity": 0.9387,
+          "reason": "log_jaccard_ge_0.80",
+          "metric_value": 1.0
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 1 candidate(s): githubstatus-k8vbzwqjkxzn (log_jaccard_ge_0.80, metric=1.0)"
+    },
+    {
+      "query_incident_id": "circleci-q17ysw9wn2pr",
+      "query_company": "circleci",
+      "top1_changed": true,
+      "top3_a": [
+        "githubstatus-v0b3bpsyvqtk",
+        "githubstatus-d35pngcy6sb9",
+        "githubstatus-5bnwwg9tzd4q"
+      ],
+      "top3_c": [
+        "circleci-ljvrkzc9pdfr",
+        "githubstatus-v0b3bpsyvqtk",
+        "githubstatus-d35pngcy6sb9"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "circleci-ljvrkzc9pdfr",
+          "company": "circleci",
+          "similarity": 0.9814,
+          "reason": "cosine_sim_ge_0.95",
+          "metric_value": 0.9814
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 1 candidate(s): circleci-ljvrkzc9pdfr (cosine_sim_ge_0.95, metric=0.9814)"
+    },
+    {
+      "query_incident_id": "openai-01KYNNX2TQ3PV0KPJ9PTRRPX6C",
+      "query_company": "openai",
+      "top1_changed": true,
+      "top3_a": [
+        "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+        "openai-01KYCGY017EG43XZS6GFVXA8VH",
+        "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8"
+      ],
+      "top3_c": [
+        "openai-01KYC921K145JTR1JK7DYKGWH1",
+        "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+        "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "company": "openai",
+          "similarity": 0.7863,
+          "reason": "root_cause_jaccard_ge_0.80",
+          "metric_value": 1.0
+        },
+        {
+          "incident_id": "openai-01KZNZTPWMV06Z6TQNMY1R1QDR",
+          "company": "openai",
+          "similarity": 0.7298,
+          "reason": "root_cause_jaccard_ge_0.80",
+          "metric_value": 1.0
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 2 candidate(s): openai-01KYC921K145JTR1JK7DYKGWH1 (root_cause_jaccard_ge_0.80, metric=1.0), openai-01KZNZTPWMV06Z6TQNMY1R1QDR (root_cause_jaccard_ge_0.80, metric=1.0)"
+    },
+    {
+      "query_incident_id": "openai-01KY7SX5MYJ2BP51X5MXAPYX71",
+      "query_company": "openai",
+      "top1_changed": true,
+      "top3_a": [
+        "openai-01KYCGY017EG43XZS6GFVXA8VH",
+        "openai-01KZNZTPWMV06Z6TQNMY1R1QDR",
+        "openai-01KZRE6ZA1RE1ZH4HQ111CX1S8"
+      ],
+      "top3_c": [
+        "openai-01KYC921K145JTR1JK7DYKGWH1",
+        "openai-01KYCGY017EG43XZS6GFVXA8VH",
+        "openai-01KZNZTPWMV06Z6TQNMY1R1QDR"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "openai-01KYC921K145JTR1JK7DYKGWH1",
+          "company": "openai",
+          "similarity": 0.9092,
+          "reason": "log_jaccard_ge_0.80",
+          "metric_value": 1.0
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 1 candidate(s): openai-01KYC921K145JTR1JK7DYKGWH1 (log_jaccard_ge_0.80, metric=1.0)"
+    },
+    {
+      "query_incident_id": "githubstatus-ph5nns5y4gxj",
+      "query_company": "github",
+      "top1_changed": true,
+      "top3_a": [
+        "githubstatus-5bnwwg9tzd4q",
+        "githubstatus-lsvy8xsf0gxv",
+        "circleci-q17ysw9wn2pr"
+      ],
+      "top3_c": [
+        "githubstatus-v0b3bpsyvqtk",
+        "githubstatus-d35pngcy6sb9",
+        "githubstatus-5bnwwg9tzd4q"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "githubstatus-v0b3bpsyvqtk",
+          "company": "github",
+          "similarity": 0.9189,
+          "reason": "log_jaccard_ge_0.80",
+          "metric_value": 1.0
+        },
+        {
+          "incident_id": "githubstatus-d35pngcy6sb9",
+          "company": "github",
+          "similarity": 0.7806,
+          "reason": "log_jaccard_ge_0.80",
+          "metric_value": 1.0
+        },
+        {
+          "incident_id": "githubstatus-dfpfsngcwywf",
+          "company": "github",
+          "similarity": 0.7414,
+          "reason": "log_jaccard_ge_0.80",
+          "metric_value": 1.0
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 3 candidate(s): githubstatus-v0b3bpsyvqtk (log_jaccard_ge_0.80, metric=1.0), githubstatus-d35pngcy6sb9 (log_jaccard_ge_0.80, metric=1.0), githubstatus-dfpfsngcwywf (log_jaccard_ge_0.80, metric=1.0)"
+    },
+    {
+      "query_incident_id": "twilio-xksxfs85vhxm",
+      "query_company": "twilio",
+      "top1_changed": true,
+      "top3_a": [
+        "twilio-1sbtd0qtkpfk",
+        "twilio-b098v1vd33sy",
+        "twilio-5128mj7z1nq8"
+      ],
+      "top3_c": [
+        "twilio-46yjhmkypqrf",
+        "twilio-1sbtd0qtkpfk",
+        "twilio-b098v1vd33sy"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "twilio-46yjhmkypqrf",
+          "company": "twilio",
+          "similarity": 0.9905,
+          "reason": "cosine_sim_ge_0.95",
+          "metric_value": 0.9905
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 1 candidate(s): twilio-46yjhmkypqrf (cosine_sim_ge_0.95, metric=0.9905)"
+    },
+    {
+      "query_incident_id": "openai-01KYJFG4S86K8FMTB4N6BDZS7F",
+      "query_company": "openai",
+      "top1_changed": false,
+      "top3_a": [
+        "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+        "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+        "openai-01KY81XMFAV8KXNJGVNEMKAK15"
+      ],
+      "top3_c": [
+        "openai-01KYMJND2XYYBDVCF8DKA5DY3N",
+        "openai-01KZ96S5HEWX0CX26W2WFYFKE6",
+        "openai-01KZ9E7QD8WFJD5DMF73QGVYH8"
+      ],
+      "near_duplicates_filtered_in_a": [
+        {
+          "incident_id": "openai-01KZ9E7QD8WFJD5DMF73QGVYH8",
+          "company": "openai",
+          "similarity": 0.7281,
+          "reason": "root_cause_jaccard_ge_0.80",
+          "metric_value": 1.0
+        }
+      ],
+      "explanation": "Near-duplicate filter removed 1 candidate(s): openai-01KZ9E7QD8WFJD5DMF73QGVYH8 (root_cause_jaccard_ge_0.80, metric=1.0)"
+    }
+  ],
+  "distributions_condition_c_top1": {
+    "cosine_similarity": {
+      "min": 0.4056,
+      "median": 0.6869,
+      "p90": 0.8847,
+      "max": 0.9905,
+      "count_ge_0_90": 6,
+      "count_ge_0_95": 2
+    },
+    "token_5gram_jaccard": {
+      "min": 0.0,
+      "median": 0.0,
+      "p90": 0.607,
+      "max": 1.0,
+      "count_ge_0_80": 7
+    }
+  }
+}
