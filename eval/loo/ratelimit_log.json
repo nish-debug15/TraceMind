@@ -1,0 +1,50 @@
+[
+  {
+    "timestamp": "2026-11-23T11:42:50.326107+00:00",
+    "model": "openai/gpt-oss-120b",
+    "limit_type": "TPM",
+    "limit": 8000,
+    "used": 7204,
+    "requested": 1039,
+    "suggested_wait_sec": 3.82,
+    "suggested_wait_str": "1.8225s",
+    "action": "wait_and_retry",
+    "raw_message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kpv2cjq7febsz2hrbt4c4wd8` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7204, Requested 1039. Please try again in 1.8225s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+  },
+  {
+    "timestamp": "2026-11-23T11:43:28.432410+00:00",
+    "model": "openai/gpt-oss-120b",
+    "limit_type": "TPM",
+    "limit": 8000,
+    "used": 6962,
+    "requested": 1044,
+    "suggested_wait_sec": 2702.0,
+    "suggested_wait_str": "45m",
+    "action": "exit_cleanly_tpd_or_long_wait",
+    "raw_message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kpv2cjq7febsz2hrbt4c4wd8` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6962, Requested 1044. Please try again in 45ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+  },
+  {
+    "timestamp": "2026-11-23T11:49:03.784942+00:00",
+    "model": "openai/gpt-oss-120b",
+    "limit_type": "TPD",
+    "limit": 200000,
+    "used": 199324,
+    "requested": 842,
+    "suggested_wait_sec": 73.71,
+    "suggested_wait_str": "1m11.712s",
+    "action": "exit_cleanly_tpd_or_long_wait",
+    "raw_message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kpv2cjq7febsz2hrbt4c4wd8` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199324, Requested 842. Please try again in 1m11.712s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+  },
+  {
+    "timestamp": "2026-11-23T11:54:22.742632+00:00",
+    "model": "openai/gpt-oss-120b",
+    "limit_type": "TPD",
+    "limit": 200000,
+    "used": 199219,
+    "requested": 966,
+    "suggested_wait_sec": 81.92,
+    "suggested_wait_str": "1m19.92s",
+    "action": "exit_cleanly_tpd_or_long_wait",
+    "raw_message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kpv2cjq7febsz2hrbt4c4wd8` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199219, Requested 966. Please try again in 1m19.92s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
+  }
+]

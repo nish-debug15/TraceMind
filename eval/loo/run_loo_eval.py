@@ -4,27 +4,18 @@ eval/loo/run_loo_eval.py
 Executes Experiment 2 (E2: Leave-One-Out Same-Company Regime):
 1. Loads 93 sampled incidents from eval/loo/sample.json.
 2. Loads retrieval results from eval/loo/retrieval.json (conditions a, b, c).
-3. Generates completions for 6 cells across all 93 queries:
-   - zero-shot baseline
-   - zero-shot gate_v2
-   - condition (a) RAG baseline (top-1)
-   - condition (a) RAG gate_v2 (top-1)
-   - condition (b) RAG baseline (top-1)
-   - condition (b) RAG gate_v2 (top-1)
-   SQLite cache: eval/cache/e2_cache.sqlite
-4. Judges technical relevance of top-1 precedents for condition (a), (b), and (c) against queries:
+3. Judges technical relevance of top-1 precedents for condition (a), (b), and (c) against queries:
    Model: qwen/qwen3.8-27b, Rubric: eval/rubrics/relevance_v1.md, vendor masked.
    SQLite cache: eval/cache/judge_cache.sqlite
-5. Scores full metric suite:
-   - ROUGE-1/2/L F1, BERTScore F1, Cosine, Word counts, Length-matched ROUGE-L (median GT length)
-   - Remediation on both-parsed subsets
-   - Paired deltas with company-clustered 95% CIs and Bonferroni 99% CIs (family m=5, alpha=0.01):
-     * RAG(a) - zero-shot
-     * RAG(b) - zero-shot
-     * RAG(a) - RAG(b) (same-company premium)
-6. Relevance@1 distributions for conditions (a), (b), (c).
-7. Stratifies RAG(a) - zero-shot delta by judged score (where n_companies >= 5, else low_n: True).
-8. Automated verdict per eval/PREREG.md.
+4. Generates completions in CELL-MAJOR order across all 93 queries:
+   gate_v2_zeroshot -> gate_v2_rag_a -> gate_v2_rag_b -> baseline_zeroshot -> baseline_rag_a -> baseline_rag_b
+   SQLite cache: eval/cache/e2_cache.sqlite
+   Prints per-cell completion counts after each cell.
+   429 Rate-limit mitigation:
+   - Parses response body and appends details to eval/loo/ratelimit_log.json.
+   - If TPD (or wait > 10 min), prints resume ETA and exits cleanly (code 0).
+5. Supports --cells flag to run or score on completed cells only.
+6. Scores full metric suite, paired deltas, relevance distributions, company concentration, and verdict.
 
 Outputs: eval/results/loo_regime_results.json
 """
@@ -36,6 +27,8 @@ import json
 import time
 import hashlib
 import sqlite3
+import argparse
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Any, List, Tuple
 import requests
@@ -60,6 +53,7 @@ RETRIEVAL_FILE = PROJECT_ROOT / "eval" / "loo" / "retrieval.json"
 RUBRIC_FILE = PROJECT_ROOT / "eval" / "rubrics" / "relevance_v1.md"
 E2_CACHE_PATH = PROJECT_ROOT / "eval" / "cache" / "e2_cache.sqlite"
 JUDGE_CACHE_PATH = PROJECT_ROOT / "eval" / "cache" / "judge_cache.sqlite"
+RATELIMIT_LOG_FILE = PROJECT_ROOT / "eval" / "loo" / "ratelimit_log.json"
 OUTPUT_FILE = PROJECT_ROOT / "eval" / "results" / "loo_regime_results.json"
 
 GEN_MODEL_ID = os.environ.get("LLM_MODEL", "openai/gpt-oss-120b")
@@ -97,6 +91,106 @@ def parse_rca(raw_text: str) -> Tuple[str, str, str]:
     else:
         status = "failed"
     return rc, rem, status
+
+
+def parse_ratelimit_details(err_text: str, resp_headers: Dict[str, str]) -> Dict[str, Any]:
+    limit_type = "UNKNOWN"
+    if re.search(r"\bTPD\b|tokens per day", err_text, re.IGNORECASE):
+        limit_type = "TPD"
+    elif re.search(r"\bTPM\b|tokens per minute", err_text, re.IGNORECASE):
+        limit_type = "TPM"
+    elif re.search(r"\bRPD\b|requests per day", err_text, re.IGNORECASE):
+        limit_type = "RPD"
+    elif re.search(r"\bRPM\b|requests per minute", err_text, re.IGNORECASE):
+        limit_type = "RPM"
+
+    limit_val = None
+    used_val = None
+    req_val = None
+
+    m_limit = re.search(r"Limit\s+(\d+)", err_text, re.IGNORECASE)
+    if m_limit:
+        limit_val = int(m_limit.group(1))
+
+    m_used = re.search(r"Used\s+(\d+)", err_text, re.IGNORECASE)
+    if m_used:
+        used_val = int(m_used.group(1))
+
+    m_req = re.search(r"Requested\s+(\d+)", err_text, re.IGNORECASE)
+    if m_req:
+        req_val = int(m_req.group(1))
+
+    wait_sec = None
+    wait_str = ""
+    m_wait = re.search(r"Please try again in\s+([0-9a-zA-Z\.]+)", err_text, re.IGNORECASE)
+    if m_wait:
+        wait_str = m_wait.group(1).strip().rstrip(".")
+        m_ms = re.search(r"(\d+(?:\.\d+)?)ms", wait_str, re.IGNORECASE)
+        ms_val = float(m_ms.group(1)) / 1000.0 if m_ms else 0.0
+
+        m_h = re.search(r"(\d+(?:\.\d+)?)h", wait_str, re.IGNORECASE)
+        h_val = float(m_h.group(1)) if m_h else 0.0
+
+        m_m = re.search(r"(\d+(?:\.\d+)?)m(?!s)", wait_str, re.IGNORECASE)
+        m_val = float(m_m.group(1)) if m_m else 0.0
+
+        m_s = re.search(r"(\d+(?:\.\d+)?)s", wait_str, re.IGNORECASE) if not m_ms else None
+        s_val = float(m_s.group(1)) if m_s else 0.0
+
+        wait_sec = h_val * 3600.0 + m_val * 60.0 + s_val + ms_val + 2.0
+    
+    if wait_sec is None:
+        retry_after = resp_headers.get("Retry-After")
+        if retry_after:
+            try:
+                wait_sec = float(retry_after)
+                wait_str = f"{wait_sec}s"
+            except (ValueError, TypeError):
+                pass
+
+    if wait_sec is None:
+        wait_sec = 10.0
+        wait_str = "10s (default)"
+
+    return {
+        "limit_type": limit_type,
+        "limit": limit_val,
+        "used": used_val,
+        "requested": req_val,
+        "suggested_wait_sec": round(wait_sec, 2),
+        "suggested_wait_str": wait_str,
+        "raw_message": err_text,
+    }
+
+
+def log_ratelimit_event(details: Dict[str, Any], model_id: str, action: str):
+    RATELIMIT_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    log_data = []
+    if RATELIMIT_LOG_FILE.exists():
+        try:
+            with open(RATELIMIT_LOG_FILE, "r", encoding="utf-8") as f:
+                log_data = json.load(f)
+            if not isinstance(log_data, list):
+                log_data = [log_data]
+        except Exception:
+            log_data = []
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    entry = {
+        "timestamp": now_iso,
+        "model": model_id,
+        "limit_type": details["limit_type"],
+        "limit": details["limit"],
+        "used": details["used"],
+        "requested": details["requested"],
+        "suggested_wait_sec": details["suggested_wait_sec"],
+        "suggested_wait_str": details["suggested_wait_str"],
+        "action": action,
+        "raw_message": details["raw_message"],
+    }
+    log_data.append(entry)
+    with open(RATELIMIT_LOG_FILE, "w", encoding="utf-8") as f:
+        json.dump(log_data, f, indent=2)
 
 
 def init_e2_cache_db() -> sqlite3.Connection:
@@ -205,21 +299,27 @@ def call_llm_gen(messages: List[Dict[str, str]], api_key: str, max_tokens: int =
                     err_text = resp.json().get("error", {}).get("message", "")
                 except Exception:
                     pass
-                wait_sec = None
-                m = re.search(r"Please try again in (?:(\d+)m)?([\d\.]+)s", err_text)
-                if m:
-                    mins = float(m.group(1)) if m.group(1) else 0.0
-                    secs = float(m.group(2))
-                    wait_sec = mins * 60.0 + secs + 2.0
-                if wait_sec is None:
-                    retry_after = resp.headers.get("Retry-After")
-                    try:
-                        wait_sec = float(retry_after) if retry_after else delay
-                    except Exception:
-                        wait_sec = delay
-                print(f"    [Rate limit 429] Waiting {wait_sec:.1f}s (attempt {attempt+1}/{max_retries})...", flush=True)
-                time.sleep(wait_sec)
-                delay = min(delay * 2.0, 30.0)
+                details = parse_ratelimit_details(err_text, resp.headers)
+                
+                # Exit cleanly if TPD or wait > 10 min (600s)
+                if details["limit_type"] == "TPD" or details["suggested_wait_sec"] > 600.0:
+                    action = "exit_cleanly_tpd_or_long_wait"
+                    log_ratelimit_event(details, GEN_MODEL_ID, action)
+                    resume_eta = datetime.now(timezone.utc) + timedelta(seconds=details["suggested_wait_sec"])
+                    print("\n" + "=" * 70, flush=True)
+                    print(f"[RATE LIMIT HIT: {details['limit_type']}]", flush=True)
+                    print(f"Limit: {details['limit']}, Used: {details['used']}, Requested: {details['requested']}", flush=True)
+                    print(f"Wait Required: {details['suggested_wait_str']} ({details['suggested_wait_sec']:.1f}s)", flush=True)
+                    print(f"Resume ETA: {resume_eta.strftime('%Y-%m-%d %H:%M:%S UTC')}", flush=True)
+                    print("Exiting cleanly (code 0). State is preserved in SQLite cache.", flush=True)
+                    print("=" * 70 + "\n", flush=True)
+                    sys.exit(0)
+                else:
+                    action = "wait_and_retry"
+                    log_ratelimit_event(details, GEN_MODEL_ID, action)
+                    print(f"    [Rate limit 429 ({details['limit_type']})] Waiting {details['suggested_wait_sec']:.1f}s ({details['suggested_wait_str']}) before retry...", flush=True)
+                    time.sleep(details["suggested_wait_sec"])
+                    delay = min(delay * 2.0, 30.0)
             elif resp.status_code >= 500:
                 print(f"    [Server Error {resp.status_code}] Waiting {delay:.1f}s...", flush=True)
                 time.sleep(delay)
@@ -269,21 +369,26 @@ def call_llm_judge(prompt: str, api_key: str, max_retries: int = 30) -> Tuple[in
                     err_text = resp.json().get("error", {}).get("message", "")
                 except Exception:
                     pass
-                wait_sec = None
-                m = re.search(r"Please try again in (?:(\d+)m)?([\d\.]+)s", err_text)
-                if m:
-                    mins = float(m.group(1)) if m.group(1) else 0.0
-                    secs = float(m.group(2))
-                    wait_sec = mins * 60.0 + secs + 2.0
-                if wait_sec is None:
-                    retry_after = resp.headers.get("Retry-After")
-                    try:
-                        wait_sec = float(retry_after) if retry_after else delay
-                    except Exception:
-                        wait_sec = delay
-                print(f"    [Judge 429] Waiting {wait_sec:.1f}s (attempt {attempt+1}/{max_retries})...", flush=True)
-                time.sleep(wait_sec)
-                delay = min(delay * 2.0, 30.0)
+                details = parse_ratelimit_details(err_text, resp.headers)
+                
+                if details["limit_type"] == "TPD" or details["suggested_wait_sec"] > 600.0:
+                    action = "exit_cleanly_tpd_or_long_wait"
+                    log_ratelimit_event(details, JUDGE_MODEL_ID, action)
+                    resume_eta = datetime.now(timezone.utc) + timedelta(seconds=details["suggested_wait_sec"])
+                    print("\n" + "=" * 70, flush=True)
+                    print(f"[JUDGE RATE LIMIT HIT: {details['limit_type']}]", flush=True)
+                    print(f"Limit: {details['limit']}, Used: {details['used']}, Requested: {details['requested']}", flush=True)
+                    print(f"Wait Required: {details['suggested_wait_str']} ({details['suggested_wait_sec']:.1f}s)", flush=True)
+                    print(f"Resume ETA: {resume_eta.strftime('%Y-%m-%d %H:%M:%S UTC')}", flush=True)
+                    print("Exiting cleanly (code 0). State is preserved in SQLite cache.", flush=True)
+                    print("=" * 70 + "\n", flush=True)
+                    sys.exit(0)
+                else:
+                    action = "wait_and_retry"
+                    log_ratelimit_event(details, JUDGE_MODEL_ID, action)
+                    print(f"    [Judge 429 ({details['limit_type']})] Waiting {details['suggested_wait_sec']:.1f}s ({details['suggested_wait_str']})...", flush=True)
+                    time.sleep(details["suggested_wait_sec"])
+                    delay = min(delay * 2.0, 30.0)
             elif resp.status_code >= 500:
                 print(f"    [Judge Server Error {resp.status_code}] Waiting {delay:.1f}s...", flush=True)
                 time.sleep(delay)
@@ -410,10 +515,33 @@ def evaluate_remediation_pairwise(
     }
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="TraceMind E2 LOO Generation, Judging & Scoring Runner")
+    parser.add_argument(
+        "--cells",
+        nargs="*",
+        default=None,
+        help="Optional cell names to evaluate (e.g. --cells gate_v2_zeroshot gate_v2_rag_a). "
+             "If flag is passed without arguments, runs scoring on currently completed cells only."
+    )
+    return parser.parse_args()
+
+
 def run_e2_evaluation():
-    print("=" * 60)
+    args = parse_args()
+    print("=" * 70)
     print("TraceMind E2: Leave-One-Out (LOO) Generation, Judging & Scoring")
-    print("=" * 60)
+    print("=" * 70)
+
+    score_completed_only = False
+    target_cells = None
+    if args.cells is not None:
+        if len(args.cells) == 0:
+            score_completed_only = True
+            print("[Option --cells]: Scoring mode restricted to completed cells only.")
+        else:
+            target_cells = [c.strip() for arg in args.cells for c in arg.split(",") if c.strip()]
+            print(f"[Option --cells]: Filtering execution to target cells: {target_cells}")
 
     api_key = os.environ.get("GROQ_API_KEY", "")
     if not api_key:
@@ -503,92 +631,126 @@ def run_e2_evaluation():
                 "rationale": rationale,
             })
 
-        if (q_idx + 1) % 10 == 0 or (q_idx + 1) == len(sample_records):
-            print(f"  Judged {q_idx + 1}/{len(sample_records)} queries (new: {new_judge_calls}, cached: {cached_judge_calls})...", flush=True)
+    print(f"Judging completed for all {len(sample_records)} queries ({cached_judge_calls} cached, {new_judge_calls} newly made).", flush=True)
 
-    # 2. Run Generations Across 6 Cells
-    print("\n--- Phase 2: Generating LOO Completions Across 6 Cells ---")
-    cells_generations: Dict[str, Dict[str, Dict[str, str]]] = {
-        "baseline_zeroshot": {},
-        "gate_v2_zeroshot": {},
-        "baseline_rag_a": {},
-        "gate_v2_rag_a": {},
-        "baseline_rag_b": {},
-        "gate_v2_rag_b": {},
-    }
-
-    cell_configs = [
-        ("baseline_zeroshot", "baseline", "none", None),
+    # 2. Run Generations Across 6 Cells in CELL-MAJOR ORDER
+    print("\n--- Phase 2: Generating LOO Completions in CELL-MAJOR Order ---")
+    
+    # Exact ordering specified by user:
+    # gate_v2_zeroshot -> gate_v2_rag_a -> gate_v2_rag_b -> baseline_zeroshot -> baseline_rag_a -> baseline_rag_b
+    all_cell_configs = [
         ("gate_v2_zeroshot", "zero_shot_gate_format", "none", None),
-        ("baseline_rag_a", "baseline", "a", "condition_a_same_company_filtered"),
         ("gate_v2_rag_a", "relevance_gate_v2", "a", "condition_a_same_company_filtered"),
-        ("baseline_rag_b", "baseline", "b", "condition_b_cross_company_filtered"),
         ("gate_v2_rag_b", "relevance_gate_v2", "b", "condition_b_cross_company_filtered"),
+        ("baseline_zeroshot", "baseline", "none", None),
+        ("baseline_rag_a", "baseline", "a", "condition_a_same_company_filtered"),
+        ("baseline_rag_b", "baseline", "b", "condition_b_cross_company_filtered"),
     ]
 
-    for q_idx, inc in enumerate(sample_records):
-        qid = inc["incident_id"]
-        q_log = inc.get("raw_log_excerpt", "")
-        ret_item = retrieval_by_query[qid]
+    cell_configs = all_cell_configs
+    if target_cells is not None and len(target_cells) > 0:
+        cell_configs = [c for c in all_cell_configs if c[0] in target_cells]
+        print(f"Restricted cell configurations: {[c[0] for c in cell_configs]}")
 
-        for cell_name, prompt_variant, cond_id, ret_key in cell_configs:
-            prompt_def = PROMPT_REGISTRY[prompt_variant]
-            sys_msg = prompt_def["system"]
+    cells_generations: Dict[str, Dict[str, Dict[str, str]]] = {
+        "gate_v2_zeroshot": {},
+        "gate_v2_rag_a": {},
+        "gate_v2_rag_b": {},
+        "baseline_zeroshot": {},
+        "baseline_rag_a": {},
+        "baseline_rag_b": {},
+    }
 
-            if ret_key is None:
-                # Zero-shot
-                pid = "none"
-                if cell_name == "baseline_zeroshot":
-                    user_msg = f"New Incident Log Excerpt:\n{q_log}\n\nProvide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
-                else:
-                    user_msg = prompt_def["user_template"].format(log_text=q_log)
-                max_tok = 800 if prompt_variant == "baseline" else 300
-            else:
-                top1_hit = ret_item[ret_key]["hits"][0]
-                pid = top1_hit["incident_id"]
-                p_rc = top1_hit.get("root_cause", "")
-                p_rem = top1_hit.get("remediation_steps", "")
-                sim = top1_hit["similarity_score"]
-
-                if "{similarity" in prompt_def["user_template"]:
-                    user_msg = prompt_def["user_template"].format(
-                        ref_root_cause=p_rc, ref_remediation_steps=p_rem, log_text=q_log, similarity=sim
-                    )
-                else:
-                    user_msg = prompt_def["user_template"].format(
-                        ref_root_cause=p_rc, ref_remediation_steps=p_rem, log_text=q_log
-                    )
-                max_tok = 800 if prompt_variant == "baseline" else 300
-
-            p_hash = hashlib.sha256(f"{sys_msg}\n{user_msg}".encode("utf-8")).hexdigest()
-            cache_key = hashlib.sha256(f"{GEN_MODEL_ID}:{p_hash}:{qid}:{pid}".encode("utf-8")).hexdigest()
-
-            cached = get_e2_cached(e2_cache_conn, cache_key)
-            if cached is not None:
-                raw_out = cached["raw_output"]
-                rc = cached["root_cause"]
-                rem = cached["remediation_steps"]
-                status = cached["parse_status"]
-                cached_gen_calls += 1
-            else:
-                messages = [
-                    {"role": "system", "content": sys_msg},
-                    {"role": "user", "content": user_msg}
-                ]
-                raw_out = call_llm_gen(messages, api_key, max_tokens=max_tok)
-                rc, rem, status = parse_rca(raw_out)
-                set_e2_cached(e2_cache_conn, cache_key, GEN_MODEL_ID, cell_name, p_hash, qid, pid, raw_out, rc, rem, status)
-                new_gen_calls += 1
-
-            cells_generations[cell_name][qid] = {
-                "root_cause": rc,
-                "remediation_steps": rem,
-                "raw_output": raw_out,
-                "parse_status": status,
+    # Pre-populate cells_generations with already-cached rows from e2_cache
+    for c_tuple in all_cell_configs:
+        cname = c_tuple[0]
+        cur = e2_cache_conn.cursor()
+        cur.execute(
+            "SELECT query_id, raw_output, root_cause, remediation_steps, parse_status FROM e2_cache WHERE cell_name = ?",
+            (cname,)
+        )
+        for row in cur.fetchall():
+            cells_generations[cname][row[0]] = {
+                "root_cause": row[2],
+                "remediation_steps": row[3],
+                "raw_output": row[1],
+                "parse_status": row[4],
             }
 
-        if (q_idx + 1) % 10 == 0 or (q_idx + 1) == len(sample_records):
-            print(f"  Generated {q_idx + 1}/{len(sample_records)} queries (new calls: {new_gen_calls}, cached: {cached_gen_calls})...", flush=True)
+    if score_completed_only:
+        print("[Notice]: Running in score_completed_only mode. Skipping live generation calls.")
+    else:
+        for cell_idx, (cell_name, prompt_variant, cond_id, ret_key) in enumerate(cell_configs):
+            print(f"\n[Processing Cell {cell_idx + 1}/{len(cell_configs)}: {cell_name}] (target: {len(sample_records)} queries)", flush=True)
+            cell_new = 0
+            cell_cached = 0
+
+            for q_idx, inc in enumerate(sample_records):
+                qid = inc["incident_id"]
+                q_log = inc.get("raw_log_excerpt", "")
+                ret_item = retrieval_by_query[qid]
+
+                prompt_def = PROMPT_REGISTRY[prompt_variant]
+                sys_msg = prompt_def["system"]
+
+                if ret_key is None:
+                    # Zero-shot
+                    pid = "none"
+                    if cell_name == "baseline_zeroshot":
+                        user_msg = f"New Incident Log Excerpt:\n{q_log}\n\nProvide your response in the following format:\nROOT CAUSE:\n(your analysis)\n\nREMEDIATION STEPS:\n(your steps)"
+                    else:
+                        user_msg = prompt_def["user_template"].format(log_text=q_log)
+                    max_tok = 800 if prompt_variant == "baseline" else 300
+                else:
+                    top1_hit = ret_item[ret_key]["hits"][0]
+                    pid = top1_hit["incident_id"]
+                    p_rc = top1_hit.get("root_cause", "")
+                    p_rem = top1_hit.get("remediation_steps", "")
+                    sim = top1_hit["similarity_score"]
+
+                    if "{similarity" in prompt_def["user_template"]:
+                        user_msg = prompt_def["user_template"].format(
+                            ref_root_cause=p_rc, ref_remediation_steps=p_rem, log_text=q_log, similarity=sim
+                        )
+                    else:
+                        user_msg = prompt_def["user_template"].format(
+                            ref_root_cause=p_rc, ref_remediation_steps=p_rem, log_text=q_log
+                        )
+                    max_tok = 800 if prompt_variant == "baseline" else 300
+
+                p_hash = hashlib.sha256(f"{sys_msg}\n{user_msg}".encode("utf-8")).hexdigest()
+                cache_key = hashlib.sha256(f"{GEN_MODEL_ID}:{p_hash}:{qid}:{pid}".encode("utf-8")).hexdigest()
+
+                cached = get_e2_cached(e2_cache_conn, cache_key)
+                if cached is not None:
+                    raw_out = cached["raw_output"]
+                    rc = cached["root_cause"]
+                    rem = cached["remediation_steps"]
+                    status = cached["parse_status"]
+                    cell_cached += 1
+                    cached_gen_calls += 1
+                else:
+                    messages = [
+                        {"role": "system", "content": sys_msg},
+                        {"role": "user", "content": user_msg}
+                    ]
+                    raw_out = call_llm_gen(messages, api_key, max_tokens=max_tok)
+                    rc, rem, status = parse_rca(raw_out)
+                    set_e2_cached(e2_cache_conn, cache_key, GEN_MODEL_ID, cell_name, p_hash, qid, pid, raw_out, rc, rem, status)
+                    cell_new += 1
+                    new_gen_calls += 1
+
+                cells_generations[cell_name][qid] = {
+                    "root_cause": rc,
+                    "remediation_steps": rem,
+                    "raw_output": raw_out,
+                    "parse_status": status,
+                }
+
+                if (q_idx + 1) % 15 == 0 or (q_idx + 1) == len(sample_records):
+                    print(f"  [{cell_name}] {q_idx + 1}/{len(sample_records)} queries ({cell_cached} cached, {cell_new} new)...", flush=True)
+
+            print(f"[Cell Complete] {cell_name}: {len(cells_generations[cell_name])}/{len(sample_records)} ({cell_cached} cached, {cell_new} newly generated)", flush=True)
 
     # 3. Compute Relevance Distributions
     print("\n--- Phase 3: Computing Relevance Distributions ---")
@@ -609,8 +771,22 @@ def run_e2_evaluation():
             "judged_relevant_pct": round(float((c1 + c2) / n_total * 100), 2),
         }
 
-    # 4. Score Full Metric Suite
-    print("\n--- Phase 4: Scoring Full Metric Suite & Deltas ---")
+    # 4. Check Cell Completion Status and Score Full Metric Suite
+    print("\n--- Phase 4: Checking Cell Completion & Scoring Full Metric Suite ---")
+    cell_completion_status: Dict[str, Dict[str, Any]] = {}
+    for c_tuple in all_cell_configs:
+        cname = c_tuple[0]
+        cnt = len(cells_generations.get(cname, {}))
+        is_done = (cnt == len(test_ids))
+        cell_completion_status[cname] = {
+            "completed": is_done,
+            "count": cnt,
+            "total": len(test_ids)
+        }
+        print(f"  Cell status: {cname} -> {cnt}/{len(test_ids)} ({'COMPLETE' if is_done else 'INCOMPLETE'})")
+
+    all_6_complete = all(s["completed"] for s in cell_completion_status.values())
+
     bootstrapper = FastClusterBootstrap(test_ids, id_to_company, n_resamples=10000, seed=42)
     clean_gts = [clean_rc(gt_rc_map[i]) for i in test_ids]
     gt_embeddings = embed(clean_gts)
@@ -623,97 +799,127 @@ def run_e2_evaluation():
         rag_a_name = f"{fmt}_rag_a"
         rag_b_name = f"{fmt}_rag_b"
 
-        zs_rc = {i: cells_generations[zs_name][i]["root_cause"] for i in test_ids}
-        zs_rem = {i: cells_generations[zs_name][i]["remediation_steps"] for i in test_ids}
+        zs_done = cell_completion_status[zs_name]["completed"]
+        rag_a_done = cell_completion_status[rag_a_name]["completed"]
+        rag_b_done = cell_completion_status[rag_b_name]["completed"]
 
-        rag_a_rc = {i: cells_generations[rag_a_name][i]["root_cause"] for i in test_ids}
-        rag_a_rem = {i: cells_generations[rag_a_name][i]["remediation_steps"] for i in test_ids}
+        arms_dict: Dict[str, Any] = {}
+        if zs_done:
+            zs_rc = {i: cells_generations[zs_name][i]["root_cause"] for i in test_ids}
+            arms_dict["zero_shot"] = compute_arm_metrics(test_ids, gt_rc_map, zs_rc, gt_embeddings, scorer, median_gt_limit, bootstrapper)
+        else:
+            arms_dict["zero_shot"] = {"status": "incomplete", "completed_count": cell_completion_status[zs_name]["count"], "required": len(test_ids)}
 
-        rag_b_rc = {i: cells_generations[rag_b_name][i]["root_cause"] for i in test_ids}
-        rag_b_rem = {i: cells_generations[rag_b_name][i]["remediation_steps"] for i in test_ids}
+        if rag_a_done:
+            rag_a_rc = {i: cells_generations[rag_a_name][i]["root_cause"] for i in test_ids}
+            arms_dict["rag_condition_a_same_company"] = compute_arm_metrics(test_ids, gt_rc_map, rag_a_rc, gt_embeddings, scorer, median_gt_limit, bootstrapper)
+        else:
+            arms_dict["rag_condition_a_same_company"] = {"status": "incomplete", "completed_count": cell_completion_status[rag_a_name]["count"], "required": len(test_ids)}
 
-        print(f"  Scoring arm: zero_shot ({fmt})...")
-        arm_zs = compute_arm_metrics(test_ids, gt_rc_map, zs_rc, gt_embeddings, scorer, median_gt_limit, bootstrapper)
+        if rag_b_done:
+            rag_b_rc = {i: cells_generations[rag_b_name][i]["root_cause"] for i in test_ids}
+            arms_dict["rag_condition_b_cross_company"] = compute_arm_metrics(test_ids, gt_rc_map, rag_b_rc, gt_embeddings, scorer, median_gt_limit, bootstrapper)
+        else:
+            arms_dict["rag_condition_b_cross_company"] = {"status": "incomplete", "completed_count": cell_completion_status[rag_b_name]["count"], "required": len(test_ids)}
 
-        print(f"  Scoring arm: rag_a ({fmt})...")
-        arm_rag_a = compute_arm_metrics(test_ids, gt_rc_map, rag_a_rc, gt_embeddings, scorer, median_gt_limit, bootstrapper)
+        deltas_dict: Dict[str, Any] = {}
+        if rag_a_done and zs_done:
+            deltas_dict["rag_a_minus_zeroshot"] = compute_paired_deltas(arms_dict["rag_condition_a_same_company"]["_raw"], arms_dict["zero_shot"]["_raw"], bootstrapper)
+        else:
+            deltas_dict["rag_a_minus_zeroshot"] = {"status": "incomplete", "reason": "requires both arms to be complete"}
 
-        print(f"  Scoring arm: rag_b ({fmt})...")
-        arm_rag_b = compute_arm_metrics(test_ids, gt_rc_map, rag_b_rc, gt_embeddings, scorer, median_gt_limit, bootstrapper)
+        if rag_b_done and zs_done:
+            deltas_dict["rag_b_minus_zeroshot"] = compute_paired_deltas(arms_dict["rag_condition_b_cross_company"]["_raw"], arms_dict["zero_shot"]["_raw"], bootstrapper)
+        else:
+            deltas_dict["rag_b_minus_zeroshot"] = {"status": "incomplete", "reason": "requires both arms to be complete"}
 
-        print(f"  Computing paired deltas ({fmt})...")
-        delta_rag_a_vs_zs = compute_paired_deltas(arm_rag_a["_raw"], arm_zs["_raw"], bootstrapper)
-        delta_rag_b_vs_zs = compute_paired_deltas(arm_rag_b["_raw"], arm_zs["_raw"], bootstrapper)
-        delta_rag_a_vs_rag_b = compute_paired_deltas(arm_rag_a["_raw"], arm_rag_b["_raw"], bootstrapper)
+        if rag_a_done and rag_b_done:
+            deltas_dict["rag_a_minus_rag_b_same_company_premium"] = compute_paired_deltas(arms_dict["rag_condition_a_same_company"]["_raw"], arms_dict["rag_condition_b_cross_company"]["_raw"], bootstrapper)
+        else:
+            deltas_dict["rag_a_minus_rag_b_same_company_premium"] = {"status": "incomplete", "reason": "requires both arms to be complete"}
 
-        print(f"  Scoring remediation on both-parsed subsets ({fmt})...")
-        rem_a_vs_zs = evaluate_remediation_pairwise(test_ids, id_to_company, gt_rem_map, rag_a_rem, zs_rem, scorer)
-        rem_b_vs_zs = evaluate_remediation_pairwise(test_ids, id_to_company, gt_rem_map, rag_b_rem, zs_rem, scorer)
-        rem_a_vs_b = evaluate_remediation_pairwise(test_ids, id_to_company, gt_rem_map, rag_a_rem, rag_b_rem, scorer)
+        # Remediation
+        rem_dict: Dict[str, Any] = {}
+        if rag_a_done and zs_done:
+            rag_a_rem = {i: cells_generations[rag_a_name][i]["remediation_steps"] for i in test_ids}
+            zs_rem = {i: cells_generations[zs_name][i]["remediation_steps"] for i in test_ids}
+            rem_dict["rag_a_minus_zeroshot"] = evaluate_remediation_pairwise(test_ids, id_to_company, gt_rem_map, rag_a_rem, zs_rem, scorer)
+        else:
+            rem_dict["rag_a_minus_zeroshot"] = {"status": "incomplete"}
 
-        # Clean _raw
-        del arm_zs["_raw"]
-        del arm_rag_a["_raw"]
-        del arm_rag_b["_raw"]
+        if rag_b_done and zs_done:
+            rag_b_rem = {i: cells_generations[rag_b_name][i]["remediation_steps"] for i in test_ids}
+            zs_rem = {i: cells_generations[zs_name][i]["remediation_steps"] for i in test_ids}
+            rem_dict["rag_b_minus_zeroshot"] = evaluate_remediation_pairwise(test_ids, id_to_company, gt_rem_map, rag_b_rem, zs_rem, scorer)
+        else:
+            rem_dict["rag_b_minus_zeroshot"] = {"status": "incomplete"}
+
+        if rag_a_done and rag_b_done:
+            rag_a_rem = {i: cells_generations[rag_a_name][i]["remediation_steps"] for i in test_ids}
+            rag_b_rem = {i: cells_generations[rag_b_name][i]["remediation_steps"] for i in test_ids}
+            rem_dict["rag_a_minus_rag_b"] = evaluate_remediation_pairwise(test_ids, id_to_company, gt_rem_map, rag_a_rem, rag_b_rem, scorer)
+        else:
+            rem_dict["rag_a_minus_rag_b"] = {"status": "incomplete"}
+
+        # Clean _raw from output objects
+        for a_key in ["zero_shot", "rag_condition_a_same_company", "rag_condition_b_cross_company"]:
+            if "_raw" in arms_dict.get(a_key, {}):
+                del arms_dict[a_key]["_raw"]
 
         format_results[fmt] = {
-            "arms": {
-                "zero_shot": arm_zs,
-                "rag_condition_a_same_company": arm_rag_a,
-                "rag_condition_b_cross_company": arm_rag_b,
-            },
-            "deltas": {
-                "rag_a_minus_zeroshot": delta_rag_a_vs_zs,
-                "rag_b_minus_zeroshot": delta_rag_b_vs_zs,
-                "rag_a_minus_rag_b_same_company_premium": delta_rag_a_vs_rag_b,
-            },
-            "remediation_both_parsed": {
-                "rag_a_minus_zeroshot": rem_a_vs_zs,
-                "rag_b_minus_zeroshot": rem_b_vs_zs,
-                "rag_a_minus_rag_b": rem_a_vs_b,
-            }
+            "arms": arms_dict,
+            "deltas": deltas_dict,
+            "remediation_both_parsed": rem_dict,
         }
 
     # 5. Stratify RAG(a) - zero-shot delta by Judged Relevance Score (Gate-v2)
     print("\n--- Phase 5: Stratifying RAG(a) - Zero-Shot Delta by Judged Relevance ---")
     judgments_a = {j["query_incident_id"]: j["score"] for j in judgments_by_condition["condition_a"]}
-    stratified_deltas = {}
+    stratified_deltas: Dict[str, Any] = {}
 
-    g2_a_rc = [clean_rc(cells_generations["gate_v2_rag_a"][i]["root_cause"]) for i in test_ids]
-    g2_zs_rc = [clean_rc(cells_generations["gate_v2_zeroshot"][i]["root_cause"]) for i in test_ids]
-    g2_diff_rl = [
-        scorer.score(clean_rc(gt_rc_map[i]), ra)["rougeL"].fmeasure - scorer.score(clean_rc(gt_rc_map[i]), zs)["rougeL"].fmeasure
-        for i, ra, zs in zip(test_ids, g2_a_rc, g2_zs_rc)
-    ]
+    if cell_completion_status["gate_v2_rag_a"]["completed"] and cell_completion_status["gate_v2_zeroshot"]["completed"]:
+        g2_a_rc = [clean_rc(cells_generations["gate_v2_rag_a"][i]["root_cause"]) for i in test_ids]
+        g2_zs_rc = [clean_rc(cells_generations["gate_v2_zeroshot"][i]["root_cause"]) for i in test_ids]
+        g2_diff_rl = [
+            scorer.score(clean_rc(gt_rc_map[i]), ra)["rougeL"].fmeasure - scorer.score(clean_rc(gt_rc_map[i]), zs)["rougeL"].fmeasure
+            for i, ra, zs in zip(test_ids, g2_a_rc, g2_zs_rc)
+        ]
 
-    for score_val in [0, 1, 2]:
-        stratum_ids = [i for i in test_ids if judgments_a[i] == score_val]
-        stratum_diffs = [d for i, d in zip(test_ids, g2_diff_rl) if judgments_a[i] == score_val]
-        stratum_companies = set(id_to_company[i] for i in stratum_ids)
-        n_comps = len(stratum_companies)
-        n_items = len(stratum_ids)
+        for score_val in [0, 1, 2]:
+            stratum_ids = [i for i in test_ids if judgments_a[i] == score_val]
+            stratum_diffs = [d for i, d in zip(test_ids, g2_diff_rl) if judgments_a[i] == score_val]
+            stratum_companies = set(id_to_company[i] for i in stratum_ids)
+            n_comps = len(stratum_companies)
+            n_items = len(stratum_ids)
 
-        if n_comps < 5 or n_items < 5:
+            if n_comps < 5 or n_items < 5:
+                stratified_deltas[f"relevance_score_{score_val}"] = {
+                    "score_level": score_val,
+                    "num_incidents": n_items,
+                    "num_companies": n_comps,
+                    "mean_delta_rougeL": round(float(np.mean(stratum_diffs)), 4) if stratum_diffs else 0.0,
+                    "low_n": True,
+                    "status": f"insufficient company count (n_companies={n_comps} < 5) for reliable clustered bootstrap"
+                }
+            else:
+                strat_bootstrapper = FastClusterBootstrap(stratum_ids, id_to_company, n_resamples=10000, seed=42)
+                ci_res = strat_bootstrapper.compute_multi_ci(stratum_diffs)
+                stratified_deltas[f"relevance_score_{score_val}"] = {
+                    "score_level": score_val,
+                    "num_incidents": n_items,
+                    "num_companies": n_comps,
+                    "mean_delta_rougeL": ci_res["mean"],
+                    "unadjusted_ci_95": ci_res["unadjusted_ci_95"],
+                    "adjusted_ci": ci_res["adjusted_ci"],
+                    "status": ci_res["status"],
+                    "low_n": False,
+                }
+    else:
+        for score_val in [0, 1, 2]:
             stratified_deltas[f"relevance_score_{score_val}"] = {
                 "score_level": score_val,
-                "num_incidents": n_items,
-                "num_companies": n_comps,
-                "mean_delta_rougeL": round(float(np.mean(stratum_diffs)), 4) if stratum_diffs else 0.0,
-                "low_n": True,
-                "status": f"insufficient company count (n_companies={n_comps} < 5) for reliable clustered bootstrap"
-            }
-        else:
-            strat_bootstrapper = FastClusterBootstrap(stratum_ids, id_to_company, n_resamples=10000, seed=42)
-            ci_res = strat_bootstrapper.compute_multi_ci(stratum_diffs)
-            stratified_deltas[f"relevance_score_{score_val}"] = {
-                "score_level": score_val,
-                "num_incidents": n_items,
-                "num_companies": n_comps,
-                "mean_delta_rougeL": ci_res["mean"],
-                "unadjusted_ci_95": ci_res["unadjusted_ci_95"],
-                "adjusted_ci": ci_res["adjusted_ci"],
-                "status": ci_res["status"],
-                "low_n": False,
+                "status": "incomplete",
+                "reason": "gate_v2_rag_a or gate_v2_zeroshot incomplete"
             }
 
     # 6. Mechanical Verdict per PREREG.md
@@ -723,34 +929,22 @@ def run_e2_evaluation():
     # 2. Remains excluding zero under near-duplicate filter (Condition a is filtered)
     # 3. Remains excluding zero under length-matching
     # ELSE: 'no detected effect'
-    g2_delta_a = format_results["gate_v2"]["deltas"]["rag_a_minus_zeroshot"]
-    rag_a_zs_adj_excludes = g2_delta_a["rougeL_f1"]["excludes_zero_after_adjustment"]
-    rag_a_zs_lm_adj_excludes = g2_delta_a["length_matched_rougeL"]["excludes_zero_after_adjustment"]
-
-    if rag_a_zs_adj_excludes and rag_a_zs_lm_adj_excludes:
-        verdict = "RAG helps when same-company history exists"
+    # Any verdict needing an incomplete cell must be written as "incomplete", never computed.
+    if not (cell_completion_status["gate_v2_rag_a"]["completed"] and cell_completion_status["gate_v2_zeroshot"]["completed"]):
+        verdict = "incomplete"
+        print(f"\n[E2 Verdict]: incomplete (requires both gate_v2_rag_a and gate_v2_zeroshot to be 93/93)")
     else:
-        verdict = "no detected effect"
+        g2_delta_a = format_results["gate_v2"]["deltas"]["rag_a_minus_zeroshot"]
+        rag_a_zs_adj_excludes = g2_delta_a["rougeL_f1"]["excludes_zero_after_adjustment"]
+        rag_a_zs_lm_adj_excludes = g2_delta_a["length_matched_rougeL"]["excludes_zero_after_adjustment"]
 
-    print(f"\n[E2 Verdict]: {verdict}")
-    print(f"  rag_a_minus_zeroshot adj excludes zero: {rag_a_zs_adj_excludes}")
-    print(f"  rag_a_minus_zeroshot length-matched adj excludes zero: {rag_a_zs_lm_adj_excludes}")
-
-    summary_text = (
-        f"Experiment 2 (Leave-One-Out Same-Company Regime, N=93 across 17 companies): "
-        f"Relevance@1: Condition (a) same-company filtered judged {relevance_distributions['condition_a']['judged_relevant_pct']}% relevant (mean score {relevance_distributions['condition_a']['mean_relevance_score']:.2f}), "
-        f"Condition (b) cross-company judged {relevance_distributions['condition_b']['judged_relevant_pct']}% relevant (mean score {relevance_distributions['condition_b']['mean_relevance_score']:.2f}), "
-        f"Condition (c) unfiltered judged {relevance_distributions['condition_c']['judged_relevant_pct']}% relevant (mean score {relevance_distributions['condition_c']['mean_relevance_score']:.2f}). "
-        f"Gate-v2 format ROUGE-L F1: Zero-shot={format_results['gate_v2']['arms']['zero_shot']['rougeL_f1']['mean']:.4f}, "
-        f"RAG(a)={format_results['gate_v2']['arms']['rag_condition_a_same_company']['rougeL_f1']['mean']:.4f}, "
-        f"RAG(b)={format_results['gate_v2']['arms']['rag_condition_b_cross_company']['rougeL_f1']['mean']:.4f}. "
-        f"Delta RAG(a)-ZS={format_results['gate_v2']['deltas']['rag_a_minus_zeroshot']['rougeL_f1']['mean']:+.4f} "
-        f"(99% Bonferroni CI {format_results['gate_v2']['deltas']['rag_a_minus_zeroshot']['rougeL_f1']['adjusted_ci']}, status: {format_results['gate_v2']['deltas']['rag_a_minus_zeroshot']['rougeL_f1']['status']}). "
-        f"Delta RAG(b)-ZS={format_results['gate_v2']['deltas']['rag_b_minus_zeroshot']['rougeL_f1']['mean']:+.4f} "
-        f"(99% Bonferroni CI {format_results['gate_v2']['deltas']['rag_b_minus_zeroshot']['rougeL_f1']['adjusted_ci']}, status: {format_results['gate_v2']['deltas']['rag_b_minus_zeroshot']['rougeL_f1']['status']}). "
-        f"Delta RAG(a)-RAG(b) (same-company premium)={format_results['gate_v2']['deltas']['rag_a_minus_rag_b_same_company_premium']['rougeL_f1']['mean']:+.4f}. "
-        f"Per PREREG.md criteria, the automated verdict is '{verdict}'."
-    )
+        if rag_a_zs_adj_excludes and rag_a_zs_lm_adj_excludes:
+            verdict = "RAG helps when same-company history exists"
+        else:
+            verdict = "no detected effect"
+        print(f"\n[E2 Verdict]: {verdict}")
+        print(f"  rag_a_minus_zeroshot adj excludes zero: {rag_a_zs_adj_excludes}")
+        print(f"  rag_a_minus_zeroshot length-matched adj excludes zero: {rag_a_zs_lm_adj_excludes}")
 
     # Compute company concentration for queries and top-1 precedents
     query_comp_counts = {}
@@ -780,6 +974,29 @@ def run_e2_evaluation():
         "top1_precedent_company_shares": top1_comp_shares,
     }
 
+    if all_6_complete:
+        summary_text = (
+            f"Experiment 2 (Leave-One-Out Same-Company Regime, N=93 across 17 companies): "
+            f"Relevance@1: Condition (a) same-company filtered judged {relevance_distributions['condition_a']['judged_relevant_pct']}% relevant (mean score {relevance_distributions['condition_a']['mean_relevance_score']:.2f}), "
+            f"Condition (b) cross-company judged {relevance_distributions['condition_b']['judged_relevant_pct']}% relevant (mean score {relevance_distributions['condition_b']['mean_relevance_score']:.2f}), "
+            f"Condition (c) unfiltered judged {relevance_distributions['condition_c']['judged_relevant_pct']}% relevant (mean score {relevance_distributions['condition_c']['mean_relevance_score']:.2f}). "
+            f"Gate-v2 format ROUGE-L F1: Zero-shot={format_results['gate_v2']['arms']['zero_shot']['rougeL_f1']['mean']:.4f}, "
+            f"RAG(a)={format_results['gate_v2']['arms']['rag_condition_a_same_company']['rougeL_f1']['mean']:.4f}, "
+            f"RAG(b)={format_results['gate_v2']['arms']['rag_condition_b_cross_company']['rougeL_f1']['mean']:.4f}. "
+            f"Delta RAG(a)-ZS={format_results['gate_v2']['deltas']['rag_a_minus_zeroshot']['rougeL_f1']['mean']:+.4f} "
+            f"(99% Bonferroni CI {format_results['gate_v2']['deltas']['rag_a_minus_zeroshot']['rougeL_f1']['adjusted_ci']}, status: {format_results['gate_v2']['deltas']['rag_a_minus_zeroshot']['rougeL_f1']['status']}). "
+            f"Delta RAG(b)-ZS={format_results['gate_v2']['deltas']['rag_b_minus_zeroshot']['rougeL_f1']['mean']:+.4f} "
+            f"(99% Bonferroni CI {format_results['gate_v2']['deltas']['rag_b_minus_zeroshot']['rougeL_f1']['adjusted_ci']}, status: {format_results['gate_v2']['deltas']['rag_b_minus_zeroshot']['rougeL_f1']['status']}). "
+            f"Delta RAG(a)-RAG(b) (same-company premium)={format_results['gate_v2']['deltas']['rag_a_minus_rag_b_same_company_premium']['rougeL_f1']['mean']:+.4f}. "
+            f"Per PREREG.md criteria, the automated verdict is '{verdict}'."
+        )
+    else:
+        completed_cells = [c for c, s in cell_completion_status.items() if s["completed"]]
+        summary_text = (
+            f"Experiment 2 (Leave-One-Out Same-Company Regime, N=93 across 17 companies): "
+            f"Evaluation partially complete. Completed cells: {completed_cells}. Verdict: '{verdict}'."
+        )
+
     results_obj = {
         "regime": "leave-one-out on train companies; NOT comparable to company-disjoint test numbers",
         "metadata": {
@@ -798,6 +1015,8 @@ def run_e2_evaluation():
             "num_cached_gen_calls": cached_gen_calls,
             "num_new_judge_calls": new_judge_calls,
             "num_cached_judge_calls": cached_judge_calls,
+            "cell_completion_status": cell_completion_status,
+            "all_cells_complete": all_6_complete,
         },
         "company_concentration": company_concentration,
         "relevance_at_1": relevance_distributions,
@@ -813,7 +1032,8 @@ def run_e2_evaluation():
 
     print(f"\n[Artifact] Successfully wrote LOO regime results to {OUTPUT_FILE}")
     print(f"Overall verdict: {verdict}")
-    print("=" * 60)
+    print(f"All 6 cells complete: {all_6_complete}")
+    print("=" * 70)
     return results_obj
 
 
