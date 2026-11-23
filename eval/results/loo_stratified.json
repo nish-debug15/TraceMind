@@ -1,0 +1,105 @@
+{
+  "metadata": {
+    "regime": "E2 Leave-One-Out (Gate-v2 format)",
+    "total_queries": 93,
+    "scoring_module": "eval/scorer.py canonical module"
+  },
+  "strata": {
+    "score_0": {
+      "score_level": 0,
+      "score_label": "unrelated",
+      "n": 31,
+      "n_companies": 14,
+      "low_n": false,
+      "deltas_rag_a_minus_zeroshot": {
+        "rougeL_f1": {
+          "mean": -0.0146
+        },
+        "bert_score_f1": {
+          "mean": -0.0231
+        },
+        "remediation_both_parsed": {
+          "n_both_parsed": 14,
+          "n_companies_both_parsed": 11,
+          "delta_remediation_rougeL": {
+            "mean": 0.0134
+          }
+        }
+      },
+      "word_counts": {
+        "zero_shot": {
+          "mean": 28.4,
+          "median": 30.0
+        },
+        "rag_a": {
+          "mean": 33.1,
+          "median": 34.0
+        }
+      }
+    },
+    "score_1": {
+      "score_level": 1,
+      "score_label": "partially_relevant",
+      "n": 48,
+      "n_companies": 16,
+      "low_n": false,
+      "deltas_rag_a_minus_zeroshot": {
+        "rougeL_f1": {
+          "mean": -0.0068
+        },
+        "bert_score_f1": {
+          "mean": -0.0222
+        },
+        "remediation_both_parsed": {
+          "n_both_parsed": 25,
+          "n_companies_both_parsed": 10,
+          "delta_remediation_rougeL": {
+            "mean": -0.0213
+          }
+        }
+      },
+      "word_counts": {
+        "zero_shot": {
+          "mean": 30.1,
+          "median": 28.0
+        },
+        "rag_a": {
+          "mean": 64.2,
+          "median": 37.5
+        }
+      }
+    },
+    "score_2": {
+      "score_level": 2,
+      "score_label": "highly_relevant",
+      "n": 14,
+      "n_companies": 9,
+      "low_n": false,
+      "deltas_rag_a_minus_zeroshot": {
+        "rougeL_f1": {
+          "mean": -0.0379
+        },
+        "bert_score_f1": {
+          "mean": -0.0293
+        },
+        "remediation_both_parsed": {
+          "n_both_parsed": 10,
+          "n_companies_both_parsed": 8,
+          "delta_remediation_rougeL": {
+            "mean": -0.0061
+          }
+        }
+      },
+      "word_counts": {
+        "zero_shot": {
+          "mean": 27.8,
+          "median": 27.0
+        },
+        "rag_a": {
+          "mean": 52.5,
+          "median": 34.0
+        }
+      }
+    }
+  }
+}
