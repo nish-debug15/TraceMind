@@ -159,6 +159,48 @@ TraceMind is designed for auditability. Rather than producing opaque predictions
 | **BERTScore F1** | **+0.0069** | `[0.0018, 0.0119]` | `[-0.0001, 0.0131]` | `[-0.0023, 0.0149]` | crosses zero |
 | **Embedding Cosine Sim** | **-0.0047** | `[-0.0195, 0.0095]` | `[-0.0273, 0.0155]` | `[-0.0343, 0.0214]` | crosses zero |
 
+### Two Regimes: Company-Disjoint Test vs. Leave-One-Out (Same-Company)
+
+> **Operational Regime Separation:** The Company-Disjoint Test set (Experiment 1, N = 93) and Leave-One-Out Same-Company regime (Experiment 2, N = 93) test fundamentally different operational assumptions and **cannot be merged, pooled, or averaged**. E1 evaluates zero-leakage cross-company generalization across 40 unseen companies (0% same-company history). E2 evaluates single-tenant enterprise retrieval where historical postmortems from the *same* organization exist in the retrieval corpus.
+
+#### Table 1 (E1): Test Set Control (Held-Out Test Set, N = 93, 0% Same-Company)
+
+> Evaluates whether downstream RAG generation gains reflect technical incident semantics or general in-context exemplar/style priming. Clustered bootstrap confidence intervals with Bonferroni multiplicity adjustment across m=5 endpoints (99% CI, 10,000 resamples, seed 42).
+
+| Condition | Format | ROUGE-L F1 | BERTScore F1 | Delta vs. Zero-Shot (ROUGE-L) [99% CI] | Delta vs. Zero-Shot (BERTScore) [99% CI] | Multiplicity Status |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Zero-Shot Baseline** | Baseline | 0.1099 | 0.5057 | — | — | — |
+| **Random Precedent** | Baseline | 0.1899 | 0.5755 | **+0.0799** `[0.0528, 0.1153]` | **+0.0698** `[0.0469, 0.0935]` | excludes zero |
+| **Real Top-1 RAG** | Baseline | 0.1242 | 0.5136 | **+0.0143** `[0.0039, 0.0258]` | **+0.0078** `[-0.0017, 0.0159]` | excludes zero |
+| **Zero-Shot Baseline** | Gate-v2 | 0.1950 | 0.5722 | — | — | — |
+| **Random Precedent** | Gate-v2 | 0.1985 | 0.5544 | **+0.0036** `[-0.0222, 0.0331]` | **-0.0178** `[-0.0416, 0.0047]` | crosses zero |
+| **Real Top-1 RAG** | Gate-v2 | 0.1969 | 0.5672 | **+0.0019** `[-0.0183, 0.0204]` | **-0.0050** `[-0.0176, 0.0087]` | crosses zero |
+
+> **E1 Decision Rule Verdict:** `inconclusive` (gate-v2 format). The real-minus-random delta is **-0.0017** `[-0.0247, 0.0172]` (crosses zero after Bonferroni adjustment), while the random-minus-zero-shot delta is **+0.0036** `[-0.0222, 0.0331]` (crosses zero). Retrieval does not provide detectable semantic gain over arbitrary exemplar priming on unseen companies.
+
+#### Table 2 (E2): Leave-One-Out (LOO) Same-Company Regime (N = 93 across 17 Companies)
+
+> Evaluates retrieval when same-company historical postmortems exist in the corpus. Condition (a) allows same-company precedents with near-duplicates filtered; Condition (b) restricts retrieval to cross-company only. Multiplicity-adjusted 99% CIs across m=5 endpoints (seed 42).
+
+| Condition | Format | ROUGE-L F1 | BERTScore F1 | Relevance@1 (Score 2 / 1 / 0) | Delta vs. Zero-Shot (ROUGE-L) [99% CI] | Delta vs. Zero-Shot (BERTScore) [99% CI] | Multiplicity Status |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Zero-Shot** | Gate-v2 | 0.1536 | 0.5237 | — | — | — | — |
+| **Same-Company (Condition a)** | Gate-v2 | 0.1396 | 0.5001 | 15.1% / 51.6% / 33.3% | **-0.0141** `[-0.0406, 0.0168]` | **-0.0236** `[-0.0537, 0.0081]` | crosses zero |
+| **Cross-Company (Condition b)** | Gate-v2 | 0.1478 | 0.5099 | 4.3% / 35.5% / 60.2% | **-0.0058** `[-0.0293, 0.0178]` | **-0.0138** `[-0.0436, 0.0161]` | crosses zero |
+| **Zero-Shot** | Baseline | 0.1417 | 0.5289 | — | — | — | — |
+| **Same-Company (Condition a)** | Baseline | 0.1583 | 0.5347 | 15.1% / 51.6% / 33.3% | **+0.0165** `[-0.0023, 0.0351]` | **+0.0057** `[-0.0053, 0.0180]` | crosses zero |
+| **Cross-Company (Condition b)** | Baseline | 0.1533 | 0.5378 | 4.3% / 35.5% / 60.2% | **+0.0115** `[-0.0050, 0.0281]` | **+0.0089** `[-0.0032, 0.0212]` | crosses zero |
+
+> **E2 Decision Rule Verdict:** `no detected effect` (gate-v2 format). The same-company RAG(a)-minus-zero-shot delta is **-0.0141** `[-0.0406, 0.0168]` (crosses zero after Bonferroni adjustment) and length-matched delta is **-0.0098** `[-0.0380, 0.0200]` (crosses zero). The same-company premium (Condition a minus Condition b) is **-0.0083** `[-0.0323, 0.0180]` (crosses zero), confirming that having same-company historical postmortems in the corpus produced no statistically detectable lift over cross-company retrieval or zero-shot generation.
+
+#### Comparative Analysis: Same-Company History (E2) vs. Company-Disjoint Generalisation (E1)
+
+- **Retrieval Relevance Gain:** In E2, same-company retrieval (Condition a) substantially lifted top-1 judged relevance compared to cross-company retrieval: 66.67% of precedents were judged relevant (15.05% identical failure mechanisms, score 2) vs. 39.78% in cross-company (4.30% score 2).
+- **Downstream Generation Impact:** Despite higher retrieval relevance in E2, downstream generation gains did not materialize in either regime under company-clustering and Bonferroni multiplicity adjustments:
+  - In **E1 (Company-Disjoint)**, the gate-v2 RAG delta was **+0.0019** `[-0.0183, 0.0204]` (crosses zero), while the random-precedent delta was **+0.0036** `[-0.0222, 0.0331]` (crosses zero).
+  - In **E2 (Leave-One-Out Same-Company)**, the gate-v2 same-company RAG(a) delta was **-0.0141** `[-0.0406, 0.0168]` (crosses zero) and cross-company RAG(b) delta was **-0.0058** `[-0.0293, 0.0178]` (crosses zero).
+- **Operational Conclusion:** Precedent retrieval does not reliably boost technical accuracy on either regime; structured formatting instructions account for virtually all observable metric gains.
+
 #### Length Diagnostics & Length-Matched Sensitivity (Test Set, N = 93)
 
 > Ground-truth root_cause median length is 51.0 words (mean: 48.3, p10: 16.2, p90: 73.0). Evaluates ROUGE-L F1 when generated outputs are truncated to median GT length (51 words) with company-clustered 95% CIs.
@@ -271,6 +313,7 @@ Technical failure relevance evaluated across all 279 retrieved precedents (top-3
 - **Answered Partition (Sim ≥ 0.40, N = 86):** Score 0 = `52.3%` (45), Score 1 = `43.0%` (37), Score 2 = `4.7%` (4). Relevance ≥ 1 = `47.7%` (41/86).
 - **Guardrail Separation:** Queries above the 0.40 threshold retrieved judged-relevant precedents in 41/86 cases (47.7%) vs. 1/7 cases (14.3%) below threshold (Fisher's exact test p = 0.1232, odds ratio 5.47). The separation is directionally consistent; n=7 abstained limits statistical power (p > 0.05). AUROC 0.667 reflects a weak-to-moderate guard rather than a sharp noise boundary.
 
+
 Detailed failure analysis and individual incident evaluations are documented in [`docs/FAILURE_ANALYSIS.md`](docs/FAILURE_ANALYSIS.md) and [`eval/results/`](eval/results/).
 
 ---
@@ -279,6 +322,7 @@ Detailed failure analysis and individual incident evaluations are documented in 
 
 ### 1. Evaluation Design
 
+- **Leave-One-Out (LOO) Same-Company Scope & Single-Seed Modeling:** Experiment 2 was evaluated on an LOO sample of $N=93$ incidents drawn exclusively from 17 eligible companies in the training split with $\ge 5$ high-quality postmortems (capped at 12 incidents per company). To isolate genuine technical retrieval gains from trivial near-duplicate copy-paste leakage, near-duplicate incidents were filtered out a priori if either embedding cosine similarity $\ge 0.95$ or 5-gram token-shingle Jaccard similarity $\ge 0.80$. All generations and judgments reflect a single generator (`openai/gpt-oss-120b`) and a single judge (`qwen/qwen3.8-27b`) evaluated under fixed seed 42.
 - **Format Effect Dominates Retrieval Effect in Gate Prompts:** In the 2x2 factorial control, the prompt format effect is substantially larger than the retrieval effect (+0.0851 zero-shot format effect and +0.0727 RAG format effect on ROUGE-L vs +0.0019 RAG precedent retrieval effect within `relevance_gate_v2`, 95% CI `[-0.0095, 0.0128]`). The observed lift is primarily an artifact of output conciseness (dropping from ~215 words to ~35 words) and heightened precision rather than precedent retrieval.
 - **Prompt Selection on Test Set:** The `relevance_gate_v2` prompt format was selected based on held-out test set performance rather than an independent validation split, introducing potential selection bias into reported absolute scores.
 - **Multiplicity Corrections Across Endpoints:** When evaluating paired deltas across multiple metric endpoints, standard 95% intervals inflate type-I error. Under Bonferroni family-wise error correction ($m=5$, $\alpha=0.01$, 99% CI), ROUGE-1 F1 (`[-0.0026, 0.0282]`), ROUGE-2 F1 (`[-0.0038, 0.0131]`), BERTScore F1 (`[-0.0023, 0.0149]`), and Cosine Similarity (`[-0.0343, 0.0214]`) all cross zero; only ROUGE-L F1 (`[0.0039, 0.0258]`) maintains statistical significance.

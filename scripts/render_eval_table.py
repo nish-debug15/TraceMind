@@ -29,6 +29,8 @@ GT_NOISE_FILE = RESULTS_DIR / "gt_noise_sensitivity.json"
 PROMPT_ABLATION_FILE = RESULTS_DIR / "prompt_ablation.json"
 RELEVANCE_ANALYSIS_FILE = RESULTS_DIR / "relevance_analysis.json"
 FLOOR_STATS_FILE = RESULTS_DIR / "floor_stats.json"
+E1_FILE = RESULTS_DIR / "random_precedent_control.json"
+E2_FILE = RESULTS_DIR / "loo_regime_results.json"
 
 
 def render_markdown_tables() -> str:
@@ -162,6 +164,156 @@ def render_markdown_tables() -> str:
                 lines.append(
                     f"| {label} | **{mean_val:+.4f}** | `[{iid_ci[0]:.4f}, {iid_ci[1]:.4f}]` | `[{clust_ci[0]:.4f}, {clust_ci[1]:.4f}]` | `[{adj_ci[0]:.4f}, {adj_ci[1]:.4f}]` | {status_str} |"
                 )
+        lines.append("")
+
+    # 2b. Two Regimes Section: Company-Disjoint Test vs. Leave-One-Out (Same-Company)
+    if E1_FILE.exists() and E2_FILE.exists():
+        with open(E1_FILE, "r", encoding="utf-8") as f:
+            e1_data = json.load(f)
+        with open(E2_FILE, "r", encoding="utf-8") as f:
+            e2_data = json.load(f)
+
+        lines.append("### Two Regimes: Company-Disjoint Test vs. Leave-One-Out (Same-Company)")
+        lines.append("")
+        lines.append("> **Operational Regime Separation:** The Company-Disjoint Test set (Experiment 1, N = 93) and Leave-One-Out Same-Company regime (Experiment 2, N = 93) test fundamentally different operational assumptions and **cannot be merged, pooled, or averaged**. E1 evaluates zero-leakage cross-company generalization across 40 unseen companies (0% same-company history). E2 evaluates single-tenant enterprise retrieval where historical postmortems from the *same* organization exist in the retrieval corpus.")
+        lines.append("")
+        lines.append("#### Table 1 (E1): Test Set Control (Held-Out Test Set, N = 93, 0% Same-Company)")
+        lines.append("")
+        lines.append("> Evaluates whether downstream RAG generation gains reflect technical incident semantics or general in-context exemplar/style priming. Clustered bootstrap confidence intervals with Bonferroni multiplicity adjustment across m=5 endpoints (99% CI, 10,000 resamples, seed 42).")
+        lines.append("")
+        lines.append("| Condition | Format | ROUGE-L F1 | BERTScore F1 | Delta vs. Zero-Shot (ROUGE-L) [99% CI] | Delta vs. Zero-Shot (BERTScore) [99% CI] | Multiplicity Status |")
+        lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|")
+
+        for fmt, fmt_lbl in [("baseline", "Baseline"), ("gate_v2", "Gate-v2")]:
+            f_e1 = e1_data.get("formats", {}).get(fmt, {})
+            arms = f_e1.get("arms", {})
+            deltas_e1 = f_e1.get("deltas", {})
+
+            # Zero-shot
+            zs = arms.get("zero_shot", {})
+            zs_rl = zs.get("rougeL_f1", {}).get("mean", 0.0)
+            zs_bs = zs.get("bert_score_f1", {}).get("mean", 0.0)
+            lines.append(f"| **Zero-Shot Baseline** | {fmt_lbl} | {zs_rl:.4f} | {zs_bs:.4f} | — | — | — |")
+
+            # Random Precedent
+            rnd = arms.get("random_precedent", {})
+            rnd_rl = rnd.get("rougeL_f1", {}).get("mean", 0.0)
+            rnd_bs = rnd.get("bert_score_f1", {}).get("mean", 0.0)
+            d_rnd = deltas_e1.get("random_minus_zeroshot", {})
+            d_rnd_rl = d_rnd.get("rougeL_f1", {})
+            d_rnd_bs = d_rnd.get("bert_score_f1", {})
+            rnd_rl_ci = d_rnd_rl.get("adjusted_ci", [0, 0])
+            rnd_bs_ci = d_rnd_bs.get("adjusted_ci", [0, 0])
+            rnd_stat = "excludes zero" if d_rnd_rl.get("excludes_zero_after_adjustment", False) else "crosses zero"
+            lines.append(
+                f"| **Random Precedent** | {fmt_lbl} | {rnd_rl:.4f} | {rnd_bs:.4f} | "
+                f"**{d_rnd_rl.get('mean', 0.0):+.4f}** `[{rnd_rl_ci[0]:.4f}, {rnd_rl_ci[1]:.4f}]` | "
+                f"**{d_rnd_bs.get('mean', 0.0):+.4f}** `[{rnd_bs_ci[0]:.4f}, {rnd_bs_ci[1]:.4f}]` | {rnd_stat} |"
+            )
+
+            # Real Top-1 RAG
+            real = arms.get("real_rag", {})
+            real_rl = real.get("rougeL_f1", {}).get("mean", 0.0)
+            real_bs = real.get("bert_score_f1", {}).get("mean", 0.0)
+            d_real = deltas_e1.get("real_minus_zeroshot", {})
+            d_real_rl = d_real.get("rougeL_f1", {})
+            d_real_bs = d_real.get("bert_score_f1", {})
+            real_rl_ci = d_real_rl.get("adjusted_ci", [0, 0])
+            real_bs_ci = d_real_bs.get("adjusted_ci", [0, 0])
+            real_stat = "excludes zero" if d_real_rl.get("excludes_zero_after_adjustment", False) else ("unadjusted only" if d_real_rl.get("significant_under_cluster_bootstrap", False) else "crosses zero")
+            lines.append(
+                f"| **Real Top-1 RAG** | {fmt_lbl} | {real_rl:.4f} | {real_bs:.4f} | "
+                f"**{d_real_rl.get('mean', 0.0):+.4f}** `[{real_rl_ci[0]:.4f}, {real_rl_ci[1]:.4f}]` | "
+                f"**{d_real_bs.get('mean', 0.0):+.4f}** `[{real_bs_ci[0]:.4f}, {real_bs_ci[1]:.4f}]` | {real_stat} |"
+            )
+
+        lines.append("")
+        e1_verdict = e1_data.get("formats", {}).get("gate_v2", {}).get("verdict", e1_data.get("verdict", "inconclusive"))
+        d_real_rnd = e1_data.get("formats", {}).get("gate_v2", {}).get("deltas", {}).get("real_minus_random", {}).get("rougeL_f1", {})
+        d_rnd_zs = e1_data.get("formats", {}).get("gate_v2", {}).get("deltas", {}).get("random_minus_zeroshot", {}).get("rougeL_f1", {})
+        lines.append(
+            f"> **E1 Decision Rule Verdict:** `{e1_verdict}` (gate-v2 format). The real-minus-random delta is "
+            f"**{d_real_rnd.get('mean', 0.0):+.4f}** `[{d_real_rnd.get('adjusted_ci', [0,0])[0]:.4f}, {d_real_rnd.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero after Bonferroni adjustment), "
+            f"while the random-minus-zero-shot delta is **{d_rnd_zs.get('mean', 0.0):+.4f}** `[{d_rnd_zs.get('adjusted_ci', [0,0])[0]:.4f}, {d_rnd_zs.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero). "
+            f"Retrieval does not provide detectable semantic gain over arbitrary exemplar priming on unseen companies."
+        )
+        lines.append("")
+
+        lines.append("#### Table 2 (E2): Leave-One-Out (LOO) Same-Company Regime (N = 93 across 17 Companies)")
+        lines.append("")
+        lines.append("> Evaluates retrieval when same-company historical postmortems exist in the corpus. Condition (a) allows same-company precedents with near-duplicates filtered; Condition (b) restricts retrieval to cross-company only. Multiplicity-adjusted 99% CIs across m=5 endpoints (seed 42).")
+        lines.append("")
+        lines.append("| Condition | Format | ROUGE-L F1 | BERTScore F1 | Relevance@1 (Score 2 / 1 / 0) | Delta vs. Zero-Shot (ROUGE-L) [99% CI] | Delta vs. Zero-Shot (BERTScore) [99% CI] | Multiplicity Status |")
+        lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|")
+
+        r1_e2 = e2_data.get("relevance_at_1", {})
+        rel_str_a = f"{r1_e2.get('condition_a', {}).get('score_2_highly_relevant', {}).get('pct', 0.0):.1f}% / {r1_e2.get('condition_a', {}).get('score_1_partially_relevant', {}).get('pct', 0.0):.1f}% / {r1_e2.get('condition_a', {}).get('score_0_unrelated', {}).get('pct', 0.0):.1f}%"
+        rel_str_b = f"{r1_e2.get('condition_b', {}).get('score_2_highly_relevant', {}).get('pct', 0.0):.1f}% / {r1_e2.get('condition_b', {}).get('score_1_partially_relevant', {}).get('pct', 0.0):.1f}% / {r1_e2.get('condition_b', {}).get('score_0_unrelated', {}).get('pct', 0.0):.1f}%"
+
+        for fmt, fmt_lbl in [("gate_v2", "Gate-v2"), ("baseline", "Baseline")]:
+            f_e2 = e2_data.get("formats", {}).get(fmt, {})
+            arms = f_e2.get("arms", {})
+            deltas_e2 = f_e2.get("deltas", {})
+
+            # Zero-shot
+            zs = arms.get("zero_shot", {})
+            zs_rl = zs.get("rougeL_f1", {}).get("mean", 0.0)
+            zs_bs = zs.get("bert_score_f1", {}).get("mean", 0.0)
+            lines.append(f"| **Zero-Shot** | {fmt_lbl} | {zs_rl:.4f} | {zs_bs:.4f} | — | — | — | — |")
+
+            # Same-company Condition a
+            ra = arms.get("rag_condition_a_same_company", {})
+            ra_rl = ra.get("rougeL_f1", {}).get("mean", 0.0)
+            ra_bs = ra.get("bert_score_f1", {}).get("mean", 0.0)
+            d_ra = deltas_e2.get("rag_a_minus_zeroshot", {})
+            d_ra_rl = d_ra.get("rougeL_f1", {})
+            d_ra_bs = d_ra.get("bert_score_f1", {})
+            ra_rl_ci = d_ra_rl.get("adjusted_ci", [0, 0])
+            ra_bs_ci = d_ra_bs.get("adjusted_ci", [0, 0])
+            ra_stat = "excludes zero" if d_ra_rl.get("excludes_zero_after_adjustment", False) else "crosses zero"
+            lines.append(
+                f"| **Same-Company (Condition a)** | {fmt_lbl} | {ra_rl:.4f} | {ra_bs:.4f} | {rel_str_a} | "
+                f"**{d_ra_rl.get('mean', 0.0):+.4f}** `[{ra_rl_ci[0]:.4f}, {ra_rl_ci[1]:.4f}]` | "
+                f"**{d_ra_bs.get('mean', 0.0):+.4f}** `[{ra_bs_ci[0]:.4f}, {ra_bs_ci[1]:.4f}]` | {ra_stat} |"
+            )
+
+            # Cross-company Condition b
+            rb = arms.get("rag_condition_b_cross_company", {})
+            rb_rl = rb.get("rougeL_f1", {}).get("mean", 0.0)
+            rb_bs = rb.get("bert_score_f1", {}).get("mean", 0.0)
+            d_rb = deltas_e2.get("rag_b_minus_zeroshot", {})
+            d_rb_rl = d_rb.get("rougeL_f1", {})
+            d_rb_bs = d_rb.get("bert_score_f1", {})
+            rb_rl_ci = d_rb_rl.get("adjusted_ci", [0, 0])
+            rb_bs_ci = d_rb_bs.get("adjusted_ci", [0, 0])
+            rb_stat = "excludes zero" if d_rb_rl.get("excludes_zero_after_adjustment", False) else "crosses zero"
+            lines.append(
+                f"| **Cross-Company (Condition b)** | {fmt_lbl} | {rb_rl:.4f} | {rb_bs:.4f} | {rel_str_b} | "
+                f"**{d_rb_rl.get('mean', 0.0):+.4f}** `[{rb_rl_ci[0]:.4f}, {rb_rl_ci[1]:.4f}]` | "
+                f"**{d_rb_bs.get('mean', 0.0):+.4f}** `[{rb_bs_ci[0]:.4f}, {rb_bs_ci[1]:.4f}]` | {rb_stat} |"
+            )
+
+        lines.append("")
+        e2_verdict = e2_data.get("verdict", "no detected effect")
+        d_ra_zs_g2 = e2_data.get("formats", {}).get("gate_v2", {}).get("deltas", {}).get("rag_a_minus_zeroshot", {}).get("rougeL_f1", {})
+        d_ra_lm_g2 = e2_data.get("formats", {}).get("gate_v2", {}).get("deltas", {}).get("rag_a_minus_zeroshot", {}).get("length_matched_rougeL", {})
+        d_prem_g2 = e2_data.get("formats", {}).get("gate_v2", {}).get("deltas", {}).get("rag_a_minus_rag_b_same_company_premium", {}).get("rougeL_f1", {})
+        lines.append(
+            f"> **E2 Decision Rule Verdict:** `{e2_verdict}` (gate-v2 format). The same-company RAG(a)-minus-zero-shot delta is "
+            f"**{d_ra_zs_g2.get('mean', 0.0):+.4f}** `[{d_ra_zs_g2.get('adjusted_ci', [0,0])[0]:.4f}, {d_ra_zs_g2.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero after Bonferroni adjustment) "
+            f"and length-matched delta is **{d_ra_lm_g2.get('mean', 0.0):+.4f}** `[{d_ra_lm_g2.get('adjusted_ci', [0,0])[0]:.4f}, {d_ra_lm_g2.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero). "
+            f"The same-company premium (Condition a minus Condition b) is **{d_prem_g2.get('mean', 0.0):+.4f}** `[{d_prem_g2.get('adjusted_ci', [0,0])[0]:.4f}, {d_prem_g2.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero), "
+            f"confirming that having same-company historical postmortems in the corpus produced no statistically detectable lift over cross-company retrieval or zero-shot generation."
+        )
+        lines.append("")
+
+        lines.append("#### Comparative Analysis: Same-Company History (E2) vs. Company-Disjoint Generalisation (E1)")
+        lines.append("")
+        lines.append("- **Retrieval Relevance Gain:** In E2, same-company retrieval (Condition a) substantially lifted top-1 judged relevance compared to cross-company retrieval: 66.67% of precedents were judged relevant (15.05% identical failure mechanisms, score 2) vs. 39.78% in cross-company (4.30% score 2).")
+        lines.append("- **Downstream Generation Impact:** Despite higher retrieval relevance in E2, downstream generation gains did not materialize in either regime under company-clustering and Bonferroni multiplicity adjustments:")
+        lines.append(f"  - In **E1 (Company-Disjoint)**, the gate-v2 RAG delta was **+0.0019** `[-0.0183, 0.0204]` (crosses zero), while the random-precedent delta was **+0.0036** `[-0.0222, 0.0331]` (crosses zero).")
+        lines.append(f"  - In **E2 (Leave-One-Out Same-Company)**, the gate-v2 same-company RAG(a) delta was **-0.0141** `[-0.0406, 0.0168]` (crosses zero) and cross-company RAG(b) delta was **-0.0058** `[-0.0293, 0.0178]` (crosses zero).")
+        lines.append("- **Operational Conclusion:** Precedent retrieval does not reliably boost technical accuracy on either regime; structured formatting instructions account for virtually all observable metric gains.")
         lines.append("")
 
     # 3. Length Diagnostics & Length-Matched Sensitivity Table
@@ -465,9 +617,46 @@ def render_markdown_tables() -> str:
     return "\n".join(lines)
 
 
+def update_readme():
+    readme_path = PROJECT_ROOT / "README.md"
+    content = readme_path.read_text(encoding="utf-8")
+    table_md = render_markdown_tables()
+
+    start_token = "## Quantitative Evaluation & Benchmark Results\n\n"
+    end_token = "\n\nDetailed failure analysis and individual incident evaluations"
+
+    start_idx = content.find(start_token)
+    end_idx = content.find(end_token)
+
+    if start_idx != -1 and end_idx != -1:
+        new_content = content[:start_idx + len(start_token)] + table_md + content[end_idx:]
+    else:
+        print("Warning: Could not find exact replacement boundaries in README.md")
+        return
+
+    loo_threat_bullet = (
+        "- **Leave-One-Out (LOO) Same-Company Scope & Single-Seed Modeling:** "
+        "Experiment 2 was evaluated on an LOO sample of $N=93$ incidents drawn exclusively from 17 eligible companies in the training split with $\\ge 5$ high-quality postmortems (capped at 12 incidents per company). "
+        "To isolate genuine technical retrieval gains from trivial near-duplicate copy-paste leakage, near-duplicate incidents were filtered out a priori if either embedding cosine similarity $\\ge 0.95$ or 5-gram token-shingle Jaccard similarity $\\ge 0.80$. "
+        "All generations and judgments reflect a single generator (`openai/gpt-oss-120b`) and a single judge (`qwen/qwen3.8-27b`) evaluated under fixed seed 42."
+    )
+    if "Leave-One-Out (LOO) Same-Company Scope" not in new_content:
+        eval_design_marker = "### 1. Evaluation Design\n\n"
+        ed_idx = new_content.find(eval_design_marker)
+        if ed_idx != -1:
+            insert_pos = ed_idx + len(eval_design_marker)
+            new_content = new_content[:insert_pos] + loo_threat_bullet + "\n" + new_content[insert_pos:]
+
+    readme_path.write_text(new_content, encoding="utf-8")
+    print(f"Successfully updated {readme_path}")
+
+
 def main():
+    import sys
     table_md = render_markdown_tables()
     print(table_md)
+    if "--update-readme" in sys.argv or True:
+        update_readme()
 
 
 if __name__ == "__main__":
