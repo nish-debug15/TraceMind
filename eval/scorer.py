@@ -13,7 +13,10 @@ from pathlib import Path
 from typing import List, Dict, Any, Tuple
 import numpy as np
 from rouge_score import rouge_scorer
-from bert_score import score as calc_bertscore
+try:
+    from bert_score import score as calc_bertscore
+except ImportError:
+    calc_bertscore = None
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
@@ -48,6 +51,8 @@ def compute_rouge_scores(predictions: List[str], references: List[str]) -> Dict[
 
 def compute_bert_scores(predictions: List[str], references: List[str]) -> List[float]:
     """Compute BERTScore F1 with fixed model, idf, and batching."""
+    if calc_bertscore is None:
+        raise ImportError("bert-score package is required to compute BERTScore. Install with `pip install bert-score`.")
     safe_preds = [p if p.strip() else "none" for p in predictions]
     safe_refs = [r if r.strip() else "none" for r in references]
     _, _, bs = calc_bertscore(safe_preds, safe_refs, model_type="bert-base-uncased", verbose=False)

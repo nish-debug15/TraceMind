@@ -9,6 +9,11 @@ from pathlib import Path
 import pytest
 from eval.scorer import score_cell
 
+try:
+    import bert_score
+except ImportError:
+    bert_score = None
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TEST_FILE = PROJECT_ROOT / "data" / "splits" / "test.json"
 CACHE_DIR = PROJECT_ROOT / "eval" / "cache"
@@ -17,6 +22,8 @@ COMMITTED_2X2_FILE = PROJECT_ROOT / "eval" / "results" / "control_2x2.json"
 
 @pytest.fixture(scope="module")
 def control_2x2_data():
+    if bert_score is None:
+        pytest.skip("bert-score not installed; skipping scorer regression tests.")
     with open(TEST_FILE, "r", encoding="utf-8") as f:
         test_records = json.load(f)
     gt_map = {r["incident_id"]: r["root_cause"] for r in test_records}
