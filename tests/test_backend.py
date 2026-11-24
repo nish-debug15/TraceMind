@@ -1,5 +1,6 @@
 import os
 import unittest.mock as mock
+import pytest
 from fastapi.testclient import TestClient
 from backend.main import app
 from rag.gen_cache import get_cached_generation, set_cached_generation
@@ -12,17 +13,18 @@ def test_health():
     assert response.json() == {"status": "ok"}
 
 def test_analyze_valid():
-    response = client.post("/analyze", json={"log_text": "Connection timeout"})
-    assert response.status_code == 200
-    data = response.json()
-    assert "incident_id" in data
-    assert "root_cause" in data
-    assert "remediation_steps" in data
-    assert "trace" in data
-    assert "retrieval_pass" in data
-    assert "retrieval_pass" in data["trace"]
-    assert data["retrieval_pass"] in (1, 2)
-    assert data["trace"]["retrieval_pass"] in (1, 2)
+    with mock.patch.dict(os.environ, {"GROQ_API_KEY": ""}):
+        response = client.post("/analyze", json={"log_text": "Connection timeout"})
+        assert response.status_code == 200
+        data = response.json()
+        assert "incident_id" in data
+        assert "root_cause" in data
+        assert "remediation_steps" in data
+        assert "trace" in data
+        assert "retrieval_pass" in data
+        assert "retrieval_pass" in data["trace"]
+        assert data["retrieval_pass"] in (1, 2)
+        assert data["trace"]["retrieval_pass"] in (1, 2)
 
 def test_analyze_empty():
     response = client.post("/analyze", json={"log_text": ""})
@@ -86,15 +88,27 @@ def test_ip_rate_limiting():
     from backend.main import ip_limiter
     ip_limiter.requests.clear()
     
-    # Fill up limit
-    for _ in range(IP_RATE_LIMIT_RPM):
-        resp = client.post('/analyze', json={'log_text': 'Connection timeout pool exhausted'})
-        assert resp.status_code in (200, 502)
+    with mock.patch.dict(os.environ, {"GROQ_API_KEY": ""}):
+        # Fill up limit
+        for _ in range(IP_RATE_LIMIT_RPM):
+            resp = client.post('/analyze', json={'log_text': 'Connection timeout pool exhausted'})
+            assert resp.status_code in (200, 502)
 
-    # Next call must be blocked with HTTP 429
-    blocked = client.post('/analyze', json={'log_text': 'Connection timeout pool exhausted'})
-    assert blocked.status_code == 429
-    data = blocked.json()
-    assert 'message' in data
-    assert 'Rate limit exceeded' in data['message']
-    ip_limiter.requests.clear()
+        # Next call must be blocked with HTTP 429
+        blocked = client.post('/analyze', json={'log_text': 'Connection timeout pool exhausted'})
+        assert blocked.status_code == 429
+        data = blocked.json()
+        assert 'message' in data
+        assert 'Rate limit exceeded' in data['message']
+        ip_limiter.requests.clear()
+
+@pytest.mark.live
+def test_analyze_live_groq():
+    """Live call to Groq API (deselected by default in non-live suite)."""
+    api_key = os.environ.get("GROQ_API_KEY", "").strip()
+    if not api_key:
+        pytest.skip("GROQ_API_KEY not set")
+    response = client.post("/analyze", json={"log_text": "Live test: connection timeout pool exhausted"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data.get("is_mock") is False

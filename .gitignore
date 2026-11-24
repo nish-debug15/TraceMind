@@ -59,13 +59,16 @@ chroma_data/
 rag/chroma_db/
 rag/chroma_db_train/
 rag/cache/
-eval/cache/
 clustering/cluster_index.pkl
 *.sqlite3
 *.sqlite
 *.db
 *.db-journal
 *.db-wal
+
+# Evaluation cache fixtures required by test suite & regression pins
+!eval/cache/
+!eval/cache/**
 
 # Model weights & HuggingFace caches
 .cache/

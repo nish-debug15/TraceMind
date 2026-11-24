@@ -29,8 +29,11 @@ GT_NOISE_FILE = RESULTS_DIR / "gt_noise_sensitivity.json"
 PROMPT_ABLATION_FILE = RESULTS_DIR / "prompt_ablation.json"
 RELEVANCE_ANALYSIS_FILE = RESULTS_DIR / "relevance_analysis.json"
 FLOOR_STATS_FILE = RESULTS_DIR / "floor_stats.json"
-E1_FILE = RESULTS_DIR / "random_precedent_control.json"
-E2_FILE = RESULTS_DIR / "loo_regime_results.json"
+E1_DIRECTIONAL_FILE = RESULTS_DIR / "random_precedent_control_directional.json"
+E1_FILE = E1_DIRECTIONAL_FILE if E1_DIRECTIONAL_FILE.exists() else (RESULTS_DIR / "random_precedent_control_rescored.json")
+E2_FILE = RESULTS_DIR / "loo_regime_results_rescored.json"
+LOO_STRATIFIED_FILE = RESULTS_DIR / "loo_stratified.json"
+LOO_CONSISTENCY_FILE = RESULTS_DIR / "loo_consistency.json"
 
 
 def render_markdown_tables() -> str:
@@ -179,7 +182,7 @@ def render_markdown_tables() -> str:
         lines.append("")
         lines.append("#### Table 1 (E1): Test Set Control (Held-Out Test Set, N = 93, 0% Same-Company)")
         lines.append("")
-        lines.append("> Evaluates whether downstream RAG generation gains reflect technical incident semantics or general in-context exemplar/style priming. Clustered bootstrap confidence intervals with Bonferroni multiplicity adjustment across m=5 endpoints (99% CI, 10,000 resamples, seed 42).")
+        lines.append("> Evaluates whether downstream RAG generation gains reflect technical incident semantics or general in-context exemplar/style priming. Clustered bootstrap confidence intervals with Bonferroni multiplicity adjustment across m=5 endpoints (99% CI, 10,000 resamples, seed 42). Metrics unified under canonical `eval/scorer.py`.")
         lines.append("")
         lines.append("| Condition | Format | ROUGE-L F1 | BERTScore F1 | Delta vs. Zero-Shot (ROUGE-L) [99% CI] | Delta vs. Zero-Shot (BERTScore) [99% CI] | Multiplicity Status |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|")
@@ -205,8 +208,9 @@ def render_markdown_tables() -> str:
             rnd_rl_ci = d_rnd_rl.get("adjusted_ci", [0, 0])
             rnd_bs_ci = d_rnd_bs.get("adjusted_ci", [0, 0])
             rnd_stat = "excludes zero" if d_rnd_rl.get("excludes_zero_after_adjustment", False) else "crosses zero"
+            rnd_name = "**Random Precedent** *(Audit: Invalid)*" if fmt == "baseline" else "**Random Precedent**"
             lines.append(
-                f"| **Random Precedent** | {fmt_lbl} | {rnd_rl:.4f} | {rnd_bs:.4f} | "
+                f"| {rnd_name} | {fmt_lbl} | {rnd_rl:.4f} | {rnd_bs:.4f} | "
                 f"**{d_rnd_rl.get('mean', 0.0):+.4f}** `[{rnd_rl_ci[0]:.4f}, {rnd_rl_ci[1]:.4f}]` | "
                 f"**{d_rnd_bs.get('mean', 0.0):+.4f}** `[{rnd_bs_ci[0]:.4f}, {rnd_bs_ci[1]:.4f}]` | {rnd_stat} |"
             )
@@ -228,20 +232,22 @@ def render_markdown_tables() -> str:
             )
 
         lines.append("")
-        e1_verdict = e1_data.get("formats", {}).get("gate_v2", {}).get("verdict", e1_data.get("verdict", "inconclusive"))
+        e1_g2_v = e1_data.get("formats", {}).get("gate_v2", {}).get("verdict_directional", e1_data.get("formats", {}).get("gate_v2", {}).get("verdict", "inconclusive"))
+        e1_base_v = e1_data.get("formats", {}).get("baseline", {}).get("verdict_directional", e1_data.get("formats", {}).get("baseline", {}).get("verdict", "precedent_harmful_or_artifact"))
         d_real_rnd = e1_data.get("formats", {}).get("gate_v2", {}).get("deltas", {}).get("real_minus_random", {}).get("rougeL_f1", {})
         d_rnd_zs = e1_data.get("formats", {}).get("gate_v2", {}).get("deltas", {}).get("random_minus_zeroshot", {}).get("rougeL_f1", {})
+        d_real_rnd_base = e1_data.get("formats", {}).get("baseline", {}).get("deltas", {}).get("real_minus_random", {}).get("rougeL_f1", {})
         lines.append(
-            f"> **E1 Decision Rule Verdict:** `{e1_verdict}` (gate-v2 format). The real-minus-random delta is "
-            f"**{d_real_rnd.get('mean', 0.0):+.4f}** `[{d_real_rnd.get('adjusted_ci', [0,0])[0]:.4f}, {d_real_rnd.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero after Bonferroni adjustment), "
-            f"while the random-minus-zero-shot delta is **{d_rnd_zs.get('mean', 0.0):+.4f}** `[{d_rnd_zs.get('adjusted_ci', [0,0])[0]:.4f}, {d_rnd_zs.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero). "
-            f"Retrieval does not provide detectable semantic gain over arbitrary exemplar priming on unseen companies."
+            f"> **E1 Decision Rule Verdicts:**\n"
+            f"> - **Gate-v2 Format:** `{e1_g2_v}`. Real-minus-random is **{d_real_rnd.get('mean', 0.0):+.4f}** `[{d_real_rnd.get('adjusted_ci', [0,0])[0]:.4f}, {d_real_rnd.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero after Bonferroni adjustment); "
+            f"random-minus-zero-shot is **{d_rnd_zs.get('mean', 0.0):+.4f}** `[{d_rnd_zs.get('adjusted_ci', [0,0])[0]:.4f}, {d_rnd_zs.get('adjusted_ci', [0,0])[1]:.4f}]` (crosses zero). Precedent retrieval produces no detectable lift over random exemplar priming on unseen companies.\n"
+            f"> - **Baseline Format (Initial):** `{e1_base_v}` under `eval/PREREG_ERRATA.md`. Real-minus-random is **{d_real_rnd_base.get('mean', 0.0):+.4f}** `[{d_real_rnd_base.get('adjusted_ci', [0,0])[0]:.4f}, {d_real_rnd_base.get('adjusted_ci', [0,0])[1]:.4f}]` (excludes zero, negative). Note: This arm was formally invalidated (Deviation 2 in `eval/DEVIATIONS.md`) because generations inadvertently used gate-v2 brevity instructions (~55 words vs ~200 words); rerun staged via `scripts/rerun_e1_baseline_v2.py`."
         )
         lines.append("")
 
         lines.append("#### Table 2 (E2): Leave-One-Out (LOO) Same-Company Regime (N = 93 across 17 Companies)")
         lines.append("")
-        lines.append("> Evaluates retrieval when same-company historical postmortems exist in the corpus. Condition (a) allows same-company precedents with near-duplicates filtered; Condition (b) restricts retrieval to cross-company only. Multiplicity-adjusted 99% CIs across m=5 endpoints (seed 42).")
+        lines.append("> Evaluates retrieval when same-company historical postmortems exist in the corpus. Condition (a) allows same-company precedents with near-duplicates filtered; Condition (b) restricts retrieval to cross-company only. Multiplicity-adjusted 99% CIs across m=5 endpoints (seed 42). Metrics unified under canonical `eval/scorer.py`.")
         lines.append("")
         lines.append("| Condition | Format | ROUGE-L F1 | BERTScore F1 | Relevance@1 (Score 2 / 1 / 0) | Delta vs. Zero-Shot (ROUGE-L) [99% CI] | Delta vs. Zero-Shot (BERTScore) [99% CI] | Multiplicity Status |")
         lines.append("|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|")
@@ -306,6 +312,63 @@ def render_markdown_tables() -> str:
             f"confirming that having same-company historical postmortems in the corpus produced no statistically detectable lift over cross-company retrieval or zero-shot generation."
         )
         lines.append("")
+
+        # Stratified LOO Deltas Table
+        if LOO_STRATIFIED_FILE.exists():
+            with open(LOO_STRATIFIED_FILE, "r", encoding="utf-8") as f:
+                strat_data = json.load(f)
+            
+            strata = strat_data.get("strata", {})
+            lines.append("#### Table 2a (E2 Stratified): LOO Downstream Deltas Stratified by Judged Top-1 Relevance")
+            lines.append("")
+            lines.append("> Evaluates RAG(a)-minus-zero-shot generation deltas within each judged relevance stratum (gate-v2 format). Word counts and parsed remediation subsets reported per stratum.")
+            lines.append("")
+            lines.append("| Judged Top-1 Relevance | Incidents (Companies) | ROUGE-L Delta | BERTScore Delta | Both-Parsed Remediation Delta (n, comp) | Word Count (Zero-Shot / RAG-a) |")
+            lines.append("|:---|:---:|:---:|:---:|:---:|:---:|")
+
+            score_labels = {
+                "score_0": "Score 0 (Unrelated)",
+                "score_1": "Score 1 (Partially Relevant)",
+                "score_2": "Score 2 (Highly Relevant / Same Mechanism)"
+            }
+            for s_k in ["score_0", "score_1", "score_2"]:
+                if s_k in strata:
+                    s_info = strata[s_k]
+                    lbl = score_labels.get(s_k, s_k)
+                    n_inc = s_info.get("n", 0)
+                    n_comp = s_info.get("n_companies", 0)
+                    deltas_s = s_info.get("deltas_rag_a_minus_zeroshot", {})
+                    rl_m = deltas_s.get("rougeL_f1", {}).get("mean", 0.0)
+                    bs_m = deltas_s.get("bert_score_f1", {}).get("mean", 0.0)
+                    rem_info = deltas_s.get("remediation_both_parsed", {})
+                    rem_m = rem_info.get("delta_remediation_rougeL", {}).get("mean", 0.0)
+                    rem_n = rem_info.get("n_both_parsed", 0)
+                    rem_comp = rem_info.get("n_companies_both_parsed", 0)
+                    wc = s_info.get("word_counts", {})
+                    zs_wc = wc.get("zero_shot", {}).get("mean", 0.0)
+                    ra_wc = wc.get("rag_a", {}).get("mean", 0.0)
+                    lines.append(
+                        f"| **{lbl}** | {n_inc} ({n_comp}) | **{rl_m:+.4f}** | **{bs_m:+.4f}** | "
+                        f"{rem_m:+.4f} (n={rem_n}, c={rem_comp}) | {zs_wc:.1f} / {ra_wc:.1f} |"
+                    )
+            lines.append("")
+
+        # LOO Retrieval Consistency & Near-Duplicate Filter Audit
+        if LOO_CONSISTENCY_FILE.exists():
+            with open(LOO_CONSISTENCY_FILE, "r", encoding="utf-8") as f:
+                cons_data = json.load(f)
+            recon = cons_data.get("reconciliation", {})
+            dist = cons_data.get("distributions_condition_c_top1", {})
+            cos_d = dist.get("cosine_similarity", {})
+            jac_d = dist.get("token_5gram_jaccard", {})
+            lines.append("#### LOO Retrieval Consistency & Near-Duplicate Filter Audit")
+            lines.append("")
+            lines.append(
+                f"- **Near-Duplicate Filter Impact:** Exactly {recon.get('condition_a_total_near_duplicates_filtered', 11)} near-duplicates were filtered in Condition (a) (across {recon.get('queries_with_divergent_top3_between_a_and_c', 8)} queries, {recon.get('queries_with_divergent_top1_between_a_and_c', 7)} changing top-1) and exactly {recon.get('condition_b_total_near_duplicates_filtered', 0)} in Condition (b).\n"
+                f"- **Divergence Reconciliation:** All {recon.get('queries_with_divergent_top3_between_a_and_c', 8)} queries with differing top-3 lists between Condition (a) and unfiltered Condition (c) are 100% accounted for by the near-duplicate filter threshold ($\\ge 0.95$ cosine or $\\ge 0.80$ 5-gram token-shingle Jaccard); {recon.get('unexplained_differences_count', 0)} unexplained divergences.\n"
+                f"- **Unfiltered Candidate Pool Distributions (Condition c Top-1):** Cosine similarity: min = {cos_d.get('min', 0.0):.4f}, median = {cos_d.get('median', 0.0):.4f}, p90 = {cos_d.get('p90', 0.0):.4f}, max = {cos_d.get('max', 0.0):.4f} ({cos_d.get('count_ge_0_90', 0)} $\\ge 0.90$, {cos_d.get('count_ge_0_95', 0)} $\\ge 0.95$). 5-gram token-shingle Jaccard: min = {jac_d.get('min', 0.0):.4f}, median = {jac_d.get('median', 0.0):.4f}, p90 = {jac_d.get('p90', 0.0):.4f}, max = {jac_d.get('max', 0.0):.4f} ({jac_d.get('count_ge_0_80', 0)} $\\ge 0.80$)."
+            )
+            lines.append("")
 
         lines.append("#### Comparative Analysis: Same-Company History (E2) vs. Company-Disjoint Generalisation (E1)")
         lines.append("")
@@ -634,18 +697,27 @@ def update_readme():
         print("Warning: Could not find exact replacement boundaries in README.md")
         return
 
-    loo_threat_bullet = (
-        "- **Leave-One-Out (LOO) Same-Company Scope & Single-Seed Modeling:** "
-        "Experiment 2 was evaluated on an LOO sample of $N=93$ incidents drawn exclusively from 17 eligible companies in the training split with $\\ge 5$ high-quality postmortems (capped at 12 incidents per company). "
-        "To isolate genuine technical retrieval gains from trivial near-duplicate copy-paste leakage, near-duplicate incidents were filtered out a priori if either embedding cosine similarity $\\ge 0.95$ or 5-gram token-shingle Jaccard similarity $\\ge 0.80$. "
-        "All generations and judgments reflect a single generator (`openai/gpt-oss-120b`) and a single judge (`qwen/qwen3.8-27b`) evaluated under fixed seed 42."
-    )
-    if "Leave-One-Out (LOO) Same-Company Scope" not in new_content:
-        eval_design_marker = "### 1. Evaluation Design\n\n"
-        ed_idx = new_content.find(eval_design_marker)
-        if ed_idx != -1:
-            insert_pos = ed_idx + len(eval_design_marker)
-            new_content = new_content[:insert_pos] + loo_threat_bullet + "\n" + new_content[insert_pos:]
+    threat_bullets = [
+        "- **Single Scorer Reconciliation:** All evaluation metrics (ROUGE-1/2/L, BERTScore F1, SentenceTransformer cosine similarity, and root-cause word count) are unified under canonical implementation [eval/scorer.py](eval/scorer.py), pinned within $10^{-4}$ against previously committed 2x2 control cells in [tests/test_scorer_regression.py](tests/test_scorer_regression.py). Discrepancies between earlier E1/E2 reports and control_2x2 arose from markdown stripping (`clean_rc()` in `analyze_e1.py`) and cosine text slicing; all reported numbers are now sourced strictly from rescored datasets.",
+        "- **E1 Baseline Arm Status (Invalidated):** An audit of the E1 baseline random-precedent arm ([scripts/audit_e1_baseline.py](scripts/audit_e1_baseline.py)) revealed that generations inadvertently used the `relevance_gate_v2` brevity constraint (`PROMPT_REGISTRY['baseline']`), producing truncated ~55-word outputs rather than verbose ~200-word outputs characteristic of baseline RAG and zero-shot. As documented in [eval/DEVIATIONS.md](eval/DEVIATIONS.md) (Deviation 2), this arm was invalidated. Prompt parity has been verified in [tests/test_e1_prompt_parity.py](tests/test_e1_prompt_parity.py) and a rerun script staged ([scripts/rerun_e1_baseline_v2.py](scripts/rerun_e1_baseline_v2.py)); directional verdict for the initial baseline under [eval/PREREG_ERRATA.md](eval/PREREG_ERRATA.md) is `precedent_harmful_or_artifact`.",
+        "- **Leave-One-Out (LOO) Sample of 17 Companies:** Experiment 2's LOO regime draws $N=93$ queries exclusively from the 17 companies in the training split with $\\ge 5$ high-quality postmortems (capped at 12 incidents per company). Because companies with fewer than 5 incidents were excluded to ensure sufficient candidate precedent depth, findings reflect multi-incident enterprise organizations and cannot be generalized to sparse-incident organizations without history.",
+        "- **Same-Mechanism Stratum Sample Size ($N=14$):** In the LOO regime, only 14 incidents (15.05% across 9 companies) had top-1 retrieved precedents judged as sharing the identical technical failure mechanism (Score 2). While this stratum exhibits negative downstream deltas ($\\Delta \\text{ROUGE-L} = -0.0379$, $\\Delta \\text{BERTScore} = -0.0293$), the small sample size ($N=14$) limits statistical power, and results are reported as exploratory without claim of generalizability.",
+        "- **E1 Single Random Seed ($seed=42$):** The E1 random-precedent control was generated under a single fixed seed ($seed=42$), uniformly sampling one non-retrieved high-quality precedent per query. While standard error across queries is captured by bootstrap resampling, multi-seed variance across alternative random precedent assignments remains unmeasured.",
+    ]
+    threat_block = "\n".join(threat_bullets)
+
+    eval_design_marker = "### 1. Evaluation Design\n\n"
+    format_effect_marker = "- **Format Effect Dominates Retrieval Effect in Gate Prompts:**"
+    ed_idx = new_content.find(eval_design_marker)
+    fe_idx = new_content.find(format_effect_marker)
+
+    if ed_idx != -1 and fe_idx != -1:
+        prefix = new_content[:ed_idx + len(eval_design_marker)]
+        suffix = new_content[fe_idx:]
+        new_content = prefix + threat_block + "\n" + suffix
+    elif ed_idx != -1:
+        insert_pos = ed_idx + len(eval_design_marker)
+        new_content = new_content[:insert_pos] + threat_block + "\n" + new_content[insert_pos:]
 
     readme_path.write_text(new_content, encoding="utf-8")
     print(f"Successfully updated {readme_path}")
