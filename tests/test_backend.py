@@ -112,3 +112,42 @@ def test_analyze_live_groq():
     assert response.status_code == 200
     data = response.json()
     assert data.get("is_mock") is False
+
+
+def test_clusters_endpoints():
+    # Test GET /clusters
+    resp = client.get("/clusters")
+    assert resp.status_code == 200
+    clusters = resp.json()
+    assert isinstance(clusters, list)
+    assert len(clusters) >= 30
+    
+    # Test GET /clusters/11
+    resp_11 = client.get("/clusters/11")
+    assert resp_11.status_code == 200
+    c11 = resp_11.json()
+    assert c11["id"] == 11
+    assert "DigitalOcean Anthropic API disruptions" in c11["name"]
+    assert len(c11["keywords"]) > 0
+    assert len(c11["typical_fixes"]) > 0
+    assert len(c11["examples"]) > 0
+    assert "source_url" in c11["examples"][0]
+    
+    # Test GET /clusters/9999 (not found)
+    resp_404 = client.get("/clusters/9999")
+    assert resp_404.status_code == 404
+
+
+def test_analyze_includes_cluster_profile():
+    with mock.patch.dict(os.environ, {"GROQ_API_KEY": ""}):
+        response = client.post("/analyze", json={"log_text": "Connection timeout acquiring connection from pool"})
+        assert response.status_code == 200
+        data = response.json()
+        assert "cluster_profile" in data
+        assert "trace" in data
+        assert "cluster_profile" in data["trace"]
+        if data["cluster_profile"] is not None:
+            assert "id" in data["cluster_profile"]
+            assert "name" in data["cluster_profile"]
+            assert "description" in data["cluster_profile"]
+            assert "typical_fixes" in data["cluster_profile"]

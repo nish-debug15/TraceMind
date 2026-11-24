@@ -3,6 +3,8 @@ import os
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
     "https://tracemind.vercel.app",
     os.getenv("FRONTEND_URL", "").strip(),
     os.getenv("VERCEL_URL", "").strip(),

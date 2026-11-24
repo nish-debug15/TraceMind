@@ -2,13 +2,22 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import os
+import json
 import logging
 import time
 import threading
+from pathlib import Path
+from typing import Optional, List
 from collections import defaultdict
 
 from backend.config import ALLOWED_ORIGINS, LLM_MODEL, IP_RATE_LIMIT_RPM
-from backend.models import AnalyzeRequest, AnalyzeResponse, PipelineTrace, RetrievedIncident
+from backend.models import (
+    AnalyzeRequest,
+    AnalyzeResponse,
+    PipelineTrace,
+    RetrievedIncident,
+    ClusterProfile,
+)
 
 # Import stubs with mock data
 from clustering import assign_cluster
@@ -25,6 +34,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+PROFILES_PATH = Path(__file__).parent.parent / "clustering" / "cluster_profiles.json"
+_CLUSTER_PROFILES: dict[int, dict] = {}
+
+
+def get_cluster_profile(cluster_id: int) -> Optional[dict]:
+    """Retrieve cluster profile by ID from clustering/cluster_profiles.json."""
+    global _CLUSTER_PROFILES
+    if not _CLUSTER_PROFILES and PROFILES_PATH.exists():
+        try:
+            with open(PROFILES_PATH, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+                _CLUSTER_PROFILES = {int(k): v for k, v in raw.items()}
+        except Exception as e:
+            logging.error(f"Failed to load cluster profiles: {e}")
+    return _CLUSTER_PROFILES.get(cluster_id)
 
 
 class IPRateLimiter:
@@ -75,6 +100,22 @@ def health_check():
     return {"status": "ok"}
 
 
+@app.get("/clusters", response_model=List[ClusterProfile])
+def list_clusters():
+    """List all failure-grounded cluster profiles."""
+    get_cluster_profile(-1)
+    return sorted(list(_CLUSTER_PROFILES.values()), key=lambda c: c.get("id", 0))
+
+
+@app.get("/clusters/{cluster_id}", response_model=ClusterProfile)
+def get_cluster(cluster_id: int):
+    """Get failure-grounded metadata, playbook fixes, and examples for a specific cluster."""
+    profile = get_cluster_profile(cluster_id)
+    if profile is None:
+        raise HTTPException(status_code=404, detail=f"Cluster {cluster_id} not found")
+    return profile
+
+
 @app.post("/analyze", response_model=AnalyzeResponse)
 def analyze_log(request: AnalyzeRequest, req: Request):
     # Enforce per-IP rate limiting
@@ -95,6 +136,9 @@ def analyze_log(request: AnalyzeRequest, req: Request):
     try:
         # Run clustering
         cluster_info = assign_cluster(request.log_text)
+        cluster_id = cluster_info["cluster_id"]
+        profile_data = get_cluster_profile(cluster_id)
+        cluster_profile_obj = ClusterProfile(**profile_data) if profile_data else None
         
         # Run RAG retrieval and generation with caching enabled in production
         use_cache = os.getenv("ENABLE_GEN_CACHE", "true").lower() == "true"
@@ -105,13 +149,14 @@ def analyze_log(request: AnalyzeRequest, req: Request):
         # Assemble PipelineTrace
         retrieval_pass = rag_info.get("retrieval_pass", 1 if rag_info.get("similarity_score", 0) >= 0.40 else 2)
         trace = PipelineTrace(
-            cluster_id=cluster_info["cluster_id"],
+            cluster_id=cluster_id,
             is_noise=cluster_info["is_noise"],
             retrieved_incident=RetrievedIncident(**rag_info["retrieved_incident"]),
             similarity_score=rag_info["similarity_score"],
             retrieval_pass=retrieval_pass,
             prompt_used=rag_info["prompt_used"],
             model=rag_info.get("model", LLM_MODEL),
+            cluster_profile=cluster_profile_obj,
         )
         
         # Assemble Final Response
@@ -122,6 +167,7 @@ def analyze_log(request: AnalyzeRequest, req: Request):
             source_url=rag_info["retrieved_incident"]["source_url"],
             retrieval_pass=retrieval_pass,
             trace=trace,
+            cluster_profile=cluster_profile_obj,
             is_mock=rag_info.get("is_mock", False)
         )
     except LLMGenerationError as e:

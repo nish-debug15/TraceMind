@@ -21,6 +21,9 @@ import {
   CheckSquare,
   Square,
   Search,
+  BookOpen,
+  Tag,
+  ArrowRight,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -37,12 +40,37 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 // --- Types matching Backend Models strictly ---
 
+type ClusterExample = {
+  company: string;
+  root_cause: string;
+  source_url: string;
+};
+
+type ClusterSource = {
+  top_company?: string;
+  top_share?: number;
+  company_count?: number;
+};
+
+type ClusterProfile = {
+  id: number;
+  name: string;
+  description: string;
+  size: number;
+  confidence?: string;
+  source?: ClusterSource;
+  keywords: string[];
+  typical_fixes: string[];
+  examples: ClusterExample[];
+};
+
 type RetrievedIncident = {
   incident_id: string;
   raw_log_excerpt: string;
   root_cause: string;
   remediation_steps: string;
   source_url: string;
+  company?: string;
   quality_score?: number;
   quality?: string | number;
 };
@@ -55,6 +83,7 @@ type PipelineTrace = {
   retrieval_pass?: number;
   prompt_used: string;
   model?: string;
+  cluster_profile?: ClusterProfile;
 };
 
 type AnalyzeResponse = {
@@ -65,6 +94,7 @@ type AnalyzeResponse = {
   source_url: string;
   retrieval_pass?: number;
   trace: PipelineTrace;
+  cluster_profile?: ClusterProfile;
   is_mock?: boolean;
 };
 
@@ -332,6 +362,9 @@ export default function Home() {
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
   const [timestamp, setTimestamp] = useState<string | null>(null);
   const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
+  const [bottomTab, setBottomTab] = useState<string>("cluster");
+  const [checkedRunbookItems, setCheckedRunbookItems] = useState<Record<number, boolean>>({});
+  const bottomPanelRef = useRef<HTMLDivElement>(null);
 
   // Health check state
   const [apiStatus, setApiStatus] = useState<"ok" | "waking" | "error">("ok");
@@ -458,6 +491,8 @@ export default function Home() {
     setError(null);
     setResult(null);
     setCheckedSteps({});
+    setCheckedRunbookItems({});
+    setBottomTab("cluster");
     setLoadingStage(0);
 
     // Timed simulated stage progression
@@ -989,7 +1024,7 @@ export default function Home() {
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
                 <span className="text-[12px] font-medium tracking-wide uppercase text-[var(--muted)]">
-                  Cluster
+                  Cluster Archetype
                 </span>
               </div>
               {result && (
@@ -997,38 +1032,80 @@ export default function Home() {
                   variant="outline"
                   className={`text-[11px] font-mono ${
                     result.trace.is_noise
-                      ? "border-[var(--warn)] text-[var(--warn)]"
-                      : "border-[var(--border)] text-[var(--muted)]"
+                      ? "border-[var(--warn)]/40 text-[var(--warn)] bg-[var(--warn)]/10"
+                      : "border-[var(--accent)]/40 text-[var(--accent)] bg-[var(--accent-soft)]/50"
                   }`}
                 >
-                  {result.trace.is_noise ? "NOISE" : "ASSIGNED"}
+                  {result.trace.is_noise ? "NOVEL" : `CLUSTER #${result.trace.cluster_id}`}
                 </Badge>
               )}
             </div>
 
             {loading ? (
-              <div className="space-y-2 pt-4">
-                <Skeleton className="h-8 w-24 bg-[var(--border)]" />
-                <Skeleton className="h-4 w-36 bg-[var(--border)]" />
+              <div className="space-y-2 pt-3">
+                <Skeleton className="h-6 w-28 bg-[var(--border)]" />
+                <Skeleton className="h-4 w-40 bg-[var(--border)]" />
+                <Skeleton className="h-4 w-32 bg-[var(--border)]" />
               </div>
             ) : result ? (
-              <div className="pt-3">
-                <div
-                  className={`text-[28px] font-mono font-semibold tabular-nums tracking-tight ${
-                    result.trace.is_noise ? "text-[var(--warn)]" : "text-[var(--text)]"
-                  }`}
-                >
-                  {result.trace.is_noise ? "Novel" : `#${result.trace.cluster_id}`}
+              <div className="pt-2.5 flex flex-col justify-between flex-1">
+                <div>
+                  <div
+                    className={`text-[15px] font-semibold tracking-tight leading-snug line-clamp-1 ${
+                      result.trace.is_noise ? "text-[var(--warn)]" : "text-[var(--text)]"
+                    }`}
+                    title={result.cluster_profile?.name || (result.trace.is_noise ? "Novel pattern" : `Cluster #${result.trace.cluster_id}`)}
+                  >
+                    {result.cluster_profile?.name || (result.trace.is_noise ? "Novel Unseen Pattern" : `Cluster #${result.trace.cluster_id}`)}
+                  </div>
+                  
+                  <p className="text-[11px] text-[var(--muted)] mt-1 line-clamp-2 leading-relaxed">
+                    {result.cluster_profile?.description || (
+                      result.trace.is_noise
+                        ? "No recurring failure signature in the historical corpus. Treat match as a hypothesis."
+                        : "Correlated to recurrent outage signature in the postmortem index."
+                    )}
+                  </p>
                 </div>
-                <div className="text-[12px] text-[var(--muted)] mt-1">
-                  {result.trace.is_noise
-                    ? "No historical cluster, treat as new"
-                    : "Known failure cluster"}
+
+                <div className="pt-2 mt-auto">
+                  {result.cluster_profile?.keywords && result.cluster_profile.keywords.length > 0 ? (
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {result.cluster_profile.keywords.slice(0, 3).map((kw, i) => (
+                        <span
+                          key={i}
+                          className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[var(--tile-2)] border border-[var(--border)] text-[var(--muted)]"
+                        >
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-[10px] font-mono text-[var(--muted)] mb-2">
+                      {result.trace.is_noise
+                        ? "338 historical incidents indexed"
+                        : `${result.cluster_profile?.size || "Multiple"} incidents in corpus`}
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBottomTab("cluster");
+                      setTimeout(() => {
+                        bottomPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }, 50);
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--accent)] hover:underline cursor-pointer group"
+                  >
+                    <span>Inspect cluster runbook</span>
+                    <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="pt-6 text-center text-[12px] text-[var(--muted)] w-full">
-                Cluster assignment will appear after analysis
+                Cluster archetype will appear after analysis
               </div>
             )}
           </motion.div>
@@ -1421,47 +1498,290 @@ export default function Home() {
           </motion.div>
 
           {/* ========================================================= */}
-          {/* ROW 4 - TILE H: Pipeline Trace (col-span 12) */}
+          {/* ROW 4 - TILE H: Incident Intelligence Hub (col-span 12) */}
           {/* ========================================================= */}
           <motion.div
+            ref={bottomPanelRef}
             custom={7}
             initial="hidden"
             animate="visible"
             variants={tileVariants}
-            className={`order-8 md:order-8 col-span-1 md:col-span-6 xl:col-span-12 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[280px] overflow-hidden ${
+            className={`order-8 md:order-8 col-span-1 md:col-span-6 xl:col-span-12 flex flex-col rounded-[16px] border bg-[var(--tile)] min-h-[380px] overflow-hidden scroll-mt-6 ${
               !result && !loading
                 ? "border-dashed border-[var(--border)] shadow-none"
                 : "border-[var(--border)] shadow-[0_1px_2px_rgba(16,16,20,0.04)] dark:shadow-none"
             }`}
           >
             {result ? (
-              <Tabs defaultValue="timeline" className="w-full flex flex-col flex-1">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border)] bg-[var(--tile)]">
+              <Tabs value={bottomTab} onValueChange={setBottomTab} className="w-full flex flex-col flex-1">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-2.5 border-b border-[var(--border)] bg-[var(--tile)] gap-2">
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-[var(--muted)]" strokeWidth={1.5} />
-                    <span className="text-[12px] font-medium tracking-wide uppercase text-[var(--muted)]">
-                      Pipeline Trace
+                    <BookOpen className="h-4 w-4 text-[var(--accent)]" strokeWidth={1.75} />
+                    <span className="text-[12px] font-semibold tracking-wide uppercase text-[var(--text)]">
+                      Incident Intelligence Hub
                     </span>
+                    <Badge variant="outline" className="text-[10px] font-mono border-[var(--border)] text-[var(--muted)] hidden md:inline-flex">
+                      {result.trace.is_noise ? "Novel Archetype" : `Cluster #${result.trace.cluster_id}`}
+                    </Badge>
                   </div>
 
                   <TabsList className="bg-[var(--tile-2)] border border-[var(--border)] h-8 p-0.5 rounded-lg">
                     <TabsTrigger
-                      value="timeline"
-                      className="text-[12px] h-7 px-3 rounded-md data-[state=active]:bg-[var(--tile)] data-[state=active]:text-[var(--text)]"
+                      value="cluster"
+                      className="text-[12px] h-7 px-3 rounded-md data-[state=active]:bg-[var(--tile)] data-[state=active]:text-[var(--text)] flex items-center gap-1.5"
                     >
-                      Timeline
+                      <Layers className="h-3.5 w-3.5" />
+                      <span>Cluster Intelligence & Runbook</span>
                     </TabsTrigger>
                     <TabsTrigger
-                      value="prompt"
-                      className="text-[12px] h-7 px-3 rounded-md data-[state=active]:bg-[var(--tile)] data-[state=active]:text-[var(--text)]"
+                      value="precedent"
+                      className="text-[12px] h-7 px-3 rounded-md data-[state=active]:bg-[var(--tile)] data-[state=active]:text-[var(--text)] flex items-center gap-1.5"
                     >
-                      Prompt
+                      <Database className="h-3.5 w-3.5" />
+                      <span>Precedent Deep-Dive</span>
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="audit"
+                      className="text-[12px] h-7 px-3 rounded-md data-[state=active]:bg-[var(--tile)] data-[state=active]:text-[var(--text)] flex items-center gap-1.5"
+                    >
+                      <Clock className="h-3.5 w-3.5" />
+                      <span>Pipeline Trace & Audit</span>
                     </TabsTrigger>
                   </TabsList>
                 </div>
 
-                {/* Timeline Tab */}
-                <TabsContent value="timeline" className="p-6 m-0 flex-1">
+                {/* TAB 1: Cluster Intelligence & Runbook */}
+                <TabsContent value="cluster" className="p-5 m-0 flex-1 flex flex-col gap-5">
+                  {/* Banner / Summary Card */}
+                  <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1.5 max-w-3xl">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[14px] font-mono font-semibold text-[var(--accent)]">
+                          {result.trace.is_noise ? "Cluster #-1" : `Cluster #${result.trace.cluster_id}`}
+                        </span>
+                        <span className="text-[14px] font-semibold text-[var(--text)]">
+                          {result.cluster_profile?.name || (result.trace.is_noise ? "Novel Failure Pattern" : "Known Failure Pattern")}
+                        </span>
+                      </div>
+                      <p className="text-[13px] leading-relaxed text-[var(--muted)]">
+                        {result.cluster_profile?.description || (
+                          result.trace.is_noise
+                            ? "No recurring failure signature in the historical corpus. Treat the retrieved precedent as an analogical hypothesis."
+                            : "Incidents in this cluster share common failure modes, architectural dependencies, and remediation playbooks."
+                        )}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-row md:flex-col items-start md:items-end gap-2 flex-shrink-0 text-[11px] font-mono text-[var(--muted)]">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[var(--text)] font-semibold">{result.cluster_profile?.size ?? 1}</span>
+                        <span>incidents in corpus</span>
+                      </div>
+                      {result.cluster_profile?.source?.top_company && (
+                        <div className="flex items-center gap-1.5">
+                          <span>Top source:</span>
+                          <span className="text-[var(--text)] font-semibold uppercase">{result.cluster_profile.source.top_company}</span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-1.5">
+                        <span>Confidence:</span>
+                        <span className="text-[var(--ok)] font-semibold uppercase">{result.cluster_profile?.confidence ?? "Standard"}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Failure Keywords / Diagnostic Signatures */}
+                  {result.cluster_profile?.keywords && result.cluster_profile.keywords.length > 0 && (
+                    <div className="flex items-center flex-wrap gap-2 pt-1">
+                      <span className="text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider flex items-center gap-1">
+                        <Tag className="h-3 w-3" />
+                        Diagnostic Keywords:
+                      </span>
+                      {result.cluster_profile.keywords.map((kw, i) => (
+                        <Badge key={i} variant="outline" className="text-[11px] font-mono bg-[var(--tile-2)] border-[var(--border)] text-[var(--text)]">
+                          {kw}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Two Column Grid: Runbook on Left, Examples on Right */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    {/* Left: Recommended SRE Runbook Playbook */}
+                    <div className="flex flex-col rounded-xl border border-[var(--border)] bg-[var(--tile)] p-4 shadow-sm">
+                      <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                        <div className="flex items-center gap-2">
+                          <ListChecks className="h-4 w-4 text-[var(--accent)]" />
+                          <h4 className="text-[13px] font-semibold text-[var(--text)]">
+                            {result.trace.is_noise ? "Novel Outage Triage Checklist" : "Cluster SRE Playbook Actions"}
+                          </h4>
+                        </div>
+                        <span className="text-[11px] font-mono text-[var(--muted)]">
+                          {Object.values(checkedRunbookItems).filter(Boolean).length}/
+                          {(result.cluster_profile?.typical_fixes?.length || 4)} completed
+                        </span>
+                      </div>
+
+                      <div className="mt-3 space-y-2.5">
+                        {(() => {
+                          const fixes = (result.cluster_profile?.typical_fixes && result.cluster_profile.typical_fixes.length > 0)
+                            ? result.cluster_profile.typical_fixes
+                            : [
+                                "Verify upstream cloud provider status and API availability",
+                                "Inspect recent deployments, image rollouts, and configuration diffs",
+                                "Correlate ingress error rates with database pool and downstream socket latency",
+                                "Capture thread dumps and socket telemetry before container restarts"
+                              ];
+                          return fixes.map((fix, idx) => {
+                            const isChecked = !!checkedRunbookItems[idx];
+                            return (
+                              <div
+                                key={idx}
+                                onClick={() => {
+                                  setCheckedRunbookItems(prev => ({ ...prev, [idx]: !prev[idx] }));
+                                }}
+                                className={`flex items-start gap-2.5 p-2.5 rounded-lg border transition-colors cursor-pointer select-none ${
+                                  isChecked
+                                    ? "bg-[var(--accent-soft)]/20 border-[var(--accent)]/30 text-[var(--muted)]"
+                                    : "bg-[var(--tile-2)]/60 border-[var(--border)] hover:bg-[var(--tile-2)] text-[var(--text)]"
+                                }`}
+                              >
+                                {isChecked ? (
+                                  <CheckSquare className="h-4 w-4 text-[var(--accent)] mt-0.5 flex-shrink-0" />
+                                ) : (
+                                  <Square className="h-4 w-4 text-[var(--muted)] mt-0.5 flex-shrink-0" />
+                                )}
+                                <span className={`text-[12px] leading-relaxed ${isChecked ? "line-through text-[var(--muted)]" : ""}`}>
+                                  {fix}
+                                </span>
+                              </div>
+                            );
+                          });
+                        })()}
+                      </div>
+                    </div>
+
+                    {/* Right: Historical Postmortems in Cluster */}
+                    <div className="flex flex-col rounded-xl border border-[var(--border)] bg-[var(--tile)] p-4 shadow-sm">
+                      <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                        <div className="flex items-center gap-2">
+                          <ExternalLink className="h-4 w-4 text-[var(--accent)]" />
+                          <h4 className="text-[13px] font-semibold text-[var(--text)]">
+                            Historical Postmortems in this Cluster
+                          </h4>
+                        </div>
+                        <span className="text-[11px] font-mono text-[var(--muted)]">
+                          {result.cluster_profile?.examples?.length || 0} incidents
+                        </span>
+                      </div>
+
+                      <div className="mt-3 space-y-3">
+                        {result.cluster_profile?.examples && result.cluster_profile.examples.length > 0 ? (
+                          result.cluster_profile.examples.map((ex, idx) => (
+                            <div
+                              key={idx}
+                              className="p-3 rounded-lg border border-[var(--border)] bg-[var(--tile-2)]/50 hover:border-[var(--accent)]/40 transition-colors flex flex-col gap-2"
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <Badge variant="outline" className="text-[10px] font-mono uppercase bg-[var(--tile)] border-[var(--border)] text-[var(--text)]">
+                                  {ex.company}
+                                </Badge>
+                                {ex.source_url && (
+                                  <a
+                                    href={ex.source_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--accent)] hover:underline"
+                                  >
+                                    <span>Read Postmortem</span>
+                                    <ExternalLink className="h-3 w-3" />
+                                  </a>
+                                )}
+                              </div>
+                              <p className="text-[12px] text-[var(--muted)] leading-relaxed line-clamp-3">
+                                {ex.root_cause}
+                              </p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-4 text-center rounded-lg border border-[var(--border)] bg-[var(--tile-2)]/30 text-[12px] text-[var(--muted)]">
+                            {result.trace.is_noise
+                              ? "Novel incident: No historical cluster postmortems directly matched. See Best Match tile for nearest retrieved analog."
+                              : "No specific incident excerpts stored for this cluster profile."}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* TAB 2: Precedent Deep-Dive */}
+                <TabsContent value="precedent" className="p-5 m-0 flex-1 flex flex-col gap-5">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    {/* Incoming Log Card */}
+                    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile)] flex flex-col gap-2.5">
+                      <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+                        <span className="text-[12px] font-medium font-mono uppercase text-[var(--muted)]">
+                          Current Incident Input
+                        </span>
+                        <Badge variant="outline" className="text-[10px] font-mono border-[var(--border)]">
+                          {result.raw_log_excerpt.length} chars
+                        </Badge>
+                      </div>
+                      <ScrollArea className="max-h-[220px] rounded-lg border border-[var(--border)] bg-[var(--tile-2)] p-3 font-mono text-[11px] leading-relaxed text-[var(--text)] whitespace-pre-wrap">
+                        {result.raw_log_excerpt}
+                      </ScrollArea>
+                    </div>
+
+                    {/* Matched Historical Precedent Card */}
+                    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile)] flex flex-col gap-2.5">
+                      <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[12px] font-medium font-mono uppercase text-[var(--muted)]">
+                            Matched Historical Precedent
+                          </span>
+                          <Badge variant="outline" className="text-[10px] font-mono border-[var(--border)] text-[var(--accent)]">
+                            {result.trace.retrieved_incident.company || extractCompany(result.trace.retrieved_incident.source_url)}
+                          </Badge>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className={`text-[10px] font-mono ${
+                            result.retrieval_pass === 1
+                              ? "border-[var(--accent)] text-[var(--accent)]"
+                              : "border-[var(--warn)] text-[var(--warn)]"
+                          }`}
+                        >
+                          Pass {result.retrieval_pass ?? 1} (Sim {result.trace.similarity_score.toFixed(2)})
+                        </Badge>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="text-[11px] font-mono text-[var(--muted)]">
+                          Incident ID: <span className="text-[var(--text)] font-semibold">{result.trace.retrieved_incident.incident_id}</span>
+                        </div>
+                        <div className="p-3 rounded-lg border border-[var(--border)] bg-[var(--tile-2)] font-mono text-[11px] text-[var(--text)] leading-relaxed max-h-[140px] overflow-y-auto">
+                          <div className="font-semibold text-[var(--accent)] mb-1">Historical Root Cause:</div>
+                          {result.trace.retrieved_incident.root_cause}
+                        </div>
+                        {result.trace.retrieved_incident.source_url && (
+                          <a
+                            href={result.trace.retrieved_incident.source_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-[var(--accent)] hover:underline pt-1"
+                          >
+                            <span>Open original incident postmortem</span>
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* TAB 3: Pipeline Trace & Audit */}
+                <TabsContent value="audit" className="p-5 m-0 flex-1 flex flex-col gap-5">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
                     {/* Node 1: Anomaly */}
                     <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col gap-2">
@@ -1545,27 +1865,27 @@ export default function Home() {
                       </Badge>
                     </div>
                   </div>
-                </TabsContent>
 
-                {/* Prompt Tab */}
-                <TabsContent value="prompt" className="p-4 m-0 flex-1 flex flex-col">
-                  <div className="flex items-center justify-between pb-3">
-                    <span className="text-[12px] font-mono text-[var(--muted)]">
-                      Exact prompt sent to the model
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => copyToClipboard(result.trace.prompt_used, "Prompt")}
-                      className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
-                    >
-                      <Copy className="h-3.5 w-3.5 mr-1" />
-                      Copy prompt
-                    </Button>
+                  {/* Prompt Inspection Area */}
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--tile)] p-4 flex flex-col gap-2.5">
+                    <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+                      <span className="text-[12px] font-mono text-[var(--muted)]">
+                        Exact Prompt Payload Injected into Model
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(result.trace.prompt_used, "Prompt")}
+                        className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
+                      >
+                        <Copy className="h-3.5 w-3.5 mr-1" />
+                        Copy prompt
+                      </Button>
+                    </div>
+                    <ScrollArea className="max-h-[260px] rounded-lg border border-[var(--border)] bg-[var(--tile-2)] p-4 font-mono text-[11px] leading-relaxed text-[var(--text)] whitespace-pre-wrap">
+                      {result.trace.prompt_used}
+                    </ScrollArea>
                   </div>
-                  <ScrollArea className="max-h-[360px] rounded-lg border border-[var(--border)] bg-[var(--tile-2)] p-4 font-mono text-[12px] leading-relaxed text-[var(--text)] whitespace-pre-wrap">
-                    {result.trace.prompt_used}
-                  </ScrollArea>
                 </TabsContent>
               </Tabs>
             ) : loading ? (
@@ -1579,8 +1899,12 @@ export default function Home() {
                 </div>
               </div>
             ) : (
-              <div className="p-10 text-center text-[12px] text-[var(--muted)]">
-                Full retrieval trace and prompt details will populate on run
+              <div className="flex-1 flex flex-col items-center justify-center p-10 text-center text-[var(--muted)]">
+                <BookOpen className="h-8 w-8 stroke-[1.25] mb-2 text-[var(--border-strong)]" />
+                <div className="text-[13px] font-medium text-[var(--text)]">Incident Intelligence Hub</div>
+                <div className="text-[12px] max-w-sm mt-1">
+                  Run incident analysis to unlock failure-grounded cluster runbooks, diagnostic signatures, and historical postmortems.
+                </div>
               </div>
             )}
           </motion.div>
