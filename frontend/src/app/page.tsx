@@ -364,6 +364,8 @@ export default function Home() {
   const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
   const [bottomTab, setBottomTab] = useState<string>("cluster");
   const [checkedRunbookItems, setCheckedRunbookItems] = useState<Record<number, boolean>>({});
+  const [auditPromptView, setAuditPromptView] = useState<"structured" | "raw">("structured");
+  const [showFullSystemPrompt, setShowFullSystemPrompt] = useState(false);
   const bottomPanelRef = useRef<HTMLDivElement>(null);
 
   // Health check state
@@ -1781,110 +1783,247 @@ export default function Home() {
                 </TabsContent>
 
                 {/* TAB 3: Pipeline Trace & Audit */}
-                <TabsContent value="audit" className="p-5 m-0 flex-1 flex flex-col gap-5">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                <TabsContent value="audit" className="p-5 m-0 flex-1 flex flex-col gap-5 pb-6">
+                  {/* Connected Execution Flow Stepper */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3 relative">
                     {/* Node 1: Anomaly */}
-                    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col gap-2">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-                        <span>01 · Anomaly</span>
-                        <span className="h-2 w-2 rounded-full bg-[var(--ok)]" />
+                    <div className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col justify-between gap-2.5 transition-all hover:border-[var(--border-strong)]">
+                      <div>
+                        <div className="flex items-center justify-between text-[10px] font-mono text-[var(--muted)] uppercase tracking-wider">
+                          <span>01 · Anomaly & Clustering</span>
+                          <span className="h-2 w-2 rounded-full bg-[var(--ok)] animate-pulse" />
+                        </div>
+                        <div className="text-[13px] font-semibold text-[var(--text)] mt-1.5 flex items-center gap-1.5">
+                          <span>{result.trace.is_noise ? "Novel Archetype" : `Cluster #${result.trace.cluster_id}`}</span>
+                        </div>
+                        <p className="text-[11px] font-mono text-[var(--muted)] mt-0.5">
+                          {result.trace.is_noise ? "No prior cluster" : (result.cluster_profile?.name ? truncateMiddle(result.cluster_profile.name, 24) : "HDBSCAN Centroid")}
+                        </p>
                       </div>
-                      <div className="text-[13px] font-medium text-[var(--text)]">
-                        Cluster #{result.trace.cluster_id}
+                      <div className="flex items-center gap-1.5 pt-1 border-t border-[var(--border)]/60 text-[10px] font-mono text-[var(--muted)]">
+                        <Badge variant="outline" className="text-[10px] font-mono border-[var(--border)] px-1.5 py-0">
+                          384-dim vector
+                        </Badge>
+                        <span>{result.raw_log_excerpt.length} chars</span>
                       </div>
-                      <p className="text-[12px] font-mono text-[var(--muted)]">
-                        Length: {result.raw_log_excerpt.length} chars
-                      </p>
-                      <Badge variant="outline" className="w-fit text-[10px] font-mono border-[var(--border)]">
-                        {result.trace.is_noise ? "Novel pattern" : "Known pattern"}
-                      </Badge>
                     </div>
 
                     {/* Node 2: Retrieval */}
-                    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col gap-2">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-                        <span>02 · Retrieval</span>
-                        <span className="h-2 w-2 rounded-full bg-[var(--ok)]" />
+                    <div className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col justify-between gap-2.5 transition-all hover:border-[var(--border-strong)]">
+                      <div>
+                        <div className="flex items-center justify-between text-[10px] font-mono text-[var(--muted)] uppercase tracking-wider">
+                          <span>02 · Vector Retrieval</span>
+                          <span className="h-2 w-2 rounded-full bg-[var(--ok)] animate-pulse" />
+                        </div>
+                        <div className="text-[13px] font-semibold text-[var(--text)] mt-1.5 flex items-center gap-1.5">
+                          <span className="uppercase">{result.trace.retrieved_incident.company || extractCompany(result.trace.retrieved_incident.source_url)}</span>
+                          <Badge
+                            variant="outline"
+                            className={`text-[9px] font-mono ml-auto ${
+                              result.retrieval_pass === 1
+                                ? "border-[var(--accent)]/40 text-[var(--accent)] bg-[var(--accent-soft)]/40"
+                                : "border-[var(--warn)]/40 text-[var(--warn)] bg-[var(--warn)]/10"
+                            }`}
+                          >
+                            Pass {result.retrieval_pass ?? 1}
+                          </Badge>
+                        </div>
+                        <p className="text-[11px] font-mono text-[var(--muted)] mt-0.5 truncate" title={result.trace.retrieved_incident.incident_id}>
+                          {truncateMiddle(result.trace.retrieved_incident.incident_id, 18)}
+                        </p>
                       </div>
-                      <div className="text-[13px] font-medium text-[var(--text)] truncate">
-                        {result.trace.retrieved_incident.incident_id}
+                      <div className="flex items-center justify-between pt-1 border-t border-[var(--border)]/60 text-[10px] font-mono text-[var(--muted)]">
+                        <span>ChromaDB index</span>
+                        <span className="font-semibold text-[var(--text)]">Sim: {result.trace.similarity_score.toFixed(2)}</span>
                       </div>
-                      <p className="text-[12px] font-mono text-[var(--muted)] tabular-nums">
-                        Sim: {result.trace.similarity_score.toFixed(2)}
-                      </p>
-                      <Badge
-                        variant="outline"
-                        className={`w-fit text-[10px] font-mono ${
-                          result.retrieval_pass === 1
-                            ? "border-[var(--accent)] text-[var(--accent)]"
-                            : "border-[var(--warn)] text-[var(--warn)]"
-                        }`}
-                      >
-                        Pass {result.retrieval_pass ?? 1}
-                      </Badge>
                     </div>
 
                     {/* Node 3: Prompt */}
-                    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col gap-2">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-                        <span>03 · Prompt</span>
-                        <span className="h-2 w-2 rounded-full bg-[var(--ok)]" />
+                    <div className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col justify-between gap-2.5 transition-all hover:border-[var(--border-strong)]">
+                      <div>
+                        <div className="flex items-center justify-between text-[10px] font-mono text-[var(--muted)] uppercase tracking-wider">
+                          <span>03 · Grounding & Prompt</span>
+                          <span className="h-2 w-2 rounded-full bg-[var(--ok)] animate-pulse" />
+                        </div>
+                        <div className="text-[13px] font-semibold text-[var(--text)] mt-1.5">
+                          Instruction + Precedent
+                        </div>
+                        <p className="text-[11px] font-mono text-[var(--muted)] mt-0.5">
+                          2 Grounded Context Blocks
+                        </p>
                       </div>
-                      <div className="text-[13px] font-medium text-[var(--text)]">
-                        Instruction Context
+                      <div className="flex items-center justify-between pt-1 border-t border-[var(--border)]/60 text-[10px] font-mono text-[var(--muted)]">
+                        <Badge variant="outline" className="text-[10px] font-mono border-[var(--border)] px-1.5 py-0">
+                          System + Query
+                        </Badge>
+                        <span>{result.trace.prompt_used.length} chars</span>
                       </div>
-                      <p className="text-[12px] font-mono text-[var(--muted)] tabular-nums">
-                        {result.trace.prompt_used.length} chars
-                      </p>
-                      <Badge variant="outline" className="w-fit text-[10px] font-mono border-[var(--border)]">
-                        System + Incident
-                      </Badge>
                     </div>
 
                     {/* Node 4: Generation */}
-                    <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col gap-2">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-                        <span>04 · Generation</span>
-                        <span className="h-2 w-2 rounded-full bg-[var(--ok)]" />
+                    <div className="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--tile-2)]/60 flex flex-col justify-between gap-2.5 transition-all hover:border-[var(--border-strong)]">
+                      <div>
+                        <div className="flex items-center justify-between text-[10px] font-mono text-[var(--muted)] uppercase tracking-wider">
+                          <span>04 · LLM Inference</span>
+                          <span className="h-2 w-2 rounded-full bg-[var(--ok)] animate-pulse" />
+                        </div>
+                        <div className="text-[13px] font-semibold text-[var(--text)] mt-1.5 truncate" title={result.trace.model || "openai/gpt-oss-120b"}>
+                          {result.trace.model ? result.trace.model.split("/").pop() : "gpt-oss-120b"}
+                        </div>
+                        <p className="text-[11px] font-mono text-[var(--muted)] mt-0.5">
+                          {latencyMs !== null ? (latencyMs > 1000 ? `${(latencyMs / 1000).toFixed(1)}s execution` : `${latencyMs}ms execution`) : "Completed"}
+                        </p>
                       </div>
-                      <div className="text-[13px] font-medium text-[var(--text)] truncate">
-                        {result.trace.model || "openai/gpt-oss-120b"}
+                      <div className="flex items-center justify-between pt-1 border-t border-[var(--border)]/60 text-[10px] font-mono text-[var(--muted)]">
+                        <Badge
+                          variant="outline"
+                          className={`text-[9px] font-mono px-1.5 py-0 ${
+                            result.is_mock
+                              ? "border-[var(--warn)] text-[var(--warn)]"
+                              : "border-[var(--ok)] text-[var(--ok)]"
+                          }`}
+                        >
+                          {result.is_mock ? "Mock Mode" : "Live Groq"}
+                        </Badge>
+                        <span className="text-[9px]">Groq LPUs</span>
                       </div>
-                      <p className="text-[12px] font-mono text-[var(--muted)] tabular-nums">
-                        {latencyMs !== null ? `${latencyMs}ms` : "Completed"}
-                      </p>
-                      <Badge
-                        variant="outline"
-                        className={`w-fit text-[10px] font-mono ${
-                          result.is_mock
-                            ? "border-[var(--warn)] text-[var(--warn)]"
-                            : "border-[var(--ok)] text-[var(--ok)]"
-                        }`}
-                      >
-                        {result.is_mock ? "Mock Output" : "Live Groq Inference"}
-                      </Badge>
                     </div>
                   </div>
 
-                  {/* Prompt Inspection Area */}
-                  <div className="rounded-xl border border-[var(--border)] bg-[var(--tile)] p-4 flex flex-col gap-2.5">
-                    <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
-                      <span className="text-[12px] font-mono text-[var(--muted)]">
-                        Exact Prompt Payload Injected into Model
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyToClipboard(result.trace.prompt_used, "Prompt")}
-                        className="h-7 text-[12px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
-                      >
-                        <Copy className="h-3.5 w-3.5 mr-1" />
-                        Copy prompt
-                      </Button>
+                  {/* Prompt & Context Inspector */}
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--tile)] p-4 flex flex-col gap-3 shadow-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[var(--border)] gap-2">
+                      <div className="flex items-center gap-2">
+                        <Terminal className="h-4 w-4 text-[var(--accent)]" />
+                        <h4 className="text-[13px] font-semibold text-[var(--text)]">
+                          Model Grounding & Injected Payload Inspector
+                        </h4>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {/* Segmented control for structured vs raw */}
+                        <div className="bg-[var(--tile-2)] border border-[var(--border)] p-0.5 rounded-lg flex items-center h-7 text-[11px]">
+                          <button
+                            type="button"
+                            onClick={() => setAuditPromptView("structured")}
+                            className={`px-2.5 py-0.5 rounded-md font-medium transition-all ${
+                              auditPromptView === "structured"
+                                ? "bg-[var(--tile)] text-[var(--text)] shadow-xs font-semibold"
+                                : "text-[var(--muted)] hover:text-[var(--text)]"
+                            }`}
+                          >
+                            Structured Blocks
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setAuditPromptView("raw")}
+                            className={`px-2.5 py-0.5 rounded-md font-medium transition-all ${
+                              auditPromptView === "raw"
+                                ? "bg-[var(--tile)] text-[var(--text)] shadow-xs font-semibold"
+                                : "text-[var(--muted)] hover:text-[var(--text)]"
+                            }`}
+                          >
+                            Raw Injected String
+                          </button>
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(result.trace.prompt_used, "Full Prompt")}
+                          className="h-7 text-[11px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--tile-2)] rounded-lg px-2"
+                        >
+                          <Copy className="h-3 w-3 mr-1" />
+                          Copy prompt
+                        </Button>
+                      </div>
                     </div>
-                    <ScrollArea className="max-h-[260px] rounded-lg border border-[var(--border)] bg-[var(--tile-2)] p-4 font-mono text-[11px] leading-relaxed text-[var(--text)] whitespace-pre-wrap">
-                      {result.trace.prompt_used}
-                    </ScrollArea>
+
+                    {auditPromptView === "structured" ? (
+                      <div className="space-y-3">
+                        {/* Block 1: System Persona & Formatting */}
+                        <div className="p-3 rounded-lg border border-[var(--border)] bg-[var(--tile-2)]/50 flex flex-col gap-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-[10px] font-mono bg-[var(--tile)] border-[var(--border)] text-[var(--accent)]">
+                                SYSTEM DIRECTIVE
+                              </Badge>
+                              <span className="text-[12px] font-medium text-[var(--text)]">
+                                Expert SRE Persona & Two-Section Format Guardrail
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setShowFullSystemPrompt(!showFullSystemPrompt)}
+                              className="text-[11px] text-[var(--accent)] hover:underline font-mono"
+                            >
+                              {showFullSystemPrompt ? "Collapse" : "Expand text"}
+                            </button>
+                          </div>
+                          {showFullSystemPrompt ? (
+                            <p className="text-[11px] font-mono text-[var(--muted)] leading-relaxed bg-[var(--tile)] p-2.5 rounded border border-[var(--border)] whitespace-pre-wrap">
+                              {result.trace.prompt_used.split("HISTORICAL PRECEDENT")[0] || result.trace.prompt_used.slice(0, 300)}
+                            </p>
+                          ) : (
+                            <p className="text-[11px] text-[var(--muted)] leading-relaxed">
+                              Enforces senior SRE persona, strict relevance gating (&quot;Precedent: relevant/not relevant&quot;), root-cause analysis, and prioritized remediation actions without internal reasoning scratchpad leakage.
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Block 2: Injected Historical Precedent */}
+                        <div className="p-3 rounded-lg border border-[var(--border)] bg-[var(--tile-2)]/50 flex flex-col gap-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-[10px] font-mono bg-[var(--tile)] border-[var(--border)] text-[var(--ok)]">
+                                GROUNDING PRECEDENT
+                              </Badge>
+                              <span className="text-[12px] font-medium text-[var(--text)]">
+                                Historical Failure Context Injected for Few-Shot / RAG Guidance
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-mono text-[var(--muted)]">
+                              Cosine Sim: {result.trace.similarity_score.toFixed(2)}
+                            </span>
+                          </div>
+                          <div className="bg-[var(--tile)] p-2.5 rounded border border-[var(--border)] font-mono text-[11px] text-[var(--text)] leading-relaxed space-y-1">
+                            <div className="text-[var(--accent)] font-semibold">
+                              Incident: {result.trace.retrieved_incident.incident_id} ({extractCompany(result.trace.retrieved_incident.source_url)})
+                            </div>
+                            <div className="text-[var(--muted)] line-clamp-2">
+                              <span className="text-[var(--text)] font-semibold">Root Cause: </span>
+                              {result.trace.retrieved_incident.root_cause}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Block 3: Target Query Incident Log */}
+                        <div className="p-3 rounded-lg border border-[var(--border)] bg-[var(--tile-2)]/50 flex flex-col gap-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-[10px] font-mono bg-[var(--tile)] border-[var(--border)] text-[var(--text)]">
+                                TARGET INCIDENT INPUT
+                              </Badge>
+                              <span className="text-[12px] font-medium text-[var(--text)]">
+                                Raw User Log Passed for Analysis
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-mono text-[var(--muted)]">
+                              {result.raw_log_excerpt.length} characters
+                            </span>
+                          </div>
+                          <div className="bg-[var(--tile)] p-2.5 rounded border border-[var(--border)] font-mono text-[11px] text-[var(--text)] leading-relaxed max-h-[80px] overflow-y-auto whitespace-pre-wrap">
+                            {result.raw_log_excerpt}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative rounded-lg border border-[var(--border)] bg-[var(--tile-2)] p-3 overflow-hidden">
+                        <ScrollArea className="h-[210px] w-full font-mono text-[11px] leading-relaxed text-[var(--text)] whitespace-pre-wrap pr-3">
+                          {result.trace.prompt_used}
+                        </ScrollArea>
+                      </div>
+                    )}
                   </div>
                 </TabsContent>
               </Tabs>
