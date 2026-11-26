@@ -11,7 +11,7 @@ license: mit
 
 # TraceMind — RAG-Powered Root Cause Analysis for SRE Logs
 
-An automated NLP pipeline that clusters log anomalies and correlates incoming infrastructure failures against a curated corpus of 828 historical incident postmortems. TraceMind surfaces an interactive Pipeline Trace—exposing matched historical incident URLs, cosine similarity scores, and prompts—so SREs can audit retrieval evidence rather than trusting an opaque model. In controlled 2x2 factorial evaluation (N=93), prompt conciseness and instruction formatting drive the observed score gains (+0.0727 to +0.0851 ROUGE-L F1), while precedent retrieval contributes a modest effect (+0.0143 in baseline format, +0.0019 in gate-v2 format; non-significant under company-clustered bootstrap).
+An automated NLP pipeline that clusters log anomalies into failure archetypes and correlates incoming infrastructure failures against a curated corpus of 828 historical incident postmortems. TraceMind surfaces an interactive **Incident Intelligence Hub**—exposing cluster-level failure mechanics, SRE remediation playbooks, matched historical incident URLs, cosine similarity gauges, and structured prompt grounding—so SREs can audit retrieval evidence and act immediately rather than trusting an opaque model. In controlled 2x2 factorial evaluation (N=93), prompt conciseness and instruction formatting drive the observed score gains (+0.0727 to +0.0851 ROUGE-L F1), while precedent retrieval contributes a modest effect (+0.0143 in baseline format, +0.0019 in gate-v2 format; non-significant under company-clustered bootstrap).
 
 ---
 
@@ -20,9 +20,10 @@ An automated NLP pipeline that clusters log anomalies and correlates incoming in
 **Backend verified on Hugging Face Spaces (`https://nishhhx0-tracemind-backend.hf.space`), frontend pending Vercel deploy.**
 
 - **ML Inference & Vector Retrieval:** Active on Hugging Face Spaces via FastAPI mounted on Gradio.
-- **LLM Provider:** `openai/gpt-oss-120b` via Groq Cloud API with client-side rate limiting and automatic caching.
-- **Frontend Dashboard:** Dark/light Bento console built with Next.js 16, Tailwind CSS v4, and shadcn/ui.
-- **Verification Status:** 30/30 unit and integration tests passing (`python -m pytest`).
+- **Cluster Intelligence:** 40 precomputed HDBSCAN failure profiles (`clustering/cluster_profiles.json`) served via `GET /clusters`, `GET /clusters/{cluster_id}`, and embedded directly in `POST /analyze`.
+- **LLM Provider:** `openai/gpt-oss-120b` via Groq Cloud API with client-side rate limiting, exponential backoff, and SQLite generation caching.
+- **Frontend Dashboard:** Dark/light Bento console built with Next.js 16 (Turbopack), Tailwind CSS v4, Motion, and shadcn/ui, featuring the **Cluster Archetype** tile and 3-tab **Incident Intelligence Hub**.
+- **Verification Status:** 75/75 non-live unit and integration tests passing (`python -m pytest`; 2 `@pytest.mark.live` tests deselected by default via `pytest.ini`).
 
 ---
 
@@ -34,27 +35,29 @@ Raw Server Log Input
          ▼
 Embedding Layer (sentence-transformers / all-MiniLM-L6-v2, 384-d)
          │
-         ▼
-Anomaly Clustering (HDBSCAN)  ──►  Groups similar incident reports; the group label is shown in the Pipeline Trace and does not change retrieval (39 clusters)
-         │
-         ▼
-2-Pass Vector Retrieval (ChromaDB)
-  ├── Pass 1: Filter quality:high postmortems (0.40 cosine similarity floor)
-  └── Pass 2: Fallback across full postmortem corpus if Pass 1 misses
-         │
-         ▼
-RAG-Augmented Prompt Construction (relevance_gate_v2)
-  └── Enforces strict precedent relevance gating ("Precedent: relevant | not relevant")
-         │
-         ▼
-LLM Generation (openai/gpt-oss-120b via Groq Cloud API)
-         │
-         ▼
-Structured RCA Output
-  ├── Precedent Relevance Badge ("Precedent applied" vs. "No relevant precedent")
-  ├── Root Cause Synthesis (Markdown)
-  ├── 5-Step Actionable Remediation Checklist
-  └── Pipeline Trace (Telemetry, Cosine Similarity Gauge, Cluster ID, Raw Prompt)
+         ├──────────────────────────────────────────────────────────┐
+         ▼                                                          ▼
+Anomaly Clustering (HDBSCAN)                             2-Pass Vector Retrieval (ChromaDB)
+  ├── Assigns nearest centroid (39 clusters + -1 novel)    ├── Pass 1: Quality-biased search (>= 0.40 cosine floor)
+  └── Attaches ClusterProfile (mechanics, fixes, examples) └── Pass 2: Full-corpus fallback if Pass 1 misses
+         │                                                          │
+         └──────────────────────────┬───────────────────────────────┘
+                                    ▼
+             RAG-Augmented Prompt Construction (relevance_gate_v2)
+               └── Enforces strict relevance gating ("Precedent: relevant | not relevant")
+                                    │
+                                    ▼
+             LLM Generation (openai/gpt-oss-120b via Groq Cloud API)
+                                    │
+                                    ▼
+             Structured SRE Console Output (Bento Dashboard)
+               ├── Cluster Archetype Tile (Name, Mechanics, Keywords, Runbook Link)
+               ├── Best Match Tile (Company, Quality, Cosine Gauge w/ 0.40 Floor)
+               ├── Root Cause & Interactive 5-Step Remediation Checklist
+               └── Incident Intelligence Hub (3 Tabs):
+                     ├── 1. Cluster Intelligence & Runbook (Interactive Fixes + Past Postmortems)
+                     ├── 2. Precedent Deep-Dive (Incoming Log vs. Matched Precedent)
+                     └── 3. Pipeline Trace & Audit (4-Stage Flow + Structured/Raw Prompt Inspector)
 ```
 
 ---
@@ -64,12 +67,12 @@ Structured RCA Output
 | Component | Technology | Role / Specification |
 |---|---|---|
 | **Embeddings** | `sentence-transformers` | `all-MiniLM-L6-v2` (384-dimensional normalized dense vectors) |
-| **Clustering** | `HDBSCAN` | 39 clusters + 338 noise on train corpus (`min_cluster_size=3`, `min_samples=2`), observational only |
-| **Vector Store** | `ChromaDB` | Persistent vector index with 2-pass quality-biased retrieval and 0.40 cosine floor |
+| **Clustering** | `HDBSCAN` | 39 clusters + 338 noise on train corpus (`min_cluster_size=3`, `min_samples=2`), plus 40 precomputed `cluster_profiles.json` |
+| **Vector Store** | `ChromaDB` | Persistent vector index (`rag/chroma_db_train`) with 2-pass quality-biased retrieval and 0.40 cosine floor |
 | **LLM Generation** | Groq Cloud API | `openai/gpt-oss-120b` (prompted inference, zero fine-tuning, `relevance_gate_v2`) |
-| **Backend API** | `FastAPI` / `Uvicorn` | REST API (`/analyze`, `/health`) with per-IP rate limiting and proxy routing (Hosted on Hugging Face Spaces) |
-| **Frontend UI** | `Next.js 16` (Turbopack) | Dark/light Bento dashboard, Tailwind CSS v4, shadcn/ui (Hosted on Vercel) |
-| **Evaluation** | Python / Pytest | ROUGE (1, 2, L), BERTScore (F1), Embedding Cosine Similarity, Bootstrap 95% CIs |
+| **Backend API** | `FastAPI` / `Uvicorn` | REST API (`/analyze`, `/clusters`, `/clusters/{cluster_id}`, `/health`) with per-IP rate limiting (Hosted on Hugging Face Spaces) |
+| **Frontend UI** | `Next.js 16` (Turbopack) | Dark/light Bento dashboard, Incident Intelligence Hub, Tailwind CSS v4, Motion, shadcn/ui |
+| **Evaluation** | Python / Pytest | Unified `eval/scorer.py` (ROUGE-1/2/L, BERTScore F1, Cosine Sim), Bootstrap 95%/99% CIs |
 
 ---
 
@@ -110,14 +113,17 @@ To eliminate data leakage and validate real-world out-of-distribution generaliza
 
 ---
 
-## Retrieval & Pipeline Trace
+## Cluster Intelligence & Incident Intelligence Hub
 
-TraceMind is designed for auditability. Rather than producing opaque predictions, the console surfaces an interactive **Pipeline Trace**:
+TraceMind is designed for both immediate SRE actionability and full auditability. Rather than surfacing opaque model outputs or raw telemetry alone, the console pairs cluster-level domain knowledge with an interactive **Incident Intelligence Hub**:
 
-- **Matched Historical Precedent:** The nearest past incident with title, company, and direct hyperlink to the official public postmortem.
-- **Similarity Gauge:** Semicircular SVG gauge displaying the cosine similarity score with an explicit **0.40 threshold marker** (scores ≥ 0.60 labeled *Strong match*, 0.40–0.59 labeled *Moderate match*, < 0.40 labeled *Weak match, treat as hypothesis*).
-- **Relevance Gate Badge:** Real-time badge indicating whether the historical match was applied (`Precedent applied`) or rejected as irrelevant (`No relevant precedent`).
-- **Raw Prompt Inspection:** Tabbed view displaying the exact system prompt, user prompt, and model parameters delivered to the LLM.
+- **Cluster Archetype Tile (`Row 2 - Tile C`):** Displays the assigned HDBSCAN failure cluster name (e.g., `#11 · DigitalOcean Anthropic API disruptions` or `#15 · Intermittent connectivity and load issues`), failure mechanics summary, diagnostic keyword tags, corpus incident count, and a one-click `Inspect cluster runbook →` jump. Novel logs (`Cluster #-1`) are explicitly flagged with a novel-outage triage guide.
+- **Matched Historical Precedent & Similarity Gauge (`Row 2 - Tile D`):** Displays the nearest historical incident with company badge, quality score, direct link to the official public postmortem, Pass 1 / Pass 2 retrieval indicator, and a semicircular SVG gauge with an explicit **0.40 threshold marker** ($\ge 0.60$ *Strong match*, $0.40\text{–}0.59$ *Moderate match*, $< 0.40$ *Weak match, treat as hypothesis*).
+- **Relevance Gate Badge (`Row 3 - Tile F`):** Real-time badge indicating whether the historical match was applied (`Precedent applied`) or rejected as irrelevant (`No relevant precedent`).
+- **Incident Intelligence Hub (`Row 4 - Tile H`):**
+  1. **Cluster Intelligence & Runbook:** Full failure mechanics description, corpus prevalence, diagnostic keywords, an interactive **Cluster SRE Playbook Actions** checklist (`typical_fixes`), and real historical postmortems in that cluster with external links.
+  2. **Precedent Deep-Dive:** Side-by-side comparison of the incoming log excerpt against the retrieved historical precedent, similarity score, and Pass 1/2 strategy.
+  3. **Pipeline Trace & Audit:** Connected 4-stage execution flow (`01 Anomaly & Clustering` $\to$ `02 Vector Retrieval` $\to$ `03 Grounding & Prompt` $\to$ `04 LLM Inference`) paired with a dual-mode **Model Grounding & Injected Payload Inspector** (`Structured Blocks` breakdown vs. bounded `Raw Injected String` with copy support).
 
 ![Pipeline Trace Demo](docs/pipeline_trace_demo.png)
 
@@ -376,10 +382,42 @@ Detailed failure analysis and individual incident evaluations are documented in 
 
 ## Security & Production Hardening
 
-- **Locked CORS Configuration:** Cross-Origin Resource Sharing is strictly constrained to `http://localhost:3000`, `http://localhost:3001`, and the designated production domain (`https://tracemind.vercel.app`). Wildcard matching (`*.vercel.app`) is disabled to prevent unauthorized API key consumption.
+- **Locked CORS Configuration:** Cross-Origin Resource Sharing is strictly constrained to `http://localhost:3000`, `http://localhost:3001`, `http://127.0.0.1:3000`, `http://127.0.0.1:3001`, and the designated production domain (`https://tracemind.vercel.app`). Wildcard matching (`*.vercel.app`) is disabled to prevent unauthorized API key consumption.
 - **Client IP Rate Limiting:** In-memory sliding window rate limiter enforcing a strict maximum of **15 analysis requests per minute per IP** (`IP_RATE_LIMIT_RPM`). Requests exceeding this limit receive `HTTP 429 Too Many Requests`.
 - **Pre-Warmed Generation Cache:** All frontend example presets are pre-warmed in SQLite (`scripts/prewarm_cache.py`). Preset clicks return cached completions instantaneously without consuming Groq API tokens or triggering 429/502 errors.
 - **Explicit API Base Path:** The frontend uses `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_API_BASE_PATH` explicitly, decoupling API routing from URL string heuristics.
+
+---
+
+## Repository Structure
+
+```
+TraceMind/
+├── backend/
+│   ├── main.py                # FastAPI app (/analyze, /clusters, /clusters/{id}, /health)
+│   ├── models.py              # Pydantic v2 schemas (AnalyzeResponse, ClusterProfile, PipelineTrace)
+│   └── config.py              # CORS origins, rate limits, Groq model config
+├── clustering/
+│   ├── cluster.py             # all-MiniLM-L6-v2 embedding & HDBSCAN centroid assignment
+│   ├── cluster_profiles.json  # 40 failure-grounded cluster profiles (fixes, keywords, examples)
+│   ├── cluster_index.pkl      # Precomputed HDBSCAN centroids and cluster IDs
+│   └── build_index.py         # Index builder for HDBSCAN centroids
+├── rag/
+│   ├── generate.py            # 2-pass ChromaDB retrieval, prompt registry, Groq API client
+│   ├── gen_cache.py           # SQLite generation cache
+│   └── chroma_db_train/       # Persistent ChromaDB vector store (662 train incidents)
+├── frontend/
+│   ├── src/app/page.tsx       # Next.js 16 Bento dashboard & Incident Intelligence Hub
+│   └── src/components/ui/     # Radix UI + shadcn primitives
+├── eval/
+│   ├── scorer.py              # Canonical scorer (ROUGE-1/2/L, BERTScore F1, Cosine Sim)
+│   ├── PREREG.md              # Pre-registered evaluation protocol
+│   ├── PREREG_ERRATA.md       # Directional hypothesis errata
+│   ├── DEVIATIONS.md          # Experimental deviation audit log
+│   └── results/               # Rescored E1, E2, LOO consistency, and stratified JSONs
+├── scripts/                   # Corpus split, leakage verification, audit, and table rendering
+└── tests/                     # 75 non-live unit/regression tests + 2 @pytest.mark.live tests
+```
 
 ---
 
@@ -426,7 +464,7 @@ python scripts/prewarm_cache.py
 # Verify zero data leakage against held-out test split
 python scripts/verify_no_leakage.py
 
-# Start FastAPI backend (http://127.0.0.1:8000)
+# Start FastAPI backend (http://127.0.0.1:8000, Swagger at /docs)
 python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
@@ -449,8 +487,11 @@ npm run start
 ### 4. Running the Test Suite & Evaluation
 
 ```bash
-# Run backend, clustering, split, and smoke verification tests
+# Run full non-live suite (75 tests; live Groq/HF tests deselected via pytest.ini)
 python -m pytest
+
+# Run backend API & cluster endpoint tests only
+python -m pytest tests/test_backend.py
 
 # Run live deployment smoke test (defaults to http://127.0.0.1:8000 or custom BACKEND_URL)
 BACKEND_URL=https://nishhhx0-tracemind-backend.hf.space python scripts/smoke_live.py
